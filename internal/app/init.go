@@ -14,26 +14,30 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 	"github.com/jackc/pgx/v5/pgxpool"
+
+	"github.com/FadhilAF/perbakin-be/common/env"
+	"github.com/FadhilAF/perbakin-be/common/validation"
+	"github.com/FadhilAF/perbakin-be/internal/repository"
 )
 
 type App struct {
-	Config   config.Config
+	Config   env.Config
 	delivery deliveries
 	usecase  usecases
-	store    db.Store
+	store    repository.Store
 }
 
-func New(config config.Config, dbPool *pgxpool.Pool) App {
+func New(config env.Config, dbPool *pgxpool.Pool) App {
 	var app App
 	app.Config = config
-	app.store = db.NewStore(dbPool)
+	app.store = repository.NewStore(dbPool)
 	app.initUsecase()
 	app.initDelivery()
 	return app
 }
 
 func (app *App) StartServer() {
-	if app.Config.Env == config.EnvProd {
+	if app.Config.Env == env.EnvProd {
 		fmt.Println(
 			color.Ize(color.Yellow, color.InBold("\nAPP RUN IN PRODUCTION MODE\n")),
 		)
@@ -47,7 +51,7 @@ func (app *App) StartServer() {
 	signal.Notify(osSignalChan, syscall.SIGINT, syscall.SIGTERM)
 
 	if validator, ok := binding.Validator.Engine().(*validator.Validate); ok {
-		validations.InitValidations(validator)
+		validation.InitValidations(validator)
 	}
 	router := app.createHandlers()
 	address := fmt.Sprintf("%s:%s", app.Config.AppHost, app.Config.AppPort)
@@ -79,12 +83,12 @@ func (app *App) createHandlers() *gin.Engine {
 
 	corsCfg := cors.DefaultConfig()
 	corsCfg.AllowHeaders = append(corsCfg.AllowHeaders, "Accept")
-	if app.Config.Env == config.EnvProd {
+	// if app.Config.Env == config.EnvProd {
 		corsCfg.AllowAllOrigins = false
 		corsCfg.AllowOrigins = []string{app.Config.AllowedOrigin}
-	} else {
-		corsCfg.AllowAllOrigins = true
-	}
+	// } else {
+	// 	corsCfg.AllowAllOrigins = true
+	// }
 
 	router.Use(cors.New(corsCfg))
 
