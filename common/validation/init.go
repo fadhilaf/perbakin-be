@@ -11,7 +11,7 @@ var customErrors map[string]func(field validator.FieldError, translatedFieldName
 
 var customMessages map[string]string
 
-func InitValidations(validate *validator.Validate) {
+func InitValidation(validate *validator.Validate) {
 	customMessages = map[string]string{}
 
 	customErrors = map[string]func(validator.FieldError, string) string{}

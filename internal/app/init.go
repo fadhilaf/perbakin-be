@@ -17,20 +17,19 @@ import (
 
 	"github.com/FadhilAF/perbakin-be/common/env"
 	"github.com/FadhilAF/perbakin-be/common/validation"
-	"github.com/FadhilAF/perbakin-be/internal/repository"
 )
 
 type App struct {
 	Config   env.Config
 	delivery deliveries
 	usecase  usecases
-	store    repository.Store
+	dbPool   *pgxpool.Pool
 }
 
 func New(config env.Config, dbPool *pgxpool.Pool) App {
 	var app App
 	app.Config = config
-	app.store = repository.NewStore(dbPool)
+	app.dbPool = dbPool
 	app.initUsecase()
 	app.initDelivery()
 	return app
@@ -51,7 +50,7 @@ func (app *App) StartServer() {
 	signal.Notify(osSignalChan, syscall.SIGINT, syscall.SIGTERM)
 
 	if validator, ok := binding.Validator.Engine().(*validator.Validate); ok {
-		validation.InitValidations(validator)
+		validation.InitValidation(validator)
 	}
 	router := app.createHandlers()
 	address := fmt.Sprintf("%s:%s", app.Config.AppHost, app.Config.AppPort)
@@ -59,7 +58,7 @@ func (app *App) StartServer() {
 
 	srv := &http.Server{
 		Addr:    address,
-		Handler: router,
+		Handler: SessionHandler(app.dbPool, router),
 	}
 
 	go func() {
