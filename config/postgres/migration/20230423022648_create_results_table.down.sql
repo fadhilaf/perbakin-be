@@ -8,9 +8,4 @@ DROP TABLE IF EXISTS "stage0_results";
 
 DROP TABLE IF EXISTS "results";
 
-DO $$
-BEGIN
-    IF EXISTS (SELECT 1 FROM pg_type WHERE typname = "stages") THEN
-        DROP TYPE "stages";
-    END IF;
-END $$;
+DROP TYPE IF EXISTS "stages";
