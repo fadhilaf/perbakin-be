@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS "shooters";
+DROP TABLE IF EXISTS shooters;

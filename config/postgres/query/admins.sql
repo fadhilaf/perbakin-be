@@ -1,9 +1,9 @@
 -- name: CreateAdmin :execresult
 INSERT INTO "users" (
-  "username", "email", "password", "name"
+  "username", "password", "name"
 )
 VALUES (
-  $1, $2, $3, $4
+  $1, $2, $3
 )
 RETURNING "id" INTO "admins" (user_id);
 
