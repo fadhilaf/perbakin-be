@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS supers (
   user_id uuid NOT NULL,
   CONSTRAINT user_id
     FOREIGN KEY (user_id) 
-      REFERENCES users (id)
+      REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS admins ( 
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS admins (
   user_id uuid NOT NULL,
   CONSTRAINT user_id
     FOREIGN KEY (user_id) 
-      REFERENCES users (id)
+      REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS scorers (
@@ -32,5 +32,5 @@ CREATE TABLE IF NOT EXISTS scorers (
   user_id uuid NOT NULL,
   CONSTRAINT user_id
     FOREIGN KEY (user_id) 
-      REFERENCES users (id)
+      REFERENCES users (id) ON DELETE CASCADE
 );
