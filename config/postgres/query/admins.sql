@@ -1,12 +1,25 @@
 -- name: CreateAdmin :execresult
-INSERT INTO "users" (
-  "username", "password", "name"
+WITH added_user AS (
+  INSERT INTO users (username, password, name)
+  VALUES ($1, $2, $3)
+  RETURNING id
 )
-VALUES (
-  $1, $2, $3
-)
-RETURNING "id" INTO "admins" (user_id);
+INSERT INTO admins (user_id)
+SELECT id FROM added_user;
 
--- name: GetAdmin :one
-SELECT "id", "user_id" FROM "users"
-WHERE "user_id" = $1;
+-- name: GetAdmins :many
+SELECT admins.id, user_id, username, name FROM admins
+INNER JOIN users ON admins.user_id = users.id;
+
+-- name: GetAdminByUserId :one
+SELECT admins.id, user_id, username, name FROM admins
+INNER JOIN users ON admins.user_id = users.id
+WHERE user_id = $1;
+
+-- name: GetAdminByUsername :one
+SELECT admins.id, user_id, username, name FROM users
+INNER JOIN admins ON admins.user_id = users.id
+WHERE username = $1;
+
+-- name: DeleteAdmin :exec
+DELETE FROM admins WHERE user_id = $1;

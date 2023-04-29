@@ -1,8 +1,8 @@
 package app
 
 import (
-  "time"
-  "net/http"
+	"net/http"
+	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
@@ -15,23 +15,23 @@ import (
 var SessionManager *scs.SessionManager
 
 func SessionHandler(dbPool *pgxpool.Pool, handler *gin.Engine) http.Handler {
-  SessionManager = scs.New()
-  SessionManager.Store = pgxstore.New(dbPool)
+	SessionManager = scs.New()
+	SessionManager.Store = pgxstore.New(dbPool)
 	SessionManager.Lifetime = 24 * time.Hour
-  SessionManager.IdleTimeout = 20 * time.Minute
-  SessionManager.Cookie.Name = "session_id"
+	SessionManager.IdleTimeout = 20 * time.Minute
+	SessionManager.Cookie.Name = "session_id"
 
-  // SessionManager.Cookie.Domain = "example.com"
+	// SessionManager.Cookie.Domain = "example.com"
 
-  SessionManager.Cookie.HttpOnly = true
+	SessionManager.Cookie.HttpOnly = true
 
-  //path cookie
-  SessionManager.Cookie.Path = "/"
-  //path cookie
+	//path cookie
+	SessionManager.Cookie.Path = "/"
+	//path cookie
 
-  SessionManager.Cookie.Persist = true
-  SessionManager.Cookie.SameSite = http.SameSiteStrictMode
-  SessionManager.Cookie.Secure = true
+	SessionManager.Cookie.Persist = true
+	SessionManager.Cookie.SameSite = http.SameSiteStrictMode
+	SessionManager.Cookie.Secure = true
 
-  return SessionManager.LoadAndSave(handler)
+	return SessionManager.LoadAndSave(handler)
 }

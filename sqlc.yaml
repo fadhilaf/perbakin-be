@@ -5,6 +5,7 @@ sql:
     schema: "config/postgres/migration"
     gen:
       go:
-        package: "pgx/v5"
+        package: "postgres"
+        sql_package: "pgx/v5"
         out: "internal/repository/postgres/sqlc"
         emit_interface: true

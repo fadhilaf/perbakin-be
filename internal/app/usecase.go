@@ -1,7 +1,7 @@
 package app
 
 import (
-  // "github.com/FadhilAF/perbakin-be/internal/repository"
+// "github.com/FadhilAF/perbakin-be/internal/repository"
 )
 
 // division_usecase "github.com/DSC-UNSRI/gdsc-website-backend/internal/usecase/division"
@@ -11,7 +11,7 @@ type usecases struct {
 }
 
 func (app *App) initUsecase() {
-  // store := repository.NewStore(app.dbPool)
+	// store := repository.NewStore(app.dbPool)
 
 	var usecases usecases
 

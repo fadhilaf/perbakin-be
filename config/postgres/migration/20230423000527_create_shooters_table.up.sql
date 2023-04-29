@@ -5,5 +5,5 @@ CREATE TABLE IF NOT EXISTS shooters (
   province varchar(255) NOT NULL,
   club varchar(255) NOT NULL,
   created_at timestamp NOT NULL DEFAULT NOW(),
-  updated_at timestamp NOT NULL DEFAULT NOW(),
+  updated_at timestamp NOT NULL DEFAULT NOW()
 );
