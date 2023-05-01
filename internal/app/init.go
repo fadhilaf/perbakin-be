@@ -82,12 +82,14 @@ func (app *App) createHandlers() *gin.Engine {
 
 	corsCfg := cors.DefaultConfig()
 	corsCfg.AllowHeaders = append(corsCfg.AllowHeaders, "Accept")
-	// if app.Config.Env == config.EnvProd {
+
+	// jangan lupa di cek pas env ny dk dev lagi
+	if app.Config.Env == env.EnvProd {
 		corsCfg.AllowAllOrigins = false
 		corsCfg.AllowOrigins = []string{app.Config.AllowedOrigin}
-	// } else {
-	// 	corsCfg.AllowAllOrigins = true
-	// }
+	} else {
+		corsCfg.AllowAllOrigins = true
+	}
 
 	router.Use(cors.New(corsCfg))
 

@@ -1,21 +1,20 @@
 package app
 
 import (
-// "github.com/FadhilAF/perbakin-be/internal/repository"
+	"github.com/FadhilAF/perbakin-be/internal/repository"
+	admin_usecase "github.com/FadhilAF/perbakin-be/internal/usecase/admin"
 )
 
-// division_usecase "github.com/DSC-UNSRI/gdsc-website-backend/internal/usecase/division"
-
 type usecases struct {
-	// division   division_usecase.DivisionUsecase
+	admin admin_usecase.AdminUsecase
 }
 
 func (app *App) initUsecase() {
-	// store := repository.NewStore(app.dbPool)
+	store := repository.NewStore(app.dbPool)
 
 	var usecases usecases
 
-	// usecases.division = division_usecase.NewDivisionUsecase(app.store)
+	usecases.admin = admin_usecase.NewAdminUsecase(store)
 
 	app.usecase = usecases
 }

@@ -27,10 +27,12 @@ func SessionHandler(dbPool *pgxpool.Pool, handler *gin.Engine) http.Handler {
 
 	//path cookie
 	SessionManager.Cookie.Path = "/"
-	//path cookie
 
 	SessionManager.Cookie.Persist = true
-	SessionManager.Cookie.SameSite = http.SameSiteStrictMode
+
+	// SessionManager.Cookie.SameSite = http.SameSiteStrictMode
+	SessionManager.Cookie.SameSite = http.SameSiteNoneMode
+
 	SessionManager.Cookie.Secure = true
 
 	return SessionManager.LoadAndSave(handler)
