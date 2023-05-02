@@ -54,7 +54,7 @@ func (q *Queries) GetScorer(ctx context.Context, userID pgtype.UUID) (Scorer, er
 }
 
 const getScorerByUsername = `-- name: GetScorerByUsername :one
-SELECT scorers.id, user_id, username, name FROM users
+SELECT scorers.id, user_id, username, password, name FROM users
 INNER JOIN scorers ON scorers.user_id = users.id
 WHERE username = $1
 `
@@ -63,6 +63,7 @@ type GetScorerByUsernameRow struct {
 	ID       pgtype.UUID
 	UserID   pgtype.UUID
 	Username string
+	Password string
 	Name     string
 }
 
@@ -73,6 +74,7 @@ func (q *Queries) GetScorerByUsername(ctx context.Context, username string) (Get
 		&i.ID,
 		&i.UserID,
 		&i.Username,
+		&i.Password,
 		&i.Name,
 	)
 	return i, err

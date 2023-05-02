@@ -16,7 +16,7 @@ SELECT scorers.id, user_id FROM scorers
 WHERE user_id = $1;
 
 -- name: GetScorerByUsername :one
-SELECT scorers.id, user_id, username, name FROM users
+SELECT scorers.id, user_id, username, password, name FROM users
 INNER JOIN scorers ON scorers.user_id = users.id
 WHERE username = $1;
 

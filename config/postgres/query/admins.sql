@@ -17,7 +17,7 @@ INNER JOIN users ON admins.user_id = users.id
 WHERE user_id = $1;
 
 -- name: GetAdminByUsername :one
-SELECT admins.id, user_id, username, name FROM users
+SELECT admins.id, user_id, username, password, name FROM users
 INNER JOIN admins ON admins.user_id = users.id
 WHERE username = $1;
 

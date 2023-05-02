@@ -1,27 +1,22 @@
 package usecase
 
 import (
-	"github.com/DSC-UNSRI/gdsc-website-backend/internal/db"
-	"github.com/DSC-UNSRI/gdsc-website-backend/internal/model"
+	"github.com/FadhilAF/perbakin-be/internal/model"
+	"github.com/FadhilAF/perbakin-be/internal/repository"
 )
 
-//go:generate mockgen -source=./init.go -destination=./__mock__/generation.go -package=mock_generation_usecase
-type RoleUsecase interface {
-	CreateRole(model.CreateRoleRequest) model.WebServiceResponse
-	UpdateRole(model.UpdateRoleRequest) model.WebServiceResponse
-	DeleteRole(model.GetOrDeleteRoleRequest) model.WebServiceResponse
-	GetRole(model.GetOrDeleteRoleRequest) model.WebServiceResponse
-	ListRole(model.ListRequest) model.WebServiceResponse
+type SuperUsecase interface {
+	SuperLogin(model.LoginRequest) model.WebServiceResponse
 }
 
-var _ RoleUsecase = &roleUsecaseImpl{}
+var _ SuperUsecase = &superUsecaseImpl{}
 
-func NewGenerationUsecase(store db.Store) RoleUsecase {
-	return &roleUsecaseImpl{
+func NewSuperUsecase(store repository.Store) SuperUsecase {
+	return &superUsecaseImpl{
 		Store: store,
 	}
 }
 
-type roleUsecaseImpl struct {
-	db.Store
+type superUsecaseImpl struct {
+	repository.Store
 }

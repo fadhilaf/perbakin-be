@@ -12,7 +12,7 @@ import (
 )
 
 const getSuperByUsername = `-- name: GetSuperByUsername :one
-SELECT supers.id, user_id, username, name FROM users
+SELECT supers.id, user_id, username, password, name FROM users
 INNER JOIN supers ON supers.user_id = users.id
 WHERE username = $1
 `
@@ -21,6 +21,7 @@ type GetSuperByUsernameRow struct {
 	ID       pgtype.UUID
 	UserID   pgtype.UUID
 	Username string
+	Password string
 	Name     string
 }
 
@@ -31,6 +32,7 @@ func (q *Queries) GetSuperByUsername(ctx context.Context, username string) (GetS
 		&i.ID,
 		&i.UserID,
 		&i.Username,
+		&i.Password,
 		&i.Name,
 	)
 	return i, err

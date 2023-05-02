@@ -1,16 +1,17 @@
 package app
 
 import (
-	// division_delivery "github.com/DSC-UNSRI/gdsc-website-backend/internal/delivery/division"
+	super_delivery "github.com/FadhilAF/perbakin-be/internal/delivery/super"
 )
 
 type deliveries struct {
-	// division   division_delivery.DivisionDelivery
+	super super_delivery.SuperDelivery
 }
 
 func (app *App) initDelivery() {
 	var deliveries deliveries
-	// deliveries.division = division_delivery.NewDivisionDelivery(app.usecase.division)
+
+	deliveries.super = super_delivery.NewSuperDelivery(app.usecase.super)
 
 	app.delivery = deliveries
 }

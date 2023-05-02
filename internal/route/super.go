@@ -1,15 +1,11 @@
 package route
 
 import (
-	delivery "github.com/DSC-UNSRI/gdsc-website-backend/internal/delivery/role"
+	delivery "github.com/FadhilAF/perbakin-be/internal/delivery/super"
+
 	"github.com/gin-gonic/gin"
 )
 
-func RolesRoutes(router *gin.RouterGroup, delivery delivery.RoleDelivery) {
-	router.POST("", delivery.CreateRole)
-	router.GET("", delivery.ListRoles)
-
-	router.GET("/:id", delivery.GetRole)
-	router.PUT("/:id", delivery.UpdateRole)
-	router.DELETE("/:id", delivery.DeleteRole)
+func SuperRoutes(router *gin.RouterGroup, delivery delivery.SuperDelivery) {
+	router.POST("/login", delivery.SuperLogin)
 }

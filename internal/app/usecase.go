@@ -2,11 +2,12 @@ package app
 
 import (
 	"github.com/FadhilAF/perbakin-be/internal/repository"
-	admin_usecase "github.com/FadhilAF/perbakin-be/internal/usecase/admin"
+
+	super_usecase "github.com/FadhilAF/perbakin-be/internal/usecase/super"
 )
 
 type usecases struct {
-	admin admin_usecase.AdminUsecase
+	super super_usecase.SuperUsecase
 }
 
 func (app *App) initUsecase() {
@@ -14,7 +15,7 @@ func (app *App) initUsecase() {
 
 	var usecases usecases
 
-	usecases.admin = admin_usecase.NewAdminUsecase(store)
+	usecases.super = super_usecase.NewSuperUsecase(store)
 
 	app.usecase = usecases
 }

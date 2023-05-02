@@ -1,26 +1,22 @@
 package delivery
 
 import (
-	usecase "github.com/DSC-UNSRI/gdsc-website-backend/internal/usecase/role"
+	usecase "github.com/FadhilAF/perbakin-be/internal/usecase/super"
 	"github.com/gin-gonic/gin"
 )
 
-type RoleDelivery interface {
-	CreateRole(ctx *gin.Context)
-	DeleteRole(ctx *gin.Context)
-	GetRole(ctx *gin.Context)
-	ListRoles(ctx *gin.Context)
-	UpdateRole(ctx *gin.Context)
+type SuperDelivery interface {
+	SuperLogin(c *gin.Context)
 }
 
-var _ RoleDelivery = &roleHandler{}
+var _ SuperDelivery = &superHandler{}
 
-func NewRoleDelivery(usecase usecase.RoleUsecase) RoleDelivery {
-	return &roleHandler{
-		usecase: usecase,
+func NewSuperDelivery(usecase usecase.SuperUsecase) SuperDelivery {
+	return &superHandler{
+		Usecase: usecase,
 	}
 }
 
-type roleHandler struct {
-	usecase usecase.RoleUsecase
+type superHandler struct {
+	Usecase usecase.SuperUsecase
 }

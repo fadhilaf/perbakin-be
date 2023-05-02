@@ -11,7 +11,7 @@ type AdminUsecase interface {
 
 var _ AdminUsecase = &adminUsecaseImpl{}
 
-func NewDivisionUsecase(store repository.Store) AdminUsecase {
+func NewAdminUsecase(store repository.Store) AdminUsecase {
 	return &adminUsecaseImpl{
 		Store: store,
 	}

@@ -67,7 +67,7 @@ func (q *Queries) GetAdminByUserId(ctx context.Context, userID pgtype.UUID) (Get
 }
 
 const getAdminByUsername = `-- name: GetAdminByUsername :one
-SELECT admins.id, user_id, username, name FROM users
+SELECT admins.id, user_id, username, password, name FROM users
 INNER JOIN admins ON admins.user_id = users.id
 WHERE username = $1
 `
@@ -76,6 +76,7 @@ type GetAdminByUsernameRow struct {
 	ID       pgtype.UUID
 	UserID   pgtype.UUID
 	Username string
+	Password string
 	Name     string
 }
 
@@ -86,6 +87,7 @@ func (q *Queries) GetAdminByUsername(ctx context.Context, username string) (GetA
 		&i.ID,
 		&i.UserID,
 		&i.Username,
+		&i.Password,
 		&i.Name,
 	)
 	return i, err

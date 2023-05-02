@@ -16,6 +16,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/FadhilAF/perbakin-be/common/env"
+	"github.com/FadhilAF/perbakin-be/common/session"
 	"github.com/FadhilAF/perbakin-be/common/validation"
 )
 
@@ -52,13 +53,13 @@ func (app *App) StartServer() {
 	if validator, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		validation.InitValidation(validator)
 	}
-	router := app.createHandlers()
+	handler := app.createHandlers()
 	address := fmt.Sprintf("%s:%s", app.Config.AppHost, app.Config.AppPort)
 	log.Printf("Server listening on %v\n", address)
 
 	srv := &http.Server{
 		Addr:    address,
-		Handler: SessionHandler(app.dbPool, router),
+		Handler: handler,
 	}
 
 	go func() {
@@ -77,7 +78,8 @@ func (app *App) StartServer() {
 	log.Println("Server exiting")
 }
 
-func (app *App) createHandlers() *gin.Engine {
+func (app *App) createHandlers() http.Handler {
+	// // Bagian Handler HTTP
 	router := gin.Default()
 
 	corsCfg := cors.DefaultConfig()
@@ -106,5 +108,9 @@ func (app *App) createHandlers() *gin.Engine {
 		}
 		fmt.Println()
 	}
-	return router
+
+	// // Bagian Handler Session
+	handler := session.SessionHandler(app.dbPool, router)
+
+	return handler
 }
