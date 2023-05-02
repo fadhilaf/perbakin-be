@@ -1,22 +1,21 @@
 package delivery
 
 import (
-	usecase "github.com/FadhilAF/s-tech-pplbo/internal/usecase/admin"
-	"github.com/gin-gonic/gin"
+	usecase "github.com/FadhilAF/perbakin-be/internal/usecase/admin"
+	// "github.com/gin-gonic/gin"
 )
 
 type AdminDelivery interface {
-	AdminLogin(c *gin.Context)
 }
 
 var _ AdminDelivery = &adminHandler{}
 
 func NewAdminDelivery(usecase usecase.AdminUsecase) AdminDelivery {
 	return &adminHandler{
-		usecase: usecase,
+		Usecase: usecase,
 	}
 }
 
 type adminHandler struct {
-	usecase usecase.AdminUsecase
+	Usecase usecase.AdminUsecase
 }

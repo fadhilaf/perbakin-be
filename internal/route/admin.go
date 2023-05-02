@@ -6,6 +6,5 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AuthRoutes(router *gin.RouterGroup, handler delivery.AdminDelivery) {
-	router.POST("/login", handler.UserLogin)
+func AdminRoutes(router *gin.RouterGroup, delivery delivery.AdminDelivery) {
 }
