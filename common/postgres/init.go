@@ -3,9 +3,7 @@ package postgres
 import (
 	"context"
 	"errors"
-	"fmt"
 	"log"
-	"os"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
@@ -14,27 +12,26 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
-func StartPostgresPoolAndMigrate(migrationFilePath, dsn string) *pgxpool.Pool {
-  dbpool, err := pgxpool.New(context.Background(), "postgresql://" + dsn)
+func StartPostgresPoolAndMigrate(dsn, migrationFilePath string) *pgxpool.Pool {
+	dbpool, err := pgxpool.New(context.Background(), "postgresql://"+dsn)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to create connection pool: %v\n", err)
-		os.Exit(1)
+		log.Fatalln("Unable to create connection pool:", err)
 	}
 	defer dbpool.Close()
 
-  migratePostgres(migrationFilePath, dsn)
+	migratePostgres(migrationFilePath, dsn)
 
-  return dbpool
+	return dbpool
 }
 
 func migratePostgres(migrationFilePath, dsn string) {
-  migration, err := migrate.New(migrationFilePath, "pgx://" + dsn)
+	migration, err := migrate.New("file://"+migrationFilePath, "pgx://"+dsn)
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalln("Error ketika membuat koneksi database untuk migrasi:", err)
 	}
 
 	err = migration.Up()
 	if err != nil && !errors.Is(err, migrate.ErrNoChange) {
-		log.Fatalln(err)
+		log.Fatalln("Error ketika melakukan migrasi:", err)
 	}
 }

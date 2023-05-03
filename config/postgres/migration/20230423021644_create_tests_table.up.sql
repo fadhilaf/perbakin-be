@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS shooting_tests (
-  id uuid PRIMARY KEY DEFAULT UUID_GENERATE_V4(),
+  id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
   super_id uuid NOT NULL,
   name varchar(255) NOT NULL,
   location varchar(255) NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS shooting_tests (
 );
 
 CREATE TABLE IF NOT EXISTS admin_tests (
-  id uuid PRIMARY KEY DEFAULT UUID_GENERATE_V4(),
+  id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
   admin_id uuid NOT NULL,
   test_id uuid NOT NULL,
   created_at timestamp NOT NULL DEFAULT NOW(),
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS admin_tests (
 );
 
 CREATE TABLE IF NOT EXISTS scorer_tests (
-  id uuid PRIMARY KEY DEFAULT UUID_GENERATE_V4(),
+  id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
   scorer_id uuid NOT NULL,
   test_id uuid NOT NULL,
   created_at timestamp NOT NULL DEFAULT NOW(),
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS scorer_tests (
 );
 
 CREATE TABLE IF NOT EXISTS shooter_tests (
-  id uuid PRIMARY KEY DEFAULT UUID_GENERATE_V4(),
+  id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
   shooter_id uuid NOT NULL,
   scorer_test_id uuid NOT NULL,
   created_by uuid NOT NULL,

@@ -88,7 +88,7 @@ func (app *App) createHandlers() http.Handler {
 	// jangan lupa di cek pas env ny dk dev lagi
 	if app.Config.Env == env.EnvProd {
 		corsCfg.AllowAllOrigins = false
-		corsCfg.AllowOrigins = []string{app.Config.AllowedOrigin}
+		corsCfg.AllowOrigins = app.Config.AllowedOrigins
 	} else {
 		corsCfg.AllowAllOrigins = true
 	}

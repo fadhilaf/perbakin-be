@@ -7,7 +7,7 @@ DO $$
 $$;
 
 CREATE TABLE IF NOT EXISTS results (
-  id uuid PRIMARY KEY DEFAULT UUID_GENERATE_V4(),
+  id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
   shooter_test_id uuid NOT NULL,
   status boolean NOT NULL DEFAULT false,
   stage stages NOT NULL DEFAULT '0',
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS results (
 );
 
 CREATE TABLE IF NOT EXISTS stage0_results (
-  id uuid PRIMARY KEY DEFAULT UUID_GENERATE_V4(),
+  id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
   result_id uuid NOT NULL,
   created_at timestamp NOT NULL DEFAULT NOW(),
   updated_at timestamp NOT NULL DEFAULT NOW(),
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS stage0_results (
 );
 
 CREATE TABLE IF NOT EXISTS stage1_results (
-  id uuid PRIMARY KEY DEFAULT UUID_GENERATE_V4(),
+  id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
   result_id uuid NOT NULL,
   created_at timestamp NOT NULL DEFAULT NOW(),
   updated_at timestamp NOT NULL DEFAULT NOW(),
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS stage1_results (
 );
 
 CREATE TABLE IF NOT EXISTS stage2_results (
-  id uuid PRIMARY KEY DEFAULT UUID_GENERATE_V4(),
+  id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
   result_id uuid NOT NULL,
   created_at timestamp NOT NULL DEFAULT NOW(),
   updated_at timestamp NOT NULL DEFAULT NOW(),
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS stage2_results (
 );
 
 CREATE TABLE IF NOT EXISTS stage3_results (
-  id uuid PRIMARY KEY DEFAULT UUID_GENERATE_V4(),
+  id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
   result_id uuid NOT NULL,
   created_at timestamp NOT NULL DEFAULT NOW(),
   updated_at timestamp NOT NULL DEFAULT NOW(),
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS stage3_results (
 );
 
 CREATE TABLE IF NOT EXISTS stage4_results (
-  id uuid PRIMARY KEY DEFAULT UUID_GENERATE_V4(),
+  id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
   result_id uuid NOT NULL,
   created_at timestamp NOT NULL DEFAULT NOW(),
   updated_at timestamp NOT NULL DEFAULT NOW(),
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS stage4_results (
 );
 
 CREATE TABLE IF NOT EXISTS stage5_results (
-  id uuid PRIMARY KEY DEFAULT UUID_GENERATE_V4(),
+  id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
   result_id uuid NOT NULL,
   created_at timestamp NOT NULL DEFAULT NOW(),
   updated_at timestamp NOT NULL DEFAULT NOW(),
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS stage5_results (
 );
 
 CREATE TABLE IF NOT EXISTS stage6_results (
-  id uuid PRIMARY KEY DEFAULT UUID_GENERATE_V4(),
+  id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
   result_id uuid NOT NULL,
   created_at timestamp NOT NULL DEFAULT NOW(),
   updated_at timestamp NOT NULL DEFAULT NOW(),

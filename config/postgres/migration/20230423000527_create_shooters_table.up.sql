@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS shooters (
-  id uuid PRIMARY KEY DEFAULT UUID_GENERATE_V4(),
+  id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
   name varchar(255) NOT NULL,
   profile_photo_path varchar(255) NOT NULL,
   province varchar(255) NOT NULL,
