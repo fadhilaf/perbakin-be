@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	"github.com/FadhilAF/perbakin-be/common/env"
 
 	"github.com/FadhilAF/perbakin-be/common/postgres"
@@ -11,8 +9,6 @@ import (
 )
 
 func main() {
-	log.SetFlags(log.Ldate | log.Ltime | log.Llongfile)
-
 	appConfig := env.New(".env")
 
 	postgresDb := postgres.StartPostgresPoolAndMigrate(appConfig.PostgresDSN, "config/postgres/migration")
