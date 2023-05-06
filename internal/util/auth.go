@@ -1,7 +1,7 @@
 package util
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/FadhilAF/perbakin-be/common/session"
 
@@ -9,32 +9,38 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func SaveUserToSession(c *gin.Context, id pgtype.UUID) {
-	session.SessionManager.Put(c, "user_id", id.Bytes)
+func SaveUserToSession(c *gin.Context, uuid pgtype.UUID) {
+	userId, err := uuid.Value()
+	if err != nil {
+		log.Println("Error ketika membaca pgtype UUID:", err)
+	}
+
+	session.SessionManager.Put(c.Request.Context(), "user_id", userId)
 }
 
-func GetUserIdFromSession(c *gin.Context) pgtype.UUID {
+func GetUserIdFromSession(c *gin.Context) {
 	var uuid pgtype.UUID
 
-	userIdSession := session.SessionManager.GetBytes(c, "user_id")
+	userIdSession := session.SessionManager.GetString(c.Request.Context(), "user_id")
 
-	if userIdSession != nil {
-		if err := uuid.Scan(userIdSession); err != nil {
-			fmt.Println("Error ketika scan uuid:", err)
+	if userIdSession != "" {
+		if err := uuid.Scan(userIdSession); err == nil {
+			c.Set("user_id", userIdSession)
+		} else {
+			log.Println("Error ketika scan uuid:", err)
 		}
 	}
 
-	return uuid
 }
 
 func GetUserIdFromContext(c *gin.Context) pgtype.UUID {
 	var uuid pgtype.UUID
 
-	userId, exist := c.Get("user_id")
+	userIdSession, exist := c.Get("user_id")
 	if exist {
-		if parsedUserId, ok := userId.([16]byte); ok {
-			if err := uuid.Scan(parsedUserId); err != nil {
-				fmt.Println("Error ketika scan uuid:", err)
+		if parsedUserIdSession, ok := userIdSession.(string); ok {
+			if err := uuid.Scan(parsedUserIdSession); err != nil {
+				log.Println("Error ketika scan uuid:", err)
 			}
 		}
 	}
@@ -42,7 +48,5 @@ func GetUserIdFromContext(c *gin.Context) pgtype.UUID {
 }
 
 func RemoveAuthSession(c *gin.Context) {
-	if session.SessionManager.Exists(c, "user_id") {
-		session.SessionManager.Remove(c, "user_id")
-	}
+	session.SessionManager.Remove(c.Request.Context(), "user_id")
 }

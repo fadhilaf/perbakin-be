@@ -17,7 +17,6 @@ func StartPostgresPoolAndMigrate(dsn, migrationFilePath string) *pgxpool.Pool {
 	if err != nil {
 		log.Fatalln("Unable to create connection pool:", err)
 	}
-	defer dbpool.Close()
 
 	migratePostgres(migrationFilePath, dsn)
 

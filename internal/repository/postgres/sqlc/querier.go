@@ -22,6 +22,7 @@ type Querier interface {
 	GetScorer(ctx context.Context, userID pgtype.UUID) (Scorer, error)
 	GetScorerByUsername(ctx context.Context, username string) (GetScorerByUsernameRow, error)
 	GetScorers(ctx context.Context) ([]Scorer, error)
+	GetSuperByUserId(ctx context.Context, userID pgtype.UUID) (GetSuperByUserIdRow, error)
 	GetSuperByUsername(ctx context.Context, username string) (GetSuperByUsernameRow, error)
 }
 

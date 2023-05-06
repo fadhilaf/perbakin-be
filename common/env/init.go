@@ -16,6 +16,7 @@ const (
 type Config struct {
 	AppHost        string   `mapstructure:"APP_HOST"`
 	AppPort        string   `mapstructure:"APP_PORT"`
+	AppDomain      string   `mapstructure:"APP_DOMAIN"`
 	PostgresDSN    string   `mapstructure:"DB_CONNECTION_URL"`
 	Env            Env      `mapstructure:"ENV"`
 	AllowedOrigins []string `mapstructure:"ORIGINS"`

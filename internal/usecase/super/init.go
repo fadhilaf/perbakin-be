@@ -7,6 +7,7 @@ import (
 
 type SuperUsecase interface {
 	SuperLogin(model.LoginRequest) model.WebServiceResponse
+	GetSuperByUserId(model.GetByUserIdRequest) model.WebServiceResponse
 }
 
 var _ SuperUsecase = &superUsecaseImpl{}

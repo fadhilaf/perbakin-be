@@ -5,7 +5,7 @@ import (
 )
 
 type User struct {
-	ID       pgtype.UUID `json:"id"`
+	ID       pgtype.UUID `json:"user_id"`
 	Username string      `json:"username"`
 	Name     string      `json:"name"`
 }
@@ -23,4 +23,8 @@ type Admin struct {
 type Scorer struct {
 	ID pgtype.UUID `json:"id"`
 	User
+}
+
+type GetByUserIdRequest struct {
+	UserID pgtype.UUID `json:"user_id"`
 }

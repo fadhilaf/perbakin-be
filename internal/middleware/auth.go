@@ -5,12 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SaveAndLoadSessionMiddleware() gin.HandlerFunc {
+func LoadSessionMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		userId := util.GetUserIdFromSession(c)
-
-		if userId.Valid {
-			c.Set("user_id", userId.Bytes)
-		}
+		util.GetUserIdFromSession(c)
 	}
 }

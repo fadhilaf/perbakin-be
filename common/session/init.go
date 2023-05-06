@@ -10,30 +10,31 @@ import (
 	"github.com/alexedwards/scs/v2"
 
 	"github.com/gin-gonic/gin"
+
+	"github.com/FadhilAF/perbakin-be/common/env"
 )
 
 var SessionManager *scs.SessionManager
 
-func SessionHandler(dbPool *pgxpool.Pool, handler *gin.Engine) http.Handler {
+func SessionHandler(handler *gin.Engine, dbPool *pgxpool.Pool, config env.Config) http.Handler {
 	SessionManager = scs.New()
 	SessionManager.Store = pgxstore.New(dbPool)
 	SessionManager.Lifetime = 24 * time.Hour
 	SessionManager.IdleTimeout = 20 * time.Minute
-	SessionManager.Cookie.Name = "session_id"
-
-	// SessionManager.Cookie.Domain = "example.com"
-
-	SessionManager.Cookie.HttpOnly = true
-
-	//path cookie
-	SessionManager.Cookie.Path = "/"
-
 	SessionManager.Cookie.Persist = true
+	SessionManager.Cookie.HttpOnly = true
+	SessionManager.Cookie.Path = "/"
+	SessionManager.Cookie.Name = "session"
 
-	// SessionManager.Cookie.SameSite = http.SameSiteStrictMode
-	SessionManager.Cookie.SameSite = http.SameSiteNoneMode
+	SessionManager.Cookie.Domain = config.AppDomain
 
-	SessionManager.Cookie.Secure = true
+	if config.Env == env.EnvProd {
+		SessionManager.Cookie.SameSite = http.SameSiteStrictMode
+		SessionManager.Cookie.Secure = true
+	} else {
+		SessionManager.Cookie.SameSite = http.SameSiteNoneMode
+		SessionManager.Cookie.Secure = false
+	}
 
 	return SessionManager.LoadAndSave(handler)
 }

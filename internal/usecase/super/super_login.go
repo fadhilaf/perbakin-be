@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	// "fmt"
 	"context"
 	"net/http"
 
@@ -11,11 +12,14 @@ import (
 
 func (usecase *superUsecaseImpl) SuperLogin(req model.LoginRequest) model.WebServiceResponse {
 	super, err := usecase.Store.GetSuperByUsername(context.Background(), req.Username)
+
 	if err != nil {
+		// return util.ToWebServiceResponse(fmt.Sprintf("Error saat mengecek username: %v", err), http.StatusInternalServerError, nil)
 		return util.ToWebServiceResponse("Username yang dimasukkan salah", http.StatusNotFound, nil)
 	}
 
-	if err := util.ComparePassword(super.Password, req.Password); err != nil {
+	if err := util.ComparePassword(req.Password, super.Password); err != nil {
+		// return util.ToWebServiceResponse(fmt.Sprintf("Error saat mengecek password: %v", err), http.StatusInternalServerError, nil)
 		return util.ToWebServiceResponse("Password yang dimasukkan salah", http.StatusUnauthorized, nil)
 	}
 

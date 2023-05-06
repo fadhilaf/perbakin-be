@@ -7,5 +7,6 @@ import (
 )
 
 func SuperRoutes(router *gin.RouterGroup, delivery delivery.SuperDelivery) {
+	router.GET("/", delivery.CheckSuperLogin)
 	router.POST("/login", delivery.SuperLogin)
 }

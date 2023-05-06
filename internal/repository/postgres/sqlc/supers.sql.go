@@ -11,6 +11,33 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const getSuperByUserId = `-- name: GetSuperByUserId :one
+SELECT supers.id, user_id, username, password, name FROM users
+INNER JOIN supers ON supers.user_id = users.id
+WHERE user_id = $1
+`
+
+type GetSuperByUserIdRow struct {
+	ID       pgtype.UUID
+	UserID   pgtype.UUID
+	Username string
+	Password string
+	Name     string
+}
+
+func (q *Queries) GetSuperByUserId(ctx context.Context, userID pgtype.UUID) (GetSuperByUserIdRow, error) {
+	row := q.db.QueryRow(ctx, getSuperByUserId, userID)
+	var i GetSuperByUserIdRow
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Username,
+		&i.Password,
+		&i.Name,
+	)
+	return i, err
+}
+
 const getSuperByUsername = `-- name: GetSuperByUsername :one
 SELECT supers.id, user_id, username, password, name FROM users
 INNER JOIN supers ON supers.user_id = users.id

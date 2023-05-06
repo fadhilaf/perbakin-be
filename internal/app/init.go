@@ -18,6 +18,8 @@ import (
 	"github.com/FadhilAF/perbakin-be/common/env"
 	"github.com/FadhilAF/perbakin-be/common/session"
 	"github.com/FadhilAF/perbakin-be/common/validation"
+
+	"github.com/FadhilAF/perbakin-be/internal/middleware"
 )
 
 type App struct {
@@ -85,7 +87,6 @@ func (app *App) createHandlers() http.Handler {
 	corsCfg := cors.DefaultConfig()
 	corsCfg.AllowHeaders = append(corsCfg.AllowHeaders, "Accept")
 
-	// jangan lupa di cek pas env ny dk dev lagi
 	if app.Config.Env == env.EnvProd {
 		corsCfg.AllowAllOrigins = false
 		corsCfg.AllowOrigins = app.Config.AllowedOrigins
@@ -94,6 +95,7 @@ func (app *App) createHandlers() http.Handler {
 	}
 
 	router.Use(cors.New(corsCfg))
+	router.Use(middleware.LoadSessionMiddleware())
 
 	v1 := router.Group("/v1/")
 	app.handlerV1(v1)
@@ -110,7 +112,7 @@ func (app *App) createHandlers() http.Handler {
 	}
 
 	// // Bagian Handler Session
-	handler := session.SessionHandler(app.dbPool, router)
+	handler := session.SessionHandler(router, app.dbPool, app.Config)
 
 	return handler
 }
