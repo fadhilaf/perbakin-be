@@ -6,6 +6,9 @@ import (
 )
 
 func (app *App) handlerV1(router *gin.RouterGroup) {
+	AuthGroup := router.Group("/auth")
+	route.AuthRoutes(AuthGroup, app.delivery.auth)
+
 	SuperGroup := router.Group("/super")
 	route.SuperRoutes(SuperGroup, app.delivery.super)
 }
