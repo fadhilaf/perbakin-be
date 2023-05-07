@@ -10,6 +10,12 @@ import (
 )
 
 func (handler *superHandler) SuperLogin(c *gin.Context) {
+	if _, exist := c.Get("user_id"); exist {
+		res := util.ToWebServiceResponse("Sudah log in, log out terlebih dahulu sebelum log in kembali", http.StatusConflict, nil)
+		c.JSON(res.Status, res)
+		return
+	}
+
 	var req model.LoginRequest
 
 	if ok := util.BindJSONAndValidate(c, &req); !ok {
