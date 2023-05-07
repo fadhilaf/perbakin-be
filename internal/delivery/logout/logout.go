@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *authHandler) Logout(c *gin.Context) {
+func Logout(c *gin.Context) {
 	uuid := util.GetUserIdFromContext(c)
 
 	res := util.ToWebServiceResponse("Sudah Logout", http.StatusOK, nil)

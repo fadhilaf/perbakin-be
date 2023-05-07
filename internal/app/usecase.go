@@ -3,15 +3,13 @@ package app
 import (
 	"github.com/FadhilAF/perbakin-be/internal/repository"
 
-	admin_usecase "github.com/FadhilAF/perbakin-be/internal/usecase/admin"
-	auth_usecase "github.com/FadhilAF/perbakin-be/internal/usecase/auth"
-	super_usecase "github.com/FadhilAF/perbakin-be/internal/usecase/super"
+	adminUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/admin"
+	superUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/super"
 )
 
 type usecases struct {
-	super super_usecase.SuperUsecase
-	auth  auth_usecase.AuthUsecase
-	admin admin_usecase.AdminUsecase
+	super superUsecase.SuperUsecase
+	admin adminUsecase.AdminUsecase
 }
 
 func (app *App) initUsecase() {
@@ -19,9 +17,8 @@ func (app *App) initUsecase() {
 
 	var usecases usecases
 
-	usecases.super = super_usecase.NewSuperUsecase(store)
-	usecases.auth = auth_usecase.NewAuthUsecase(store)
-	usecases.admin = admin_usecase.NewAdminUsecase(store)
+	usecases.super = superUsecase.NewSuperUsecase(store)
+	usecases.admin = adminUsecase.NewAdminUsecase(store)
 
 	app.usecase = usecases
 }
