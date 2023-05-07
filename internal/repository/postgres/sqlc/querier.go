@@ -24,6 +24,10 @@ type Querier interface {
 	GetScorers(ctx context.Context) ([]Scorer, error)
 	GetSuperByUserId(ctx context.Context, userID pgtype.UUID) (GetSuperByUserIdRow, error)
 	GetSuperByUsername(ctx context.Context, username string) (GetSuperByUsernameRow, error)
+	GetSupers(ctx context.Context) ([]GetSupersRow, error)
+	UpdateScorer(ctx context.Context, arg UpdateScorerParams) error
+	UpdateSuper(ctx context.Context, arg UpdateSuperParams) error
+	updateAdmin(ctx context.Context, arg updateAdminParams) error
 }
 
 var _ Querier = (*Queries)(nil)

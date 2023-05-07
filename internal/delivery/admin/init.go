@@ -2,10 +2,13 @@ package delivery
 
 import (
 	usecase "github.com/FadhilAF/perbakin-be/internal/usecase/admin"
-	// "github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin"
 )
 
 type AdminDelivery interface {
+	AdminLogin(c *gin.Context)
+	MustAdminMiddleware() gin.HandlerFunc
+	CheckAdminLogin(c *gin.Context)
 }
 
 var _ AdminDelivery = &adminHandler{}

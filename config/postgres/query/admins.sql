@@ -21,5 +21,8 @@ SELECT admins.id, user_id, username, password, name FROM users
 INNER JOIN admins ON admins.user_id = users.id
 WHERE username = $1;
 
+-- name: updateAdmin :exec
+UPDATE users SET username = $2, name = $3 WHERE id = $1;
+
 -- name: DeleteAdmin :exec
 DELETE FROM admins WHERE user_id = $1;

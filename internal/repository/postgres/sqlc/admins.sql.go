@@ -129,3 +129,18 @@ func (q *Queries) GetAdmins(ctx context.Context) ([]GetAdminsRow, error) {
 	}
 	return items, nil
 }
+
+const updateAdmin = `-- name: updateAdmin :exec
+UPDATE users SET username = $2, name = $3 WHERE id = $1
+`
+
+type updateAdminParams struct {
+	ID       pgtype.UUID
+	Username string
+	Name     string
+}
+
+func (q *Queries) updateAdmin(ctx context.Context, arg updateAdminParams) error {
+	_, err := q.db.Exec(ctx, updateAdmin, arg.ID, arg.Username, arg.Name)
+	return err
+}

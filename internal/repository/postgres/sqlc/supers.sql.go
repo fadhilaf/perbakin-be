@@ -64,3 +64,57 @@ func (q *Queries) GetSuperByUsername(ctx context.Context, username string) (GetS
 	)
 	return i, err
 }
+
+const getSupers = `-- name: GetSupers :many
+SELECT supers.id, user_id, username, password, name FROM supers
+INNER JOIN users ON supers.user_id = users.id
+`
+
+type GetSupersRow struct {
+	ID       pgtype.UUID
+	UserID   pgtype.UUID
+	Username string
+	Password string
+	Name     string
+}
+
+func (q *Queries) GetSupers(ctx context.Context) ([]GetSupersRow, error) {
+	rows, err := q.db.Query(ctx, getSupers)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetSupersRow
+	for rows.Next() {
+		var i GetSupersRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Username,
+			&i.Password,
+			&i.Name,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const updateSuper = `-- name: UpdateSuper :exec
+UPDATE users SET username = $2, name = $3 WHERE id = $1
+`
+
+type UpdateSuperParams struct {
+	ID       pgtype.UUID
+	Username string
+	Name     string
+}
+
+func (q *Queries) UpdateSuper(ctx context.Context, arg UpdateSuperParams) error {
+	_, err := q.db.Exec(ctx, updateSuper, arg.ID, arg.Username, arg.Name)
+	return err
+}

@@ -28,3 +28,9 @@ type Scorer struct {
 type GetByUserIdRequest struct {
 	UserID pgtype.UUID `json:"user_id"`
 }
+
+type CreateUserRequest struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Name     string `json:"name"`
+}

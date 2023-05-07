@@ -26,4 +26,4 @@ migrate-fresh: migrate-down migrate-up
 sqlc:
 	sqlc -f sqlc.yaml generate
 
-.PHONY:	migrate-up migrate-down sqlc migrate-fresh run
+.PHONY:	migrate-up migrate-down sqlc migrate-fresh

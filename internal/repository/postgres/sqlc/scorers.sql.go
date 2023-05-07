@@ -104,3 +104,18 @@ func (q *Queries) GetScorers(ctx context.Context) ([]Scorer, error) {
 	}
 	return items, nil
 }
+
+const updateScorer = `-- name: UpdateScorer :exec
+UPDATE users SET username = $2, name = $3 WHERE id = $1
+`
+
+type UpdateScorerParams struct {
+	ID       pgtype.UUID
+	Username string
+	Name     string
+}
+
+func (q *Queries) UpdateScorer(ctx context.Context, arg UpdateScorerParams) error {
+	_, err := q.db.Exec(ctx, updateScorer, arg.ID, arg.Username, arg.Name)
+	return err
+}

@@ -2,7 +2,6 @@ package util
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/FadhilAF/perbakin-be/common/validation"
@@ -28,8 +27,6 @@ func BindFormAndValidate(ctx *gin.Context, i interface{}) bool {
 
 	if err == nil {
 		return true
-	} else {
-		fmt.Println("Error di validasi Form:", err)
 	}
 
 	validate(ctx, err)
@@ -42,6 +39,7 @@ func BindJSONAndValidate(ctx *gin.Context, i interface{}) bool {
 	if err == nil {
 		return true
 	}
+
 	validate(ctx, err)
 	return false
 }
@@ -67,6 +65,6 @@ func validate(ctx *gin.Context, err error) {
 			Data:    nil,
 		})
 	} else {
-		ctx.JSON(http.StatusInternalServerError, ToWebServiceResponse("Internal server error", http.StatusInternalServerError, nil))
+		ctx.JSON(http.StatusInternalServerError, ToWebServiceResponse("Error membaca request body: "+err.Error(), http.StatusInternalServerError, nil))
 	}
 }

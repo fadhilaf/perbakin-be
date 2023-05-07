@@ -20,5 +20,8 @@ SELECT scorers.id, user_id, username, password, name FROM users
 INNER JOIN scorers ON scorers.user_id = users.id
 WHERE username = $1;
 
+-- name: UpdateScorer :exec
+UPDATE users SET username = $2, name = $3 WHERE id = $1;
+
 -- name: DeleteScorer :exec
 DELETE FROM scorers WHERE user_id = $1;

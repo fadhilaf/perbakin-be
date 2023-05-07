@@ -7,7 +7,9 @@ import (
 
 type SuperDelivery interface {
 	SuperLogin(c *gin.Context)
+	MustSuperMiddleware() gin.HandlerFunc
 	CheckSuperLogin(c *gin.Context)
+	CreateAdmin(c *gin.Context)
 }
 
 var _ SuperDelivery = &superHandler{}

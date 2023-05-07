@@ -8,10 +8,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *authHandler) Logout(ctx *gin.Context) {
-	util.RemoveAuthSession(ctx)
+func (handler *authHandler) Logout(c *gin.Context) {
+	uuid := util.GetUserIdFromContext(c)
 
-	res := util.ToWebServiceResponse("Logout berhasil", http.StatusOK, nil)
+	res := util.ToWebServiceResponse("Sudah Logout", http.StatusOK, nil)
 
-	ctx.JSON(res.Status, res)
+	if uuid.Valid {
+		util.RemoveAuthSession(c)
+		res = util.ToWebServiceResponse("Logout berhasil", http.StatusOK, nil)
+	}
+
+	c.JSON(res.Status, res)
 }
