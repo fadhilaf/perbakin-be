@@ -8,11 +8,10 @@ package postgres
 import (
 	"context"
 
-	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const createScorer = `-- name: CreateScorer :execresult
+const createScorer = `-- name: CreateScorer :exec
 WITH added_user AS (
   INSERT INTO users (username, password, name)
   VALUES ($1, $2, $3)
@@ -28,8 +27,9 @@ type CreateScorerParams struct {
 	Name     string
 }
 
-func (q *Queries) CreateScorer(ctx context.Context, arg CreateScorerParams) (pgconn.CommandTag, error) {
-	return q.db.Exec(ctx, createScorer, arg.Username, arg.Password, arg.Name)
+func (q *Queries) CreateScorer(ctx context.Context, arg CreateScorerParams) error {
+	_, err := q.db.Exec(ctx, createScorer, arg.Username, arg.Password, arg.Name)
+	return err
 }
 
 const deleteScorer = `-- name: DeleteScorer :exec

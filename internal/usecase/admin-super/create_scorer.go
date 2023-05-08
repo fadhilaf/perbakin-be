@@ -20,7 +20,7 @@ func (usecase *adminSuperUsecaseImpl) CreateScorer(req model.CreateUserRequest) 
 		return util.ToWebServiceResponse("Gagal proses hash password: "+err.Error(), http.StatusInternalServerError, nil)
 	}
 
-	_, err = usecase.Store.CreateScorer(context.Background(), repositoryModel.CreateScorerParams{
+	err = usecase.Store.CreateScorer(context.Background(), repositoryModel.CreateScorerParams{
 		Username: req.Username,
 		Password: passwordHash,
 		Name:     req.Name,

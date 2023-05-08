@@ -16,6 +16,9 @@ func (app *App) handlerV1(router *gin.RouterGroup) {
 	adminGroup := router.Group("/admin")
 	route.AdminRoutes(adminGroup, app.delivery.admin)
 
+	scorerGroup := router.Group("/scorer")
+	route.ScorerRoutes(scorerGroup, app.delivery.scorer)
+
 	adminSuperGroup := router.Group("/admin-super")
 	route.AdminSuperRoutes(adminSuperGroup, app.delivery.adminSuper)
 }

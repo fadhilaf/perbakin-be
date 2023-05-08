@@ -1,4 +1,4 @@
--- name: CreateScorer :execresult
+-- name: CreateScorer :exec
 WITH added_user AS (
   INSERT INTO users (username, password, name)
   VALUES ($1, $2, $3)

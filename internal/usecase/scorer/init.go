@@ -1,11 +1,13 @@
 package usecase
 
 import (
-	// "github.com/FadhilAF/perbakin-be/internal/model"
+	"github.com/FadhilAF/perbakin-be/internal/model"
 	"github.com/FadhilAF/perbakin-be/internal/repository"
 )
 
 type ScorerUsecase interface {
+	ScorerLogin(model.LoginRequest) model.WebServiceResponse
+	GetScorerByUserId(model.GetByUserIdRequest) model.WebServiceResponse
 }
 
 var _ ScorerUsecase = &scorerUsecaseImpl{}

@@ -8,7 +8,10 @@ import (
 type AdminSuperDelivery interface {
 	MustAdminSuperMiddleware() gin.HandlerFunc
 	CreateScorer(c *gin.Context)
+	GetScorer(c *gin.Context)
 	GetAllScorers(c *gin.Context)
+	UpdateScorer(c *gin.Context)
+	DeleteScorer(c *gin.Context)
 }
 
 var _ AdminSuperDelivery = &adminSuperHandler{}

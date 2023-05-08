@@ -20,7 +20,7 @@ func (usecase *superUsecaseImpl) CreateAdmin(req model.CreateUserRequest) model.
 		return util.ToWebServiceResponse("Gagal proses hash password: "+err.Error(), http.StatusInternalServerError, nil)
 	}
 
-	_, err = usecase.Store.CreateAdmin(context.Background(), repositoryModel.CreateAdminParams{
+	err = usecase.Store.CreateAdmin(context.Background(), repositoryModel.CreateAdminParams{
 		Username: req.Username,
 		Password: passwordHash,
 		Name:     req.Name,

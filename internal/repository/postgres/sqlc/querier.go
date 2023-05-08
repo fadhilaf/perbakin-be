@@ -7,13 +7,12 @@ package postgres
 import (
 	"context"
 
-	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Querier interface {
-	CreateAdmin(ctx context.Context, arg CreateAdminParams) (pgconn.CommandTag, error)
-	CreateScorer(ctx context.Context, arg CreateScorerParams) (pgconn.CommandTag, error)
+	CreateAdmin(ctx context.Context, arg CreateAdminParams) error
+	CreateScorer(ctx context.Context, arg CreateScorerParams) error
 	DeleteScorer(ctx context.Context, userID pgtype.UUID) error
 	DeleteUser(ctx context.Context, id pgtype.UUID) error
 	GetAdmin(ctx context.Context, id pgtype.UUID) (GetAdminRow, error)

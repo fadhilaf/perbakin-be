@@ -8,11 +8,10 @@ package postgres
 import (
 	"context"
 
-	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const createAdmin = `-- name: CreateAdmin :execresult
+const createAdmin = `-- name: CreateAdmin :exec
 WITH added_user AS (
   INSERT INTO users (username, password, name)
   VALUES ($1, $2, $3)
@@ -28,8 +27,9 @@ type CreateAdminParams struct {
 	Name     string
 }
 
-func (q *Queries) CreateAdmin(ctx context.Context, arg CreateAdminParams) (pgconn.CommandTag, error) {
-	return q.db.Exec(ctx, createAdmin, arg.Username, arg.Password, arg.Name)
+func (q *Queries) CreateAdmin(ctx context.Context, arg CreateAdminParams) error {
+	_, err := q.db.Exec(ctx, createAdmin, arg.Username, arg.Password, arg.Name)
+	return err
 }
 
 const getAdmin = `-- name: GetAdmin :one

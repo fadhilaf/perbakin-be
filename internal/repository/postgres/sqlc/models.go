@@ -13,14 +13,6 @@ type Admin struct {
 	UserID pgtype.UUID
 }
 
-type AdminTest struct {
-	ID        pgtype.UUID
-	AdminID   pgtype.UUID
-	TestID    pgtype.UUID
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
-}
-
 type Result struct {
 	ID            pgtype.UUID
 	ShooterTestID pgtype.UUID
@@ -35,14 +27,6 @@ type Scorer struct {
 	UserID pgtype.UUID
 }
 
-type ScorerTest struct {
-	ID        pgtype.UUID
-	ScorerID  pgtype.UUID
-	TestID    pgtype.UUID
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
-}
-
 type Session struct {
 	Token  string
 	Data   []byte
@@ -50,31 +34,11 @@ type Session struct {
 }
 
 type Shooter struct {
-	ID               pgtype.UUID
-	Name             string
-	ProfilePhotoPath string
-	Province         string
-	Club             string
-	CreatedAt        pgtype.Timestamp
-	UpdatedAt        pgtype.Timestamp
-}
-
-type ShooterTest struct {
-	ID           pgtype.UUID
-	ShooterID    pgtype.UUID
-	ScorerTestID pgtype.UUID
-	CreatedBy    pgtype.UUID
-	CreatedAt    pgtype.Timestamp
-	UpdatedAt    pgtype.Timestamp
-}
-
-type ShootingTest struct {
 	ID        pgtype.UUID
-	SuperID   pgtype.UUID
 	Name      string
-	Location  string
-	Begin     pgtype.Timestamp
-	Finish    pgtype.Timestamp
+	ImagePath string
+	Province  string
+	Club      string
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
 }
@@ -131,6 +95,42 @@ type Stage6Result struct {
 type Super struct {
 	ID     pgtype.UUID
 	UserID pgtype.UUID
+}
+
+type Test struct {
+	ID        pgtype.UUID
+	SuperID   pgtype.UUID
+	Name      string
+	Location  string
+	Begin     pgtype.Timestamp
+	Finish    pgtype.Timestamp
+	CreatedAt pgtype.Timestamp
+	UpdatedAt pgtype.Timestamp
+}
+
+type TestAdmin struct {
+	ID        pgtype.UUID
+	TestID    pgtype.UUID
+	AdminID   pgtype.UUID
+	CreatedAt pgtype.Timestamp
+	UpdatedAt pgtype.Timestamp
+}
+
+type TestScorer struct {
+	ID        pgtype.UUID
+	TestID    pgtype.UUID
+	ScorerID  pgtype.UUID
+	CreatedAt pgtype.Timestamp
+	UpdatedAt pgtype.Timestamp
+}
+
+type TestShooter struct {
+	ID           pgtype.UUID
+	ShooterID    pgtype.UUID
+	ScorerTestID pgtype.UUID
+	CreatedBy    pgtype.UUID
+	CreatedAt    pgtype.Timestamp
+	UpdatedAt    pgtype.Timestamp
 }
 
 type User struct {
