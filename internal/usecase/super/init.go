@@ -9,6 +9,9 @@ type SuperUsecase interface {
 	SuperLogin(model.LoginRequest) model.WebServiceResponse
 	GetSuperByUserId(model.GetByUserIdRequest) model.WebServiceResponse
 	CreateAdmin(model.CreateUserRequest) model.WebServiceResponse
+	GetAdmin(model.GetUserById) model.WebServiceResponse
+	UpdateAdmin(model.UpdateUserRequest) model.WebServiceResponse
+	DeleteAdmin(model.DeleteUserRequest) model.WebServiceResponse
 }
 
 var _ SuperUsecase = &superUsecaseImpl{}

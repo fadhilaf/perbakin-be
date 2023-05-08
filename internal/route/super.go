@@ -12,4 +12,7 @@ func SuperRoutes(router *gin.RouterGroup, delivery delivery.SuperDelivery) {
 	superRouter := router.Group("/", delivery.MustSuperMiddleware())
 	superRouter.GET("/", delivery.CheckSuperLogin)
 	superRouter.POST("/admin/create", delivery.CreateAdmin)
+	superRouter.GET("/admin/:id", delivery.GetAdmin)
+	superRouter.PUT("/admin/:id", delivery.UpdateAdmin)
+	superRouter.DELETE("/admin/:id", delivery.DeleteAdmin)
 }

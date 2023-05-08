@@ -10,7 +10,7 @@ import (
 )
 
 func (usecase *superUsecaseImpl) CreateAdmin(req model.CreateUserRequest) model.WebServiceResponse {
-	_, err := usecase.Store.GetAdminByUsername(context.Background(), req.Username)
+	_, err := usecase.Store.GetUserByUsername(context.Background(), req.Username)
 	if err == nil {
 		return util.ToWebServiceResponse("Username sudah digunakan", http.StatusConflict, nil)
 	}

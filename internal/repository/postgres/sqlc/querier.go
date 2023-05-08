@@ -14,20 +14,28 @@ import (
 type Querier interface {
 	CreateAdmin(ctx context.Context, arg CreateAdminParams) (pgconn.CommandTag, error)
 	CreateScorer(ctx context.Context, arg CreateScorerParams) (pgconn.CommandTag, error)
-	DeleteAdmin(ctx context.Context, userID pgtype.UUID) error
 	DeleteScorer(ctx context.Context, userID pgtype.UUID) error
+	DeleteUser(ctx context.Context, id pgtype.UUID) error
+	GetAdmin(ctx context.Context, id pgtype.UUID) (GetAdminRow, error)
 	GetAdminByUserId(ctx context.Context, userID pgtype.UUID) (GetAdminByUserIdRow, error)
 	GetAdminByUsername(ctx context.Context, username string) (GetAdminByUsernameRow, error)
-	GetAdmins(ctx context.Context) ([]GetAdminsRow, error)
-	GetScorer(ctx context.Context, userID pgtype.UUID) (Scorer, error)
+	GetAdminData(ctx context.Context, id pgtype.UUID) (GetAdminDataRow, error)
+	GetAllAdmins(ctx context.Context) ([]GetAllAdminsRow, error)
+	GetAllScorers(ctx context.Context) ([]GetAllScorersRow, error)
+	GetScorer(ctx context.Context, id pgtype.UUID) (GetScorerRow, error)
+	GetScorerByUserId(ctx context.Context, userID pgtype.UUID) (GetScorerByUserIdRow, error)
 	GetScorerByUsername(ctx context.Context, username string) (GetScorerByUsernameRow, error)
-	GetScorers(ctx context.Context) ([]Scorer, error)
+	GetScorerData(ctx context.Context, id pgtype.UUID) (GetScorerDataRow, error)
 	GetSuperByUserId(ctx context.Context, userID pgtype.UUID) (GetSuperByUserIdRow, error)
 	GetSuperByUsername(ctx context.Context, username string) (GetSuperByUsernameRow, error)
 	GetSupers(ctx context.Context) ([]GetSupersRow, error)
+	GetUserByUsername(ctx context.Context, username string) (GetUserByUsernameRow, error)
+	UpdateAdmin(ctx context.Context, arg UpdateAdminParams) error
+	UpdateAdminName(ctx context.Context, arg UpdateAdminNameParams) error
+	UpdateAdminPassword(ctx context.Context, arg UpdateAdminPasswordParams) error
 	UpdateScorer(ctx context.Context, arg UpdateScorerParams) error
-	UpdateSuper(ctx context.Context, arg UpdateSuperParams) error
-	updateAdmin(ctx context.Context, arg updateAdminParams) error
+	UpdateScorerName(ctx context.Context, arg UpdateScorerNameParams) error
+	UpdateScorerPassword(ctx context.Context, arg UpdateScorerPasswordParams) error
 }
 
 var _ Querier = (*Queries)(nil)

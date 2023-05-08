@@ -4,12 +4,14 @@ import (
 	"github.com/FadhilAF/perbakin-be/internal/repository"
 
 	adminUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/admin"
+	adminSuperUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/admin-super"
 	superUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/super"
 )
 
 type usecases struct {
-	super superUsecase.SuperUsecase
-	admin adminUsecase.AdminUsecase
+	super      superUsecase.SuperUsecase
+	admin      adminUsecase.AdminUsecase
+	adminSuper adminSuperUsecase.AdminSuperUsecase
 }
 
 func (app *App) initUsecase() {
@@ -19,6 +21,7 @@ func (app *App) initUsecase() {
 
 	usecases.super = superUsecase.NewSuperUsecase(store)
 	usecases.admin = adminUsecase.NewAdminUsecase(store)
+	usecases.adminSuper = adminSuperUsecase.NewAdminSuperUsecase(store)
 
 	app.usecase = usecases
 }

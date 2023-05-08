@@ -1,6 +1,8 @@
 package model
 
 import (
+	"time"
+
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -10,19 +12,15 @@ type User struct {
 	Name     string      `json:"name"`
 }
 
-type Super struct {
-	ID pgtype.UUID `json:"id"`
-	User
+type UserDisplayData struct {
+	ID        pgtype.UUID `json:"id"`
+	Name      string      `json:"name"`
+	CreatedAt time.Time   `json:"created_at"`
+	UpdatedAt time.Time   `json:"updated_at"`
 }
 
-type Admin struct {
-	ID pgtype.UUID `json:"id"`
-	User
-}
-
-type Scorer struct {
-	ID pgtype.UUID `json:"id"`
-	User
+type GetUserById struct {
+	ID pgtype.UUID
 }
 
 type GetByUserIdRequest struct {
@@ -33,4 +31,19 @@ type CreateUserRequest struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Name     string `json:"name"`
+}
+
+type UpdateUserDataRequest struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Name     string `json:"name"`
+}
+
+type UpdateUserRequest struct {
+	ID   pgtype.UUID
+	Data UpdateUserDataRequest
+}
+
+type DeleteUserRequest struct {
+	ID pgtype.UUID
 }

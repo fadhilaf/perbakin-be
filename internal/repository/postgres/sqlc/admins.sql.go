@@ -32,13 +32,33 @@ func (q *Queries) CreateAdmin(ctx context.Context, arg CreateAdminParams) (pgcon
 	return q.db.Exec(ctx, createAdmin, arg.Username, arg.Password, arg.Name)
 }
 
-const deleteAdmin = `-- name: DeleteAdmin :exec
-DELETE FROM admins WHERE user_id = $1
+const getAdmin = `-- name: GetAdmin :one
+SELECT admins.id, user_id, username, name, created_at, updated_at FROM admins
+INNER JOIN users ON admins.user_id = users.id
+WHERE admins.id = $1
 `
 
-func (q *Queries) DeleteAdmin(ctx context.Context, userID pgtype.UUID) error {
-	_, err := q.db.Exec(ctx, deleteAdmin, userID)
-	return err
+type GetAdminRow struct {
+	ID        pgtype.UUID
+	UserID    pgtype.UUID
+	Username  string
+	Name      string
+	CreatedAt pgtype.Timestamp
+	UpdatedAt pgtype.Timestamp
+}
+
+func (q *Queries) GetAdmin(ctx context.Context, id pgtype.UUID) (GetAdminRow, error) {
+	row := q.db.QueryRow(ctx, getAdmin, id)
+	var i GetAdminRow
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Username,
+		&i.Name,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }
 
 const getAdminByUserId = `-- name: GetAdminByUserId :one
@@ -93,32 +113,57 @@ func (q *Queries) GetAdminByUsername(ctx context.Context, username string) (GetA
 	return i, err
 }
 
-const getAdmins = `-- name: GetAdmins :many
-SELECT admins.id, user_id, username, name FROM admins
+const getAdminData = `-- name: GetAdminData :one
+SELECT admins.id, name, created_at, updated_at FROM admins
+INNER JOIN users ON admins.user_id = users.id
+WHERE admins.id = $1
+`
+
+type GetAdminDataRow struct {
+	ID        pgtype.UUID
+	Name      string
+	CreatedAt pgtype.Timestamp
+	UpdatedAt pgtype.Timestamp
+}
+
+func (q *Queries) GetAdminData(ctx context.Context, id pgtype.UUID) (GetAdminDataRow, error) {
+	row := q.db.QueryRow(ctx, getAdminData, id)
+	var i GetAdminDataRow
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const getAllAdmins = `-- name: GetAllAdmins :many
+SELECT admins.id, name, created_at, updated_at FROM admins
 INNER JOIN users ON admins.user_id = users.id
 `
 
-type GetAdminsRow struct {
-	ID       pgtype.UUID
-	UserID   pgtype.UUID
-	Username string
-	Name     string
+type GetAllAdminsRow struct {
+	ID        pgtype.UUID
+	Name      string
+	CreatedAt pgtype.Timestamp
+	UpdatedAt pgtype.Timestamp
 }
 
-func (q *Queries) GetAdmins(ctx context.Context) ([]GetAdminsRow, error) {
-	rows, err := q.db.Query(ctx, getAdmins)
+func (q *Queries) GetAllAdmins(ctx context.Context) ([]GetAllAdminsRow, error) {
+	rows, err := q.db.Query(ctx, getAllAdmins)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAdminsRow
+	var items []GetAllAdminsRow
 	for rows.Next() {
-		var i GetAdminsRow
+		var i GetAllAdminsRow
 		if err := rows.Scan(
 			&i.ID,
-			&i.UserID,
-			&i.Username,
 			&i.Name,
+			&i.CreatedAt,
+			&i.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -130,17 +175,66 @@ func (q *Queries) GetAdmins(ctx context.Context) ([]GetAdminsRow, error) {
 	return items, nil
 }
 
-const updateAdmin = `-- name: updateAdmin :exec
-UPDATE users SET username = $2, name = $3 WHERE id = $1
+const updateAdmin = `-- name: UpdateAdmin :exec
+UPDATE users 
+SET username = $2, password = $3, name = $4, updated_at = NOW()
+WHERE users.id = (
+  SELECT user_id FROM admins 
+  WHERE admins.id = $1
+)
 `
 
-type updateAdminParams struct {
+type UpdateAdminParams struct {
 	ID       pgtype.UUID
 	Username string
+	Password string
 	Name     string
 }
 
-func (q *Queries) updateAdmin(ctx context.Context, arg updateAdminParams) error {
-	_, err := q.db.Exec(ctx, updateAdmin, arg.ID, arg.Username, arg.Name)
+func (q *Queries) UpdateAdmin(ctx context.Context, arg UpdateAdminParams) error {
+	_, err := q.db.Exec(ctx, updateAdmin,
+		arg.ID,
+		arg.Username,
+		arg.Password,
+		arg.Name,
+	)
+	return err
+}
+
+const updateAdminName = `-- name: UpdateAdminName :exec
+UPDATE users 
+SET name = $2, updated_at = NOW() 
+WHERE user_id = (
+  SELECT user_id FROM admins 
+  WHERE admins.id = $1
+)
+`
+
+type UpdateAdminNameParams struct {
+	ID   pgtype.UUID
+	Name string
+}
+
+func (q *Queries) UpdateAdminName(ctx context.Context, arg UpdateAdminNameParams) error {
+	_, err := q.db.Exec(ctx, updateAdminName, arg.ID, arg.Name)
+	return err
+}
+
+const updateAdminPassword = `-- name: UpdateAdminPassword :exec
+UPDATE users 
+SET password = $2, updated_at = NOW() 
+WHERE user_id = (
+  SELECT user_id FROM admins 
+  WHERE admins.id = $1
+)
+`
+
+type UpdateAdminPasswordParams struct {
+	ID       pgtype.UUID
+	Password string
+}
+
+func (q *Queries) UpdateAdminPassword(ctx context.Context, arg UpdateAdminPasswordParams) error {
+	_, err := q.db.Exec(ctx, updateAdminPassword, arg.ID, arg.Password)
 	return err
 }

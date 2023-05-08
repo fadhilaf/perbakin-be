@@ -10,9 +10,12 @@ import (
 func (app *App) handlerV1(router *gin.RouterGroup) {
 	router.POST("/logout", logoutController.Logout)
 
-	SuperGroup := router.Group("/super")
-	route.SuperRoutes(SuperGroup, app.delivery.super)
+	superGroup := router.Group("/super")
+	route.SuperRoutes(superGroup, app.delivery.super)
 
-	AdminGroup := router.Group("/admin")
-	route.AdminRoutes(AdminGroup, app.delivery.admin)
+	adminGroup := router.Group("/admin")
+	route.AdminRoutes(adminGroup, app.delivery.admin)
+
+	adminSuperGroup := router.Group("/admin-super")
+	route.AdminSuperRoutes(adminSuperGroup, app.delivery.adminSuper)
 }

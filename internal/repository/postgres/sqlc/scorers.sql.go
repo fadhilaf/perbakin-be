@@ -41,15 +41,94 @@ func (q *Queries) DeleteScorer(ctx context.Context, userID pgtype.UUID) error {
 	return err
 }
 
+const getAllScorers = `-- name: GetAllScorers :many
+SELECT scorers.id, name, created_at, updated_at FROM scorers 
+INNER JOIN users ON scorers.user_id = users.id
+`
+
+type GetAllScorersRow struct {
+	ID        pgtype.UUID
+	Name      string
+	CreatedAt pgtype.Timestamp
+	UpdatedAt pgtype.Timestamp
+}
+
+func (q *Queries) GetAllScorers(ctx context.Context) ([]GetAllScorersRow, error) {
+	rows, err := q.db.Query(ctx, getAllScorers)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetAllScorersRow
+	for rows.Next() {
+		var i GetAllScorersRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getScorer = `-- name: GetScorer :one
-SELECT scorers.id, user_id FROM scorers
+SELECT scorers.id, user_id, username, name, created_at, updated_at FROM scorers
+INNER JOIN users ON scorers.user_id = users.id
+WHERE scorers.id = $1
+`
+
+type GetScorerRow struct {
+	ID        pgtype.UUID
+	UserID    pgtype.UUID
+	Username  string
+	Name      string
+	CreatedAt pgtype.Timestamp
+	UpdatedAt pgtype.Timestamp
+}
+
+func (q *Queries) GetScorer(ctx context.Context, id pgtype.UUID) (GetScorerRow, error) {
+	row := q.db.QueryRow(ctx, getScorer, id)
+	var i GetScorerRow
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Username,
+		&i.Name,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const getScorerByUserId = `-- name: GetScorerByUserId :one
+SELECT scorers.id, user_id, username, name FROM scorers 
+INNER JOIN users ON scorers.user_id = users.id
 WHERE user_id = $1
 `
 
-func (q *Queries) GetScorer(ctx context.Context, userID pgtype.UUID) (Scorer, error) {
-	row := q.db.QueryRow(ctx, getScorer, userID)
-	var i Scorer
-	err := row.Scan(&i.ID, &i.UserID)
+type GetScorerByUserIdRow struct {
+	ID       pgtype.UUID
+	UserID   pgtype.UUID
+	Username string
+	Name     string
+}
+
+func (q *Queries) GetScorerByUserId(ctx context.Context, userID pgtype.UUID) (GetScorerByUserIdRow, error) {
+	row := q.db.QueryRow(ctx, getScorerByUserId, userID)
+	var i GetScorerByUserIdRow
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Username,
+		&i.Name,
+	)
 	return i, err
 }
 
@@ -80,42 +159,91 @@ func (q *Queries) GetScorerByUsername(ctx context.Context, username string) (Get
 	return i, err
 }
 
-const getScorers = `-- name: GetScorers :many
-SELECT scorers.id, user_id FROM scorers 
+const getScorerData = `-- name: GetScorerData :one
+SELECT scorers.id, name, created_at, updated_at FROM scorers
 INNER JOIN users ON scorers.user_id = users.id
+WHERE scorers.id = $1
 `
 
-func (q *Queries) GetScorers(ctx context.Context) ([]Scorer, error) {
-	rows, err := q.db.Query(ctx, getScorers)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []Scorer
-	for rows.Next() {
-		var i Scorer
-		if err := rows.Scan(&i.ID, &i.UserID); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
+type GetScorerDataRow struct {
+	ID        pgtype.UUID
+	Name      string
+	CreatedAt pgtype.Timestamp
+	UpdatedAt pgtype.Timestamp
+}
+
+func (q *Queries) GetScorerData(ctx context.Context, id pgtype.UUID) (GetScorerDataRow, error) {
+	row := q.db.QueryRow(ctx, getScorerData, id)
+	var i GetScorerDataRow
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }
 
 const updateScorer = `-- name: UpdateScorer :exec
-UPDATE users SET username = $2, name = $3 WHERE id = $1
+UPDATE users 
+SET username = $2, password = $3, name = $4, updated_at = NOW() 
+WHERE user_id = (
+  SELECT user_id FROM scorers 
+  WHERE scorers.id = $1
+)
 `
 
 type UpdateScorerParams struct {
 	ID       pgtype.UUID
 	Username string
+	Password string
 	Name     string
 }
 
 func (q *Queries) UpdateScorer(ctx context.Context, arg UpdateScorerParams) error {
-	_, err := q.db.Exec(ctx, updateScorer, arg.ID, arg.Username, arg.Name)
+	_, err := q.db.Exec(ctx, updateScorer,
+		arg.ID,
+		arg.Username,
+		arg.Password,
+		arg.Name,
+	)
+	return err
+}
+
+const updateScorerName = `-- name: UpdateScorerName :exec
+UPDATE users 
+SET name = $2, updated_at = NOW() 
+WHERE user_id = (
+  SELECT user_id FROM scorers 
+  WHERE scorers.id = $1
+)
+`
+
+type UpdateScorerNameParams struct {
+	ID   pgtype.UUID
+	Name string
+}
+
+func (q *Queries) UpdateScorerName(ctx context.Context, arg UpdateScorerNameParams) error {
+	_, err := q.db.Exec(ctx, updateScorerName, arg.ID, arg.Name)
+	return err
+}
+
+const updateScorerPassword = `-- name: UpdateScorerPassword :exec
+UPDATE users 
+SET password = $2, updated_at = NOW()
+WHERE user_id = (
+  SELECT user_id FROM scorers 
+  WHERE scorers.id = $1
+)
+`
+
+type UpdateScorerPasswordParams struct {
+	ID       pgtype.UUID
+	Password string
+}
+
+func (q *Queries) UpdateScorerPassword(ctx context.Context, arg UpdateScorerPasswordParams) error {
+	_, err := q.db.Exec(ctx, updateScorerPassword, arg.ID, arg.Password)
 	return err
 }

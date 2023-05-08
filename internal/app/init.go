@@ -50,6 +50,7 @@ func (app *App) StartServer() {
 	}
 
 	osSignalChan := make(chan os.Signal, 1)
+	// signal.Notify(osSignalChan, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 	signal.Notify(osSignalChan, syscall.SIGINT, syscall.SIGTERM)
 
 	if validator, ok := binding.Validator.Engine().(*validator.Validate); ok {
@@ -66,7 +67,7 @@ func (app *App) StartServer() {
 
 	go func() {
 		err := srv.ListenAndServe()
-		if err != nil {
+		if err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Cannot start server %v\n", err)
 		}
 	}()
@@ -76,6 +77,7 @@ func (app *App) StartServer() {
 	if err != nil {
 		log.Fatalf("cannot shutdown server %v", err)
 	}
+
 	fmt.Println()
 	log.Println("Server exiting")
 }

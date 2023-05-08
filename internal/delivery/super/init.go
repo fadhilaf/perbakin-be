@@ -10,6 +10,9 @@ type SuperDelivery interface {
 	MustSuperMiddleware() gin.HandlerFunc
 	CheckSuperLogin(c *gin.Context)
 	CreateAdmin(c *gin.Context)
+	GetAdmin(c *gin.Context)
+	UpdateAdmin(c *gin.Context)
+	DeleteAdmin(c *gin.Context)
 }
 
 var _ SuperDelivery = &superHandler{}

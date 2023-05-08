@@ -12,7 +12,7 @@ import (
 )
 
 const getSuperByUserId = `-- name: GetSuperByUserId :one
-SELECT supers.id, user_id, username, password, name FROM users
+SELECT supers.id, user_id, username, name FROM users
 INNER JOIN supers ON supers.user_id = users.id
 WHERE user_id = $1
 `
@@ -21,7 +21,6 @@ type GetSuperByUserIdRow struct {
 	ID       pgtype.UUID
 	UserID   pgtype.UUID
 	Username string
-	Password string
 	Name     string
 }
 
@@ -32,7 +31,6 @@ func (q *Queries) GetSuperByUserId(ctx context.Context, userID pgtype.UUID) (Get
 		&i.ID,
 		&i.UserID,
 		&i.Username,
-		&i.Password,
 		&i.Name,
 	)
 	return i, err
@@ -66,16 +64,15 @@ func (q *Queries) GetSuperByUsername(ctx context.Context, username string) (GetS
 }
 
 const getSupers = `-- name: GetSupers :many
-SELECT supers.id, user_id, username, password, name FROM supers
+SELECT supers.id, name, created_at, updated_at FROM supers
 INNER JOIN users ON supers.user_id = users.id
 `
 
 type GetSupersRow struct {
-	ID       pgtype.UUID
-	UserID   pgtype.UUID
-	Username string
-	Password string
-	Name     string
+	ID        pgtype.UUID
+	Name      string
+	CreatedAt pgtype.Timestamp
+	UpdatedAt pgtype.Timestamp
 }
 
 func (q *Queries) GetSupers(ctx context.Context) ([]GetSupersRow, error) {
@@ -89,10 +86,9 @@ func (q *Queries) GetSupers(ctx context.Context) ([]GetSupersRow, error) {
 		var i GetSupersRow
 		if err := rows.Scan(
 			&i.ID,
-			&i.UserID,
-			&i.Username,
-			&i.Password,
 			&i.Name,
+			&i.CreatedAt,
+			&i.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -102,19 +98,4 @@ func (q *Queries) GetSupers(ctx context.Context) ([]GetSupersRow, error) {
 		return nil, err
 	}
 	return items, nil
-}
-
-const updateSuper = `-- name: UpdateSuper :exec
-UPDATE users SET username = $2, name = $3 WHERE id = $1
-`
-
-type UpdateSuperParams struct {
-	ID       pgtype.UUID
-	Username string
-	Name     string
-}
-
-func (q *Queries) UpdateSuper(ctx context.Context, arg UpdateSuperParams) error {
-	_, err := q.db.Exec(ctx, updateSuper, arg.ID, arg.Username, arg.Name)
-	return err
 }
