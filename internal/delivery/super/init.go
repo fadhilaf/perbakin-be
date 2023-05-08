@@ -11,6 +11,7 @@ type SuperDelivery interface {
 	CheckSuperLogin(c *gin.Context)
 	CreateAdmin(c *gin.Context)
 	GetAdmin(c *gin.Context)
+	GetAllAdmins(c *gin.Context)
 	UpdateAdmin(c *gin.Context)
 	DeleteAdmin(c *gin.Context)
 }

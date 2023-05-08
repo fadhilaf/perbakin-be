@@ -10,6 +10,7 @@ type SuperUsecase interface {
 	GetSuperByUserId(model.GetByUserIdRequest) model.WebServiceResponse
 	CreateAdmin(model.CreateUserRequest) model.WebServiceResponse
 	GetAdmin(model.GetUserById) model.WebServiceResponse
+	GetAllAdmins() model.WebServiceResponse
 	UpdateAdmin(model.UpdateUserRequest) model.WebServiceResponse
 	DeleteAdmin(model.DeleteUserRequest) model.WebServiceResponse
 }

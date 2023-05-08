@@ -8,6 +8,6 @@ import (
 
 func AdminSuperRoutes(router *gin.RouterGroup, delivery delivery.AdminSuperDelivery) {
 	adminSuperRoute := router.Group("/", delivery.MustAdminSuperMiddleware())
-
-	adminSuperRoute.GET("/admins", delivery.GetAllAdmins)
+	adminSuperRoute.POST("/scorer", delivery.CreateScorer)
+	adminSuperRoute.GET("/scorers", delivery.GetAllScorers)
 }

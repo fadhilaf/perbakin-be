@@ -6,8 +6,9 @@ import (
 )
 
 type AdminSuperUsecase interface {
-	GetAllAdmins() model.WebServiceResponse
 	GetAdminSuperByUserId(req model.GetByUserIdRequest) model.WebServiceResponse
+	CreateScorer(req model.CreateUserRequest) model.WebServiceResponse
+	GetAllScorers() model.WebServiceResponse
 }
 
 var _ AdminSuperUsecase = &adminSuperUsecaseImpl{}

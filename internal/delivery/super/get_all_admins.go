@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *adminSuperHandler) GetAllAdmins(c *gin.Context) {
+func (handler *superHandler) GetAllAdmins(c *gin.Context) {
 	res := handler.Usecase.GetAllAdmins()
 
 	c.JSON(res.Status, res.Data)

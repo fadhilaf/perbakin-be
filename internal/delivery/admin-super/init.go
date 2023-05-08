@@ -6,8 +6,9 @@ import (
 )
 
 type AdminSuperDelivery interface {
-	GetAllAdmins(c *gin.Context)
 	MustAdminSuperMiddleware() gin.HandlerFunc
+	CreateScorer(c *gin.Context)
+	GetAllScorers(c *gin.Context)
 }
 
 var _ AdminSuperDelivery = &adminSuperHandler{}
