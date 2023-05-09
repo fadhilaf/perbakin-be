@@ -36,6 +36,7 @@ type CreateExamRow struct {
 	Finish    pgtype.Date
 }
 
+// untuk membuat exam (super role)
 func (q *Queries) CreateExam(ctx context.Context, arg CreateExamParams) (CreateExamRow, error) {
 	row := q.db.QueryRow(ctx, createExam,
 		arg.SuperID,
@@ -62,15 +63,18 @@ const deleteExam = `-- name: DeleteExam :exec
 DELETE FROM exams WHERE id = $1
 `
 
+// untuk menghapus exam (super role)
 func (q *Queries) DeleteExam(ctx context.Context, id pgtype.UUID) error {
 	_, err := q.db.Exec(ctx, deleteExam, id)
 	return err
 }
 
 const getAllExams = `-- name: GetAllExams :many
-SELECT id, super_id, name, location, organizer, begin, finish, created_at, updated_at FROM exams
+SELECT id, super_id, name, location, organizer, begin, finish, created_at, updated_at 
+FROM exams
 `
 
+// untuk mengambil seluruh exam (super role)
 func (q *Queries) GetAllExams(ctx context.Context) ([]Exam, error) {
 	rows, err := q.db.Query(ctx, getAllExams)
 	if err != nil {
@@ -102,24 +106,15 @@ func (q *Queries) GetAllExams(ctx context.Context) ([]Exam, error) {
 }
 
 const getExamById = `-- name: GetExamById :one
-SELECT id, super_id, name, location, organizer, begin, finish 
+SELECT id, super_id, name, location, organizer, begin, finish, created_at, updated_at 
 FROM exams 
 WHERE id = $1
 `
 
-type GetExamByIdRow struct {
-	ID        pgtype.UUID
-	SuperID   pgtype.UUID
-	Name      string
-	Location  string
-	Organizer string
-	Begin     pgtype.Date
-	Finish    pgtype.Date
-}
-
-func (q *Queries) GetExamById(ctx context.Context, id pgtype.UUID) (GetExamByIdRow, error) {
+// untuk mengambil satu data exam (super role)
+func (q *Queries) GetExamById(ctx context.Context, id pgtype.UUID) (Exam, error) {
 	row := q.db.QueryRow(ctx, getExamById, id)
-	var i GetExamByIdRow
+	var i Exam
 	err := row.Scan(
 		&i.ID,
 		&i.SuperID,
@@ -128,29 +123,22 @@ func (q *Queries) GetExamById(ctx context.Context, id pgtype.UUID) (GetExamByIdR
 		&i.Organizer,
 		&i.Begin,
 		&i.Finish,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }
 
 const getExamByName = `-- name: GetExamByName :one
-SELECT id, super_id, name, location, organizer, begin, finish 
+SELECT id, super_id, name, location, organizer, begin, finish, created_at, updated_at 
 FROM exams 
 WHERE name = $1
 `
 
-type GetExamByNameRow struct {
-	ID        pgtype.UUID
-	SuperID   pgtype.UUID
-	Name      string
-	Location  string
-	Organizer string
-	Begin     pgtype.Date
-	Finish    pgtype.Date
-}
-
-func (q *Queries) GetExamByName(ctx context.Context, name string) (GetExamByNameRow, error) {
+// untuk mengambil exam berdasarkan nama untuk cek nama sudah dipakai blum (super role)
+func (q *Queries) GetExamByName(ctx context.Context, name string) (Exam, error) {
 	row := q.db.QueryRow(ctx, getExamByName, name)
-	var i GetExamByNameRow
+	var i Exam
 	err := row.Scan(
 		&i.ID,
 		&i.SuperID,
@@ -159,35 +147,47 @@ func (q *Queries) GetExamByName(ctx context.Context, name string) (GetExamByName
 		&i.Organizer,
 		&i.Begin,
 		&i.Finish,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }
 
-const getExamBySuperId = `-- name: GetExamBySuperId :many
-SELECT id, super_id, name, location, organizer, begin, finish 
+const getExamRelationById = `-- name: GetExamRelationById :one
+SELECT id, super_id 
+FROM exams 
+WHERE id = $1
+`
+
+type GetExamRelationByIdRow struct {
+	ID      pgtype.UUID
+	SuperID pgtype.UUID
+}
+
+// untuk mengambil data relasi exam (all role)
+func (q *Queries) GetExamRelationById(ctx context.Context, id pgtype.UUID) (GetExamRelationByIdRow, error) {
+	row := q.db.QueryRow(ctx, getExamRelationById, id)
+	var i GetExamRelationByIdRow
+	err := row.Scan(&i.ID, &i.SuperID)
+	return i, err
+}
+
+const getExamsBySuperId = `-- name: GetExamsBySuperId :many
+SELECT id, super_id, name, location, organizer, begin, finish, created_at, updated_at 
 FROM exams 
 WHERE super_id = $1
 `
 
-type GetExamBySuperIdRow struct {
-	ID        pgtype.UUID
-	SuperID   pgtype.UUID
-	Name      string
-	Location  string
-	Organizer string
-	Begin     pgtype.Date
-	Finish    pgtype.Date
-}
-
-func (q *Queries) GetExamBySuperId(ctx context.Context, superID pgtype.UUID) ([]GetExamBySuperIdRow, error) {
-	rows, err := q.db.Query(ctx, getExamBySuperId, superID)
+// untuk mengambil seluruh exam (super role)
+func (q *Queries) GetExamsBySuperId(ctx context.Context, superID pgtype.UUID) ([]Exam, error) {
+	rows, err := q.db.Query(ctx, getExamsBySuperId, superID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetExamBySuperIdRow
+	var items []Exam
 	for rows.Next() {
-		var i GetExamBySuperIdRow
+		var i Exam
 		if err := rows.Scan(
 			&i.ID,
 			&i.SuperID,
@@ -196,6 +196,8 @@ func (q *Queries) GetExamBySuperId(ctx context.Context, superID pgtype.UUID) ([]
 			&i.Organizer,
 			&i.Begin,
 			&i.Finish,
+			&i.CreatedAt,
+			&i.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -217,7 +219,7 @@ SET
   finish = $6, 
   updated_at = NOW()
 WHERE id = $1
-RETURNING id, super_id, name, location, organizer, begin, finish
+RETURNING id, super_id, name, location, organizer, begin, finish, created_at, updated_at
 `
 
 type UpdateExamParams struct {
@@ -229,17 +231,8 @@ type UpdateExamParams struct {
 	Finish    pgtype.Date
 }
 
-type UpdateExamRow struct {
-	ID        pgtype.UUID
-	SuperID   pgtype.UUID
-	Name      string
-	Location  string
-	Organizer string
-	Begin     pgtype.Date
-	Finish    pgtype.Date
-}
-
-func (q *Queries) UpdateExam(ctx context.Context, arg UpdateExamParams) (UpdateExamRow, error) {
+// untuk memperbarui exam (super role)
+func (q *Queries) UpdateExam(ctx context.Context, arg UpdateExamParams) (Exam, error) {
 	row := q.db.QueryRow(ctx, updateExam,
 		arg.ID,
 		arg.Name,
@@ -248,7 +241,7 @@ func (q *Queries) UpdateExam(ctx context.Context, arg UpdateExamParams) (UpdateE
 		arg.Begin,
 		arg.Finish,
 	)
-	var i UpdateExamRow
+	var i Exam
 	err := row.Scan(
 		&i.ID,
 		&i.SuperID,
@@ -257,6 +250,8 @@ func (q *Queries) UpdateExam(ctx context.Context, arg UpdateExamParams) (UpdateE
 		&i.Organizer,
 		&i.Begin,
 		&i.Finish,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }

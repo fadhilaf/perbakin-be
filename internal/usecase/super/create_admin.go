@@ -7,27 +7,37 @@ import (
 	"github.com/FadhilAF/perbakin-be/internal/model"
 	repositoryModel "github.com/FadhilAF/perbakin-be/internal/repository/postgres/sqlc"
 	"github.com/FadhilAF/perbakin-be/internal/util"
+	"github.com/gin-gonic/gin"
 )
 
-func (usecase *superUsecaseImpl) CreateAdmin(req model.CreateUserRequest) model.WebServiceResponse {
-	_, err := usecase.Store.GetUserByUsername(context.Background(), req.Username)
-	if err == nil {
+func (usecase *superUsecaseImpl) CreateAdmin(req model.CreateOperatorRequest) model.WebServiceResponse {
+	if _, err := usecase.Store.GetUserByUsername(context.Background(), req.Body.Username); err == nil {
 		return util.ToWebServiceResponse("Username sudah digunakan", http.StatusConflict, nil)
 	}
 
-	passwordHash, err := util.HashPassword(req.Password)
+	passwordHash, err := util.HashPassword(req.Body.Password)
 	if err != nil {
 		return util.ToWebServiceResponse("Gagal proses hash password: "+err.Error(), http.StatusInternalServerError, nil)
 	}
 
-	err = usecase.Store.CreateAdmin(context.Background(), repositoryModel.CreateAdminParams{
-		Username: req.Username,
+	admin, err := usecase.Store.CreateAdmin(context.Background(), repositoryModel.CreateAdminParams{
+		ExamID:   req.ExamID,
+		Username: req.Body.Username,
 		Password: passwordHash,
-		Name:     req.Name,
+		Name:     req.Body.Name,
 	})
 	if err != nil {
 		return util.ToWebServiceResponse("Gagal membuat admin: "+err.Error(), http.StatusInternalServerError, nil)
 	}
 
-	return util.ToWebServiceResponse("Berhasil membuat admin", http.StatusCreated, nil)
+	return util.ToWebServiceResponse("Berhasil membuat admin", http.StatusCreated, gin.H{
+		"admin": model.Operator{
+			ID:     admin.ID,
+			ExamID: admin.ExamID,
+			User: model.User{
+				ID:       admin.UserID,
+				Username: admin.Username,
+				Name:     admin.Name,
+			},
+		}})
 }

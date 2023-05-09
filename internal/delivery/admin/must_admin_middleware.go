@@ -13,20 +13,21 @@ func (handler *adminHandler) MustAdminMiddleware() gin.HandlerFunc {
 
 		userId := util.GetUserIdFromContext(c)
 		if !userId.Valid {
-			res := util.ToWebServiceResponse("User belum login", 401, nil)
+			res := util.ToWebServiceResponse("User belum login", http.StatusUnauthorized, nil)
 			c.JSON(res.Status, res)
 			c.Abort()
 			return
 		}
 
-		res := handler.Usecase.GetAdminByUserId(model.GetByUserIdRequest{UserID: userId})
-		if res.Status != http.StatusOK {
+		admin, err := handler.AllUsecase.GetAdminRelationByUserId(model.UserByUserIdRequest{UserID: userId})
+		if err != nil {
+			res := util.ToWebServiceResponse("User bukan merupakan admin", http.StatusUnauthorized, nil)
 			c.JSON(res.Status, res)
 			c.Abort()
 			return
 		}
 
-		c.Set("admin", res.Data["admin"].(model.Admin))
+		c.Set("admin", admin)
 		c.Next()
 	}
 }

@@ -7,16 +7,17 @@ import (
 
 type SuperUsecase interface {
 	SuperLogin(model.LoginRequest) model.WebServiceResponse
-	GetSuperByUserId(model.GetByUserIdRequest) model.WebServiceResponse
 
-	CreateAdmin(model.CreateUserRequest) model.WebServiceResponse
-	GetAdminById(model.ByIdRequest) model.WebServiceResponse
+	CreateAdmin(model.CreateOperatorRequest) model.WebServiceResponse
 	GetAllAdmins() model.WebServiceResponse
-	UpdateAdmin(model.UpdateUserRequest) model.WebServiceResponse
-	DeleteAdmin(model.ByIdRequest) model.WebServiceResponse
+	GetAdminsByExamId(model.GetOperatorsByExamIdRequest) model.WebServiceResponse
+	GetAdminById(model.OperatorByIdRequest) model.WebServiceResponse
+	UpdateAdmin(model.UpdateOperatorRequest) model.WebServiceResponse
+	DeleteAdmin(model.OperatorByIdRequest) model.WebServiceResponse
 
 	GetExamById(model.ByIdRequest) model.WebServiceResponse
 	GetAllExams() model.WebServiceResponse
+	GetExamsByUserId(model.GetExamsBySuperIdRequest) model.WebServiceResponse
 	CreateExam(model.CreateExamRequest) model.WebServiceResponse
 	UpdateExam(model.UpdateExamRequest) model.WebServiceResponse
 	DeleteExam(model.DeleteExamRequest) model.WebServiceResponse

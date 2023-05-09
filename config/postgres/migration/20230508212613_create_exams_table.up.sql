@@ -12,3 +12,27 @@ CREATE TABLE IF NOT EXISTS exams (
     FOREIGN KEY (super_id) 
       REFERENCES supers (id)
 );
+
+CREATE TABLE IF NOT EXISTS admins ( 
+  id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
+  user_id uuid NOT NULL,
+  exam_id uuid NOT NULL,
+  CONSTRAINT user_id
+    FOREIGN KEY (user_id) 
+      REFERENCES users (id) ON DELETE CASCADE,
+  CONSTRAINT exam_id
+    FOREIGN KEY (exam_id) 
+      REFERENCES exams (id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS scorers (
+  id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
+  user_id uuid NOT NULL,
+  exam_id uuid NOT NULL,
+  CONSTRAINT user_id
+    FOREIGN KEY (user_id) 
+      REFERENCES users (id) ON DELETE CASCADE,
+  CONSTRAINT exam_id
+    FOREIGN KEY (exam_id) 
+      REFERENCES exams (id) ON DELETE CASCADE
+);

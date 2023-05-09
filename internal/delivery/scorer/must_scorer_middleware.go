@@ -13,20 +13,21 @@ func (handler *scorerHandler) MustScorerMiddleware() gin.HandlerFunc {
 
 		userId := util.GetUserIdFromContext(c)
 		if !userId.Valid {
-			res := util.ToWebServiceResponse("User belum login", 401, nil)
+			res := util.ToWebServiceResponse("User belum login", http.StatusUnauthorized, nil)
 			c.JSON(res.Status, res)
 			c.Abort()
 			return
 		}
 
-		res := handler.Usecase.GetScorerByUserId(model.GetByUserIdRequest{UserID: userId})
-		if res.Status != http.StatusOK {
+		scorer, err := handler.AllUsecase.GetScorerRelationByUserId(model.UserByUserIdRequest{UserID: userId})
+		if err != nil {
+			res := util.ToWebServiceResponse("User bukan merupakan penguji", http.StatusUnauthorized, nil)
 			c.JSON(res.Status, res)
 			c.Abort()
 			return
 		}
 
-		c.Set("scorer", res.Data["scorer"].(model.Scorer))
+		c.Set("scorer", scorer)
 		c.Next()
 	}
 }

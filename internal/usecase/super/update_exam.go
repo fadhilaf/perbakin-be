@@ -23,7 +23,7 @@ func (usecase *superUsecaseImpl) UpdateExam(req model.UpdateExamRequest) model.W
 	}
 
 	newExam, err := usecase.Store.UpdateExam(context.Background(), respositoryModel.UpdateExamParams{
-		ID:        exam.ID,
+		ID:        req.ID,
 		Name:      req.Body.Name,
 		Location:  req.Body.Location,
 		Organizer: req.Body.Organizer,

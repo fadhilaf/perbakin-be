@@ -6,12 +6,12 @@ import (
 )
 
 type AdminSuperUsecase interface {
-	GetAdminSuperByUserId(req model.GetByUserIdRequest) model.WebServiceResponse
-	CreateScorer(req model.CreateUserRequest) model.WebServiceResponse
-	GetScorerById(req model.ByIdRequest) model.WebServiceResponse
+	CreateScorer(req model.CreateOperatorRequest) model.WebServiceResponse
 	GetAllScorers() model.WebServiceResponse
-	UpdateScorer(req model.UpdateUserRequest) model.WebServiceResponse
-	DeleteScorer(req model.ByIdRequest) model.WebServiceResponse
+	GetScorersByExamId(req model.GetOperatorsByExamIdRequest) model.WebServiceResponse
+	GetScorerById(req model.OperatorByIdRequest) model.WebServiceResponse
+	UpdateScorer(req model.UpdateOperatorRequest) model.WebServiceResponse
+	DeleteScorer(req model.OperatorByIdRequest) model.WebServiceResponse
 }
 
 var _ AdminSuperUsecase = &adminSuperUsecaseImpl{}

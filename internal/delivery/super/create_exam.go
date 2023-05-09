@@ -7,10 +7,7 @@ import (
 )
 
 func (handler *superHandler) CreateExam(c *gin.Context) {
-	super, ok := util.MustGetSuper(c)
-	if !ok {
-		return
-	}
+	super := c.MustGet("super").(model.SuperRelation)
 
 	var req model.CreateExamBodyStringRequest
 

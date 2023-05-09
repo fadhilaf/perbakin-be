@@ -9,12 +9,7 @@ import (
 )
 
 func (handler *scorerHandler) CheckScorerLogin(c *gin.Context) {
-	scorer, ok := c.MustGet("scorer").(model.Scorer)
-	if !ok {
-		res := util.ToWebServiceResponse("Error ketika parsing data scorer", http.StatusInternalServerError, nil)
-		c.JSON(res.Status, res)
-		return
-	}
+	scorer := c.MustGet("scorer").(model.OperatorRelation)
 
 	res := util.ToWebServiceResponse("User adalah scorer", http.StatusOK, gin.H{"scorer": scorer})
 	c.JSON(res.Status, res)

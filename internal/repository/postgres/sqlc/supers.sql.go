@@ -11,79 +11,28 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const getSuperByUserId = `-- name: GetSuperByUserId :one
-SELECT supers.id, user_id, username, name FROM users
-INNER JOIN supers ON supers.user_id = users.id
-WHERE user_id = $1
-`
-
-type GetSuperByUserIdRow struct {
-	ID       pgtype.UUID
-	UserID   pgtype.UUID
-	Username string
-	Name     string
-}
-
-func (q *Queries) GetSuperByUserId(ctx context.Context, userID pgtype.UUID) (GetSuperByUserIdRow, error) {
-	row := q.db.QueryRow(ctx, getSuperByUserId, userID)
-	var i GetSuperByUserIdRow
-	err := row.Scan(
-		&i.ID,
-		&i.UserID,
-		&i.Username,
-		&i.Name,
-	)
-	return i, err
-}
-
-const getSuperByUsername = `-- name: GetSuperByUsername :one
-SELECT supers.id, user_id, username, password, name FROM users
-INNER JOIN supers ON supers.user_id = users.id
-WHERE username = $1
-`
-
-type GetSuperByUsernameRow struct {
-	ID       pgtype.UUID
-	UserID   pgtype.UUID
-	Username string
-	Password string
-	Name     string
-}
-
-func (q *Queries) GetSuperByUsername(ctx context.Context, username string) (GetSuperByUsernameRow, error) {
-	row := q.db.QueryRow(ctx, getSuperByUsername, username)
-	var i GetSuperByUsernameRow
-	err := row.Scan(
-		&i.ID,
-		&i.UserID,
-		&i.Username,
-		&i.Password,
-		&i.Name,
-	)
-	return i, err
-}
-
-const getSupers = `-- name: GetSupers :many
+const getAllSupers = `-- name: GetAllSupers :many
 SELECT supers.id, name, created_at, updated_at FROM supers
 INNER JOIN users ON supers.user_id = users.id
 `
 
-type GetSupersRow struct {
+type GetAllSupersRow struct {
 	ID        pgtype.UUID
 	Name      string
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
 }
 
-func (q *Queries) GetSupers(ctx context.Context) ([]GetSupersRow, error) {
-	rows, err := q.db.Query(ctx, getSupers)
+// untuk ngambil data display seluruh super admin (all role)
+func (q *Queries) GetAllSupers(ctx context.Context) ([]GetAllSupersRow, error) {
+	rows, err := q.db.Query(ctx, getAllSupers)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetSupersRow
+	var items []GetAllSupersRow
 	for rows.Next() {
-		var i GetSupersRow
+		var i GetAllSupersRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.Name,
@@ -98,4 +47,50 @@ func (q *Queries) GetSupers(ctx context.Context) ([]GetSupersRow, error) {
 		return nil, err
 	}
 	return items, nil
+}
+
+const getSuperByUsername = `-- name: GetSuperByUsername :one
+SELECT supers.id, user_id, username, password, name, created_at, updated_at FROM users
+INNER JOIN supers ON supers.user_id = users.id
+WHERE username = $1
+`
+
+type GetSuperByUsernameRow struct {
+	ID        pgtype.UUID
+	UserID    pgtype.UUID
+	Username  string
+	Password  string
+	Name      string
+	CreatedAt pgtype.Timestamp
+	UpdatedAt pgtype.Timestamp
+}
+
+// untuk ngambil data display super admin berdasarkan username (super role)
+func (q *Queries) GetSuperByUsername(ctx context.Context, username string) (GetSuperByUsernameRow, error) {
+	row := q.db.QueryRow(ctx, getSuperByUsername, username)
+	var i GetSuperByUsernameRow
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Username,
+		&i.Password,
+		&i.Name,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const getSuperRelationByUserId = `-- name: GetSuperRelationByUserId :one
+SELECT supers.id, user_id FROM users
+INNER JOIN supers ON supers.user_id = users.id
+WHERE user_id = $1
+`
+
+// untuk ngambil data relasi super admin berdasarkan user id (all role)
+func (q *Queries) GetSuperRelationByUserId(ctx context.Context, userID pgtype.UUID) (Super, error) {
+	row := q.db.QueryRow(ctx, getSuperRelationByUserId, userID)
+	var i Super
+	err := row.Scan(&i.ID, &i.UserID)
+	return i, err
 }

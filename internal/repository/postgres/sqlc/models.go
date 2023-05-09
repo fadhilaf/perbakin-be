@@ -11,6 +11,7 @@ import (
 type Admin struct {
 	ID     pgtype.UUID
 	UserID pgtype.UUID
+	ExamID pgtype.UUID
 }
 
 type Exam struct {
@@ -37,6 +38,7 @@ type Result struct {
 type Scorer struct {
 	ID     pgtype.UUID
 	UserID pgtype.UUID
+	ExamID pgtype.UUID
 }
 
 type Session struct {

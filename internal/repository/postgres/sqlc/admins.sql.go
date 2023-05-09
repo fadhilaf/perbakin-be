@@ -11,29 +11,63 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const createAdmin = `-- name: CreateAdmin :exec
+const createAdmin = `-- name: CreateAdmin :one
 WITH added_user AS (
   INSERT INTO users (username, password, name)
-  VALUES ($1, $2, $3)
+  VALUES ($2, $3, $4)
+  RETURNING id
+), added_admin AS (
+  INSERT INTO admins (user_id, exam_id)
+  SELECT id, $1 FROM added_user
   RETURNING id
 )
-INSERT INTO admins (user_id)
-SELECT id FROM added_user
+SELECT admins.id, user_id, exam_id, username, name, created_at, updated_at FROM admins
+INNER JOIN users ON admins.user_id = users.id
+WHERE admins.id = (
+  SELECT id FROM added_admin
+)
 `
 
 type CreateAdminParams struct {
+	ExamID   pgtype.UUID
 	Username string
 	Password string
 	Name     string
 }
 
-func (q *Queries) CreateAdmin(ctx context.Context, arg CreateAdminParams) error {
-	_, err := q.db.Exec(ctx, createAdmin, arg.Username, arg.Password, arg.Name)
-	return err
+type CreateAdminRow struct {
+	ID        pgtype.UUID
+	UserID    pgtype.UUID
+	ExamID    pgtype.UUID
+	Username  string
+	Name      string
+	CreatedAt pgtype.Timestamp
+	UpdatedAt pgtype.Timestamp
+}
+
+// untuk ngebuat admin (super role) TODO: return sebanyak get admin by id
+func (q *Queries) CreateAdmin(ctx context.Context, arg CreateAdminParams) (CreateAdminRow, error) {
+	row := q.db.QueryRow(ctx, createAdmin,
+		arg.ExamID,
+		arg.Username,
+		arg.Password,
+		arg.Name,
+	)
+	var i CreateAdminRow
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.ExamID,
+		&i.Username,
+		&i.Name,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }
 
 const getAdminById = `-- name: GetAdminById :one
-SELECT admins.id, user_id, username, name, created_at, updated_at FROM admins
+SELECT admins.id, user_id, exam_id, username, name, created_at, updated_at FROM admins
 INNER JOIN users ON admins.user_id = users.id
 WHERE admins.id = $1
 `
@@ -41,18 +75,21 @@ WHERE admins.id = $1
 type GetAdminByIdRow struct {
 	ID        pgtype.UUID
 	UserID    pgtype.UUID
+	ExamID    pgtype.UUID
 	Username  string
 	Name      string
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
 }
 
+// untuk ngambil data akun admin berdasarkan id (super role)
 func (q *Queries) GetAdminById(ctx context.Context, id pgtype.UUID) (GetAdminByIdRow, error) {
 	row := q.db.QueryRow(ctx, getAdminById, id)
 	var i GetAdminByIdRow
 	err := row.Scan(
 		&i.ID,
 		&i.UserID,
+		&i.ExamID,
 		&i.Username,
 		&i.Name,
 		&i.CreatedAt,
@@ -61,76 +98,33 @@ func (q *Queries) GetAdminById(ctx context.Context, id pgtype.UUID) (GetAdminByI
 	return i, err
 }
 
-const getAdminByUserId = `-- name: GetAdminByUserId :one
-SELECT admins.id, user_id, username, name FROM admins
-INNER JOIN users ON admins.user_id = users.id
-WHERE user_id = $1
-`
-
-type GetAdminByUserIdRow struct {
-	ID       pgtype.UUID
-	UserID   pgtype.UUID
-	Username string
-	Name     string
-}
-
-func (q *Queries) GetAdminByUserId(ctx context.Context, userID pgtype.UUID) (GetAdminByUserIdRow, error) {
-	row := q.db.QueryRow(ctx, getAdminByUserId, userID)
-	var i GetAdminByUserIdRow
-	err := row.Scan(
-		&i.ID,
-		&i.UserID,
-		&i.Username,
-		&i.Name,
-	)
-	return i, err
-}
-
 const getAdminByUsername = `-- name: GetAdminByUsername :one
-SELECT admins.id, user_id, username, password, name FROM users
+SELECT admins.id, user_id, exam_id, username, password, name, created_at, updated_at FROM users
 INNER JOIN admins ON admins.user_id = users.id
 WHERE username = $1
 `
 
 type GetAdminByUsernameRow struct {
-	ID       pgtype.UUID
-	UserID   pgtype.UUID
-	Username string
-	Password string
-	Name     string
+	ID        pgtype.UUID
+	UserID    pgtype.UUID
+	ExamID    pgtype.UUID
+	Username  string
+	Password  string
+	Name      string
+	CreatedAt pgtype.Timestamp
+	UpdatedAt pgtype.Timestamp
 }
 
+// untuk ngambil data display admin berdasarkan username (admin role)
 func (q *Queries) GetAdminByUsername(ctx context.Context, username string) (GetAdminByUsernameRow, error) {
 	row := q.db.QueryRow(ctx, getAdminByUsername, username)
 	var i GetAdminByUsernameRow
 	err := row.Scan(
 		&i.ID,
 		&i.UserID,
+		&i.ExamID,
 		&i.Username,
 		&i.Password,
-		&i.Name,
-	)
-	return i, err
-}
-
-const getAdminData = `-- name: GetAdminData :one
-SELECT admins.id, name, created_at, updated_at FROM admins
-INNER JOIN users ON admins.user_id = users.id
-WHERE admins.id = $1
-`
-
-type GetAdminDataRow struct {
-	ID        pgtype.UUID
-	Name      string
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
-}
-
-func (q *Queries) GetAdminData(ctx context.Context, id pgtype.UUID) (GetAdminDataRow, error) {
-	row := q.db.QueryRow(ctx, getAdminData, id)
-	var i GetAdminDataRow
-	err := row.Scan(
-		&i.ID,
 		&i.Name,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -138,29 +132,51 @@ func (q *Queries) GetAdminData(ctx context.Context, id pgtype.UUID) (GetAdminDat
 	return i, err
 }
 
-const getAllAdmins = `-- name: GetAllAdmins :many
-SELECT admins.id, name, created_at, updated_at FROM admins
+const getAdminRelationByUserId = `-- name: GetAdminRelationByUserId :one
+SELECT admins.id, user_id, exam_id FROM admins
 INNER JOIN users ON admins.user_id = users.id
+WHERE user_id = $1
 `
 
-type GetAllAdminsRow struct {
+// untuk ngambil data relasi admin berdasarkan user id (all role)
+func (q *Queries) GetAdminRelationByUserId(ctx context.Context, userID pgtype.UUID) (Admin, error) {
+	row := q.db.QueryRow(ctx, getAdminRelationByUserId, userID)
+	var i Admin
+	err := row.Scan(&i.ID, &i.UserID, &i.ExamID)
+	return i, err
+}
+
+const getAdminsByExamId = `-- name: GetAdminsByExamId :many
+SELECT admins.id, user_id, exam_id, username, name, created_at, updated_at FROM admins 
+INNER JOIN users ON admins.user_id = users.id
+WHERE exam_id = $1
+`
+
+type GetAdminsByExamIdRow struct {
 	ID        pgtype.UUID
+	UserID    pgtype.UUID
+	ExamID    pgtype.UUID
+	Username  string
 	Name      string
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
 }
 
-func (q *Queries) GetAllAdmins(ctx context.Context) ([]GetAllAdminsRow, error) {
-	rows, err := q.db.Query(ctx, getAllAdmins)
+// untuk ngambil data akun seluruh admin dalam satu exam (super role)
+func (q *Queries) GetAdminsByExamId(ctx context.Context, examID pgtype.UUID) ([]GetAdminsByExamIdRow, error) {
+	rows, err := q.db.Query(ctx, getAdminsByExamId, examID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAllAdminsRow
+	var items []GetAdminsByExamIdRow
 	for rows.Next() {
-		var i GetAllAdminsRow
+		var i GetAdminsByExamIdRow
 		if err := rows.Scan(
 			&i.ID,
+			&i.UserID,
+			&i.ExamID,
+			&i.Username,
 			&i.Name,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -175,12 +191,61 @@ func (q *Queries) GetAllAdmins(ctx context.Context) ([]GetAllAdminsRow, error) {
 	return items, nil
 }
 
-const updateAdmin = `-- name: UpdateAdmin :exec
-UPDATE users 
-SET username = $2, password = $3, name = $4, updated_at = NOW()
-WHERE users.id = (
-  SELECT user_id FROM admins 
-  WHERE admins.id = $1
+const getAllAdmins = `-- name: GetAllAdmins :many
+SELECT admins.id, exams.name AS exam, users.name AS name, users.created_at, users.updated_at FROM admins
+INNER JOIN users ON admins.user_id = users.id
+INNER JOIN exams ON admins.exam_id = exams.id
+`
+
+type GetAllAdminsRow struct {
+	ID        pgtype.UUID
+	Exam      string
+	Name      string
+	CreatedAt pgtype.Timestamp
+	UpdatedAt pgtype.Timestamp
+}
+
+// untuk ngambil data display seluruh admin (all role)
+func (q *Queries) GetAllAdmins(ctx context.Context) ([]GetAllAdminsRow, error) {
+	rows, err := q.db.Query(ctx, getAllAdmins)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetAllAdminsRow
+	for rows.Next() {
+		var i GetAllAdminsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Exam,
+			&i.Name,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const updateAdmin = `-- name: UpdateAdmin :one
+WITH updated_user AS (
+  UPDATE users 
+  SET username = $2, password = $3, name = $4, updated_at = NOW()
+  WHERE users.id = (
+    SELECT user_id FROM admins 
+    WHERE admins.id = $1
+  )
+  RETURNING id
+)
+SELECT admins.id, user_id, exam_id, username, name, created_at, updated_at FROM admins
+INNER JOIN users ON admins.user_id = users.id
+WHERE user_id = (
+  SELECT id FROM updated_user
 )
 `
 
@@ -191,23 +256,45 @@ type UpdateAdminParams struct {
 	Name     string
 }
 
-func (q *Queries) UpdateAdmin(ctx context.Context, arg UpdateAdminParams) error {
-	_, err := q.db.Exec(ctx, updateAdmin,
+type UpdateAdminRow struct {
+	ID        pgtype.UUID
+	UserID    pgtype.UUID
+	ExamID    pgtype.UUID
+	Username  string
+	Name      string
+	CreatedAt pgtype.Timestamp
+	UpdatedAt pgtype.Timestamp
+}
+
+// untuk update data akun admin (super role) TODO: return sebanyak get admin by id
+func (q *Queries) UpdateAdmin(ctx context.Context, arg UpdateAdminParams) (UpdateAdminRow, error) {
+	row := q.db.QueryRow(ctx, updateAdmin,
 		arg.ID,
 		arg.Username,
 		arg.Password,
 		arg.Name,
 	)
-	return err
+	var i UpdateAdminRow
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.ExamID,
+		&i.Username,
+		&i.Name,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }
 
-const updateAdminName = `-- name: UpdateAdminName :exec
+const updateAdminName = `-- name: UpdateAdminName :one
 UPDATE users 
 SET name = $2, updated_at = NOW() 
 WHERE user_id = (
   SELECT user_id FROM admins 
   WHERE admins.id = $1
 )
+RETURNING id
 `
 
 type UpdateAdminNameParams struct {
@@ -215,18 +302,22 @@ type UpdateAdminNameParams struct {
 	Name string
 }
 
-func (q *Queries) UpdateAdminName(ctx context.Context, arg UpdateAdminNameParams) error {
-	_, err := q.db.Exec(ctx, updateAdminName, arg.ID, arg.Name)
-	return err
+// low prio
+func (q *Queries) UpdateAdminName(ctx context.Context, arg UpdateAdminNameParams) (pgtype.UUID, error) {
+	row := q.db.QueryRow(ctx, updateAdminName, arg.ID, arg.Name)
+	var id pgtype.UUID
+	err := row.Scan(&id)
+	return id, err
 }
 
-const updateAdminPassword = `-- name: UpdateAdminPassword :exec
+const updateAdminPassword = `-- name: UpdateAdminPassword :one
 UPDATE users 
 SET password = $2, updated_at = NOW() 
 WHERE user_id = (
   SELECT user_id FROM admins 
   WHERE admins.id = $1
 )
+RETURNING id
 `
 
 type UpdateAdminPasswordParams struct {
@@ -234,7 +325,10 @@ type UpdateAdminPasswordParams struct {
 	Password string
 }
 
-func (q *Queries) UpdateAdminPassword(ctx context.Context, arg UpdateAdminPasswordParams) error {
-	_, err := q.db.Exec(ctx, updateAdminPassword, arg.ID, arg.Password)
-	return err
+// low prio
+func (q *Queries) UpdateAdminPassword(ctx context.Context, arg UpdateAdminPasswordParams) (pgtype.UUID, error) {
+	row := q.db.QueryRow(ctx, updateAdminPassword, arg.ID, arg.Password)
+	var id pgtype.UUID
+	err := row.Scan(&id)
+	return id, err
 }

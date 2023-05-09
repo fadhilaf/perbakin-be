@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	"github.com/FadhilAF/perbakin-be/internal/model"
@@ -12,8 +11,6 @@ import (
 )
 
 func (usecase *superUsecaseImpl) CreateExam(req model.CreateExamRequest) model.WebServiceResponse {
-	fmt.Println("CreateExam: ", req.Body.Begin)
-
 	if _, err := usecase.Store.GetExamByName(context.Background(), req.Body.Name); err == nil {
 		return util.ToWebServiceResponse("Nama ujian sudah digunakan", http.StatusConflict, nil)
 	}

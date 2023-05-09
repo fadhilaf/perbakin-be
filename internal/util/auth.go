@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/FadhilAF/perbakin-be/common/session"
-	"github.com/FadhilAF/perbakin-be/internal/model"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -45,6 +44,7 @@ func GetUserIdFromContext(c *gin.Context) pgtype.UUID {
 			}
 		}
 	}
+
 	return uuid
 }
 
@@ -52,12 +52,14 @@ func RemoveAuthSession(c *gin.Context) {
 	session.SessionManager.Remove(c.Request.Context(), "user_id")
 }
 
-func MustGetSuper(c *gin.Context) (super model.Super, ok bool) {
-	super, ok = c.MustGet("super").(model.Super)
-	if !ok {
-		res := ToWebServiceResponse("Error ketika parsing data super", http.StatusInternalServerError, nil)
+func GetIdParam(c *gin.Context, param string) (uuid pgtype.UUID, ok bool) {
+	id := c.Param(param)
+
+	if err := uuid.Scan(id); err != nil {
+		res := ToWebServiceResponse(param+" yang dimasukkan tidak valid", http.StatusBadRequest, nil)
 		c.JSON(res.Status, res)
+		return uuid, false
 	}
 
-	return super, ok
+	return uuid, true
 }

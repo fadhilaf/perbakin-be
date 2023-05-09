@@ -21,8 +21,9 @@ func (usecase *adminUsecaseImpl) AdminLogin(req model.LoginRequest) model.WebSer
 	}
 
 	return util.ToWebServiceResponse("Login berhasil", http.StatusOK, gin.H{
-		"admin": model.Admin{
-			ID: admin.ID,
+		"admin": model.Operator{
+			ID:     admin.ID,
+			ExamID: admin.ExamID,
 			User: model.User{
 				ID:       admin.UserID,
 				Username: admin.Username,

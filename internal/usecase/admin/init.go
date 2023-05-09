@@ -7,7 +7,6 @@ import (
 
 type AdminUsecase interface {
 	AdminLogin(model.LoginRequest) model.WebServiceResponse
-	GetAdminByUserId(model.GetByUserIdRequest) model.WebServiceResponse
 }
 
 var _ AdminUsecase = &adminUsecaseImpl{}

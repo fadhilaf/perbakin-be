@@ -7,12 +7,17 @@ import (
 )
 
 func (handler *adminSuperHandler) DeleteScorer(c *gin.Context) {
-	id, ok := util.GetIdParam(c)
+	exam := c.MustGet("exam").(model.ExamRelation)
+
+	id, ok := util.GetIdParam(c, "scorer_id")
 	if !ok {
 		return
 	}
 
-	res := handler.Usecase.DeleteScorer(model.ByIdRequest{ID: id})
+	res := handler.Usecase.DeleteScorer(model.OperatorByIdRequest{
+		ID:     id,
+		ExamID: exam.ID,
+	})
 
 	c.JSON(res.Status, res)
 }

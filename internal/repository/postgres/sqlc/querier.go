@@ -11,36 +11,68 @@ import (
 )
 
 type Querier interface {
-	CreateAdmin(ctx context.Context, arg CreateAdminParams) error
+	// untuk ngebuat admin (super role) TODO: return sebanyak get admin by id
+	CreateAdmin(ctx context.Context, arg CreateAdminParams) (CreateAdminRow, error)
+	// untuk membuat exam (super role)
 	CreateExam(ctx context.Context, arg CreateExamParams) (CreateExamRow, error)
-	CreateScorer(ctx context.Context, arg CreateScorerParams) error
+	// untuk ngebuat scorer (admin-super role) TODO: return sebanyak get scorer by id
+	CreateScorer(ctx context.Context, arg CreateScorerParams) (CreateScorerRow, error)
+	// untuk menghapus exam (super role)
 	DeleteExam(ctx context.Context, id pgtype.UUID) error
+	// dipake untuk delete user
 	DeleteUser(ctx context.Context, id pgtype.UUID) error
+	// untuk ngambil data akun admin berdasarkan id (super role)
 	GetAdminById(ctx context.Context, id pgtype.UUID) (GetAdminByIdRow, error)
-	GetAdminByUserId(ctx context.Context, userID pgtype.UUID) (GetAdminByUserIdRow, error)
+	// untuk ngambil data display admin berdasarkan username (admin role)
 	GetAdminByUsername(ctx context.Context, username string) (GetAdminByUsernameRow, error)
-	GetAdminData(ctx context.Context, id pgtype.UUID) (GetAdminDataRow, error)
+	// untuk ngambil data relasi admin berdasarkan user id (all role)
+	GetAdminRelationByUserId(ctx context.Context, userID pgtype.UUID) (Admin, error)
+	// untuk ngambil data akun seluruh admin dalam satu exam (super role)
+	GetAdminsByExamId(ctx context.Context, examID pgtype.UUID) ([]GetAdminsByExamIdRow, error)
+	// untuk ngambil data display seluruh admin (all role)
 	GetAllAdmins(ctx context.Context) ([]GetAllAdminsRow, error)
+	// untuk mengambil seluruh exam (super role)
 	GetAllExams(ctx context.Context) ([]Exam, error)
+	// untuk ngambil data display seluruh scorer (all role)
 	GetAllScorers(ctx context.Context) ([]GetAllScorersRow, error)
-	GetExamById(ctx context.Context, id pgtype.UUID) (GetExamByIdRow, error)
-	GetExamByName(ctx context.Context, name string) (GetExamByNameRow, error)
-	GetExamBySuperId(ctx context.Context, superID pgtype.UUID) ([]GetExamBySuperIdRow, error)
+	// untuk ngambil data display seluruh super admin (all role)
+	GetAllSupers(ctx context.Context) ([]GetAllSupersRow, error)
+	// untuk mengambil satu data exam (super role)
+	GetExamById(ctx context.Context, id pgtype.UUID) (Exam, error)
+	// untuk mengambil exam berdasarkan nama untuk cek nama sudah dipakai blum (super role)
+	GetExamByName(ctx context.Context, name string) (Exam, error)
+	// untuk mengambil data relasi exam (all role)
+	GetExamRelationById(ctx context.Context, id pgtype.UUID) (GetExamRelationByIdRow, error)
+	// untuk mengambil seluruh exam (super role)
+	GetExamsBySuperId(ctx context.Context, superID pgtype.UUID) ([]Exam, error)
+	// untuk ngambil data akun scorer berdasarkan id (admin-super role)
 	GetScorerById(ctx context.Context, id pgtype.UUID) (GetScorerByIdRow, error)
-	GetScorerByUserId(ctx context.Context, userID pgtype.UUID) (GetScorerByUserIdRow, error)
+	// untuk ngambil data display scorer berdasarkan username (scorer role)
 	GetScorerByUsername(ctx context.Context, username string) (GetScorerByUsernameRow, error)
-	GetScorerData(ctx context.Context, id pgtype.UUID) (GetScorerDataRow, error)
-	GetSuperByUserId(ctx context.Context, userID pgtype.UUID) (GetSuperByUserIdRow, error)
+	// untuk ngambil data relasi scorer berdasarkan user id (all role)
+	GetScorerRelationByUserId(ctx context.Context, userID pgtype.UUID) (Scorer, error)
+	// untuk ngambil data akun seluruh scorer dalam satu exam (admin-super role)
+	GetScorersByExamId(ctx context.Context, examID pgtype.UUID) ([]GetScorersByExamIdRow, error)
+	// untuk ngambil data display super admin berdasarkan username (super role)
 	GetSuperByUsername(ctx context.Context, username string) (GetSuperByUsernameRow, error)
-	GetSupers(ctx context.Context) ([]GetSupersRow, error)
+	// untuk ngambil data relasi super admin berdasarkan user id (all role)
+	GetSuperRelationByUserId(ctx context.Context, userID pgtype.UUID) (Super, error)
+	// dipake untuk mengecek username ketika create user baru
 	GetUserByUsername(ctx context.Context, username string) (GetUserByUsernameRow, error)
-	UpdateAdmin(ctx context.Context, arg UpdateAdminParams) error
-	UpdateAdminName(ctx context.Context, arg UpdateAdminNameParams) error
-	UpdateAdminPassword(ctx context.Context, arg UpdateAdminPasswordParams) error
-	UpdateExam(ctx context.Context, arg UpdateExamParams) (UpdateExamRow, error)
-	UpdateScorer(ctx context.Context, arg UpdateScorerParams) error
-	UpdateScorerName(ctx context.Context, arg UpdateScorerNameParams) error
-	UpdateScorerPassword(ctx context.Context, arg UpdateScorerPasswordParams) error
+	// untuk update data akun admin (super role) TODO: return sebanyak get admin by id
+	UpdateAdmin(ctx context.Context, arg UpdateAdminParams) (UpdateAdminRow, error)
+	// low prio
+	UpdateAdminName(ctx context.Context, arg UpdateAdminNameParams) (pgtype.UUID, error)
+	// low prio
+	UpdateAdminPassword(ctx context.Context, arg UpdateAdminPasswordParams) (pgtype.UUID, error)
+	// untuk memperbarui exam (super role)
+	UpdateExam(ctx context.Context, arg UpdateExamParams) (Exam, error)
+	// untuk update data akun admin (super role) TODO: return sebanyak get admin by id
+	UpdateScorer(ctx context.Context, arg UpdateScorerParams) (UpdateScorerRow, error)
+	// low prio
+	UpdateScorerName(ctx context.Context, arg UpdateScorerNameParams) (pgtype.UUID, error)
+	// low prio
+	UpdateScorerPassword(ctx context.Context, arg UpdateScorerPasswordParams) (pgtype.UUID, error)
 }
 
 var _ Querier = (*Queries)(nil)

@@ -14,18 +14,13 @@ type Exam struct {
 	Organizer string      `json:"organizer"`
 	Begin     pgtype.Date `json:"begin"`
 	Finish    pgtype.Date `json:"finish"`
-}
-
-type ExamDisplayData struct {
-	ID        pgtype.UUID `json:"id"`
-	SuperID   pgtype.UUID `json:"super_id"`
-	Name      string      `json:"name"`
-	Location  string      `json:"location"`
-	Organizer string      `json:"organizer"`
-	Begin     pgtype.Date `json:"begin"`
-	Finish    pgtype.Date `json:"finish"`
 	CreatedAt time.Time   `json:"created_at"`
 	UpdatedAt time.Time   `json:"updated_at"`
+}
+
+type ExamRelation struct {
+	ID      pgtype.UUID `json:"id"`
+	SuperID pgtype.UUID `json:"super_id"`
 }
 
 // Bentuk struct yang biso di validasi itu type ny harus string
@@ -50,12 +45,8 @@ type CreateExamRequest struct {
 	Body    CreateExamBodyRequest
 }
 
-type UpdateExamBodyRequest struct {
-	Name      string
-	Location  string
-	Organizer string
-	Begin     pgtype.Date
-	Finish    pgtype.Date
+type GetExamsBySuperIdRequest struct {
+	SuperID pgtype.UUID
 }
 
 // Bentuk struct yang biso di validasi itu type ny harus string
@@ -65,6 +56,14 @@ type UpdateExamBodyStringRequest struct {
 	Organizer string `json:"organizer" binding:"required"`
 	Begin     string `json:"begin" binding:"required,datetime=2006-01-02"`
 	Finish    string `json:"finish" binding:"required,datetime=2006-01-02"`
+}
+
+type UpdateExamBodyRequest struct {
+	Name      string
+	Location  string
+	Organizer string
+	Begin     pgtype.Date
+	Finish    pgtype.Date
 }
 
 type UpdateExamRequest struct {

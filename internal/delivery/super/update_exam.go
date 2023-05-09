@@ -7,15 +7,7 @@ import (
 )
 
 func (handler *superHandler) UpdateExam(c *gin.Context) {
-	super, ok := util.MustGetSuper(c)
-	if !ok {
-		return
-	}
-
-	id, ok := util.GetIdParam(c)
-	if !ok {
-		return
-	}
+	exam := c.MustGet("exam").(model.ExamRelation)
 
 	var req model.UpdateExamBodyStringRequest
 
@@ -23,7 +15,7 @@ func (handler *superHandler) UpdateExam(c *gin.Context) {
 		return
 	}
 
-	res := handler.Usecase.UpdateExam(model.UpdateExamRequest{ID: id, SuperID: super.ID, Body: model.UpdateExamBodyRequest{
+	res := handler.Usecase.UpdateExam(model.UpdateExamRequest{ID: exam.ID, SuperID: exam.SuperID, Body: model.UpdateExamBodyRequest{
 		Name:      req.Name,
 		Location:  req.Location,
 		Organizer: req.Organizer,

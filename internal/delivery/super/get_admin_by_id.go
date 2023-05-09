@@ -7,12 +7,17 @@ import (
 )
 
 func (handler *superHandler) GetAdminById(c *gin.Context) {
-	id, ok := util.GetIdParam(c)
+	exam := c.MustGet("exam").(model.ExamRelation)
+
+	id, ok := util.GetIdParam(c, "admin_id")
 	if !ok {
 		return
 	}
 
-	res := handler.Usecase.GetAdminById(model.ByIdRequest{ID: id})
+	res := handler.Usecase.GetAdminById(model.OperatorByIdRequest{
+		ID:     id,
+		ExamID: exam.ID,
+	})
 
 	c.JSON(res.Status, res)
 }

@@ -15,9 +15,9 @@ func (usecase *superUsecaseImpl) GetAllExams() model.WebServiceResponse {
 		return util.ToWebServiceResponse("Gagal mendapatkan data ujian", http.StatusInternalServerError, nil)
 	}
 
-	var examsDisplayData []model.ExamDisplayData
+	var examsData []model.Exam
 	for _, exam := range exams {
-		examsDisplayData = append(examsDisplayData, model.ExamDisplayData{
+		examsData = append(examsData, model.Exam{
 			ID:        exam.ID,
 			SuperID:   exam.SuperID,
 			Name:      exam.Name,
@@ -31,6 +31,6 @@ func (usecase *superUsecaseImpl) GetAllExams() model.WebServiceResponse {
 	}
 
 	return util.ToWebServiceResponse("Berhasil mendapatkan data ujian", http.StatusOK, gin.H{
-		"exams": examsDisplayData,
+		"exams": examsData,
 	})
 }

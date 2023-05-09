@@ -7,13 +7,18 @@ import (
 )
 
 func (handler *superHandler) CreateAdmin(c *gin.Context) {
-	var req model.CreateUserRequest
+	exam := c.MustGet("exam").(model.ExamRelation)
+
+	var req model.OperatorBodyRequest
 
 	if ok := util.BindJSONAndValidate(c, &req); !ok {
 		return
 	}
 
-	res := handler.Usecase.CreateAdmin(req)
+	res := handler.Usecase.CreateAdmin(model.CreateOperatorRequest{
+		ExamID: exam.ID,
+		Body:   req,
+	})
 
 	c.JSON(res.Status, res)
 }

@@ -7,18 +7,20 @@ import (
 )
 
 func (handler *adminSuperHandler) UpdateScorer(c *gin.Context) {
-	id, ok := util.GetIdParam(c)
+	exam := c.MustGet("exam").(model.ExamRelation)
+
+	id, ok := util.GetIdParam(c, "scorer_id")
 	if !ok {
 		return
 	}
 
-	var req model.UpdateUserBodyRequest
+	var req model.OperatorBodyRequest
 
 	if ok := util.BindJSONAndValidate(c, &req); !ok {
 		return
 	}
 
-	res := handler.Usecase.UpdateScorer(model.UpdateUserRequest{ID: id, Body: req})
+	res := handler.Usecase.UpdateScorer(model.UpdateOperatorRequest{ID: id, ExamID: exam.ID, Body: req})
 
 	c.JSON(res.Status, res)
 }

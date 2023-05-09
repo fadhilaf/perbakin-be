@@ -1,56 +1,84 @@
--- name: CreateScorer :exec
+-- untuk ngebuat scorer (admin-super role) TODO: return sebanyak get scorer by id
+-- name: CreateScorer :one
 WITH added_user AS (
   INSERT INTO users (username, password, name)
-  VALUES ($1, $2, $3)
+  VALUES ($2, $3, $4)
+  RETURNING id
+), added_scorer AS (
+  INSERT INTO scorers (user_id, exam_id)
+  SELECT id, $1 FROM added_user
   RETURNING id
 )
-INSERT INTO scorers (user_id)
-SELECT id FROM added_user;
-
--- name: GetAllScorers :many
-SELECT scorers.id, name, created_at, updated_at FROM scorers 
-INNER JOIN users ON scorers.user_id = users.id;
-
--- name: GetScorerData :one
-SELECT scorers.id, name, created_at, updated_at FROM scorers
+SELECT scorers.id, user_id, exam_id, username, name, created_at, updated_at FROM scorers
 INNER JOIN users ON scorers.user_id = users.id
-WHERE scorers.id = $1;
+WHERE scorers.id = (
+  SELECT id FROM added_scorer
+);
 
--- name: GetScorerByUserId :one
-SELECT scorers.id, user_id, username, name FROM scorers 
+-- untuk ngambil data display seluruh scorer (all role)
+-- name: GetAllScorers :many
+SELECT scorers.id, exams.name AS exam, users.name AS name, users.created_at, users.updated_at FROM scorers 
+INNER JOIN users ON scorers.user_id = users.id
+INNER JOIN exams ON scorers.exam_id = exams.id;
+
+-- untuk ngambil data akun seluruh scorer dalam satu exam (admin-super role)
+-- name: GetScorersByExamId :many
+SELECT scorers.id, user_id, exam_id, username, name, created_at, updated_at FROM scorers 
+INNER JOIN users ON scorers.user_id = users.id
+WHERE exam_id = $1;
+
+-- untuk ngambil data relasi scorer berdasarkan user id (all role)
+-- name: GetScorerRelationByUserId :one
+SELECT scorers.id, user_id, exam_id FROM scorers 
 INNER JOIN users ON scorers.user_id = users.id
 WHERE user_id = $1;
 
+-- untuk ngambil data display scorer berdasarkan username (scorer role)
 -- name: GetScorerByUsername :one
-SELECT scorers.id, user_id, username, password, name FROM users
+SELECT scorers.id, user_id, exam_id, username, password, name, created_at, updated_at FROM users
 INNER JOIN scorers ON scorers.user_id = users.id
 WHERE username = $1;
 
+-- untuk ngambil data akun scorer berdasarkan id (admin-super role)
 -- name: GetScorerById :one
-SELECT scorers.id, user_id, username, name, created_at, updated_at FROM scorers
+SELECT scorers.id, user_id, exam_id, username, name, created_at, updated_at FROM scorers
 INNER JOIN users ON scorers.user_id = users.id
 WHERE scorers.id = $1;
 
--- name: UpdateScorer :exec
-UPDATE users 
-SET username = $2, password = $3, name = $4, updated_at = NOW() 
+-- untuk update data akun admin (super role) TODO: return sebanyak get admin by id
+-- name: UpdateScorer :one
+
+WITH updated_user AS (
+  UPDATE users 
+  SET username = $2, password = $3, name = $4, updated_at = NOW() 
+  WHERE user_id = (
+    SELECT user_id FROM scorers 
+    WHERE scorers.id = $1
+  )
+  RETURNING id
+)
+SELECT scorers.id, user_id, exam_id, username, name, created_at, updated_at FROM scorers
+INNER JOIN users ON scorers.user_id = users.id
 WHERE user_id = (
-  SELECT user_id FROM scorers 
-  WHERE scorers.id = $1
+  SELECT id FROM updated_user
 );
 
--- name: UpdateScorerName :exec
+-- low prio
+-- name: UpdateScorerName :one
 UPDATE users 
 SET name = $2, updated_at = NOW() 
 WHERE user_id = (
   SELECT user_id FROM scorers 
   WHERE scorers.id = $1
-);
+)
+RETURNING id;
 
--- name: UpdateScorerPassword :exec
+-- low prio
+-- name: UpdateScorerPassword :one
 UPDATE users 
 SET password = $2, updated_at = NOW()
 WHERE user_id = (
   SELECT user_id FROM scorers 
   WHERE scorers.id = $1
-);
+)
+RETURNING id;

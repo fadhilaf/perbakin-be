@@ -18,19 +18,3 @@ CREATE TABLE IF NOT EXISTS supers (
     FOREIGN KEY (user_id) 
       REFERENCES users (id) ON DELETE CASCADE
 );
-
-CREATE TABLE IF NOT EXISTS admins ( 
-  id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
-  user_id uuid NOT NULL,
-  CONSTRAINT user_id
-    FOREIGN KEY (user_id) 
-      REFERENCES users (id) ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS scorers (
-  id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
-  user_id uuid NOT NULL,
-  CONSTRAINT user_id
-    FOREIGN KEY (user_id) 
-      REFERENCES users (id) ON DELETE CASCADE
-);
