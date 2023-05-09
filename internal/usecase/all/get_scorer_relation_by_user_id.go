@@ -6,8 +6,8 @@ import (
 	"github.com/FadhilAF/perbakin-be/internal/model"
 )
 
-func (usecase *allUsecaseImpl) GetScorerRelationByUserId(req model.UserByUserIdRequest) (*model.OperatorRelation, error) {
+func (usecase *allUsecaseImpl) GetScorerRelationByUserId(req model.UserByUserIdRequest) (model.OperatorRelation, error) {
 	scorer, err := usecase.Store.GetScorerRelationByUserId(context.Background(), req.UserID)
 
-	return &model.OperatorRelation{ID: scorer.ID, UserID: scorer.UserID, ExamID: scorer.ExamID}, err
+	return model.OperatorRelation{ID: scorer.ID, UserID: scorer.UserID, ExamID: scorer.ExamID}, err
 }
