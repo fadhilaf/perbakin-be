@@ -8,11 +8,17 @@ import (
 type SuperUsecase interface {
 	SuperLogin(model.LoginRequest) model.WebServiceResponse
 	GetSuperByUserId(model.GetByUserIdRequest) model.WebServiceResponse
+
 	CreateAdmin(model.CreateUserRequest) model.WebServiceResponse
-	GetAdmin(model.GetUserById) model.WebServiceResponse
+	GetAdminById(model.ByIdRequest) model.WebServiceResponse
 	GetAllAdmins() model.WebServiceResponse
 	UpdateAdmin(model.UpdateUserRequest) model.WebServiceResponse
-	DeleteAdmin(model.DeleteUserRequest) model.WebServiceResponse
+	DeleteAdmin(model.ByIdRequest) model.WebServiceResponse
+
+	GetExamById(model.ByIdRequest) model.WebServiceResponse
+	CreateExam(model.CreateExamRequest) model.WebServiceResponse
+	UpdateExam(model.UpdateExamRequest) model.WebServiceResponse
+	DeleteExam(model.DeleteExamRequest) model.WebServiceResponse
 }
 
 var _ SuperUsecase = &superUsecaseImpl{}

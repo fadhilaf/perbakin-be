@@ -6,11 +6,17 @@ import (
 
 	"github.com/FadhilAF/perbakin-be/common/validation"
 	"github.com/FadhilAF/perbakin-be/internal/model"
+	"github.com/jackc/pgx/v5/pgtype"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 )
+
+func ConvertDate(string string) (date pgtype.Date) {
+	date.Scan(string)
+	return date
+}
 
 func BindWith(ctx *gin.Context, i interface{}, binding binding.Binding) bool {
 	err := ctx.ShouldBindWith(i, binding)

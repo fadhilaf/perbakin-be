@@ -32,13 +32,13 @@ func (q *Queries) CreateAdmin(ctx context.Context, arg CreateAdminParams) error 
 	return err
 }
 
-const getAdmin = `-- name: GetAdmin :one
+const getAdminById = `-- name: GetAdminById :one
 SELECT admins.id, user_id, username, name, created_at, updated_at FROM admins
 INNER JOIN users ON admins.user_id = users.id
 WHERE admins.id = $1
 `
 
-type GetAdminRow struct {
+type GetAdminByIdRow struct {
 	ID        pgtype.UUID
 	UserID    pgtype.UUID
 	Username  string
@@ -47,9 +47,9 @@ type GetAdminRow struct {
 	UpdatedAt pgtype.Timestamp
 }
 
-func (q *Queries) GetAdmin(ctx context.Context, id pgtype.UUID) (GetAdminRow, error) {
-	row := q.db.QueryRow(ctx, getAdmin, id)
-	var i GetAdminRow
+func (q *Queries) GetAdminById(ctx context.Context, id pgtype.UUID) (GetAdminByIdRow, error) {
+	row := q.db.QueryRow(ctx, getAdminById, id)
+	var i GetAdminByIdRow
 	err := row.Scan(
 		&i.ID,
 		&i.UserID,

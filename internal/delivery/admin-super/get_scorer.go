@@ -6,13 +6,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *adminSuperHandler) GetScorer(c *gin.Context) {
+func (handler *adminSuperHandler) GetScorerById(c *gin.Context) {
 	id, ok := util.GetIdParam(c)
 	if !ok {
 		return
 	}
 
-	res := handler.Usecase.GetScorer(model.GetUserById{ID: id})
+	res := handler.Usecase.GetScorerById(model.ByIdRequest{ID: id})
 
 	c.JSON(res.Status, res)
 }

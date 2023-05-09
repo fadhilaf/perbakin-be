@@ -19,31 +19,23 @@ type UserDisplayData struct {
 	UpdatedAt time.Time   `json:"updated_at"`
 }
 
-type GetUserById struct {
-	ID pgtype.UUID
-}
-
 type GetByUserIdRequest struct {
-	UserID pgtype.UUID `json:"user_id"`
+	UserID pgtype.UUID
 }
 
 type CreateUserRequest struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Name     string `json:"name"`
+	Username string `json:"username" binding:"required,excludes= "`
+	Password string `json:"password" binding:"required"`
+	Name     string `json:"name" binding:"required"`
 }
 
-type UpdateUserDataRequest struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Name     string `json:"name"`
+type UpdateUserBodyRequest struct { //ini yg dari http Body ny mending kasi namo kek UpdateUserBodyRequest kek itu
+	Username string `json:"username" binding:"required,excludes= "`
+	Password string `json:"password" binding:"required"`
+	Name     string `json:"name" binding:"required"`
 }
 
 type UpdateUserRequest struct {
 	ID   pgtype.UUID
-	Data UpdateUserDataRequest
-}
-
-type DeleteUserRequest struct {
-	ID pgtype.UUID
+	Body UpdateUserBodyRequest
 }

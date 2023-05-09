@@ -12,13 +12,13 @@ func (handler *superHandler) UpdateAdmin(c *gin.Context) {
 		return
 	}
 
-	var req model.UpdateUserDataRequest
+	var req model.UpdateUserBodyRequest
 
 	if ok := util.BindJSONAndValidate(c, &req); !ok {
 		return
 	}
 
-	res := handler.Usecase.UpdateAdmin(model.UpdateUserRequest{ID: id, Data: req})
+	res := handler.Usecase.UpdateAdmin(model.UpdateUserRequest{ID: id, Body: req})
 
 	c.JSON(res.Status, res)
 }

@@ -9,8 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (usecase *adminSuperUsecaseImpl) GetScorer(req model.GetUserById) model.WebServiceResponse {
-	scorer, err := usecase.Store.GetScorer(context.Background(), req.ID)
+func (usecase *adminSuperUsecaseImpl) GetScorerById(req model.ByIdRequest) model.WebServiceResponse {
+	scorer, err := usecase.Store.GetScorerById(context.Background(), req.ID)
 	if err != nil {
 		return util.ToWebServiceResponse("Id tidak terdaftar sebagai scorer", http.StatusUnauthorized, nil)
 	}

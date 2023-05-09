@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-  "github.com/FadhilAF/perbakin-be/internal/model"
+	"github.com/FadhilAF/perbakin-be/internal/model"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -26,9 +26,9 @@ func HandleValidationErrors(errs validator.ValidationErrors) (res model.Validati
 	var finalErrors []string
 	for _, v := range errs {
 		// debugFieldError(v)
-		translateFunction, ok := customErrors[v.Tag()]
+		translateFunction, ok := customError[v.Tag()]
 		if ok {
-			translatedFieldName, found := customMessages[v.Field()]
+			translatedFieldName, found := customMessage[v.Field()]
 			if !found {
 				translatedFieldName = v.Field()
 			}

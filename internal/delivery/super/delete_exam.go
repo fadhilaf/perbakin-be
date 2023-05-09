@@ -6,13 +6,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *superHandler) DeleteAdmin(c *gin.Context) {
+func (handler *superHandler) DeleteExam(c *gin.Context) {
+	super, ok := util.MustGetSuper(c)
+	if !ok {
+		return
+	}
+
 	id, ok := util.GetIdParam(c)
 	if !ok {
 		return
 	}
 
-	res := handler.Usecase.DeleteAdmin(model.ByIdRequest{ID: id})
+	res := handler.Usecase.DeleteExam(model.DeleteExamRequest{ID: id, SuperID: super.ID})
 
 	c.JSON(res.Status, res)
 }

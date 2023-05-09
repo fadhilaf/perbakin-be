@@ -8,10 +8,10 @@ import (
 type AdminSuperUsecase interface {
 	GetAdminSuperByUserId(req model.GetByUserIdRequest) model.WebServiceResponse
 	CreateScorer(req model.CreateUserRequest) model.WebServiceResponse
-	GetScorer(req model.GetUserById) model.WebServiceResponse
+	GetScorerById(req model.ByIdRequest) model.WebServiceResponse
 	GetAllScorers() model.WebServiceResponse
 	UpdateScorer(req model.UpdateUserRequest) model.WebServiceResponse
-	DeleteScorer(req model.DeleteUserRequest) model.WebServiceResponse
+	DeleteScorer(req model.ByIdRequest) model.WebServiceResponse
 }
 
 var _ AdminSuperUsecase = &adminSuperUsecaseImpl{}

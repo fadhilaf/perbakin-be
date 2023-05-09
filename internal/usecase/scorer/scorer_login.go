@@ -13,7 +13,7 @@ func (usecase *scorerUsecaseImpl) ScorerLogin(req model.LoginRequest) model.WebS
 	scorer, err := usecase.Store.GetScorerByUsername(context.Background(), req.Username)
 
 	if err != nil {
-		return util.ToWebServiceResponse("Username yang dimasukkan salah", http.StatusNotFound, nil)
+		return util.ToWebServiceResponse("Username yang dimasukkan tidak ditemukan", http.StatusNotFound, nil)
 	}
 
 	if err := util.ComparePassword(req.Password, scorer.Password); err != nil {

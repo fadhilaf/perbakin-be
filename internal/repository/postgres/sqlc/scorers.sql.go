@@ -32,15 +32,6 @@ func (q *Queries) CreateScorer(ctx context.Context, arg CreateScorerParams) erro
 	return err
 }
 
-const deleteScorer = `-- name: DeleteScorer :exec
-DELETE FROM scorers WHERE user_id = $1
-`
-
-func (q *Queries) DeleteScorer(ctx context.Context, userID pgtype.UUID) error {
-	_, err := q.db.Exec(ctx, deleteScorer, userID)
-	return err
-}
-
 const getAllScorers = `-- name: GetAllScorers :many
 SELECT scorers.id, name, created_at, updated_at FROM scorers 
 INNER JOIN users ON scorers.user_id = users.id
@@ -78,13 +69,13 @@ func (q *Queries) GetAllScorers(ctx context.Context) ([]GetAllScorersRow, error)
 	return items, nil
 }
 
-const getScorer = `-- name: GetScorer :one
+const getScorerById = `-- name: GetScorerById :one
 SELECT scorers.id, user_id, username, name, created_at, updated_at FROM scorers
 INNER JOIN users ON scorers.user_id = users.id
 WHERE scorers.id = $1
 `
 
-type GetScorerRow struct {
+type GetScorerByIdRow struct {
 	ID        pgtype.UUID
 	UserID    pgtype.UUID
 	Username  string
@@ -93,9 +84,9 @@ type GetScorerRow struct {
 	UpdatedAt pgtype.Timestamp
 }
 
-func (q *Queries) GetScorer(ctx context.Context, id pgtype.UUID) (GetScorerRow, error) {
-	row := q.db.QueryRow(ctx, getScorer, id)
-	var i GetScorerRow
+func (q *Queries) GetScorerById(ctx context.Context, id pgtype.UUID) (GetScorerByIdRow, error) {
+	row := q.db.QueryRow(ctx, getScorerById, id)
+	var i GetScorerByIdRow
 	err := row.Scan(
 		&i.ID,
 		&i.UserID,

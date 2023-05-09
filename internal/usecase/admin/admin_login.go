@@ -13,7 +13,7 @@ func (usecase *adminUsecaseImpl) AdminLogin(req model.LoginRequest) model.WebSer
 	admin, err := usecase.Store.GetAdminByUsername(context.Background(), req.Username)
 
 	if err != nil {
-		return util.ToWebServiceResponse("Username yang dimasukkan salah", http.StatusNotFound, nil)
+		return util.ToWebServiceResponse("Username yang dimasukkan tidak ditemukan", http.StatusNotFound, nil)
 	}
 
 	if err := util.ComparePassword(req.Password, admin.Password); err != nil {

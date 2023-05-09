@@ -12,7 +12,7 @@ func (handler *adminSuperHandler) DeleteScorer(c *gin.Context) {
 		return
 	}
 
-	res := handler.Usecase.DeleteScorer(model.DeleteUserRequest{ID: id})
+	res := handler.Usecase.DeleteScorer(model.ByIdRequest{ID: id})
 
 	c.JSON(res.Status, res)
 }

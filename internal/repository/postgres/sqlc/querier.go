@@ -12,16 +12,21 @@ import (
 
 type Querier interface {
 	CreateAdmin(ctx context.Context, arg CreateAdminParams) error
+	CreateExam(ctx context.Context, arg CreateExamParams) (CreateExamRow, error)
 	CreateScorer(ctx context.Context, arg CreateScorerParams) error
-	DeleteScorer(ctx context.Context, userID pgtype.UUID) error
+	DeleteExam(ctx context.Context, id pgtype.UUID) error
 	DeleteUser(ctx context.Context, id pgtype.UUID) error
-	GetAdmin(ctx context.Context, id pgtype.UUID) (GetAdminRow, error)
+	GetAdminById(ctx context.Context, id pgtype.UUID) (GetAdminByIdRow, error)
 	GetAdminByUserId(ctx context.Context, userID pgtype.UUID) (GetAdminByUserIdRow, error)
 	GetAdminByUsername(ctx context.Context, username string) (GetAdminByUsernameRow, error)
 	GetAdminData(ctx context.Context, id pgtype.UUID) (GetAdminDataRow, error)
 	GetAllAdmins(ctx context.Context) ([]GetAllAdminsRow, error)
+	GetAllExams(ctx context.Context) ([]GetAllExamsRow, error)
 	GetAllScorers(ctx context.Context) ([]GetAllScorersRow, error)
-	GetScorer(ctx context.Context, id pgtype.UUID) (GetScorerRow, error)
+	GetExamById(ctx context.Context, id pgtype.UUID) (GetExamByIdRow, error)
+	GetExamByName(ctx context.Context, name string) (GetExamByNameRow, error)
+	GetExamBySuperId(ctx context.Context, superID pgtype.UUID) ([]GetExamBySuperIdRow, error)
+	GetScorerById(ctx context.Context, id pgtype.UUID) (GetScorerByIdRow, error)
 	GetScorerByUserId(ctx context.Context, userID pgtype.UUID) (GetScorerByUserIdRow, error)
 	GetScorerByUsername(ctx context.Context, username string) (GetScorerByUsernameRow, error)
 	GetScorerData(ctx context.Context, id pgtype.UUID) (GetScorerDataRow, error)
@@ -32,6 +37,7 @@ type Querier interface {
 	UpdateAdmin(ctx context.Context, arg UpdateAdminParams) error
 	UpdateAdminName(ctx context.Context, arg UpdateAdminNameParams) error
 	UpdateAdminPassword(ctx context.Context, arg UpdateAdminPasswordParams) error
+	UpdateExam(ctx context.Context, arg UpdateExamParams) (UpdateExamRow, error)
 	UpdateScorer(ctx context.Context, arg UpdateScorerParams) error
 	UpdateScorerName(ctx context.Context, arg UpdateScorerNameParams) error
 	UpdateScorerPassword(ctx context.Context, arg UpdateScorerPasswordParams) error

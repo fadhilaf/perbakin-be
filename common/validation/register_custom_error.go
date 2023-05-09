@@ -8,27 +8,41 @@ import (
 )
 
 func registerCustomErrors() {
-	customErrors["required"] = func(field validator.FieldError, translatedFieldName string) string {
-		return fmt.Sprintf("%s tidak boleh kosong", translatedFieldName)
+	customError["required"] = func(field validator.FieldError, translatedFieldName string) string {
+		return fmt.Sprintf("'%s' tidak boleh kosong", translatedFieldName)
 	}
 
-	customErrors["startswith"] = func(field validator.FieldError, translatedFieldName string) string {
-		return fmt.Sprintf("%s harus berawalan %s", translatedFieldName, field.Value())
+	customError["uuid"] = func(field validator.FieldError, translatedFieldName string) string {
+		return fmt.Sprintf("'%s' harus dengan format UUID", translatedFieldName)
 	}
 
-	customErrors["uuid"] = func(field validator.FieldError, translatedFieldName string) string {
-		return fmt.Sprintf("%s harus dengan format UUID", translatedFieldName)
-	}
-
-	customErrors["max"] = func(field validator.FieldError, translatedFieldName string) string {
+	customError["max"] = func(field validator.FieldError, translatedFieldName string) string {
 		fieldType := field.Kind()
 		if fieldType == reflect.Int {
-			return fmt.Sprintf("%s tidak boleh lebih dari %s", translatedFieldName, field.Param())
+			return fmt.Sprintf("'%s' tidak boleh lebih dari %s", translatedFieldName, field.Param())
 		}
-		return fmt.Sprintf("%s tidak boleh melebihi %s karakter", translatedFieldName, field.Param())
+		return fmt.Sprintf("'%s' tidak boleh melebihi %s karakter", translatedFieldName, field.Param())
 	}
 
-	customErrors["numeric"] = func(field validator.FieldError, translatedFieldName string) string {
-		return fmt.Sprintf("%s harus numeric", translatedFieldName)
+	customError["numeric"] = func(field validator.FieldError, translatedFieldName string) string {
+		return fmt.Sprintf("'%s' harus numeric", translatedFieldName)
+	}
+
+	customError["datetime"] = func(field validator.FieldError, translatedFieldName string) string {
+		param := field.Param()
+		if param == "2006-01-02" {
+			param = "YYYY-MM-DD"
+		}
+
+		return fmt.Sprintf("%s harus dengan format %s", translatedFieldName, param)
+	}
+
+	customError["excludes"] = func(field validator.FieldError, translatedFieldName string) string {
+		param := field.Param()
+		if param == " " {
+			param = "spasi"
+		}
+
+		return fmt.Sprintf("'%s' tidak boleh memiliki %s", translatedFieldName, param)
 	}
 }

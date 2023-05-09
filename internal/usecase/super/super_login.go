@@ -15,7 +15,7 @@ func (usecase *superUsecaseImpl) SuperLogin(req model.LoginRequest) model.WebSer
 
 	if err != nil {
 		// return util.ToWebServiceResponse(fmt.Sprintf("Error saat mengecek username: %v", err), http.StatusInternalServerError, nil)
-		return util.ToWebServiceResponse("Username yang dimasukkan salah", http.StatusNotFound, nil)
+		return util.ToWebServiceResponse("Username yang dimasukkan tidak ditemukan", http.StatusNotFound, nil)
 	}
 
 	if err := util.ComparePassword(req.Password, super.Password); err != nil {

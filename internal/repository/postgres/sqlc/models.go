@@ -13,13 +13,25 @@ type Admin struct {
 	UserID pgtype.UUID
 }
 
+type Exam struct {
+	ID        pgtype.UUID
+	SuperID   pgtype.UUID
+	Name      string
+	Location  string
+	Organizer string
+	Begin     pgtype.Date
+	Finish    pgtype.Date
+	CreatedAt pgtype.Timestamp
+	UpdatedAt pgtype.Timestamp
+}
+
 type Result struct {
-	ID            pgtype.UUID
-	ShooterTestID pgtype.UUID
-	Status        bool
-	Stage         interface{}
-	CreatedAt     pgtype.Timestamp
-	UpdatedAt     pgtype.Timestamp
+	ID        pgtype.UUID
+	ShooterID pgtype.UUID
+	Status    bool
+	Stage     interface{}
+	CreatedAt pgtype.Timestamp
+	UpdatedAt pgtype.Timestamp
 }
 
 type Scorer struct {
@@ -35,6 +47,7 @@ type Session struct {
 
 type Shooter struct {
 	ID        pgtype.UUID
+	ExamID    pgtype.UUID
 	Name      string
 	ImagePath string
 	Province  string
@@ -95,42 +108,6 @@ type Stage6Result struct {
 type Super struct {
 	ID     pgtype.UUID
 	UserID pgtype.UUID
-}
-
-type Test struct {
-	ID        pgtype.UUID
-	SuperID   pgtype.UUID
-	Name      string
-	Location  string
-	Begin     pgtype.Timestamp
-	Finish    pgtype.Timestamp
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
-}
-
-type TestAdmin struct {
-	ID        pgtype.UUID
-	TestID    pgtype.UUID
-	AdminID   pgtype.UUID
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
-}
-
-type TestScorer struct {
-	ID        pgtype.UUID
-	TestID    pgtype.UUID
-	ScorerID  pgtype.UUID
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
-}
-
-type TestShooter struct {
-	ID           pgtype.UUID
-	ShooterID    pgtype.UUID
-	ScorerTestID pgtype.UUID
-	CreatedBy    pgtype.UUID
-	CreatedAt    pgtype.Timestamp
-	UpdatedAt    pgtype.Timestamp
 }
 
 type User struct {

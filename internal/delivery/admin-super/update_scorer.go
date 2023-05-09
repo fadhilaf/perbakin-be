@@ -12,13 +12,13 @@ func (handler *adminSuperHandler) UpdateScorer(c *gin.Context) {
 		return
 	}
 
-	var req model.UpdateUserDataRequest
+	var req model.UpdateUserBodyRequest
 
 	if ok := util.BindJSONAndValidate(c, &req); !ok {
 		return
 	}
 
-	res := handler.Usecase.UpdateScorer(model.UpdateUserRequest{ID: id, Data: req})
+	res := handler.Usecase.UpdateScorer(model.UpdateUserRequest{ID: id, Body: req})
 
 	c.JSON(res.Status, res)
 }

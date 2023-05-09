@@ -6,13 +6,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *superHandler) GetAdmin(c *gin.Context) {
+func (handler *superHandler) GetAdminById(c *gin.Context) {
 	id, ok := util.GetIdParam(c)
 	if !ok {
 		return
 	}
 
-	res := handler.Usecase.GetAdmin(model.GetUserById{ID: id})
+	res := handler.Usecase.GetAdminById(model.ByIdRequest{ID: id})
 
 	c.JSON(res.Status, res)
 }

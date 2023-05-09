@@ -26,7 +26,7 @@ SELECT scorers.id, user_id, username, password, name FROM users
 INNER JOIN scorers ON scorers.user_id = users.id
 WHERE username = $1;
 
--- name: GetScorer :one
+-- name: GetScorerById :one
 SELECT scorers.id, user_id, username, name, created_at, updated_at FROM scorers
 INNER JOIN users ON scorers.user_id = users.id
 WHERE scorers.id = $1;
@@ -54,6 +54,3 @@ WHERE user_id = (
   SELECT user_id FROM scorers 
   WHERE scorers.id = $1
 );
-
--- name: DeleteScorer :exec
-DELETE FROM scorers WHERE user_id = $1;

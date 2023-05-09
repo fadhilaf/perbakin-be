@@ -12,21 +12,21 @@ import (
 )
 
 func (usecase *superUsecaseImpl) UpdateAdmin(req model.UpdateUserRequest) model.WebServiceResponse {
-	admin, err := usecase.Store.GetAdmin(context.Background(), req.ID)
+	admin, err := usecase.Store.GetAdminById(context.Background(), req.ID)
 	if err != nil {
 		return util.ToWebServiceResponse("Tidak ditemukan admin dengan ID tersebut", http.StatusNotFound, nil)
 	}
 
-	passwordHash, err := util.HashPassword(req.Data.Password)
+	passwordHash, err := util.HashPassword(req.Body.Password)
 	if err != nil {
 		return util.ToWebServiceResponse("Gagal proses hash password: "+err.Error(), http.StatusInternalServerError, nil)
 	}
 
 	err = usecase.Store.UpdateAdmin(context.Background(), respositoryModel.UpdateAdminParams{
 		ID:       admin.ID,
-		Username: req.Data.Username,
+		Username: req.Body.Username,
 		Password: passwordHash,
-		Name:     req.Data.Name,
+		Name:     req.Body.Name,
 	})
 	if err != nil {
 		fmt.Println(err)
