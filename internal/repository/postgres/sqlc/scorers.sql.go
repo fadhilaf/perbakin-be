@@ -233,11 +233,10 @@ func (q *Queries) GetScorersByExamId(ctx context.Context, examID pgtype.UUID) ([
 }
 
 const updateScorer = `-- name: UpdateScorer :one
-
 WITH updated_user AS (
   UPDATE users 
   SET username = $2, password = $3, name = $4, updated_at = NOW() 
-  WHERE user_id = (
+  WHERE users.id = (
     SELECT user_id FROM scorers 
     WHERE scorers.id = $1
   )

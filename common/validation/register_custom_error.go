@@ -34,7 +34,7 @@ func registerCustomErrors() {
 			param = "YYYY-MM-DD"
 		}
 
-		return fmt.Sprintf("%s harus dengan format %s", translatedFieldName, param)
+		return fmt.Sprintf("'%s' harus dengan format %s", translatedFieldName, param)
 	}
 
 	customError["excludes"] = func(field validator.FieldError, translatedFieldName string) string {

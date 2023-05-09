@@ -17,7 +17,8 @@ var _ ScorerDelivery = &scorerHandler{}
 
 func NewScorerDelivery(usecase scorerUsecase.ScorerUsecase, allUsecase allUsecase.AllUsecase) ScorerDelivery {
 	return &scorerHandler{
-		Usecase: usecase,
+		Usecase:    usecase,
+		AllUsecase: allUsecase,
 	}
 }
 

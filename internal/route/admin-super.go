@@ -13,6 +13,7 @@ func AdminSuperRoutes(router *gin.RouterGroup, delivery delivery.AdminSuperDeliv
 
 	examRoute := adminSuperRoute.Group("/exam/:exam_id", delivery.MustExamMiddleware())
 
+	examRoute.GET("/scorer", delivery.GetScorersByExamId)
 	examRoute.POST("/scorer", delivery.CreateScorer)
 	examRoute.GET("/scorers", delivery.GetScorersByExamId)
 	examRoute.GET("/scorer/:scorer_id", delivery.GetScorerById)

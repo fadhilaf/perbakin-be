@@ -59,7 +59,7 @@ type Querier interface {
 	GetSuperRelationByUserId(ctx context.Context, userID pgtype.UUID) (Super, error)
 	// dipake untuk mengecek username ketika create user baru
 	GetUserByUsername(ctx context.Context, username string) (GetUserByUsernameRow, error)
-	// untuk update data akun admin (super role) TODO: return sebanyak get admin by id
+	// untuk update data akun admin (super role)
 	UpdateAdmin(ctx context.Context, arg UpdateAdminParams) (UpdateAdminRow, error)
 	// low prio
 	UpdateAdminName(ctx context.Context, arg UpdateAdminNameParams) (pgtype.UUID, error)

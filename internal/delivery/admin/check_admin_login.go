@@ -9,7 +9,7 @@ import (
 )
 
 func (handler *adminHandler) CheckAdminLogin(c *gin.Context) {
-	admin, _ := c.MustGet("admin").(model.OperatorRelation)
+	admin := c.MustGet("admin").(model.OperatorRelation)
 
 	res := util.ToWebServiceResponse("User adalah admin", http.StatusOK, gin.H{"admin": admin})
 	c.JSON(res.Status, res)

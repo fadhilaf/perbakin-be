@@ -19,7 +19,7 @@ type OperatorRelation struct {
 }
 
 type OperatorDisplayData struct {
-	ID        pgtype.UUID `json:"user_id"`
+	ID        pgtype.UUID `json:"id"`
 	Exam      string      `json:"exam"`
 	Name      string      `json:"name"`
 	CreatedAt time.Time   `json:"created_at"`

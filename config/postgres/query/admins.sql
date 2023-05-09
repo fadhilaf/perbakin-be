@@ -45,7 +45,7 @@ SELECT admins.id, user_id, exam_id, username, name, created_at, updated_at FROM 
 INNER JOIN users ON admins.user_id = users.id
 WHERE admins.id = $1;
 
--- untuk update data akun admin (super role) TODO: return sebanyak get admin by id
+-- untuk update data akun admin (super role)
 -- name: UpdateAdmin :one
 WITH updated_user AS (
   UPDATE users 

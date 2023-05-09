@@ -47,11 +47,10 @@ WHERE scorers.id = $1;
 
 -- untuk update data akun admin (super role) TODO: return sebanyak get admin by id
 -- name: UpdateScorer :one
-
 WITH updated_user AS (
   UPDATE users 
   SET username = $2, password = $3, name = $4, updated_at = NOW() 
-  WHERE user_id = (
+  WHERE users.id = (
     SELECT user_id FROM scorers 
     WHERE scorers.id = $1
   )

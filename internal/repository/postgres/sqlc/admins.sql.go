@@ -266,7 +266,7 @@ type UpdateAdminRow struct {
 	UpdatedAt pgtype.Timestamp
 }
 
-// untuk update data akun admin (super role) TODO: return sebanyak get admin by id
+// untuk update data akun admin (super role)
 func (q *Queries) UpdateAdmin(ctx context.Context, arg UpdateAdminParams) (UpdateAdminRow, error) {
 	row := q.db.QueryRow(ctx, updateAdmin,
 		arg.ID,

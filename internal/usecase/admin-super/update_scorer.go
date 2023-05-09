@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	respositoryModel "github.com/FadhilAF/perbakin-be/internal/repository/postgres/sqlc"
@@ -34,8 +33,7 @@ func (usecase *adminSuperUsecaseImpl) UpdateScorer(req model.UpdateOperatorReque
 		Name:     req.Body.Name,
 	})
 	if err != nil {
-		fmt.Println(err)
-		return util.ToWebServiceResponse("Gagal mengubah scorer", http.StatusInternalServerError, nil)
+		return util.ToWebServiceResponse("Gagal mengubah scorer: "+err.Error(), http.StatusInternalServerError, nil)
 	}
 
 	return util.ToWebServiceResponse("Berhasil mengubah scorer", http.StatusOK, gin.H{

@@ -25,6 +25,7 @@ func SuperRoutes(router *gin.RouterGroup, delivery delivery.SuperDelivery) {
 	examRouter.DELETE("/", delivery.DeleteExam)
 
 	examRouter.POST("/admin", delivery.CreateAdmin)
+	examRouter.GET("/admin", delivery.GetAdminsByExamId)
 	examRouter.GET("/admins", delivery.GetAllAdmins)
 	examRouter.GET("/admin/:admin_id", delivery.GetAdminById)
 	examRouter.PUT("/admin/:admin_id", delivery.UpdateAdmin)
