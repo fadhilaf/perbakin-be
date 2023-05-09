@@ -16,8 +16,9 @@ type SuperDelivery interface {
 	UpdateAdmin(c *gin.Context)
 	DeleteAdmin(c *gin.Context)
 
-	GetExamById(c *gin.Context)
 	CreateExam(c *gin.Context)
+	GetExamById(c *gin.Context)
+	GetAllExams(c *gin.Context)
 	UpdateExam(c *gin.Context)
 	DeleteExam(c *gin.Context)
 }

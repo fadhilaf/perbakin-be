@@ -20,6 +20,7 @@ func SuperRoutes(router *gin.RouterGroup, delivery delivery.SuperDelivery) {
 
 	superRouter.POST("/exam", delivery.CreateExam)
 	superRouter.GET("/exam/:id", delivery.GetExamById)
+	superRouter.GET("/exams", delivery.GetAllExams)
 	superRouter.PUT("/exam/:id", delivery.UpdateExam)
 	superRouter.DELETE("/exam/:id", delivery.DeleteExam)
 }

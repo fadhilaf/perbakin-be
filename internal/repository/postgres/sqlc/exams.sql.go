@@ -68,28 +68,18 @@ func (q *Queries) DeleteExam(ctx context.Context, id pgtype.UUID) error {
 }
 
 const getAllExams = `-- name: GetAllExams :many
-SELECT id, super_id, name, location, organizer, begin, finish FROM exams
+SELECT id, super_id, name, location, organizer, begin, finish, created_at, updated_at FROM exams
 `
 
-type GetAllExamsRow struct {
-	ID        pgtype.UUID
-	SuperID   pgtype.UUID
-	Name      string
-	Location  string
-	Organizer string
-	Begin     pgtype.Date
-	Finish    pgtype.Date
-}
-
-func (q *Queries) GetAllExams(ctx context.Context) ([]GetAllExamsRow, error) {
+func (q *Queries) GetAllExams(ctx context.Context) ([]Exam, error) {
 	rows, err := q.db.Query(ctx, getAllExams)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAllExamsRow
+	var items []Exam
 	for rows.Next() {
-		var i GetAllExamsRow
+		var i Exam
 		if err := rows.Scan(
 			&i.ID,
 			&i.SuperID,
@@ -98,6 +88,8 @@ func (q *Queries) GetAllExams(ctx context.Context) ([]GetAllExamsRow, error) {
 			&i.Organizer,
 			&i.Begin,
 			&i.Finish,
+			&i.CreatedAt,
+			&i.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -222,7 +214,8 @@ SET
   location = $3, 
   organizer = $4, 
   begin = $5, 
-  finish = $6 
+  finish = $6, 
+  updated_at = NOW()
 WHERE id = $1
 RETURNING id, super_id, name, location, organizer, begin, finish
 `

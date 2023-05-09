@@ -21,7 +21,7 @@ type Querier interface {
 	GetAdminByUsername(ctx context.Context, username string) (GetAdminByUsernameRow, error)
 	GetAdminData(ctx context.Context, id pgtype.UUID) (GetAdminDataRow, error)
 	GetAllAdmins(ctx context.Context) ([]GetAllAdminsRow, error)
-	GetAllExams(ctx context.Context) ([]GetAllExamsRow, error)
+	GetAllExams(ctx context.Context) ([]Exam, error)
 	GetAllScorers(ctx context.Context) ([]GetAllScorersRow, error)
 	GetExamById(ctx context.Context, id pgtype.UUID) (GetExamByIdRow, error)
 	GetExamByName(ctx context.Context, name string) (GetExamByNameRow, error)

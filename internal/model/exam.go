@@ -1,6 +1,8 @@
 package model
 
 import (
+	"time"
+
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -12,6 +14,18 @@ type Exam struct {
 	Organizer string      `json:"organizer"`
 	Begin     pgtype.Date `json:"begin"`
 	Finish    pgtype.Date `json:"finish"`
+}
+
+type ExamDisplayData struct {
+	ID        pgtype.UUID `json:"id"`
+	SuperID   pgtype.UUID `json:"super_id"`
+	Name      string      `json:"name"`
+	Location  string      `json:"location"`
+	Organizer string      `json:"organizer"`
+	Begin     pgtype.Date `json:"begin"`
+	Finish    pgtype.Date `json:"finish"`
+	CreatedAt time.Time   `json:"created_at"`
+	UpdatedAt time.Time   `json:"updated_at"`
 }
 
 // Bentuk struct yang biso di validasi itu type ny harus string

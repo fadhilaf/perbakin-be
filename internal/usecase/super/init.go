@@ -16,6 +16,7 @@ type SuperUsecase interface {
 	DeleteAdmin(model.ByIdRequest) model.WebServiceResponse
 
 	GetExamById(model.ByIdRequest) model.WebServiceResponse
+	GetAllExams() model.WebServiceResponse
 	CreateExam(model.CreateExamRequest) model.WebServiceResponse
 	UpdateExam(model.UpdateExamRequest) model.WebServiceResponse
 	DeleteExam(model.DeleteExamRequest) model.WebServiceResponse
