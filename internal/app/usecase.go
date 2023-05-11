@@ -8,7 +8,7 @@ import (
 	scorerUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/scorer"
 	superUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/super"
 
-	allUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/all"
+	sessionUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/session"
 )
 
 type usecases struct {
@@ -17,7 +17,7 @@ type usecases struct {
 	adminSuper adminSuperUsecase.AdminSuperUsecase
 	scorer     scorerUsecase.ScorerUsecase
 
-	all allUsecase.AllUsecase
+	session sessionUsecase.SessionUsecase
 }
 
 func (app *App) initUsecase() {
@@ -30,7 +30,7 @@ func (app *App) initUsecase() {
 	usecases.scorer = scorerUsecase.NewScorerUsecase(store)
 	usecases.adminSuper = adminSuperUsecase.NewAdminSuperUsecase(store)
 
-	usecases.all = allUsecase.NewAllUsecase(store)
+	usecases.session = sessionUsecase.NewSessionUsecase(store)
 
 	app.usecase = usecases
 }

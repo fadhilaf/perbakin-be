@@ -19,13 +19,13 @@ func (handler *adminSuperHandler) MustAdminSuperMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		if super, err := handler.AllUsecase.GetSuperRelationByUserId(model.UserByUserIdRequest{UserID: userId}); err == nil {
+		if super, err := handler.SessionUsecase.GetSuperRelationByUserId(model.UserByUserIdRequest{UserID: userId}); err == nil {
 			c.Set("super", super)
 			c.Next()
 			return
 		}
 
-		if admin, err := handler.AllUsecase.GetAdminRelationByUserId(model.UserByUserIdRequest{UserID: userId}); err == nil {
+		if admin, err := handler.SessionUsecase.GetAdminRelationByUserId(model.UserByUserIdRequest{UserID: userId}); err == nil {
 			c.Set("admin", admin)
 			c.Next()
 			return

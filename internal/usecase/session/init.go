@@ -5,7 +5,7 @@ import (
 	"github.com/FadhilAF/perbakin-be/internal/repository"
 )
 
-type AllUsecase interface {
+type SessionUsecase interface {
 	GetSuperRelationByUserId(model.UserByUserIdRequest) (model.SuperRelation, error)
 
 	GetExamRelationById(model.ByIdRequest) (model.ExamRelation, error)
@@ -14,14 +14,14 @@ type AllUsecase interface {
 	GetScorerRelationByUserId(model.UserByUserIdRequest) (model.OperatorRelation, error)
 }
 
-var _ AllUsecase = &allUsecaseImpl{}
+var _ SessionUsecase = &sessionUsecaseImpl{}
 
-func NewAllUsecase(store repository.Store) AllUsecase {
-	return &allUsecaseImpl{
+func NewSessionUsecase(store repository.Store) SessionUsecase {
+	return &sessionUsecaseImpl{
 		Store: store,
 	}
 }
 
-type allUsecaseImpl struct {
+type sessionUsecaseImpl struct {
 	repository.Store
 }

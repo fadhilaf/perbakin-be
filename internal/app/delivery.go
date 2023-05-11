@@ -17,10 +17,10 @@ type deliveries struct {
 func (app *App) initDelivery() {
 	var deliveries deliveries
 
-	deliveries.super = superDelivery.NewSuperDelivery(app.usecase.super, app.usecase.all)
-	deliveries.admin = adminDelivery.NewAdminDelivery(app.usecase.admin, app.usecase.all)
-	deliveries.adminSuper = adminSuperDelivery.NewAdminSuperDelivery(app.usecase.adminSuper, app.usecase.all)
-	deliveries.scorer = scorerDelivery.NewScorerDelivery(app.usecase.scorer, app.usecase.all)
+	deliveries.super = superDelivery.NewSuperDelivery(app.usecase.super, app.usecase.session)
+	deliveries.admin = adminDelivery.NewAdminDelivery(app.usecase.admin, app.usecase.session)
+	deliveries.adminSuper = adminSuperDelivery.NewAdminSuperDelivery(app.usecase.adminSuper, app.usecase.session)
+	deliveries.scorer = scorerDelivery.NewScorerDelivery(app.usecase.scorer, app.usecase.session)
 
 	app.delivery = deliveries
 }

@@ -1,7 +1,7 @@
 package delivery
 
 import (
-	allUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/all"
+	sessionUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/session"
 	superUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/super"
 
 	"github.com/gin-gonic/gin"
@@ -34,14 +34,14 @@ type SuperDelivery interface {
 
 var _ SuperDelivery = &superHandler{}
 
-func NewSuperDelivery(usecase superUsecase.SuperUsecase, allUsecase allUsecase.AllUsecase) SuperDelivery {
+func NewSuperDelivery(usecase superUsecase.SuperUsecase, sessionUsecase sessionUsecase.SessionUsecase) SuperDelivery {
 	return &superHandler{
-		Usecase:    usecase,
-		AllUsecase: allUsecase,
+		Usecase:        usecase,
+		SessionUsecase: sessionUsecase,
 	}
 }
 
 type superHandler struct {
-	Usecase    superUsecase.SuperUsecase
-	AllUsecase allUsecase.AllUsecase
+	Usecase        superUsecase.SuperUsecase
+	SessionUsecase sessionUsecase.SessionUsecase
 }

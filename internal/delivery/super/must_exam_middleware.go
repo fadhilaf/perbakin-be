@@ -18,7 +18,7 @@ func (handler *superHandler) MustExamMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		exam, err := handler.AllUsecase.GetExamRelationById(model.ByIdRequest{ID: examId})
+		exam, err := handler.SessionUsecase.GetExamRelationById(model.ByIdRequest{ID: examId})
 		if err != nil {
 			res := util.ToWebServiceResponse("Ujian tidak ditemukan", http.StatusNotFound, nil)
 			c.JSON(res.Status, res)

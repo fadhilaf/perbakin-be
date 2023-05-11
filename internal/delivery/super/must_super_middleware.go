@@ -19,7 +19,7 @@ func (handler *superHandler) MustSuperMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		super, err := handler.AllUsecase.GetSuperRelationByUserId(model.UserByUserIdRequest{UserID: userId})
+		super, err := handler.SessionUsecase.GetSuperRelationByUserId(model.UserByUserIdRequest{UserID: userId})
 		if err != nil {
 			res := util.ToWebServiceResponse("User bukan merupakan super admin", http.StatusUnauthorized, nil)
 			c.JSON(res.Status, res)
