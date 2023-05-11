@@ -7,6 +7,7 @@ import (
 
 type ScorerUsecase interface {
 	ScorerLogin(model.LoginRequest) model.WebServiceResponse
+	GetScorerByUserId(model.UserByUserIdRequest) model.WebServiceResponse
 }
 
 var _ ScorerUsecase = &scorerUsecaseImpl{}

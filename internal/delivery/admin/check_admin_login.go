@@ -1,16 +1,14 @@
 package delivery
 
 import (
-	"net/http"
-
 	"github.com/FadhilAF/perbakin-be/internal/model"
-	"github.com/FadhilAF/perbakin-be/internal/util"
 	"github.com/gin-gonic/gin"
 )
 
 func (handler *adminHandler) CheckAdminLogin(c *gin.Context) {
-	admin := c.MustGet("admin").(model.OperatorRelation)
+	adminRelation := c.MustGet("admin").(model.OperatorRelation)
 
-	res := util.ToWebServiceResponse("User adalah admin", http.StatusOK, gin.H{"admin": admin})
+	res := handler.Usecase.GetAdminByUserId(model.UserByUserIdRequest{UserID: adminRelation.UserID})
+
 	c.JSON(res.Status, res)
 }

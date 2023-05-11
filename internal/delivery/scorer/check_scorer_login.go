@@ -1,16 +1,14 @@
 package delivery
 
 import (
-	"net/http"
-
 	"github.com/FadhilAF/perbakin-be/internal/model"
-	"github.com/FadhilAF/perbakin-be/internal/util"
 	"github.com/gin-gonic/gin"
 )
 
 func (handler *scorerHandler) CheckScorerLogin(c *gin.Context) {
-	scorer := c.MustGet("scorer").(model.OperatorRelation)
+	scorerRelation := c.MustGet("scorer").(model.OperatorRelation)
 
-	res := util.ToWebServiceResponse("User adalah scorer", http.StatusOK, gin.H{"scorer": scorer})
+	res := handler.Usecase.GetScorerByUserId(model.UserByUserIdRequest{UserID: scorerRelation.UserID})
+
 	c.JSON(res.Status, res)
 }

@@ -33,6 +33,12 @@ SELECT admins.id, user_id, exam_id FROM admins
 INNER JOIN users ON admins.user_id = users.id
 WHERE user_id = $1;
 
+-- untuk ngambil data lengkap admin berdasarkan user id (admin role)
+-- name: GetAdminByUserId :one
+SELECT admins.id, user_id, exam_id, username, password, name, created_at, updated_at FROM users
+INNER JOIN admins ON admins.user_id = users.id
+WHERE user_id = $1;
+
 -- untuk ngambil data display admin berdasarkan username (admin role)
 -- name: GetAdminByUsername :one
 SELECT admins.id, user_id, exam_id, username, password, name, created_at, updated_at FROM users

@@ -7,6 +7,7 @@ import (
 
 type SuperUsecase interface {
 	SuperLogin(model.LoginRequest) model.WebServiceResponse
+	GetSuperByUserId(model.UserByUserIdRequest) model.WebServiceResponse
 
 	CreateAdmin(model.CreateOperatorRequest) model.WebServiceResponse
 	GetAllAdmins() model.WebServiceResponse

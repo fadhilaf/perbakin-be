@@ -1,16 +1,14 @@
 package delivery
 
 import (
-	"net/http"
-
 	"github.com/FadhilAF/perbakin-be/internal/model"
-	"github.com/FadhilAF/perbakin-be/internal/util"
 	"github.com/gin-gonic/gin"
 )
 
 func (handler *superHandler) CheckSuperLogin(c *gin.Context) {
-	super := c.MustGet("super").(model.SuperRelation)
+	superRelation := c.MustGet("super").(model.SuperRelation)
 
-	res := util.ToWebServiceResponse("User adalah super admin", http.StatusOK, gin.H{"super": super})
+	res := handler.Usecase.GetSuperByUserId(model.UserByUserIdRequest{UserID: superRelation.UserID})
+
 	c.JSON(res.Status, res)
 }
