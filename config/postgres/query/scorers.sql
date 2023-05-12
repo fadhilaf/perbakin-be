@@ -3,17 +3,14 @@
 WITH added_user AS (
   INSERT INTO users (username, password, name)
   VALUES ($2, $3, $4)
-  RETURNING id
+  RETURNING id, username, password, name, created_at, updated_at
 ), added_scorer AS (
   INSERT INTO scorers (user_id, exam_id)
   SELECT id, $1 FROM added_user
-  RETURNING id
+  RETURNING id, user_id, exam_id
 )
-SELECT scorers.id, user_id, exam_id, username, name, created_at, updated_at FROM scorers
-INNER JOIN users ON scorers.user_id = users.id
-WHERE scorers.id = (
-  SELECT id FROM added_scorer
-);
+SELECT added_scorer.id, user_id, exam_id, username, name, created_at, updated_at FROM added_user
+INNER JOIN added_scorer ON added_user.id = user_id;
 
 -- untuk ngambil data display seluruh scorer (all role)
 -- name: GetAllScorers :many
@@ -23,7 +20,7 @@ INNER JOIN exams ON scorers.exam_id = exams.id;
 
 -- untuk ngambil data akun seluruh scorer dalam satu exam (admin-super role)
 -- name: GetScorersByExamId :many
-SELECT scorers.id, user_id, exam_id, username, name, created_at, updated_at FROM scorers 
+SELECT scorers.id, user_id, exam_id, username, name FROM scorers 
 INNER JOIN users ON scorers.user_id = users.id
 WHERE exam_id = $1;
 

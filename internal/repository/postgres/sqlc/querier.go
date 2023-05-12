@@ -17,8 +17,12 @@ type Querier interface {
 	CreateExam(ctx context.Context, arg CreateExamParams) (CreateExamRow, error)
 	// untuk ngebuat scorer (admin-super role) TODO: return sebanyak get scorer by id
 	CreateScorer(ctx context.Context, arg CreateScorerParams) (CreateScorerRow, error)
+	// membuat shooter baru (admin-super role)
+	CreateShooter(ctx context.Context, arg CreateShooterParams) (Shooter, error)
 	// untuk menghapus exam (super role)
 	DeleteExam(ctx context.Context, id pgtype.UUID) error
+	// untuk menghapus shooter berdasarkan id (admin-super role)
+	DeleteShooter(ctx context.Context, id pgtype.UUID) error
 	// dipake untuk delete user
 	DeleteUser(ctx context.Context, id pgtype.UUID) error
 	// untuk ngambil data akun admin berdasarkan id (super role)
@@ -37,6 +41,8 @@ type Querier interface {
 	GetAllExams(ctx context.Context) ([]Exam, error)
 	// untuk ngambil data display seluruh scorer (all role)
 	GetAllScorers(ctx context.Context) ([]GetAllScorersRow, error)
+	// untuk mengambil seluruh shooter (admin-super role)
+	GetAllShooters(ctx context.Context) ([]GetAllShootersRow, error)
 	// untuk ngambil data display seluruh super admin (all role)
 	GetAllSupers(ctx context.Context) ([]GetAllSupersRow, error)
 	// untuk mengambil satu data exam (super role)
@@ -57,6 +63,12 @@ type Querier interface {
 	GetScorerRelationByUserId(ctx context.Context, userID pgtype.UUID) (Scorer, error)
 	// untuk ngambil data akun seluruh scorer dalam satu exam (admin-super role)
 	GetScorersByExamId(ctx context.Context, examID pgtype.UUID) ([]GetScorersByExamIdRow, error)
+	// untuk mengambil shooter berdasarkan exam_id (admin-super role) TODO: tambah nilai results jg
+	GetShooterByExamId(ctx context.Context, examID pgtype.UUID) ([]GetShooterByExamIdRow, error)
+	// untuk mengambil shooter berdasarkan id (admin-super role)
+	GetShooterById(ctx context.Context, id pgtype.UUID) (Shooter, error)
+	// untuk mengambil shooter berdasarkan scorer_id (admin-super role)
+	GetShootersByScorerId(ctx context.Context, scorerID pgtype.UUID) ([]GetShootersByScorerIdRow, error)
 	// untuk ngambil data lengkap super admin berdasarkan user id (super role)
 	GetSuperByUserId(ctx context.Context, userID pgtype.UUID) (GetSuperByUserIdRow, error)
 	// untuk ngambil data display super admin berdasarkan username (super role)
@@ -79,6 +91,8 @@ type Querier interface {
 	UpdateScorerName(ctx context.Context, arg UpdateScorerNameParams) (pgtype.UUID, error)
 	// low prio
 	UpdateScorerPassword(ctx context.Context, arg UpdateScorerPasswordParams) (pgtype.UUID, error)
+	// untuk mengupdate shooter berdasarkan id (admin-super role)
+	UpdateShooter(ctx context.Context, arg UpdateShooterParams) (Shooter, error)
 }
 
 var _ Querier = (*Queries)(nil)

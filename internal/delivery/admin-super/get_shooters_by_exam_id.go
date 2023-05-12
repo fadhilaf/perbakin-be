@@ -5,10 +5,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *superHandler) GetAdminsByExamId(c *gin.Context) {
+func (handler *adminSuperHandler) GetShootersByExamId(c *gin.Context) {
 	exam := c.MustGet("exam").(model.ExamRelation)
 
-	res := handler.Usecase.GetAdminsByExamId(model.ByExamIdRequest{
+	res := handler.Usecase.GetShootersByExamId(model.ByExamIdRequest{
 		ExamID: exam.ID,
 	})
 

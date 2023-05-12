@@ -11,6 +11,7 @@ type AdminSuperDelivery interface {
 	MustAdminSuperMiddleware() gin.HandlerFunc
 
 	GetAllScorers(c *gin.Context)
+	GetAllShooters(c *gin.Context)
 
 	MustExamMiddleware() gin.HandlerFunc
 
@@ -19,6 +20,14 @@ type AdminSuperDelivery interface {
 	GetScorerById(c *gin.Context)
 	UpdateScorer(c *gin.Context)
 	DeleteScorer(c *gin.Context)
+
+	MustScorerMiddleware() gin.HandlerFunc
+
+	CreateShooter(c *gin.Context)
+	GetShooterById(c *gin.Context)
+	GetShootersByExamId(c *gin.Context)
+	UpdateShooter(c *gin.Context)
+	DeleteShooter(c *gin.Context)
 }
 
 var _ AdminSuperDelivery = &adminSuperHandler{}

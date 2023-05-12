@@ -3,17 +3,14 @@
 WITH added_user AS (
   INSERT INTO users (username, password, name)
   VALUES ($2, $3, $4)
-  RETURNING id
+  RETURNING id, username, password, name, created_at, updated_at
 ), added_admin AS (
   INSERT INTO admins (user_id, exam_id)
   SELECT id, $1 FROM added_user
-  RETURNING id
+  RETURNING id, user_id, exam_id
 )
-SELECT admins.id, user_id, exam_id, username, name, created_at, updated_at FROM admins
-INNER JOIN users ON admins.user_id = users.id
-WHERE admins.id = (
-  SELECT id FROM added_admin
-);
+SELECT added_admin.id, user_id, exam_id, username, name, created_at, updated_at FROM added_user
+INNER JOIN added_admin ON added_user.id = user_id;
 
 -- untuk ngambil data display seluruh admin (all role)
 -- name: GetAllAdmins :many
@@ -23,7 +20,7 @@ INNER JOIN exams ON admins.exam_id = exams.id;
 
 -- untuk ngambil data akun seluruh admin dalam satu exam (super role)
 -- name: GetAdminsByExamId :many
-SELECT admins.id, user_id, exam_id, username, name, created_at, updated_at FROM admins 
+SELECT admins.id, user_id, exam_id, username, name FROM admins 
 INNER JOIN users ON admins.user_id = users.id
 WHERE exam_id = $1;
 

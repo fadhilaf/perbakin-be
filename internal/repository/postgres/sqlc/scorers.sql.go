@@ -15,17 +15,14 @@ const createScorer = `-- name: CreateScorer :one
 WITH added_user AS (
   INSERT INTO users (username, password, name)
   VALUES ($2, $3, $4)
-  RETURNING id
+  RETURNING id, username, password, name, created_at, updated_at
 ), added_scorer AS (
   INSERT INTO scorers (user_id, exam_id)
   SELECT id, $1 FROM added_user
-  RETURNING id
+  RETURNING id, user_id, exam_id
 )
-SELECT scorers.id, user_id, exam_id, username, name, created_at, updated_at FROM scorers
-INNER JOIN users ON scorers.user_id = users.id
-WHERE scorers.id = (
-  SELECT id FROM added_scorer
-)
+SELECT added_scorer.id, user_id, exam_id, username, name, created_at, updated_at FROM added_user
+INNER JOIN added_scorer ON added_user.id = user_id
 `
 
 type CreateScorerParams struct {
@@ -222,19 +219,17 @@ func (q *Queries) GetScorerRelationByUserId(ctx context.Context, userID pgtype.U
 }
 
 const getScorersByExamId = `-- name: GetScorersByExamId :many
-SELECT scorers.id, user_id, exam_id, username, name, created_at, updated_at FROM scorers 
+SELECT scorers.id, user_id, exam_id, username, name FROM scorers 
 INNER JOIN users ON scorers.user_id = users.id
 WHERE exam_id = $1
 `
 
 type GetScorersByExamIdRow struct {
-	ID        pgtype.UUID
-	UserID    pgtype.UUID
-	ExamID    pgtype.UUID
-	Username  string
-	Name      string
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
+	ID       pgtype.UUID
+	UserID   pgtype.UUID
+	ExamID   pgtype.UUID
+	Username string
+	Name     string
 }
 
 // untuk ngambil data akun seluruh scorer dalam satu exam (admin-super role)
@@ -253,8 +248,6 @@ func (q *Queries) GetScorersByExamId(ctx context.Context, examID pgtype.UUID) ([
 			&i.ExamID,
 			&i.Username,
 			&i.Name,
-			&i.CreatedAt,
-			&i.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}

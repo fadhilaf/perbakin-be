@@ -15,17 +15,14 @@ const createAdmin = `-- name: CreateAdmin :one
 WITH added_user AS (
   INSERT INTO users (username, password, name)
   VALUES ($2, $3, $4)
-  RETURNING id
+  RETURNING id, username, password, name, created_at, updated_at
 ), added_admin AS (
   INSERT INTO admins (user_id, exam_id)
   SELECT id, $1 FROM added_user
-  RETURNING id
+  RETURNING id, user_id, exam_id
 )
-SELECT admins.id, user_id, exam_id, username, name, created_at, updated_at FROM admins
-INNER JOIN users ON admins.user_id = users.id
-WHERE admins.id = (
-  SELECT id FROM added_admin
-)
+SELECT added_admin.id, user_id, exam_id, username, name, created_at, updated_at FROM added_user
+INNER JOIN added_admin ON added_user.id = user_id
 `
 
 type CreateAdminParams struct {
@@ -181,19 +178,17 @@ func (q *Queries) GetAdminRelationByUserId(ctx context.Context, userID pgtype.UU
 }
 
 const getAdminsByExamId = `-- name: GetAdminsByExamId :many
-SELECT admins.id, user_id, exam_id, username, name, created_at, updated_at FROM admins 
+SELECT admins.id, user_id, exam_id, username, name FROM admins 
 INNER JOIN users ON admins.user_id = users.id
 WHERE exam_id = $1
 `
 
 type GetAdminsByExamIdRow struct {
-	ID        pgtype.UUID
-	UserID    pgtype.UUID
-	ExamID    pgtype.UUID
-	Username  string
-	Name      string
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
+	ID       pgtype.UUID
+	UserID   pgtype.UUID
+	ExamID   pgtype.UUID
+	Username string
+	Name     string
 }
 
 // untuk ngambil data akun seluruh admin dalam satu exam (super role)
@@ -212,8 +207,6 @@ func (q *Queries) GetAdminsByExamId(ctx context.Context, examID pgtype.UUID) ([]
 			&i.ExamID,
 			&i.Username,
 			&i.Name,
-			&i.CreatedAt,
-			&i.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}

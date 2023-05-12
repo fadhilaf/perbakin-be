@@ -7,3 +7,7 @@ import (
 type ByIdRequest struct {
 	ID pgtype.UUID
 }
+
+type ByExamIdRequest struct {
+	ExamID pgtype.UUID
+}

@@ -11,7 +11,7 @@ type SuperUsecase interface {
 
 	CreateAdmin(model.CreateOperatorRequest) model.WebServiceResponse
 	GetAllAdmins() model.WebServiceResponse
-	GetAdminsByExamId(model.GetOperatorsByExamIdRequest) model.WebServiceResponse
+	GetAdminsByExamId(model.ByExamIdRequest) model.WebServiceResponse
 	GetAdminById(model.OperatorByIdRequest) model.WebServiceResponse
 	UpdateAdmin(model.UpdateOperatorRequest) model.WebServiceResponse
 	DeleteAdmin(model.OperatorByIdRequest) model.WebServiceResponse

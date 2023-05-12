@@ -31,10 +31,6 @@ type OperatorByIdRequest struct {
 	ExamID pgtype.UUID
 }
 
-type GetOperatorsByExamIdRequest struct {
-	ExamID pgtype.UUID
-}
-
 type OperatorBodyRequest struct {
 	Username string `json:"username" binding:"required,excludes= "`
 	Password string `json:"password" binding:"required"`

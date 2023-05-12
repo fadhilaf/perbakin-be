@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (usecase *adminSuperUsecaseImpl) GetScorersByExamId(req model.GetOperatorsByExamIdRequest) model.WebServiceResponse {
+func (usecase *adminSuperUsecaseImpl) GetScorersByExamId(req model.ByExamIdRequest) model.WebServiceResponse {
 	scorers, err := usecase.Store.GetScorersByExamId(context.Background(), req.ExamID)
 	if err != nil {
 		return util.ToWebServiceResponse("Gagal mendapatkan data penguji", http.StatusInternalServerError, nil)
