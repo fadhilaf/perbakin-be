@@ -21,7 +21,7 @@ func (usecase *adminSuperUsecaseImpl) UpdateShooter(req model.UpdateShooterReque
 		return util.ToWebServiceResponse("Tidak dapat mengubah penembak penguji lain", http.StatusUnauthorized, nil)
 	}
 
-	scorer, err := usecase.Store.GetScorerById(context.Background(), req.ScorerID)
+	scorer, err := usecase.Store.GetScorerById(context.Background(), req.Body.ScorerID)
 	if err != nil {
 		return util.ToWebServiceResponse("Tidak ditemukan penguji pengganti dengan ID yang diberikan", http.StatusNotFound, nil)
 	}
@@ -32,6 +32,7 @@ func (usecase *adminSuperUsecaseImpl) UpdateShooter(req model.UpdateShooterReque
 
 	newShooter, err := usecase.Store.UpdateShooter(context.Background(), respositoryModel.UpdateShooterParams{
 		ID:       req.ID,
+		ScorerID: req.Body.ScorerID,
 		Name:     req.Body.Name,
 		Province: req.Body.Province,
 		Club:     req.Body.Club,

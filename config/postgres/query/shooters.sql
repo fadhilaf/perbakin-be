@@ -30,7 +30,7 @@ WHERE id = $1;
 -- untuk mengupdate shooter berdasarkan id (admin-super role)
 -- name: UpdateShooter :one
 UPDATE shooters 
-SET name = $2, province = $3, club = $4, updated_at = NOW()
+SET scorer_id = $2, name = $3, province = $4, club = $5, updated_at = NOW()
 WHERE id = $1
 RETURNING id, scorer_id, name, province, club, created_at, updated_at;
 

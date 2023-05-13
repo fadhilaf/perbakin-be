@@ -206,13 +206,14 @@ func (q *Queries) GetShootersByScorerId(ctx context.Context, scorerID pgtype.UUI
 
 const updateShooter = `-- name: UpdateShooter :one
 UPDATE shooters 
-SET name = $2, province = $3, club = $4, updated_at = NOW()
+SET scorer_id = $2, name = $3, province = $4, club = $5, updated_at = NOW()
 WHERE id = $1
 RETURNING id, scorer_id, name, province, club, created_at, updated_at
 `
 
 type UpdateShooterParams struct {
 	ID       pgtype.UUID
+	ScorerID pgtype.UUID
 	Name     string
 	Province string
 	Club     string
@@ -222,6 +223,7 @@ type UpdateShooterParams struct {
 func (q *Queries) UpdateShooter(ctx context.Context, arg UpdateShooterParams) (Shooter, error) {
 	row := q.db.QueryRow(ctx, updateShooter,
 		arg.ID,
+		arg.ScorerID,
 		arg.Name,
 		arg.Province,
 		arg.Club,
