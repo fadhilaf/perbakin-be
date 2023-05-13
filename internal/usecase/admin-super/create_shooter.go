@@ -23,10 +23,12 @@ func (usecase *adminSuperUsecaseImpl) CreateShooter(req model.CreateShooterReque
 
 	return util.ToWebServiceResponse("Berhasil membuat penembak", http.StatusCreated, gin.H{
 		"shooter": model.Shooter{
-			ID:       shooter.ID,
-			ScorerID: shooter.ScorerID,
-			Name:     shooter.Name,
-			Province: shooter.Province,
-			Club:     shooter.Club,
+			ID:        shooter.ID,
+			ScorerID:  shooter.ScorerID,
+			Name:      shooter.Name,
+			Province:  shooter.Province,
+			Club:      shooter.Club,
+			CreatedAt: shooter.CreatedAt.Time,
+			UpdatedAt: shooter.UpdatedAt.Time,
 		}})
 }

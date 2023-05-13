@@ -7,11 +7,13 @@ import (
 )
 
 type Shooter struct {
-	ID       pgtype.UUID `json:"id"`
-	ScorerID pgtype.UUID `json:"scorer_id"`
-	Name     string      `json:"name"`
-	Province string      `json:"province"`
-	Club     string      `json:"club"`
+	ID        pgtype.UUID `json:"id"`
+	ScorerID  pgtype.UUID `json:"scorer_id"`
+	Name      string      `json:"name"`
+	Province  string      `json:"province"`
+	Club      string      `json:"club"`
+	CreatedAt time.Time   `json:"created_at"`
+	UpdatedAt time.Time   `json:"updated_at"`
 }
 
 type ShooterDisplayData struct {

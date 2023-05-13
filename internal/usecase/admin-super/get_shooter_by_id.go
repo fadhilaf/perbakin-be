@@ -21,10 +21,12 @@ func (usecase *adminSuperUsecaseImpl) GetShooterById(req model.ShooterByIdReques
 
 	return util.ToWebServiceResponse("Data penembak ditemukan", http.StatusOK, gin.H{
 		"shooter": model.Shooter{
-			ID:       shooter.ID,
-			ScorerID: shooter.ScorerID,
-			Name:     shooter.Name,
-			Province: shooter.Province,
-			Club:     shooter.Club,
+			ID:        shooter.ID,
+			ScorerID:  shooter.ScorerID,
+			Name:      shooter.Name,
+			Province:  shooter.Province,
+			Club:      shooter.Club,
+			CreatedAt: shooter.CreatedAt.Time,
+			UpdatedAt: shooter.UpdatedAt.Time,
 		}})
 }

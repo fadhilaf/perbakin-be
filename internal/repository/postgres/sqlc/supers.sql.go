@@ -12,15 +12,13 @@ import (
 )
 
 const getAllSupers = `-- name: GetAllSupers :many
-SELECT supers.id, name, created_at, updated_at FROM supers
+SELECT supers.id, name FROM supers
 INNER JOIN users ON supers.user_id = users.id
 `
 
 type GetAllSupersRow struct {
-	ID        pgtype.UUID
-	Name      string
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
+	ID   pgtype.UUID
+	Name string
 }
 
 // untuk ngambil data display seluruh super admin (all role)
@@ -33,12 +31,7 @@ func (q *Queries) GetAllSupers(ctx context.Context) ([]GetAllSupersRow, error) {
 	var items []GetAllSupersRow
 	for rows.Next() {
 		var i GetAllSupersRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Name,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-		); err != nil {
+		if err := rows.Scan(&i.ID, &i.Name); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

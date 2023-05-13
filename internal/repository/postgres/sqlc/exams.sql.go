@@ -70,20 +70,30 @@ func (q *Queries) DeleteExam(ctx context.Context, id pgtype.UUID) error {
 }
 
 const getAllExams = `-- name: GetAllExams :many
-SELECT id, super_id, name, location, organizer, begin, finish, created_at, updated_at 
+SELECT id, super_id, name, location, organizer, begin, finish 
 FROM exams
 `
 
+type GetAllExamsRow struct {
+	ID        pgtype.UUID
+	SuperID   pgtype.UUID
+	Name      string
+	Location  string
+	Organizer string
+	Begin     pgtype.Date
+	Finish    pgtype.Date
+}
+
 // untuk mengambil seluruh exam (super role)
-func (q *Queries) GetAllExams(ctx context.Context) ([]Exam, error) {
+func (q *Queries) GetAllExams(ctx context.Context) ([]GetAllExamsRow, error) {
 	rows, err := q.db.Query(ctx, getAllExams)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Exam
+	var items []GetAllExamsRow
 	for rows.Next() {
-		var i Exam
+		var i GetAllExamsRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.SuperID,
@@ -92,8 +102,6 @@ func (q *Queries) GetAllExams(ctx context.Context) ([]Exam, error) {
 			&i.Organizer,
 			&i.Begin,
 			&i.Finish,
-			&i.CreatedAt,
-			&i.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -173,21 +181,31 @@ func (q *Queries) GetExamRelationById(ctx context.Context, id pgtype.UUID) (GetE
 }
 
 const getExamsBySuperId = `-- name: GetExamsBySuperId :many
-SELECT id, super_id, name, location, organizer, begin, finish, created_at, updated_at 
+SELECT id, super_id, name, location, organizer, begin, finish 
 FROM exams 
 WHERE super_id = $1
 `
 
+type GetExamsBySuperIdRow struct {
+	ID        pgtype.UUID
+	SuperID   pgtype.UUID
+	Name      string
+	Location  string
+	Organizer string
+	Begin     pgtype.Date
+	Finish    pgtype.Date
+}
+
 // untuk mengambil seluruh exam (super role)
-func (q *Queries) GetExamsBySuperId(ctx context.Context, superID pgtype.UUID) ([]Exam, error) {
+func (q *Queries) GetExamsBySuperId(ctx context.Context, superID pgtype.UUID) ([]GetExamsBySuperIdRow, error) {
 	rows, err := q.db.Query(ctx, getExamsBySuperId, superID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Exam
+	var items []GetExamsBySuperIdRow
 	for rows.Next() {
-		var i Exam
+		var i GetExamsBySuperIdRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.SuperID,
@@ -196,8 +214,6 @@ func (q *Queries) GetExamsBySuperId(ctx context.Context, superID pgtype.UUID) ([
 			&i.Organizer,
 			&i.Begin,
 			&i.Finish,
-			&i.CreatedAt,
-			&i.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}

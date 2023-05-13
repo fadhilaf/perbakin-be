@@ -43,10 +43,12 @@ func (usecase *adminSuperUsecaseImpl) UpdateShooter(req model.UpdateShooterReque
 
 	return util.ToWebServiceResponse("Berhasil mengubah penembak", http.StatusOK, gin.H{
 		"shooter": model.Shooter{
-			ID:       newShooter.ID,
-			ScorerID: newShooter.ScorerID,
-			Name:     newShooter.Name,
-			Province: newShooter.Province,
-			Club:     newShooter.Club,
+			ID:        newShooter.ID,
+			ScorerID:  newShooter.ScorerID,
+			Name:      newShooter.Name,
+			Province:  newShooter.Province,
+			Club:      newShooter.Club,
+			CreatedAt: shooter.CreatedAt.Time,
+			UpdatedAt: shooter.UpdatedAt.Time,
 		}})
 }

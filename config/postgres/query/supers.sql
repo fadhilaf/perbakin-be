@@ -1,6 +1,6 @@
 -- untuk ngambil data display seluruh super admin (all role)
 -- name: GetAllSupers :many
-SELECT supers.id, name, created_at, updated_at FROM supers
+SELECT supers.id, name FROM supers
 INNER JOIN users ON supers.user_id = users.id;
 
 -- untuk ngambil data relasi super admin berdasarkan user id (all role)

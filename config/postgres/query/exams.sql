@@ -6,12 +6,12 @@ RETURNING id, super_id, name, location, organizer, begin, finish;
 
 -- untuk mengambil seluruh exam (super role)
 -- name: GetAllExams :many
-SELECT id, super_id, name, location, organizer, begin, finish, created_at, updated_at 
+SELECT id, super_id, name, location, organizer, begin, finish 
 FROM exams;
 
 -- untuk mengambil seluruh exam (super role)
 -- name: GetExamsBySuperId :many
-SELECT id, super_id, name, location, organizer, begin, finish, created_at, updated_at 
+SELECT id, super_id, name, location, organizer, begin, finish 
 FROM exams 
 WHERE super_id = $1;
 

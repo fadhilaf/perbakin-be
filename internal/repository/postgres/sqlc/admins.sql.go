@@ -219,17 +219,15 @@ func (q *Queries) GetAdminsByExamId(ctx context.Context, examID pgtype.UUID) ([]
 }
 
 const getAllAdmins = `-- name: GetAllAdmins :many
-SELECT admins.id, exams.name AS exam, users.name AS name, users.created_at, users.updated_at FROM admins
+SELECT admins.id, exams.name AS exam, users.name AS name FROM admins
 INNER JOIN users ON admins.user_id = users.id
 INNER JOIN exams ON admins.exam_id = exams.id
 `
 
 type GetAllAdminsRow struct {
-	ID        pgtype.UUID
-	Exam      string
-	Name      string
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
+	ID   pgtype.UUID
+	Exam string
+	Name string
 }
 
 // untuk ngambil data display seluruh admin (all role)
@@ -242,13 +240,7 @@ func (q *Queries) GetAllAdmins(ctx context.Context) ([]GetAllAdminsRow, error) {
 	var items []GetAllAdminsRow
 	for rows.Next() {
 		var i GetAllAdminsRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Exam,
-			&i.Name,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-		); err != nil {
+		if err := rows.Scan(&i.ID, &i.Exam, &i.Name); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

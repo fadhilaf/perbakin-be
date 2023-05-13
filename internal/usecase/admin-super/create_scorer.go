@@ -35,9 +35,11 @@ func (usecase *adminSuperUsecaseImpl) CreateScorer(req model.CreateOperatorReque
 			ID:     scorer.ID,
 			ExamID: scorer.ExamID,
 			User: model.User{
-				ID:       scorer.UserID,
-				Username: scorer.Username,
-				Name:     scorer.Name,
+				ID:        scorer.UserID,
+				Username:  scorer.Username,
+				Name:      scorer.Name,
+				CreatedAt: scorer.CreatedAt.Time,
+				UpdatedAt: scorer.UpdatedAt.Time,
 			},
 		}})
 }

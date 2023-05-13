@@ -57,18 +57,16 @@ func (q *Queries) DeleteShooter(ctx context.Context, id pgtype.UUID) error {
 }
 
 const getAllShooters = `-- name: GetAllShooters :many
-SELECT shooters.id, exams.name AS exam, shooters.name AS name, province, club, shooters.created_at, shooters.updated_at
+SELECT shooters.id, exams.name AS exam, shooters.name AS name, province, club
 FROM shooters INNER JOIN scorers ON shooters.scorer_id = scorers.id INNER JOIN exams ON scorers.exam_id = exams.id
 `
 
 type GetAllShootersRow struct {
-	ID        pgtype.UUID
-	Exam      string
-	Name      string
-	Province  string
-	Club      string
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
+	ID       pgtype.UUID
+	Exam     string
+	Name     string
+	Province string
+	Club     string
 }
 
 // untuk mengambil seluruh shooter (admin-super role)
@@ -87,8 +85,6 @@ func (q *Queries) GetAllShooters(ctx context.Context) ([]GetAllShootersRow, erro
 			&i.Name,
 			&i.Province,
 			&i.Club,
-			&i.CreatedAt,
-			&i.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}

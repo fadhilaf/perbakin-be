@@ -64,17 +64,15 @@ func (q *Queries) CreateScorer(ctx context.Context, arg CreateScorerParams) (Cre
 }
 
 const getAllScorers = `-- name: GetAllScorers :many
-SELECT scorers.id, exams.name AS exam, users.name AS name, users.created_at, users.updated_at FROM scorers 
+SELECT scorers.id, exams.name AS exam, users.name AS name FROM scorers 
 INNER JOIN users ON scorers.user_id = users.id
 INNER JOIN exams ON scorers.exam_id = exams.id
 `
 
 type GetAllScorersRow struct {
-	ID        pgtype.UUID
-	Exam      string
-	Name      string
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
+	ID   pgtype.UUID
+	Exam string
+	Name string
 }
 
 // untuk ngambil data display seluruh scorer (all role)
@@ -87,13 +85,7 @@ func (q *Queries) GetAllScorers(ctx context.Context) ([]GetAllScorersRow, error)
 	var items []GetAllScorersRow
 	for rows.Next() {
 		var i GetAllScorersRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Exam,
-			&i.Name,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-		); err != nil {
+		if err := rows.Scan(&i.ID, &i.Exam, &i.Name); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

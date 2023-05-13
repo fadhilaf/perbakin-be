@@ -24,9 +24,11 @@ func (usecase *adminSuperUsecaseImpl) GetScorerById(req model.OperatorByIdReques
 			ID:     scorer.ID,
 			ExamID: scorer.ExamID,
 			User: model.User{
-				ID:       scorer.UserID,
-				Username: scorer.Username,
-				Name:     scorer.Name,
+				ID:        scorer.UserID,
+				Username:  scorer.Username,
+				Name:      scorer.Name,
+				CreatedAt: scorer.CreatedAt.Time,
+				UpdatedAt: scorer.UpdatedAt.Time,
 			},
 		}})
 }

@@ -41,9 +41,11 @@ func (usecase *adminSuperUsecaseImpl) UpdateScorer(req model.UpdateOperatorReque
 			ID:     newScorer.ID,
 			ExamID: newScorer.ExamID,
 			User: model.User{
-				ID:       newScorer.UserID,
-				Username: newScorer.Username,
-				Name:     newScorer.Name,
+				ID:        newScorer.UserID,
+				Username:  newScorer.Username,
+				Name:      newScorer.Name,
+				CreatedAt: scorer.CreatedAt.Time,
+				UpdatedAt: scorer.UpdatedAt.Time,
 			},
 		}})
 }

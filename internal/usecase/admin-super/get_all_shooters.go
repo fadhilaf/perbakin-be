@@ -18,13 +18,11 @@ func (usecase *adminSuperUsecaseImpl) GetAllShooters() model.WebServiceResponse 
 	var shootersDisplayData []model.ShooterDisplayData
 	for _, shooter := range shooters {
 		shootersDisplayData = append(shootersDisplayData, model.ShooterDisplayData{
-			ID:        shooter.ID,
-			Exam:      shooter.Exam,
-			Name:      shooter.Name,
-			Province:  shooter.Province,
-			Club:      shooter.Club,
-			CreatedAt: shooter.CreatedAt.Time,
-			UpdatedAt: shooter.UpdatedAt.Time,
+			ID:       shooter.ID,
+			Exam:     shooter.Exam,
+			Name:     shooter.Name,
+			Province: shooter.Province,
+			Club:     shooter.Club,
 		})
 	}
 
