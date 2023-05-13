@@ -7,5 +7,5 @@ import (
 func (handler *adminSuperHandler) GetAllShooters(c *gin.Context) {
 	res := handler.Usecase.GetAllShooters()
 
-	c.JSON(res.Status, res.Data)
+	c.JSON(res.Status, res)
 }

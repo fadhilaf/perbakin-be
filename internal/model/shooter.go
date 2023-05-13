@@ -7,7 +7,7 @@ import (
 )
 
 type Shooter struct {
-	ID       pgtype.UUID `json:"user_id"`
+	ID       pgtype.UUID `json:"id"`
 	ScorerID pgtype.UUID `json:"scorer_id"`
 	Name     string      `json:"name"`
 	Province string      `json:"province"`
@@ -15,7 +15,7 @@ type Shooter struct {
 }
 
 type ShooterDisplayData struct {
-	ID        pgtype.UUID `json:"user_id"`
+	ID        pgtype.UUID `json:"id"`
 	Exam      string      `json:"exam"`
 	Name      string      `json:"name"`
 	Province  string      `json:"province"`

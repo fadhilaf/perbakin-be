@@ -7,5 +7,5 @@ import (
 func (handler *superHandler) GetAllAdmins(c *gin.Context) {
 	res := handler.Usecase.GetAllAdmins()
 
-	c.JSON(res.Status, res.Data)
+	c.JSON(res.Status, res)
 }

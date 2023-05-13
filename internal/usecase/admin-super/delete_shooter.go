@@ -15,7 +15,7 @@ func (usecase *adminSuperUsecaseImpl) DeleteShooter(req model.ShooterByIdRequest
 	}
 
 	if shooter.ScorerID != req.ScorerID {
-		return util.ToWebServiceResponse("Tidak diperbohkan menghapus penembak ujian lain", http.StatusUnauthorized, nil)
+		return util.ToWebServiceResponse("Tidak diperbohkan menghapus penembak penguji lain", http.StatusUnauthorized, nil)
 	}
 
 	if err = usecase.Store.DeleteShooter(context.Background(), shooter.ID); err != nil {

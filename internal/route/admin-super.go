@@ -10,6 +10,7 @@ func AdminSuperRoutes(router *gin.RouterGroup, delivery delivery.AdminSuperDeliv
 	adminSuperRoute := router.Group("/", delivery.MustAdminSuperMiddleware())
 
 	adminSuperRoute.GET("/scorers", delivery.GetAllScorers)
+	adminSuperRoute.GET("/shooters", delivery.GetAllShooters)
 
 	examRoute := adminSuperRoute.Group("/exam/:exam_id", delivery.MustExamMiddleware())
 
@@ -20,11 +21,11 @@ func AdminSuperRoutes(router *gin.RouterGroup, delivery delivery.AdminSuperDeliv
 	examRoute.PUT("/scorer/:scorer_id", delivery.UpdateScorer)
 	examRoute.DELETE("/scorer/:scorer_id", delivery.DeleteScorer)
 
-	examRoute.GET("/shooters", delivery.GetShootersByExamId)
+	examRoute.GET("/shooter", delivery.GetShootersByExamId)
 
-	scorerRoute := adminSuperRoute.Group("/scorer/:scorer_id", delivery.MustScorerMiddleware())
+	scorerRoute := examRoute.Group("/scorer/:scorer_id", delivery.MustScorerMiddleware())
 
-	scorerRoute.GET("/shooter", delivery.GetShooterById)
+	// scorerRoute.GET("/shooter", delivery.GetShooterByScorerId)
 	scorerRoute.POST("/shooter", delivery.CreateShooter)
 
 	scorerRoute.GET("/shooter/:shooter_id", delivery.GetShooterById)

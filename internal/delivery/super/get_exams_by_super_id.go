@@ -13,5 +13,5 @@ func (handler *superHandler) GetExamsBySuperId(c *gin.Context) {
 		SuperID: super.ID,
 	})
 
-	c.JSON(res.Status, res.Data)
+	c.JSON(res.Status, res)
 }

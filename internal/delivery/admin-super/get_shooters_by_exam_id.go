@@ -12,5 +12,5 @@ func (handler *adminSuperHandler) GetShootersByExamId(c *gin.Context) {
 		ExamID: exam.ID,
 	})
 
-	c.JSON(res.Status, res.Data)
+	c.JSON(res.Status, res)
 }

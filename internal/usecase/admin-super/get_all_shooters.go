@@ -12,7 +12,7 @@ import (
 func (usecase *adminSuperUsecaseImpl) GetAllShooters() model.WebServiceResponse {
 	shooters, err := usecase.Store.GetAllShooters(context.Background())
 	if err != nil {
-		return util.ToWebServiceResponse("Gagal mendapatkan data penembak", http.StatusInternalServerError, nil)
+		return util.ToWebServiceResponse("Gagal mendapatkan data penembak"+err.Error(), http.StatusInternalServerError, nil)
 	}
 
 	var shootersDisplayData []model.ShooterDisplayData

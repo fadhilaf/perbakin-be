@@ -7,5 +7,5 @@ import (
 func (handler *superHandler) GetAllExams(c *gin.Context) {
 	res := handler.Usecase.GetAllExams()
 
-	c.JSON(res.Status, res.Data)
+	c.JSON(res.Status, res)
 }

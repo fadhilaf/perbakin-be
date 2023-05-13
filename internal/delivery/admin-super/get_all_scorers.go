@@ -7,5 +7,5 @@ import (
 func (handler *adminSuperHandler) GetAllScorers(c *gin.Context) {
 	res := handler.Usecase.GetAllScorers()
 
-	c.JSON(res.Status, res.Data)
+	c.JSON(res.Status, res)
 }
