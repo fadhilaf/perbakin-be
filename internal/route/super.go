@@ -14,6 +14,8 @@ func SuperRoutes(router *gin.RouterGroup, delivery delivery.SuperDelivery) {
 
 	superRouter.GET("/exams", delivery.GetAllExams)
 	superRouter.GET("/admins", delivery.GetAllAdmins)
+	superRouter.GET("/scorers", delivery.GetAllScorers)
+	superRouter.GET("/shooters", delivery.GetAllShooters)
 
 	superRouter.GET("/exam", delivery.GetExamsBySuperId)
 	superRouter.POST("/exam", delivery.CreateExam)
@@ -30,4 +32,20 @@ func SuperRoutes(router *gin.RouterGroup, delivery delivery.SuperDelivery) {
 	examRouter.GET("/admin/:admin_id", delivery.GetAdminById)
 	examRouter.PUT("/admin/:admin_id", delivery.UpdateAdmin)
 	examRouter.DELETE("/admin/:admin_id", delivery.DeleteAdmin)
+
+	examRouter.GET("/scorer", delivery.GetScorersByExamId)
+	examRouter.POST("/scorer", delivery.CreateScorer)
+	examRouter.GET("/scorer/:scorer_id", delivery.GetScorerById)
+	examRouter.PUT("/scorer/:scorer_id", delivery.UpdateScorer)
+	examRouter.DELETE("/scorer/:scorer_id", delivery.DeleteScorer)
+
+	examRouter.GET("/shooter", delivery.GetShootersByExamId)
+
+	scorerRoute := examRouter.Group("/scorer/:scorer_id", delivery.MustScorerMiddleware())
+
+	scorerRoute.POST("/shooter", delivery.CreateShooter)
+
+	scorerRoute.GET("/shooter/:shooter_id", delivery.GetShooterById)
+	scorerRoute.PUT("/shooter/:shooter_id", delivery.UpdateShooter)
+	scorerRoute.DELETE("/shooter/:shooter_id", delivery.DeleteShooter)
 }

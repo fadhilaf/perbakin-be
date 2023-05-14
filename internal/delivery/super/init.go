@@ -1,6 +1,7 @@
 package delivery
 
 import (
+	adminSuperUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/admin-super"
 	sessionUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/session"
 	superUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/super"
 
@@ -22,6 +23,8 @@ type SuperDelivery interface {
 	DeleteExam(c *gin.Context)
 
 	GetAllAdmins(c *gin.Context)
+	GetAllScorers(c *gin.Context)
+	GetAllShooters(c *gin.Context)
 
 	MustExamMiddleware() gin.HandlerFunc
 
@@ -30,18 +33,35 @@ type SuperDelivery interface {
 	GetAdminById(c *gin.Context)
 	UpdateAdmin(c *gin.Context)
 	DeleteAdmin(c *gin.Context)
+
+	CreateScorer(c *gin.Context)
+	GetScorersByExamId(c *gin.Context)
+	GetScorerById(c *gin.Context)
+	UpdateScorer(c *gin.Context)
+	DeleteScorer(c *gin.Context)
+
+	GetShootersByExamId(c *gin.Context)
+
+	MustScorerMiddleware() gin.HandlerFunc
+
+	CreateShooter(c *gin.Context)
+	GetShooterById(c *gin.Context)
+	UpdateShooter(c *gin.Context)
+	DeleteShooter(c *gin.Context)
 }
 
 var _ SuperDelivery = &superHandler{}
 
-func NewSuperDelivery(usecase superUsecase.SuperUsecase, sessionUsecase sessionUsecase.SessionUsecase) SuperDelivery {
+func NewSuperDelivery(usecase superUsecase.SuperUsecase, adminSuperUsecase adminSuperUsecase.AdminSuperUsecase, sessionUsecase sessionUsecase.SessionUsecase) SuperDelivery {
 	return &superHandler{
-		Usecase:        usecase,
-		SessionUsecase: sessionUsecase,
+		Usecase:           usecase,
+		AdminSuperUsecase: adminSuperUsecase,
+		SessionUsecase:    sessionUsecase,
 	}
 }
 
 type superHandler struct {
-	Usecase        superUsecase.SuperUsecase
-	SessionUsecase sessionUsecase.SessionUsecase
+	Usecase           superUsecase.SuperUsecase
+	AdminSuperUsecase adminSuperUsecase.AdminSuperUsecase
+	SessionUsecase    sessionUsecase.SessionUsecase
 }

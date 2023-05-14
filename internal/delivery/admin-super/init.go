@@ -24,8 +24,8 @@ type AdminSuperDelivery interface {
 	MustScorerMiddleware() gin.HandlerFunc
 
 	CreateShooter(c *gin.Context)
-	GetShooterById(c *gin.Context)
 	GetShootersByExamId(c *gin.Context)
+	GetShooterById(c *gin.Context)
 	UpdateShooter(c *gin.Context)
 	DeleteShooter(c *gin.Context)
 }

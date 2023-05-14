@@ -17,9 +17,8 @@ type deliveries struct {
 func (app *App) initDelivery() {
 	var deliveries deliveries
 
-	deliveries.super = superDelivery.NewSuperDelivery(app.usecase.super, app.usecase.session)
-	deliveries.admin = adminDelivery.NewAdminDelivery(app.usecase.admin, app.usecase.session)
-	deliveries.adminSuper = adminSuperDelivery.NewAdminSuperDelivery(app.usecase.adminSuper, app.usecase.session)
+	deliveries.super = superDelivery.NewSuperDelivery(app.usecase.super, app.usecase.adminSuper, app.usecase.session)
+	deliveries.admin = adminDelivery.NewAdminDelivery(app.usecase.admin, app.usecase.adminSuper, app.usecase.session)
 	deliveries.scorer = scorerDelivery.NewScorerDelivery(app.usecase.scorer, app.usecase.session)
 
 	app.delivery = deliveries

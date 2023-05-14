@@ -6,11 +6,8 @@ import (
 )
 
 type SessionUsecase interface {
-	GetSuperRelationByUserId(model.UserByUserIdRequest) (model.SuperRelation, error)
-
 	GetExamRelationById(model.ByIdRequest) (model.ExamRelation, error)
 
-	GetAdminRelationByUserId(model.UserByUserIdRequest) (model.OperatorRelation, error)
 	GetScorerRelationByUserId(model.UserByUserIdRequest) (model.OperatorRelation, error)
 }
 
