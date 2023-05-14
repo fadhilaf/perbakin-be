@@ -79,7 +79,7 @@ func (app *App) StartServer() {
 	}
 
 	fmt.Println()
-	log.Println("Server exiting")
+	log.Println("Server exiting bye bye :D")
 }
 
 func (app *App) createHandlers() http.Handler {
