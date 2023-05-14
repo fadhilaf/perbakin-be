@@ -3,7 +3,7 @@ package delivery
 import (
 	adminUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/admin"
 	adminSuperUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/admin-super"
-	sessionUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/session"
+	allUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/all"
 	"github.com/gin-gonic/gin"
 )
 
@@ -31,20 +31,22 @@ type AdminDelivery interface {
 	GetShooterById(c *gin.Context)
 	UpdateShooter(c *gin.Context)
 	DeleteShooter(c *gin.Context)
+
+	GetShootersByScorerId(c *gin.Context)
 }
 
 var _ AdminDelivery = &adminHandler{}
 
-func NewAdminDelivery(usecase adminUsecase.AdminUsecase, adminSuperUsecase adminSuperUsecase.AdminSuperUsecase, sessionUsecase sessionUsecase.SessionUsecase) AdminDelivery {
+func NewAdminDelivery(usecase adminUsecase.AdminUsecase, adminSuperUsecase adminSuperUsecase.AdminSuperUsecase, allUsecase allUsecase.AllUsecase) AdminDelivery {
 	return &adminHandler{
 		Usecase:           usecase,
 		AdminSuperUsecase: adminSuperUsecase,
-		SessionUsecase:    sessionUsecase,
+		AllUsecase:        allUsecase,
 	}
 }
 
 type adminHandler struct {
 	Usecase           adminUsecase.AdminUsecase
 	AdminSuperUsecase adminSuperUsecase.AdminSuperUsecase
-	SessionUsecase    sessionUsecase.SessionUsecase
+	AllUsecase        allUsecase.AllUsecase
 }

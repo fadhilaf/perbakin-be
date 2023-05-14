@@ -11,4 +11,6 @@ func ScorerRoutes(router *gin.RouterGroup, delivery delivery.ScorerDelivery) {
 
 	scorerRouter := router.Group("/", delivery.MustScorerMiddleware())
 	scorerRouter.GET("/", delivery.CheckScorerLogin)
+
+	scorerRouter.GET("/shooter", delivery.GetShootersByScorerId)
 }

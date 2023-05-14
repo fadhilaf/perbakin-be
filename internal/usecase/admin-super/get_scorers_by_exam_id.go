@@ -15,16 +15,11 @@ func (usecase *adminSuperUsecaseImpl) GetScorersByExamId(req model.ByExamIdReque
 		return util.ToWebServiceResponse("Gagal mendapatkan data penguji", http.StatusInternalServerError, nil)
 	}
 
-	var scorersData []model.Operator
+	var scorersData []model.OperatorDisplayData
 	for _, scorer := range scorers {
-		scorersData = append(scorersData, model.Operator{
-			ID:     scorer.ID,
-			ExamID: scorer.ExamID,
-			User: model.User{
-				ID:       scorer.UserID,
-				Username: scorer.Username,
-				Name:     scorer.Name,
-			},
+		scorersData = append(scorersData, model.OperatorDisplayData{
+			ID:   scorer.ID,
+			Name: scorer.Name,
 		})
 	}
 

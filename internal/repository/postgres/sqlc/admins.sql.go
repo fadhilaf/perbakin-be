@@ -178,17 +178,14 @@ func (q *Queries) GetAdminRelationByUserId(ctx context.Context, userID pgtype.UU
 }
 
 const getAdminsByExamId = `-- name: GetAdminsByExamId :many
-SELECT admins.id, user_id, exam_id, username, name FROM admins 
+SELECT admins.id, name FROM admins 
 INNER JOIN users ON admins.user_id = users.id
 WHERE exam_id = $1
 `
 
 type GetAdminsByExamIdRow struct {
-	ID       pgtype.UUID
-	UserID   pgtype.UUID
-	ExamID   pgtype.UUID
-	Username string
-	Name     string
+	ID   pgtype.UUID
+	Name string
 }
 
 // untuk ngambil data akun seluruh admin dalam satu exam (super role)
@@ -201,13 +198,7 @@ func (q *Queries) GetAdminsByExamId(ctx context.Context, examID pgtype.UUID) ([]
 	var items []GetAdminsByExamIdRow
 	for rows.Next() {
 		var i GetAdminsByExamIdRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.UserID,
-			&i.ExamID,
-			&i.Username,
-			&i.Name,
-		); err != nil {
+		if err := rows.Scan(&i.ID, &i.Name); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

@@ -11,13 +11,13 @@ FROM exams;
 
 -- untuk mengambil seluruh exam (super role)
 -- name: GetExamsBySuperId :many
-SELECT id, super_id, name, location, organizer, begin, finish 
+SELECT id, name, location, organizer, begin, finish 
 FROM exams 
 WHERE super_id = $1;
 
 -- untuk mengambil exam berdasarkan nama untuk cek nama sudah dipakai blum (super role)
 -- name: GetExamByName :one
-SELECT id, super_id, name, location, organizer, begin, finish, created_at, updated_at 
+SELECT id
 FROM exams 
 WHERE name = $1;
 

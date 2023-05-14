@@ -20,7 +20,7 @@ INNER JOIN exams ON scorers.exam_id = exams.id;
 
 -- untuk ngambil data akun seluruh scorer dalam satu exam (admin-super role)
 -- name: GetScorersByExamId :many
-SELECT scorers.id, user_id, exam_id, username, name FROM scorers 
+SELECT scorers.id, name FROM scorers 
 INNER JOIN users ON scorers.user_id = users.id
 WHERE exam_id = $1;
 

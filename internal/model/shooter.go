@@ -16,9 +16,27 @@ type Shooter struct {
 	UpdatedAt time.Time   `json:"updated_at"`
 }
 
-type ShooterDisplayData struct {
+// untuk GetAllShooters
+type ShooterDisplayExamData struct {
 	ID       pgtype.UUID `json:"id"`
 	Exam     string      `json:"exam"`
+	Name     string      `json:"name"`
+	Province string      `json:"province"`
+	Club     string      `json:"club"`
+}
+
+// untuk GetShootersByExamId
+type ShooterDisplayScorerData struct {
+	ID       pgtype.UUID `json:"id"`
+	Scorer   string      `json:"scorer"`
+	Name     string      `json:"name"`
+	Province string      `json:"province"`
+	Club     string      `json:"club"`
+}
+
+// untuk GetShootersByScorerId
+type ShooterDisplayData struct {
+	ID       pgtype.UUID `json:"id"`
 	Name     string      `json:"name"`
 	Province string      `json:"province"`
 	Club     string      `json:"club"`

@@ -15,9 +15,9 @@ func (usecase *adminSuperUsecaseImpl) GetAllShooters() model.WebServiceResponse 
 		return util.ToWebServiceResponse("Gagal mendapatkan data penembak"+err.Error(), http.StatusInternalServerError, nil)
 	}
 
-	var shootersDisplayData []model.ShooterDisplayData
+	var shootersDisplayData []model.ShooterDisplayExamData
 	for _, shooter := range shooters {
-		shootersDisplayData = append(shootersDisplayData, model.ShooterDisplayData{
+		shootersDisplayData = append(shootersDisplayData, model.ShooterDisplayExamData{
 			ID:       shooter.ID,
 			Exam:     shooter.Exam,
 			Name:     shooter.Name,

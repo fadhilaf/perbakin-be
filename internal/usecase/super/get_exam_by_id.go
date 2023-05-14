@@ -24,5 +24,7 @@ func (usecase *superUsecaseImpl) GetExamById(req model.ByIdRequest) model.WebSer
 			Organizer: exam.Organizer,
 			Begin:     exam.Begin,
 			Finish:    exam.Finish,
+			CreatedAt: exam.CreatedAt.Time,
+			UpdatedAt: exam.UpdatedAt.Time,
 		}})
 }

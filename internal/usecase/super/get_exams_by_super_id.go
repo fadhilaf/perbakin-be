@@ -9,17 +9,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (usecase *superUsecaseImpl) GetExamsByUserId(req model.GetExamsBySuperIdRequest) model.WebServiceResponse {
+func (usecase *superUsecaseImpl) GetExamsBySuperId(req model.GetExamsBySuperIdRequest) model.WebServiceResponse {
 	exams, err := usecase.Store.GetExamsBySuperId(context.Background(), req.SuperID)
 	if err != nil {
 		return util.ToWebServiceResponse("Data ujian tidak ditemukan", http.StatusUnauthorized, nil)
 	}
 
-	var examsData []model.Exam
+	var examsData []model.ExamDisplayData
 	for _, exam := range exams {
-		examsData = append(examsData, model.Exam{
+		examsData = append(examsData, model.ExamDisplayData{
 			ID:        exam.ID,
-			SuperID:   exam.SuperID,
 			Name:      exam.Name,
 			Location:  exam.Location,
 			Organizer: exam.Organizer,

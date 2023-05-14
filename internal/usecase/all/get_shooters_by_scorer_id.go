@@ -15,11 +15,10 @@ func (usecase *allUsecaseImpl) GetShootersByScorerId(req model.ByScorerIdRequest
 		return util.ToWebServiceResponse("Gagal mendapatkan data penembak", http.StatusInternalServerError, nil)
 	}
 
-	var shootersData []model.Shooter
+	var shootersData []model.ShooterDisplayData
 	for _, shooter := range shooters {
-		shootersData = append(shootersData, model.Shooter{
+		shootersData = append(shootersData, model.ShooterDisplayData{
 			ID:       shooter.ID,
-			ScorerID: shooter.ScorerID,
 			Name:     shooter.Name,
 			Province: shooter.Province,
 			Club:     shooter.Club,

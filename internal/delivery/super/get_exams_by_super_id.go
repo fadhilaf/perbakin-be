@@ -9,7 +9,7 @@ import (
 func (handler *superHandler) GetExamsBySuperId(c *gin.Context) {
 	super := c.MustGet("super").(model.SuperRelation)
 
-	res := handler.Usecase.GetExamsByUserId(model.GetExamsBySuperIdRequest{
+	res := handler.Usecase.GetExamsBySuperId(model.GetExamsBySuperIdRequest{
 		SuperID: super.ID,
 	})
 

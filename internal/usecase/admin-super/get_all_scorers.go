@@ -15,9 +15,9 @@ func (usecase *adminSuperUsecaseImpl) GetAllScorers() model.WebServiceResponse {
 		return util.ToWebServiceResponse("Gagal mendapatkan data penguji", http.StatusInternalServerError, nil)
 	}
 
-	var scorersDisplayData []model.OperatorDisplayData
+	var scorersDisplayData []model.OperatorDisplayExamData
 	for _, scorer := range scorers {
-		scorersDisplayData = append(scorersDisplayData, model.OperatorDisplayData{
+		scorersDisplayData = append(scorersDisplayData, model.OperatorDisplayExamData{
 			ID:   scorer.ID,
 			Exam: scorer.Exam,
 			Name: scorer.Name,

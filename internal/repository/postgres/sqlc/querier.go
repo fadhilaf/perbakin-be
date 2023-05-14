@@ -48,7 +48,7 @@ type Querier interface {
 	// untuk mengambil satu data exam (super role)
 	GetExamById(ctx context.Context, id pgtype.UUID) (Exam, error)
 	// untuk mengambil exam berdasarkan nama untuk cek nama sudah dipakai blum (super role)
-	GetExamByName(ctx context.Context, name string) (Exam, error)
+	GetExamByName(ctx context.Context, name string) (pgtype.UUID, error)
 	// untuk mengambil data relasi exam (all role)
 	GetExamRelationById(ctx context.Context, id pgtype.UUID) (GetExamRelationByIdRow, error)
 	// untuk mengambil seluruh exam (super role)

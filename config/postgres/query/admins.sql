@@ -20,7 +20,7 @@ INNER JOIN exams ON admins.exam_id = exams.id;
 
 -- untuk ngambil data akun seluruh admin dalam satu exam (super role)
 -- name: GetAdminsByExamId :many
-SELECT admins.id, user_id, exam_id, username, name FROM admins 
+SELECT admins.id, name FROM admins 
 INNER JOIN users ON admins.user_id = users.id
 WHERE exam_id = $1;
 

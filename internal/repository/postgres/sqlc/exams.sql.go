@@ -138,27 +138,17 @@ func (q *Queries) GetExamById(ctx context.Context, id pgtype.UUID) (Exam, error)
 }
 
 const getExamByName = `-- name: GetExamByName :one
-SELECT id, super_id, name, location, organizer, begin, finish, created_at, updated_at 
+SELECT id
 FROM exams 
 WHERE name = $1
 `
 
 // untuk mengambil exam berdasarkan nama untuk cek nama sudah dipakai blum (super role)
-func (q *Queries) GetExamByName(ctx context.Context, name string) (Exam, error) {
+func (q *Queries) GetExamByName(ctx context.Context, name string) (pgtype.UUID, error) {
 	row := q.db.QueryRow(ctx, getExamByName, name)
-	var i Exam
-	err := row.Scan(
-		&i.ID,
-		&i.SuperID,
-		&i.Name,
-		&i.Location,
-		&i.Organizer,
-		&i.Begin,
-		&i.Finish,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-	)
-	return i, err
+	var id pgtype.UUID
+	err := row.Scan(&id)
+	return id, err
 }
 
 const getExamRelationById = `-- name: GetExamRelationById :one
@@ -181,14 +171,13 @@ func (q *Queries) GetExamRelationById(ctx context.Context, id pgtype.UUID) (GetE
 }
 
 const getExamsBySuperId = `-- name: GetExamsBySuperId :many
-SELECT id, super_id, name, location, organizer, begin, finish 
+SELECT id, name, location, organizer, begin, finish 
 FROM exams 
 WHERE super_id = $1
 `
 
 type GetExamsBySuperIdRow struct {
 	ID        pgtype.UUID
-	SuperID   pgtype.UUID
 	Name      string
 	Location  string
 	Organizer string
@@ -208,7 +197,6 @@ func (q *Queries) GetExamsBySuperId(ctx context.Context, superID pgtype.UUID) ([
 		var i GetExamsBySuperIdRow
 		if err := rows.Scan(
 			&i.ID,
-			&i.SuperID,
 			&i.Name,
 			&i.Location,
 			&i.Organizer,

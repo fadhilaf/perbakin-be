@@ -21,10 +21,12 @@ type SuperUsecase interface {
 
 	GetExamById(model.ByIdRequest) model.WebServiceResponse
 	GetAllExams() model.WebServiceResponse
-	GetExamsByUserId(model.GetExamsBySuperIdRequest) model.WebServiceResponse
+	GetExamsBySuperId(model.GetExamsBySuperIdRequest) model.WebServiceResponse
 	CreateExam(model.CreateExamRequest) model.WebServiceResponse
 	UpdateExam(model.UpdateExamRequest) model.WebServiceResponse
 	DeleteExam(model.DeleteExamRequest) model.WebServiceResponse
+
+	GetExamRelationById(model.ByIdRequest) (model.ExamRelation, error)
 }
 
 var _ SuperUsecase = &superUsecaseImpl{}
