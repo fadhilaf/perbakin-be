@@ -19,8 +19,8 @@ var SessionManager *scs.SessionManager
 func SessionHandler(handler *gin.Engine, dbPool *pgxpool.Pool, config env.Config) http.Handler {
 	SessionManager = scs.New()
 	SessionManager.Store = pgxstore.New(dbPool)
-	SessionManager.Lifetime = 12 * time.Hour
-	SessionManager.IdleTimeout = 20 * time.Minute
+	SessionManager.Lifetime = 24 * time.Hour
+	SessionManager.IdleTimeout = 3 * time.Hour
 	SessionManager.Cookie.Persist = true
 	SessionManager.Cookie.HttpOnly = true
 	SessionManager.Cookie.Path = "/"
