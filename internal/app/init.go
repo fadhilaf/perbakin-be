@@ -60,20 +60,20 @@ func (app *App) StartServer() {
 	address := fmt.Sprintf("%s:%s", app.Config.AppHost, app.Config.AppPort)
 	log.Printf("Server listening on %v\n", address)
 
-	srv := &http.Server{
+	server := &http.Server{
 		Addr:    address,
 		Handler: handler,
 	}
 
 	go func() {
-		err := srv.ListenAndServe()
+		err := server.ListenAndServe()
 		if err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Cannot start server %v\n", err)
 		}
 	}()
 
 	<-osSignalChan
-	err := srv.Close()
+	err := server.Close()
 	if err != nil {
 		log.Fatalf("cannot shutdown server %v", err)
 	}
