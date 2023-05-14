@@ -7,8 +7,6 @@ import (
 
 type SessionUsecase interface {
 	GetExamRelationById(model.ByIdRequest) (model.ExamRelation, error)
-
-	GetScorerRelationByUserId(model.UserByUserIdRequest) (model.OperatorRelation, error)
 }
 
 var _ SessionUsecase = &sessionUsecaseImpl{}

@@ -1,8 +1,6 @@
 package model
 
 import (
-	"time"
-
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -19,11 +17,9 @@ type OperatorRelation struct {
 }
 
 type OperatorDisplayData struct {
-	ID        pgtype.UUID `json:"id"`
-	Exam      string      `json:"exam"`
-	Name      string      `json:"name"`
-	CreatedAt time.Time   `json:"created_at"`
-	UpdatedAt time.Time   `json:"updated_at"`
+	ID   pgtype.UUID `json:"id"`
+	Exam string      `json:"exam"`
+	Name string      `json:"name"`
 }
 
 type OperatorByIdRequest struct {

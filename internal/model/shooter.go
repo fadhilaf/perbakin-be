@@ -17,13 +17,11 @@ type Shooter struct {
 }
 
 type ShooterDisplayData struct {
-	ID        pgtype.UUID `json:"id"`
-	Exam      string      `json:"exam"`
-	Name      string      `json:"name"`
-	Province  string      `json:"province"`
-	Club      string      `json:"club"`
-	CreatedAt time.Time   `json:"created_at"`
-	UpdatedAt time.Time   `json:"updated_at"`
+	ID       pgtype.UUID `json:"id"`
+	Exam     string      `json:"exam"`
+	Name     string      `json:"name"`
+	Province string      `json:"province"`
+	Club     string      `json:"club"`
 }
 
 type ByScorerIdRequest struct {

@@ -2,16 +2,14 @@ package app
 
 import (
 	adminDelivery "github.com/FadhilAF/perbakin-be/internal/delivery/admin"
-	adminSuperDelivery "github.com/FadhilAF/perbakin-be/internal/delivery/admin-super"
 	scorerDelivery "github.com/FadhilAF/perbakin-be/internal/delivery/scorer"
 	superDelivery "github.com/FadhilAF/perbakin-be/internal/delivery/super"
 )
 
 type deliveries struct {
-	super      superDelivery.SuperDelivery
-	admin      adminDelivery.AdminDelivery
-	adminSuper adminSuperDelivery.AdminSuperDelivery
-	scorer     scorerDelivery.ScorerDelivery
+	super  superDelivery.SuperDelivery
+	admin  adminDelivery.AdminDelivery
+	scorer scorerDelivery.ScorerDelivery
 }
 
 func (app *App) initDelivery() {

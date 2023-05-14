@@ -19,7 +19,7 @@ func (handler *scorerHandler) MustScorerMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		scorer, err := handler.SessionUsecase.GetScorerRelationByUserId(model.UserByUserIdRequest{UserID: userId})
+		scorer, err := handler.Usecase.GetScorerRelationByUserId(model.UserByUserIdRequest{UserID: userId})
 		if err != nil {
 			res := util.ToWebServiceResponse("User bukan merupakan penguji", http.StatusUnauthorized, nil)
 			c.JSON(res.Status, res)
