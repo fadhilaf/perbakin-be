@@ -27,7 +27,10 @@ func (handler *superHandler) SuperLogin(c *gin.Context) {
 	if res.Status == http.StatusOK {
 		if super, ok := res.Data["super"].(model.Super); ok {
 			util.SaveUserToSession(c, super.User.ID)
+			util.SetAuthStatusCookie(c, "super")
 		}
+	} else {
+		util.SetAuthStatusCookie(c, "")
 	}
 
 	c.JSON(res.Status, res)

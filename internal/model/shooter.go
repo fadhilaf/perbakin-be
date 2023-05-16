@@ -18,11 +18,10 @@ type Shooter struct {
 
 // untuk GetAllShooters
 type ShooterDisplayExamData struct {
-	ID       pgtype.UUID `json:"id"`
-	Exam     string      `json:"exam"`
-	Name     string      `json:"name"`
-	Province string      `json:"province"`
-	Club     string      `json:"club"`
+	Exam     string `json:"exam"`
+	Name     string `json:"name"`
+	Province string `json:"province"`
+	Club     string `json:"club"`
 }
 
 // untuk GetShootersByExamId

@@ -14,7 +14,7 @@ INNER JOIN added_scorer ON added_user.id = user_id;
 
 -- untuk ngambil data display seluruh scorer (all role)
 -- name: GetAllScorers :many
-SELECT scorers.id, exams.name AS exam, users.name AS name FROM scorers 
+SELECT exams.name AS exam, users.name AS name FROM scorers 
 INNER JOIN users ON scorers.user_id = users.id
 INNER JOIN exams ON scorers.exam_id = exams.id;
 

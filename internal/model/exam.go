@@ -18,6 +18,15 @@ type Exam struct {
 	UpdatedAt time.Time   `json:"updated_at"`
 }
 
+type ExamDisplaySuperData struct {
+	Name      string      `json:"name"`
+	Super     string      `json:"super"`
+	Location  string      `json:"location"`
+	Organizer string      `json:"organizer"`
+	Begin     pgtype.Date `json:"begin"`
+	Finish    pgtype.Date `json:"finish"`
+}
+
 type ExamDisplayData struct {
 	ID        pgtype.UUID `json:"id"`
 	Name      string      `json:"name"`

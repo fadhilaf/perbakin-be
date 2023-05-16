@@ -18,7 +18,6 @@ func (usecase *adminSuperUsecaseImpl) GetAllScorers() model.WebServiceResponse {
 	var scorersDisplayData []model.OperatorDisplayExamData
 	for _, scorer := range scorers {
 		scorersDisplayData = append(scorersDisplayData, model.OperatorDisplayExamData{
-			ID:   scorer.ID,
 			Exam: scorer.Exam,
 			Name: scorer.Name,
 		})

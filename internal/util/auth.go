@@ -18,6 +18,18 @@ func SaveUserToSession(c *gin.Context, uuid pgtype.UUID) {
 	session.SessionManager.Put(c.Request.Context(), "user_id", userId)
 }
 
+func SetAuthStatusCookie(c *gin.Context, value string) {
+	cookie := &http.Cookie{
+		Name:     "auth_status",
+		Value:    value,
+		Path:     "/",
+		HttpOnly: false,
+		MaxAge:   10800, //3 jam
+	}
+
+	http.SetCookie(c.Writer, cookie)
+}
+
 func GetUserIdFromSession(c *gin.Context) {
 	var uuid pgtype.UUID
 

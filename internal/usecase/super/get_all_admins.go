@@ -18,7 +18,6 @@ func (usecase *superUsecaseImpl) GetAllAdmins() model.WebServiceResponse {
 	var adminsData []model.OperatorDisplayExamData
 	for _, admin := range admins {
 		adminsData = append(adminsData, model.OperatorDisplayExamData{
-			ID:   admin.ID,
 			Exam: admin.Exam,
 			Name: admin.Name,
 		})

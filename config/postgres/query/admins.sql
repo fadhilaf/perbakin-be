@@ -14,7 +14,7 @@ INNER JOIN added_admin ON added_user.id = user_id;
 
 -- untuk ngambil data display seluruh admin (all role)
 -- name: GetAllAdmins :many
-SELECT admins.id, exams.name AS exam, users.name AS name FROM admins
+SELECT exams.name AS exam, users.name AS name FROM admins
 INNER JOIN users ON admins.user_id = users.id
 INNER JOIN exams ON admins.exam_id = exams.id;
 

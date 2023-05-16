@@ -27,7 +27,10 @@ func (handler *adminHandler) AdminLogin(c *gin.Context) {
 	if res.Status == http.StatusOK {
 		if admin, ok := res.Data["admin"].(model.Operator); ok {
 			util.SaveUserToSession(c, admin.User.ID)
+			util.SetAuthStatusCookie(c, "admin")
 		}
+	} else {
+		util.SetAuthStatusCookie(c, "")
 	}
 
 	c.JSON(res.Status, res)

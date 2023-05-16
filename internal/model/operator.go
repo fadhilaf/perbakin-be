@@ -18,9 +18,8 @@ type OperatorRelation struct {
 
 // untuk GetAllOperators
 type OperatorDisplayExamData struct {
-	ID   pgtype.UUID `json:"id"`
-	Exam string      `json:"exam"`
-	Name string      `json:"name"`
+	Exam string `json:"exam"`
+	Name string `json:"name"`
 }
 
 // untuk GetOperatorsByExamId

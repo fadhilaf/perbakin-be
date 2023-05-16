@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS supers (
   id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
-  user_id uuid NOT NULL,
+  user_id uuid NOT NULL UNIQUE,
   CONSTRAINT user_id
     FOREIGN KEY (user_id) 
       REFERENCES users (id) ON DELETE CASCADE

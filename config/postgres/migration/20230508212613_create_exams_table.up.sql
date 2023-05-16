@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS exams (
 
 CREATE TABLE IF NOT EXISTS admins ( 
   id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
-  user_id uuid NOT NULL,
+  user_id uuid NOT NULL UNIQUE,
   exam_id uuid NOT NULL,
   CONSTRAINT user_id
     FOREIGN KEY (user_id) 
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS admins (
 
 CREATE TABLE IF NOT EXISTS scorers (
   id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
-  user_id uuid NOT NULL,
+  user_id uuid NOT NULL UNIQUE,
   exam_id uuid NOT NULL,
   CONSTRAINT user_id
     FOREIGN KEY (user_id) 

@@ -19,5 +19,6 @@ func Logout(c *gin.Context) {
 
 	util.RemoveAuthSession(c)
 	res := util.ToWebServiceResponse("Logout berhasil", http.StatusOK, nil)
+	util.SetAuthStatusCookie(c, "")
 	c.JSON(res.Status, res)
 }

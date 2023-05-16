@@ -70,14 +70,13 @@ func (q *Queries) DeleteExam(ctx context.Context, id pgtype.UUID) error {
 }
 
 const getAllExams = `-- name: GetAllExams :many
-SELECT id, super_id, name, location, organizer, begin, finish 
-FROM exams
+SELECT exams.name, users.name as super, location, organizer, begin, finish 
+FROM exams JOIN users ON exams.super_id = users.id
 `
 
 type GetAllExamsRow struct {
-	ID        pgtype.UUID
-	SuperID   pgtype.UUID
 	Name      string
+	Super     string
 	Location  string
 	Organizer string
 	Begin     pgtype.Date
@@ -95,9 +94,8 @@ func (q *Queries) GetAllExams(ctx context.Context) ([]GetAllExamsRow, error) {
 	for rows.Next() {
 		var i GetAllExamsRow
 		if err := rows.Scan(
-			&i.ID,
-			&i.SuperID,
 			&i.Name,
+			&i.Super,
 			&i.Location,
 			&i.Organizer,
 			&i.Begin,

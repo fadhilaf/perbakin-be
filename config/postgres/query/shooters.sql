@@ -6,7 +6,7 @@ RETURNING id, scorer_id, name, province, club, created_at, updated_at;
 
 -- untuk mengambil seluruh shooter (admin-super role)
 -- name: GetAllShooters :many
-SELECT shooters.id, exams.name AS exam, shooters.name AS name, province, club
+SELECT exams.name AS exam, shooters.name AS name, province, club
 FROM shooters INNER JOIN scorers ON shooters.scorer_id = scorers.id INNER JOIN exams ON scorers.exam_id = exams.id;
 
 -- untuk mengambil shooter berdasarkan exam_id (admin-super role) TODO: tambah nilai results jg

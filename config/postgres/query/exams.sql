@@ -6,8 +6,8 @@ RETURNING id, super_id, name, location, organizer, begin, finish;
 
 -- untuk mengambil seluruh exam (super role)
 -- name: GetAllExams :many
-SELECT id, super_id, name, location, organizer, begin, finish 
-FROM exams;
+SELECT exams.name, users.name as super, location, organizer, begin, finish 
+FROM exams JOIN users ON exams.super_id = users.id;
 
 -- untuk mengambil seluruh exam (super role)
 -- name: GetExamsBySuperId :many
