@@ -14,6 +14,8 @@ func (handler *superHandler) MustSuperMiddleware() gin.HandlerFunc {
 		userId := util.GetUserIdFromContext(c)
 		if !userId.Valid {
 			res := util.ToWebServiceResponse("User belum login", http.StatusUnauthorized, nil)
+			util.SetAuthStatusCookie(c, "")
+
 			c.JSON(res.Status, res)
 			c.Abort()
 			return

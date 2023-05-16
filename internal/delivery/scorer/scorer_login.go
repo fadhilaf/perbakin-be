@@ -29,8 +29,6 @@ func (handler *scorerHandler) ScorerLogin(c *gin.Context) {
 			util.SaveUserToSession(c, scorer.User.ID)
 			util.SetAuthStatusCookie(c, "scorer")
 		}
-	} else {
-		util.SetAuthStatusCookie(c, "")
 	}
 
 	c.JSON(res.Status, res)

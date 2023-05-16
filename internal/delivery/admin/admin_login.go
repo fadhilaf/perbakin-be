@@ -29,8 +29,6 @@ func (handler *adminHandler) AdminLogin(c *gin.Context) {
 			util.SaveUserToSession(c, admin.User.ID)
 			util.SetAuthStatusCookie(c, "admin")
 		}
-	} else {
-		util.SetAuthStatusCookie(c, "")
 	}
 
 	c.JSON(res.Status, res)

@@ -29,8 +29,6 @@ func (handler *superHandler) SuperLogin(c *gin.Context) {
 			util.SaveUserToSession(c, super.User.ID)
 			util.SetAuthStatusCookie(c, "super")
 		}
-	} else {
-		util.SetAuthStatusCookie(c, "")
 	}
 
 	c.JSON(res.Status, res)
