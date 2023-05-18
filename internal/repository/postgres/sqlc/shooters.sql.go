@@ -108,7 +108,7 @@ type GetShooterByExamIdRow struct {
 	Club     string
 }
 
-// untuk mengambil shooter berdasarkan exam_id (admin-super role) TODO: tambah nilai results jg
+// untuk mengambil shooter berdasarkan exam_id (admin-super role)
 func (q *Queries) GetShooterByExamId(ctx context.Context, examID pgtype.UUID) ([]GetShooterByExamIdRow, error) {
 	rows, err := q.db.Query(ctx, getShooterByExamId, examID)
 	if err != nil {
@@ -170,7 +170,7 @@ type GetShootersByScorerIdRow struct {
 	Club     string
 }
 
-// untuk mengambil shooter berdasarkan scorer_id (admin-super role)
+// untuk mengambil shooter berdasarkan scorer_id (all role)
 func (q *Queries) GetShootersByScorerId(ctx context.Context, scorerID pgtype.UUID) ([]GetShootersByScorerIdRow, error) {
 	rows, err := q.db.Query(ctx, getShootersByScorerId, scorerID)
 	if err != nil {

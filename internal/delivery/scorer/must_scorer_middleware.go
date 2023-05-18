@@ -14,7 +14,7 @@ func (handler *scorerHandler) MustScorerMiddleware() gin.HandlerFunc {
 		userId := util.GetUserIdFromContext(c)
 		if !userId.Valid {
 			res := util.ToWebServiceResponse("User belum login", http.StatusUnauthorized, nil)
-			util.SetAuthStatusCookie(c, "")
+			util.DeleteAuthStatusCookie(c)
 
 			c.JSON(res.Status, res)
 			c.Abort()

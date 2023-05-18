@@ -29,7 +29,7 @@ type Exam struct {
 type Result struct {
 	ID        pgtype.UUID
 	ShooterID pgtype.UUID
-	Status    bool
+	Failed    bool
 	Stage     interface{}
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
@@ -60,48 +60,12 @@ type Shooter struct {
 type Stage0Result struct {
 	ID        pgtype.UUID
 	ResultID  pgtype.UUID
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
-}
-
-type Stage1Result struct {
-	ID        pgtype.UUID
-	ResultID  pgtype.UUID
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
-}
-
-type Stage2Result struct {
-	ID        pgtype.UUID
-	ResultID  pgtype.UUID
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
-}
-
-type Stage3Result struct {
-	ID        pgtype.UUID
-	ResultID  pgtype.UUID
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
-}
-
-type Stage4Result struct {
-	ID        pgtype.UUID
-	ResultID  pgtype.UUID
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
-}
-
-type Stage5Result struct {
-	ID        pgtype.UUID
-	ResultID  pgtype.UUID
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
-}
-
-type Stage6Result struct {
-	ID        pgtype.UUID
-	ResultID  pgtype.UUID
+	Status    interface{}
+	Series1   interface{}
+	Series2   interface{}
+	Series3   interface{}
+	Series4   interface{}
+	Series5   interface{}
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
 }

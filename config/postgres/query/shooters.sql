@@ -9,13 +9,13 @@ RETURNING id, scorer_id, name, province, club, created_at, updated_at;
 SELECT exams.name AS exam, shooters.name AS name, province, club
 FROM shooters INNER JOIN scorers ON shooters.scorer_id = scorers.id INNER JOIN exams ON scorers.exam_id = exams.id;
 
--- untuk mengambil shooter berdasarkan exam_id (admin-super role) TODO: tambah nilai results jg
+-- untuk mengambil shooter berdasarkan exam_id (admin-super role)
 -- name: GetShooterByExamId :many
 SELECT shooters.id, users.name AS scorer, shooters.name AS name, province, club
 FROM shooters INNER JOIN scorers ON shooters.scorer_id = scorers.id INNER JOIN users ON scorers.user_id = users.id
 WHERE scorers.exam_id = $1;
 
--- untuk mengambil shooter berdasarkan scorer_id (admin-super role)
+-- untuk mengambil shooter berdasarkan scorer_id (all role)
 -- name: GetShootersByScorerId :many
 SELECT id, name, province, club
 FROM shooters

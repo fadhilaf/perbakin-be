@@ -30,6 +30,18 @@ func SetAuthStatusCookie(c *gin.Context, value string) {
 	http.SetCookie(c.Writer, cookie)
 }
 
+func DeleteAuthStatusCookie(c *gin.Context) {
+	cookie := &http.Cookie{
+		Name:     "auth_status",
+		Value:    "",
+		Path:     "/",
+		HttpOnly: false,
+		MaxAge:   -1,
+	}
+
+	http.SetCookie(c.Writer, cookie)
+}
+
 func GetUserIdFromSession(c *gin.Context) {
 	var uuid pgtype.UUID
 
