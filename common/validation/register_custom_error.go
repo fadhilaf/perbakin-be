@@ -24,8 +24,8 @@ func registerCustomErrors() {
 		return fmt.Sprintf("'%s' tidak boleh melebihi %s karakter", translatedFieldName, field.Param())
 	}
 
-	customError["numeric"] = func(field validator.FieldError, translatedFieldName string) string {
-		return fmt.Sprintf("'%s' harus numeric", translatedFieldName)
+	customError["number"] = func(field validator.FieldError, translatedFieldName string) string {
+		return fmt.Sprintf("'%s' harus angka", translatedFieldName)
 	}
 
 	customError["datetime"] = func(field validator.FieldError, translatedFieldName string) string {
@@ -44,5 +44,17 @@ func registerCustomErrors() {
 		}
 
 		return fmt.Sprintf("'%s' tidak boleh memiliki %s", translatedFieldName, param)
+	}
+
+	customError["boolean"] = func(field validator.FieldError, translatedFieldName string) string {
+		return fmt.Sprintf("'%s' harus boolean", translatedFieldName)
+	}
+
+	customError["gte"] = func(field validator.FieldError, translatedFieldName string) string {
+		return fmt.Sprintf("'%s' harus lebih dari %s", translatedFieldName, field.Param())
+	}
+
+	customError["lte"] = func(field validator.FieldError, translatedFieldName string) string {
+		return fmt.Sprintf("'%s' harus kurang dari %s", translatedFieldName, field.Param())
 	}
 }

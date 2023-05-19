@@ -85,12 +85,6 @@ type UpdateExamBodyRequest struct {
 }
 
 type UpdateExamRequest struct {
-	ID      pgtype.UUID
-	SuperID pgtype.UUID
-	Body    UpdateExamBodyRequest
-}
-
-type DeleteExamRequest struct {
-	ID      pgtype.UUID
-	SuperID pgtype.UUID
+	ID   pgtype.UUID
+	Body UpdateExamBodyRequest
 }

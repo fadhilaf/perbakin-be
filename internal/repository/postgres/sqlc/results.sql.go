@@ -17,6 +17,7 @@ VALUES ($1)
 RETURNING id, shooter_id, failed, stage, created_at, updated_at
 `
 
+// (all role)
 func (q *Queries) CreateResult(ctx context.Context, shooterID pgtype.UUID) (Result, error) {
 	row := q.db.QueryRow(ctx, createResult, shooterID)
 	var i Result
@@ -31,6 +32,17 @@ func (q *Queries) CreateResult(ctx context.Context, shooterID pgtype.UUID) (Resu
 	return i, err
 }
 
+const deleteResultByShooterId = `-- name: DeleteResultByShooterId :exec
+DELETE FROM results
+WHERE shooter_id = $1
+`
+
+// (admin-super role) dibuat by shooter id, kareno shooter dan result itu 1:1
+func (q *Queries) DeleteResultByShooterId(ctx context.Context, shooterID pgtype.UUID) error {
+	_, err := q.db.Exec(ctx, deleteResultByShooterId, shooterID)
+	return err
+}
+
 const getResultByShooterId = `-- name: GetResultByShooterId :one
 SELECT id, shooter_id, failed, stage, created_at, updated_at
 FROM results
@@ -39,6 +51,34 @@ WHERE shooter_id = $1
 
 func (q *Queries) GetResultByShooterId(ctx context.Context, shooterID pgtype.UUID) (Result, error) {
 	row := q.db.QueryRow(ctx, getResultByShooterId, shooterID)
+	var i Result
+	err := row.Scan(
+		&i.ID,
+		&i.ShooterID,
+		&i.Failed,
+		&i.Stage,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const updateResultByShooterId = `-- name: UpdateResultByShooterId :one
+UPDATE results 
+SET failed = $2, stage = $3, updated_at = NOW()
+WHERE shooter_id = $1
+RETURNING id, shooter_id, failed, stage, created_at, updated_at
+`
+
+type UpdateResultByShooterIdParams struct {
+	ShooterID pgtype.UUID
+	Failed    bool
+	Stage     interface{}
+}
+
+// (admin-super role) dibuat by shooter id, kareno shooter dan result itu 1:1
+func (q *Queries) UpdateResultByShooterId(ctx context.Context, arg UpdateResultByShooterIdParams) (Result, error) {
+	row := q.db.QueryRow(ctx, updateResultByShooterId, arg.ShooterID, arg.Failed, arg.Stage)
 	var i Result
 	err := row.Scan(
 		&i.ID,

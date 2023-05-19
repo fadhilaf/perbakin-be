@@ -15,7 +15,7 @@ func (handler *superHandler) UpdateExam(c *gin.Context) {
 		return
 	}
 
-	res := handler.Usecase.UpdateExam(model.UpdateExamRequest{ID: exam.ID, SuperID: exam.SuperID, Body: model.UpdateExamBodyRequest{
+	res := handler.Usecase.UpdateExam(model.UpdateExamRequest{ID: exam.ID, Body: model.UpdateExamBodyRequest{
 		Name:      req.Name,
 		Location:  req.Location,
 		Organizer: req.Organizer,

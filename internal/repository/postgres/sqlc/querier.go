@@ -15,6 +15,7 @@ type Querier interface {
 	CreateAdmin(ctx context.Context, arg CreateAdminParams) (CreateAdminRow, error)
 	// untuk membuat exam (super role)
 	CreateExam(ctx context.Context, arg CreateExamParams) (CreateExamRow, error)
+	// (all role)
 	CreateResult(ctx context.Context, shooterID pgtype.UUID) (Result, error)
 	// untuk ngebuat scorer (admin-super role) TODO: return sebanyak get scorer by id
 	CreateScorer(ctx context.Context, arg CreateScorerParams) (CreateScorerRow, error)
@@ -23,6 +24,8 @@ type Querier interface {
 	CreateStage0(ctx context.Context, resultID pgtype.UUID) (CreateStage0Row, error)
 	// untuk menghapus exam (super role)
 	DeleteExam(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role) dibuat by shooter id, kareno shooter dan result itu 1:1
+	DeleteResultByShooterId(ctx context.Context, shooterID pgtype.UUID) error
 	// untuk menghapus shooter berdasarkan id (admin-super role)
 	DeleteShooter(ctx context.Context, id pgtype.UUID) error
 	// dipake untuk delete user
@@ -89,6 +92,8 @@ type Querier interface {
 	UpdateAdminPassword(ctx context.Context, arg UpdateAdminPasswordParams) (pgtype.UUID, error)
 	// untuk memperbarui exam (super role)
 	UpdateExam(ctx context.Context, arg UpdateExamParams) (Exam, error)
+	// (admin-super role) dibuat by shooter id, kareno shooter dan result itu 1:1
+	UpdateResultByShooterId(ctx context.Context, arg UpdateResultByShooterIdParams) (Result, error)
 	// untuk update data akun admin (super role) TODO: return sebanyak get admin by id
 	UpdateScorer(ctx context.Context, arg UpdateScorerParams) (UpdateScorerRow, error)
 	// low prio
@@ -97,15 +102,25 @@ type Querier interface {
 	UpdateScorerPassword(ctx context.Context, arg UpdateScorerPasswordParams) (pgtype.UUID, error)
 	// untuk mengupdate shooter berdasarkan id (admin-super role)
 	UpdateShooter(ctx context.Context, arg UpdateShooterParams) (Shooter, error)
+	// (scorer role)
 	UpdateStage0NextSeries2(ctx context.Context, arg UpdateStage0NextSeries2Params) (UpdateStage0NextSeries2Row, error)
+	// (scorer role)
 	UpdateStage0NextSeries3(ctx context.Context, arg UpdateStage0NextSeries3Params) (UpdateStage0NextSeries3Row, error)
+	// (scorer role)
 	UpdateStage0NextSeries4(ctx context.Context, arg UpdateStage0NextSeries4Params) (UpdateStage0NextSeries4Row, error)
+	// (scorer role)
 	UpdateStage0NextSeries5(ctx context.Context, arg UpdateStage0NextSeries5Params) (UpdateStage0NextSeries5Row, error)
+	// (scorer role)
 	UpdateStage0NextSeries6(ctx context.Context, arg UpdateStage0NextSeries6Params) (UpdateStage0NextSeries6Row, error)
+	// (scorer role)
 	UpdateStage0Series1(ctx context.Context, arg UpdateStage0Series1Params) (interface{}, error)
+	// (scorer role)
 	UpdateStage0Series2(ctx context.Context, arg UpdateStage0Series2Params) (interface{}, error)
+	// (scorer role)
 	UpdateStage0Series3(ctx context.Context, arg UpdateStage0Series3Params) (interface{}, error)
+	// (scorer role)
 	UpdateStage0Series4(ctx context.Context, arg UpdateStage0Series4Params) (interface{}, error)
+	// (scorer role)
 	UpdateStage0Series5(ctx context.Context, arg UpdateStage0Series5Params) (interface{}, error)
 }
 

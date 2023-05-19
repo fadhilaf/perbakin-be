@@ -16,7 +16,7 @@ DO $$
         score7 integer,
         score8 integer,
         score9 integer,
-        score10 integer,
+        score10 integer
       );
     END IF;
 

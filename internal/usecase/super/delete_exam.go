@@ -8,14 +8,10 @@ import (
 	"github.com/FadhilAF/perbakin-be/internal/util"
 )
 
-func (usecase *superUsecaseImpl) DeleteExam(req model.DeleteExamRequest) model.WebServiceResponse {
+func (usecase *superUsecaseImpl) DeleteExam(req model.ByIdRequest) model.WebServiceResponse {
 	exam, err := usecase.Store.GetExamById(context.Background(), req.ID)
 	if err != nil {
 		return util.ToWebServiceResponse("Tidak ditemukan ujian dengan ID tersebut", http.StatusNotFound, nil)
-	}
-
-	if exam.SuperID != req.SuperID {
-		return util.ToWebServiceResponse("Tidak dapat menghapus ujian super admin lain", http.StatusUnauthorized, nil)
 	}
 
 	if err = usecase.Store.DeleteExam(context.Background(), exam.ID); err != nil {

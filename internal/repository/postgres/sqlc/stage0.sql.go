@@ -15,37 +15,37 @@ const createStage0 = `-- name: CreateStage0 :one
 WITH added_stage0 AS (
   INSERT INTO stage0_results (result_id)
   VALUES ($1)
-  RETURNING id, result_id, status
+  RETURNING id, result_id, status, series1, series2, series3, series4, series5, created_at, updated_at
 ), updated_result AS (
   UPDATE results
   SET stage = '0', updated_at = NOW()
   WHERE id = $1
-  RETURNING id, shooter_id, failed, stage, created_at, updated_at
 )
 SELECT 
-  updated_result.id, 
-  updated_result.shooter_id, 
-  updated_result.failed, 
-  updated_result.stage, 
-  updated_result.created_at, 
-  updated_result.updated_at, 
   added_stage0.id, 
   added_stage0.result_id, 
-  added_stage0.status
-FROM updated_result
-INNER JOIN added_stage0 ON added_stage0.result_id = updated_result.id
+  added_stage0.status, 
+  added_stage0.series1, 
+  added_stage0.series2, 
+  added_stage0.series3, 
+  added_stage0.series4, 
+  added_stage0.series5, 
+  added_stage0.created_at, 
+  added_stage0.updated_at
+FROM added_stage0
 `
 
 type CreateStage0Row struct {
 	ID        pgtype.UUID
-	ShooterID pgtype.UUID
-	Failed    bool
-	Stage     interface{}
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
-	ID_2      pgtype.UUID
 	ResultID  pgtype.UUID
 	Status    interface{}
+	Series1   interface{}
+	Series2   interface{}
+	Series3   interface{}
+	Series4   interface{}
+	Series5   interface{}
+	CreatedAt pgtype.Timestamp
+	UpdatedAt pgtype.Timestamp
 }
 
 func (q *Queries) CreateStage0(ctx context.Context, resultID pgtype.UUID) (CreateStage0Row, error) {
@@ -53,14 +53,15 @@ func (q *Queries) CreateStage0(ctx context.Context, resultID pgtype.UUID) (Creat
 	var i CreateStage0Row
 	err := row.Scan(
 		&i.ID,
-		&i.ShooterID,
-		&i.Failed,
-		&i.Stage,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-		&i.ID_2,
 		&i.ResultID,
 		&i.Status,
+		&i.Series1,
+		&i.Series2,
+		&i.Series3,
+		&i.Series4,
+		&i.Series5,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }
@@ -123,6 +124,7 @@ type UpdateStage0NextSeries2Row struct {
 	Status  interface{}
 }
 
+// (scorer role)
 func (q *Queries) UpdateStage0NextSeries2(ctx context.Context, arg UpdateStage0NextSeries2Params) (UpdateStage0NextSeries2Row, error) {
 	row := q.db.QueryRow(ctx, updateStage0NextSeries2, arg.ResultID, arg.Series1)
 	var i UpdateStage0NextSeries2Row
@@ -147,6 +149,7 @@ type UpdateStage0NextSeries3Row struct {
 	Status  interface{}
 }
 
+// (scorer role)
 func (q *Queries) UpdateStage0NextSeries3(ctx context.Context, arg UpdateStage0NextSeries3Params) (UpdateStage0NextSeries3Row, error) {
 	row := q.db.QueryRow(ctx, updateStage0NextSeries3, arg.ResultID, arg.Series2)
 	var i UpdateStage0NextSeries3Row
@@ -171,6 +174,7 @@ type UpdateStage0NextSeries4Row struct {
 	Status  interface{}
 }
 
+// (scorer role)
 func (q *Queries) UpdateStage0NextSeries4(ctx context.Context, arg UpdateStage0NextSeries4Params) (UpdateStage0NextSeries4Row, error) {
 	row := q.db.QueryRow(ctx, updateStage0NextSeries4, arg.ResultID, arg.Series3)
 	var i UpdateStage0NextSeries4Row
@@ -195,6 +199,7 @@ type UpdateStage0NextSeries5Row struct {
 	Status  interface{}
 }
 
+// (scorer role)
 func (q *Queries) UpdateStage0NextSeries5(ctx context.Context, arg UpdateStage0NextSeries5Params) (UpdateStage0NextSeries5Row, error) {
 	row := q.db.QueryRow(ctx, updateStage0NextSeries5, arg.ResultID, arg.Series4)
 	var i UpdateStage0NextSeries5Row
@@ -219,6 +224,7 @@ type UpdateStage0NextSeries6Row struct {
 	Status  interface{}
 }
 
+// (scorer role)
 func (q *Queries) UpdateStage0NextSeries6(ctx context.Context, arg UpdateStage0NextSeries6Params) (UpdateStage0NextSeries6Row, error) {
 	row := q.db.QueryRow(ctx, updateStage0NextSeries6, arg.ResultID, arg.Series5)
 	var i UpdateStage0NextSeries6Row
@@ -238,6 +244,7 @@ type UpdateStage0Series1Params struct {
 	Series1  interface{}
 }
 
+// (scorer role)
 func (q *Queries) UpdateStage0Series1(ctx context.Context, arg UpdateStage0Series1Params) (interface{}, error) {
 	row := q.db.QueryRow(ctx, updateStage0Series1, arg.ResultID, arg.Series1)
 	var series1 interface{}
@@ -257,6 +264,7 @@ type UpdateStage0Series2Params struct {
 	Series2  interface{}
 }
 
+// (scorer role)
 func (q *Queries) UpdateStage0Series2(ctx context.Context, arg UpdateStage0Series2Params) (interface{}, error) {
 	row := q.db.QueryRow(ctx, updateStage0Series2, arg.ResultID, arg.Series2)
 	var series2 interface{}
@@ -276,6 +284,7 @@ type UpdateStage0Series3Params struct {
 	Series3  interface{}
 }
 
+// (scorer role)
 func (q *Queries) UpdateStage0Series3(ctx context.Context, arg UpdateStage0Series3Params) (interface{}, error) {
 	row := q.db.QueryRow(ctx, updateStage0Series3, arg.ResultID, arg.Series3)
 	var series3 interface{}
@@ -295,6 +304,7 @@ type UpdateStage0Series4Params struct {
 	Series4  interface{}
 }
 
+// (scorer role)
 func (q *Queries) UpdateStage0Series4(ctx context.Context, arg UpdateStage0Series4Params) (interface{}, error) {
 	row := q.db.QueryRow(ctx, updateStage0Series4, arg.ResultID, arg.Series4)
 	var series4 interface{}
@@ -314,6 +324,7 @@ type UpdateStage0Series5Params struct {
 	Series5  interface{}
 }
 
+// (scorer role)
 func (q *Queries) UpdateStage0Series5(ctx context.Context, arg UpdateStage0Series5Params) (interface{}, error) {
 	row := q.db.QueryRow(ctx, updateStage0Series5, arg.ResultID, arg.Series5)
 	var series5 interface{}

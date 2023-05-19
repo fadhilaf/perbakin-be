@@ -13,13 +13,9 @@ import (
 )
 
 func (usecase *superUsecaseImpl) UpdateExam(req model.UpdateExamRequest) model.WebServiceResponse {
-	exam, err := usecase.Store.GetExamById(context.Background(), req.ID)
+	_, err := usecase.Store.GetExamById(context.Background(), req.ID)
 	if err != nil {
 		return util.ToWebServiceResponse("Tidak ditemukan ujian dengan ID tersebut", http.StatusNotFound, nil)
-	}
-
-	if exam.SuperID != req.SuperID {
-		return util.ToWebServiceResponse("Tidak dapat mengubah ujian super admin lain", http.StatusUnauthorized, nil)
 	}
 
 	newExam, err := usecase.Store.UpdateExam(context.Background(), respositoryModel.UpdateExamParams{
