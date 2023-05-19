@@ -19,6 +19,9 @@ type AdminSuperUsecase interface {
 	GetShooterById(model.ShooterByIdRequest) model.WebServiceResponse
 	UpdateShooter(model.UpdateShooterRequest) model.WebServiceResponse
 	DeleteShooter(model.ShooterByIdRequest) model.WebServiceResponse
+
+	UpdateResultByShooterId(model.UpdateResultByShooterIdRequest) model.WebServiceResponse
+	DeleteResultByShooterId(model.ByShooterIdRequest) model.WebServiceResponse
 }
 
 var _ AdminSuperUsecase = &adminSuperUsecaseImpl{}

@@ -16,6 +16,12 @@ func (usecase *allUsecaseImpl) GetResultByShooterId(req model.ByShooterIdRequest
 	}
 
 	return util.ToWebServiceResponse("Berhasil mendapatkan hasil ujian", http.StatusOK, gin.H{
-		"result": result,
-	})
+		"result": model.Result{
+			ID:        result.ID,
+			ShooterID: result.ShooterID,
+			Failed:    result.Failed,
+			Stage:     result.Stage.(string),
+			CreatedAt: result.CreatedAt.Time,
+			UpdatedAt: result.UpdatedAt.Time,
+		}})
 }

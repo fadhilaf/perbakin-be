@@ -7,6 +7,11 @@ import (
 
 type AllUsecase interface {
 	GetShootersByScorerId(model.ByScorerIdRequest) model.WebServiceResponse
+
+	CreateResult(model.ByShooterIdRequest) model.WebServiceResponse
+	GetResultByShooterId(model.ByShooterIdRequest) model.WebServiceResponse
+
+	CreateStage0(model.ByResultIdRequest) model.WebServiceResponse
 }
 
 var _ AllUsecase = &allUsecaseImpl{}
