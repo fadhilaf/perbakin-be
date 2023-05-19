@@ -11,7 +11,7 @@ FROM shooters INNER JOIN scorers ON shooters.scorer_id = scorers.id INNER JOIN e
 
 -- untuk mengambil shooter berdasarkan exam_id (admin-super role)
 -- name: GetShooterByExamId :many
-SELECT shooters.id, users.name AS scorer, shooters.name AS name, province, club
+SELECT shooters.id, scorer_id, users.name AS scorer, shooters.name AS name, province, club
 FROM shooters INNER JOIN scorers ON shooters.scorer_id = scorers.id INNER JOIN users ON scorers.user_id = users.id
 WHERE scorers.exam_id = $1;
 

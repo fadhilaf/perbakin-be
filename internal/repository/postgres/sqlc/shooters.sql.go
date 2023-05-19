@@ -95,13 +95,14 @@ func (q *Queries) GetAllShooters(ctx context.Context) ([]GetAllShootersRow, erro
 }
 
 const getShooterByExamId = `-- name: GetShooterByExamId :many
-SELECT shooters.id, users.name AS scorer, shooters.name AS name, province, club
+SELECT shooters.id, scorer_id, users.name AS scorer, shooters.name AS name, province, club
 FROM shooters INNER JOIN scorers ON shooters.scorer_id = scorers.id INNER JOIN users ON scorers.user_id = users.id
 WHERE scorers.exam_id = $1
 `
 
 type GetShooterByExamIdRow struct {
 	ID       pgtype.UUID
+	ScorerID pgtype.UUID
 	Scorer   string
 	Name     string
 	Province string
@@ -120,6 +121,7 @@ func (q *Queries) GetShooterByExamId(ctx context.Context, examID pgtype.UUID) ([
 		var i GetShooterByExamIdRow
 		if err := rows.Scan(
 			&i.ID,
+			&i.ScorerID,
 			&i.Scorer,
 			&i.Name,
 			&i.Province,

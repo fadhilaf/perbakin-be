@@ -7,6 +7,7 @@ import (
 )
 
 func (handler *adminHandler) UpdateShooter(c *gin.Context) {
+	exam := c.MustGet("exam").(model.ExamRelation)
 	shooter := c.MustGet("shooter").(model.ShooterRelation)
 
 	var req model.UpdateShooterBodyRequest
@@ -15,7 +16,7 @@ func (handler *adminHandler) UpdateShooter(c *gin.Context) {
 		return
 	}
 
-	res := handler.AdminSuperUsecase.UpdateShooter(model.UpdateShooterRequest{ID: shooter.ID, Body: req})
+	res := handler.AdminSuperUsecase.UpdateShooter(model.UpdateShooterRequest{ID: shooter.ID, ExamID: exam.ID, Body: req})
 
 	c.JSON(res.Status, res)
 }

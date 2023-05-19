@@ -32,6 +32,7 @@ type ShooterDisplayExamData struct {
 // untuk GetShootersByExamId
 type ShooterDisplayScorerData struct {
 	ID       pgtype.UUID `json:"id"`
+	ScorerID pgtype.UUID `json:"scorer_id"`
 	Scorer   string      `json:"scorer"`
 	Name     string      `json:"name"`
 	Province string      `json:"province"`
@@ -74,6 +75,7 @@ type UpdateShooterBodyRequest struct {
 }
 
 type UpdateShooterRequest struct {
-	ID   pgtype.UUID
-	Body UpdateShooterBodyRequest
+	ID     pgtype.UUID
+	ExamID pgtype.UUID
+	Body   UpdateShooterBodyRequest
 }
