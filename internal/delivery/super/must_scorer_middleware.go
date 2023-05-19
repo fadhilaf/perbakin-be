@@ -14,17 +14,26 @@ func (handler *superHandler) MustScorerMiddleware() gin.HandlerFunc {
 
 		scorerId, ok := util.GetIdParam(c, "scorer_id")
 		if !ok {
+			c.Abort()
 			return
 		}
 
-		res := handler.AdminSuperUsecase.GetScorerById(model.OperatorByIdRequest{ID: scorerId, ExamID: exam.ID})
-		if res.Status != http.StatusOK {
+		scorer, err := handler.AdminSuperUsecase.GetScorerRelationById(model.ByIdRequest{ID: scorerId})
+		if err != nil {
+			res := util.ToWebServiceResponse("Penguji tidak ditemukan", http.StatusNotFound, nil)
 			c.JSON(res.Status, res)
 			c.Abort()
 			return
 		}
 
-		c.Set("scorer", res.Data["scorer"].(model.Operator))
+		if scorer.ExamID != exam.ID {
+			res := util.ToWebServiceResponse("Tidak dapat mengakses penguji ujian lain", http.StatusUnauthorized, nil)
+			c.JSON(res.Status, res)
+			c.Abort()
+			return
+		}
+
+		c.Set("scorer", scorer)
 		c.Next()
 	}
 }

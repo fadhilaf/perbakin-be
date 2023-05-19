@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *scorerHandler) MustShooterMiddleware() gin.HandlerFunc {
+func (handler *superHandler) MustShooterMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		scorer := c.MustGet("scorer").(model.OperatorRelation)
 

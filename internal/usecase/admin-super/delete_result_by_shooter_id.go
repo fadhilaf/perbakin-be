@@ -9,12 +9,7 @@ import (
 )
 
 func (usecase *adminSuperUsecaseImpl) DeleteResultByShooterId(req model.ByShooterIdRequest) model.WebServiceResponse {
-	result, err := usecase.Store.GetResultByShooterId(context.Background(), req.ShooterID)
-	if err != nil {
-		return util.ToWebServiceResponse("Tidak ditemukan hasil ujian dengan ID yang diberikan", http.StatusNotFound, nil)
-	}
-
-	if err = usecase.Store.DeleteResultByShooterId(context.Background(), result.ID); err != nil {
+	if err := usecase.Store.DeleteResultByShooterId(context.Background(), req.ShooterID); err != nil {
 		return util.ToWebServiceResponse("Gagal menghapus hasil ujian: "+err.Error(), http.StatusInternalServerError, nil)
 	}
 

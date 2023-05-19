@@ -45,7 +45,6 @@ type CreateOperatorRequest struct {
 }
 
 type UpdateOperatorRequest struct {
-	ID     pgtype.UUID
-	ExamID pgtype.UUID
-	Body   OperatorBodyRequest
+	ID   pgtype.UUID
+	Body OperatorBodyRequest
 }

@@ -30,6 +30,12 @@ SELECT scorers.id, user_id, exam_id FROM scorers
 INNER JOIN users ON scorers.user_id = users.id
 WHERE user_id = $1;
 
+-- untuk ngambil data relasi scorer berdasarkan id (all role)
+-- name: GetScorerRelationById :one
+SELECT scorers.id, user_id, exam_id FROM scorers 
+INNER JOIN users ON scorers.user_id = users.id
+WHERE scorers.id = $1;
+
 -- untuk ngambil data lengkap scorer berdasarkan user id (scorer role)
 -- name: GetScorerByUserId :one
 SELECT scorers.id, user_id, exam_id, username, password, name, created_at, updated_at FROM users

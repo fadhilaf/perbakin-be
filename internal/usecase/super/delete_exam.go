@@ -9,12 +9,7 @@ import (
 )
 
 func (usecase *superUsecaseImpl) DeleteExam(req model.ByIdRequest) model.WebServiceResponse {
-	exam, err := usecase.Store.GetExamById(context.Background(), req.ID)
-	if err != nil {
-		return util.ToWebServiceResponse("Tidak ditemukan ujian dengan ID tersebut", http.StatusNotFound, nil)
-	}
-
-	if err = usecase.Store.DeleteExam(context.Background(), exam.ID); err != nil {
+	if err := usecase.Store.DeleteExam(context.Background(), req.ID); err != nil {
 		return util.ToWebServiceResponse("Gagal menghapus ujian: "+err.Error(), http.StatusInternalServerError, nil)
 	}
 

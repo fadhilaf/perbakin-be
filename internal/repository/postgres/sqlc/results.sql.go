@@ -63,6 +63,24 @@ func (q *Queries) GetResultByShooterId(ctx context.Context, shooterID pgtype.UUI
 	return i, err
 }
 
+const getResultRelationByShooterId = `-- name: GetResultRelationByShooterId :one
+SELECT id, shooter_id
+FROM results
+WHERE shooter_id = $1
+`
+
+type GetResultRelationByShooterIdRow struct {
+	ID        pgtype.UUID
+	ShooterID pgtype.UUID
+}
+
+func (q *Queries) GetResultRelationByShooterId(ctx context.Context, shooterID pgtype.UUID) (GetResultRelationByShooterIdRow, error) {
+	row := q.db.QueryRow(ctx, getResultRelationByShooterId, shooterID)
+	var i GetResultRelationByShooterIdRow
+	err := row.Scan(&i.ID, &i.ShooterID)
+	return i, err
+}
+
 const updateResultByShooterId = `-- name: UpdateResultByShooterId :one
 UPDATE results 
 SET failed = $2, stage = $3, updated_at = NOW()

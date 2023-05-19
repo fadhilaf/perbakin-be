@@ -12,15 +12,6 @@ import (
 )
 
 func (usecase *adminSuperUsecaseImpl) UpdateScorer(req model.UpdateOperatorRequest) model.WebServiceResponse {
-	scorer, err := usecase.Store.GetScorerById(context.Background(), req.ID)
-	if err != nil {
-		return util.ToWebServiceResponse("Tidak ditemukan scorer dengan ID tersebut", http.StatusNotFound, nil)
-	}
-
-	if scorer.ExamID != req.ExamID {
-		return util.ToWebServiceResponse("Tidak dapat mengubah penguji ujian lain", http.StatusUnauthorized, nil)
-	}
-
 	passwordHash, err := util.HashPassword(req.Body.Password)
 	if err != nil {
 		return util.ToWebServiceResponse("Gagal proses hash password: "+err.Error(), http.StatusInternalServerError, nil)
@@ -44,8 +35,8 @@ func (usecase *adminSuperUsecaseImpl) UpdateScorer(req model.UpdateOperatorReque
 				ID:        newScorer.UserID,
 				Username:  newScorer.Username,
 				Name:      newScorer.Name,
-				CreatedAt: scorer.CreatedAt.Time,
-				UpdatedAt: scorer.UpdatedAt.Time,
+				CreatedAt: newScorer.CreatedAt.Time,
+				UpdatedAt: newScorer.UpdatedAt.Time,
 			},
 		}})
 }

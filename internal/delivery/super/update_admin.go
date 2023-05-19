@@ -7,12 +7,7 @@ import (
 )
 
 func (handler *superHandler) UpdateAdmin(c *gin.Context) {
-	exam := c.MustGet("exam").(model.ExamRelation)
-
-	id, ok := util.GetIdParam(c, "admin_id")
-	if !ok {
-		return
-	}
+	admin := c.MustGet("admin").(model.OperatorRelation)
 
 	var req model.OperatorBodyRequest
 
@@ -20,7 +15,7 @@ func (handler *superHandler) UpdateAdmin(c *gin.Context) {
 		return
 	}
 
-	res := handler.Usecase.UpdateAdmin(model.UpdateOperatorRequest{ID: id, ExamID: exam.ID, Body: req})
+	res := handler.Usecase.UpdateAdmin(model.UpdateOperatorRequest{ID: admin.ID, Body: req})
 
 	c.JSON(res.Status, res)
 }

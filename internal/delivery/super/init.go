@@ -30,26 +30,32 @@ type SuperDelivery interface {
 
 	CreateAdmin(c *gin.Context)
 	GetAdminsByExamId(c *gin.Context)
+
+	CreateScorer(c *gin.Context)
+	GetScorersByExamId(c *gin.Context)
+
+	GetShootersByExamId(c *gin.Context)
+
+	MustAdminMiddleware() gin.HandlerFunc
+
 	GetAdminById(c *gin.Context)
 	UpdateAdmin(c *gin.Context)
 	DeleteAdmin(c *gin.Context)
 
-	CreateScorer(c *gin.Context)
-	GetScorersByExamId(c *gin.Context)
+	MustScorerMiddleware() gin.HandlerFunc
+
 	GetScorerById(c *gin.Context)
 	UpdateScorer(c *gin.Context)
 	DeleteScorer(c *gin.Context)
 
-	GetShootersByExamId(c *gin.Context)
-
-	MustScorerMiddleware() gin.HandlerFunc
-
+	GetShootersByScorerId(c *gin.Context)
 	CreateShooter(c *gin.Context)
+
+	MustShooterMiddleware() gin.HandlerFunc
+
 	GetShooterById(c *gin.Context)
 	UpdateShooter(c *gin.Context)
 	DeleteShooter(c *gin.Context)
-
-	GetShootersByScorerId(c *gin.Context)
 }
 
 var _ SuperDelivery = &superHandler{}

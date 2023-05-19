@@ -9,15 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (usecase *adminSuperUsecaseImpl) GetShooterById(req model.ShooterByIdRequest) model.WebServiceResponse {
-	shooter, err := usecase.Store.GetShooterById(context.Background(), req.ID)
-	if err != nil {
-		return util.ToWebServiceResponse("Id tidak terdaftar sebagai penembak", http.StatusUnauthorized, nil)
-	}
-
-	if shooter.ScorerID != req.ScorerID {
-		return util.ToWebServiceResponse("Tidak diperbolehkan menampilkan data akun penembak ujian lain", http.StatusUnauthorized, nil)
-	}
+func (usecase *adminSuperUsecaseImpl) GetShooterById(req model.ByIdRequest) model.WebServiceResponse {
+	shooter, _ := usecase.Store.GetShooterById(context.Background(), req.ID)
 
 	return util.ToWebServiceResponse("Data penembak ditemukan", http.StatusOK, gin.H{
 		"shooter": model.Shooter{

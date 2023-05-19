@@ -28,24 +28,30 @@ func SuperRoutes(router *gin.RouterGroup, delivery delivery.SuperDelivery) {
 
 	examRouter.GET("/admin", delivery.GetAdminsByExamId)
 	examRouter.POST("/admin", delivery.CreateAdmin)
-	examRouter.GET("/admins", delivery.GetAllAdmins)
-	examRouter.GET("/admin/:admin_id", delivery.GetAdminById)
-	examRouter.PUT("/admin/:admin_id", delivery.UpdateAdmin)
-	examRouter.DELETE("/admin/:admin_id", delivery.DeleteAdmin)
 
 	examRouter.GET("/scorer", delivery.GetScorersByExamId)
 	examRouter.POST("/scorer", delivery.CreateScorer)
-	examRouter.GET("/scorer/:scorer_id", delivery.GetScorerById)
-	examRouter.PUT("/scorer/:scorer_id", delivery.UpdateScorer)
-	examRouter.DELETE("/scorer/:scorer_id", delivery.DeleteScorer)
 
 	examRouter.GET("/shooter", delivery.GetShootersByExamId)
 
-	scorerRoute := examRouter.Group("/scorer/:scorer_id", delivery.MustScorerMiddleware())
+	adminRouter := examRouter.Group("/admin/:admin_id", delivery.MustAdminMiddleware())
 
-	scorerRoute.GET("/shooter", delivery.GetShootersByScorerId)
-	scorerRoute.POST("/shooter", delivery.CreateShooter)
-	scorerRoute.GET("/shooter/:shooter_id", delivery.GetShooterById)
-	scorerRoute.PUT("/shooter/:shooter_id", delivery.UpdateShooter)
-	scorerRoute.DELETE("/shooter/:shooter_id", delivery.DeleteShooter)
+	adminRouter.GET("/admin/:admin_id", delivery.GetAdminById)
+	adminRouter.PUT("/admin/:admin_id", delivery.UpdateAdmin)
+	adminRouter.DELETE("/admin/:admin_id", delivery.DeleteAdmin)
+
+	scorerRouter := examRouter.Group("/scorer/:scorer_id", delivery.MustScorerMiddleware())
+
+	scorerRouter.GET("/scorer/:scorer_id", delivery.GetScorerById)
+	scorerRouter.PUT("/scorer/:scorer_id", delivery.UpdateScorer)
+	scorerRouter.DELETE("/scorer/:scorer_id", delivery.DeleteScorer)
+
+	scorerRouter.GET("/shooter", delivery.GetShootersByScorerId)
+	scorerRouter.POST("/shooter", delivery.CreateShooter)
+
+	shooterRouter := scorerRouter.Group("/shooter/:shooter_id", delivery.MustShooterMiddleware())
+
+	shooterRouter.GET("/shooter/:shooter_id", delivery.GetShooterById)
+	shooterRouter.PUT("/shooter/:shooter_id", delivery.UpdateShooter)
+	shooterRouter.DELETE("/shooter/:shooter_id", delivery.DeleteShooter)
 }

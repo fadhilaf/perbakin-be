@@ -9,6 +9,11 @@ SELECT id, shooter_id, failed, stage, created_at, updated_at
 FROM results
 WHERE shooter_id = $1;
 
+-- name: GetResultRelationByShooterId :one
+SELECT id, shooter_id
+FROM results
+WHERE shooter_id = $1;
+
 -- (admin-super role) dibuat by shooter id, kareno shooter dan result itu 1:1
 -- name: UpdateResultByShooterId :one
 UPDATE results 

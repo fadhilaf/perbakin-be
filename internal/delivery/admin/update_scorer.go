@@ -7,12 +7,7 @@ import (
 )
 
 func (handler *adminHandler) UpdateScorer(c *gin.Context) {
-	admin := c.MustGet("admin").(model.OperatorRelation)
-
-	id, ok := util.GetIdParam(c, "scorer_id")
-	if !ok {
-		return
-	}
+	scorer := c.MustGet("scorer").(model.OperatorRelation)
 
 	var req model.OperatorBodyRequest
 
@@ -20,7 +15,7 @@ func (handler *adminHandler) UpdateScorer(c *gin.Context) {
 		return
 	}
 
-	res := handler.AdminSuperUsecase.UpdateScorer(model.UpdateOperatorRequest{ID: id, ExamID: admin.ExamID, Body: req})
+	res := handler.AdminSuperUsecase.UpdateScorer(model.UpdateOperatorRequest{ID: scorer.ID, Body: req})
 
 	c.JSON(res.Status, res)
 }

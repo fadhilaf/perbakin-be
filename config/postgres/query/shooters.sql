@@ -27,6 +27,12 @@ SELECT id, scorer_id, name, province, club, created_at, updated_at
 FROM shooters
 WHERE id = $1;
 
+-- untuk mengambil relasi shooter berdasarkan id (all role)
+-- name: GetShooterRelationById :one
+SELECT id, scorer_id
+FROM shooters
+WHERE id = $1;
+
 -- untuk mengupdate shooter berdasarkan id (admin-super role)
 -- name: UpdateShooter :one
 UPDATE shooters 

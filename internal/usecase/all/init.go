@@ -6,6 +6,8 @@ import (
 )
 
 type AllUsecase interface {
+	GetShooterRelationById(model.ByIdRequest) (model.ShooterRelation, error)
+
 	GetShootersByScorerId(model.ByScorerIdRequest) model.WebServiceResponse
 
 	CreateResult(model.ByShooterIdRequest) model.WebServiceResponse

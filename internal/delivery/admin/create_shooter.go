@@ -7,7 +7,7 @@ import (
 )
 
 func (handler *adminHandler) CreateShooter(c *gin.Context) {
-	scorer := c.MustGet("scorer").(model.Operator)
+	scorer := c.MustGet("scorer").(model.OperatorRelation)
 
 	var req model.CreateShooterBodyRequest
 

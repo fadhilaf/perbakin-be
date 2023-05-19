@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	respositoryModel "github.com/FadhilAF/perbakin-be/internal/repository/postgres/sqlc"
@@ -13,11 +12,6 @@ import (
 )
 
 func (usecase *superUsecaseImpl) UpdateExam(req model.UpdateExamRequest) model.WebServiceResponse {
-	_, err := usecase.Store.GetExamById(context.Background(), req.ID)
-	if err != nil {
-		return util.ToWebServiceResponse("Tidak ditemukan ujian dengan ID tersebut", http.StatusNotFound, nil)
-	}
-
 	newExam, err := usecase.Store.UpdateExam(context.Background(), respositoryModel.UpdateExamParams{
 		ID:        req.ID,
 		Name:      req.Body.Name,
@@ -27,8 +21,7 @@ func (usecase *superUsecaseImpl) UpdateExam(req model.UpdateExamRequest) model.W
 		Finish:    req.Body.Finish,
 	})
 	if err != nil {
-		fmt.Println(err)
-		return util.ToWebServiceResponse("Gagal mengubah ujian", http.StatusInternalServerError, nil)
+		return util.ToWebServiceResponse("Gagal mengubah ujian: "+err.Error(), http.StatusInternalServerError, nil)
 	}
 
 	return util.ToWebServiceResponse("Berhasil mengubah ujian", http.StatusOK, gin.H{

@@ -9,15 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (usecase *superUsecaseImpl) GetAdminById(req model.OperatorByIdRequest) model.WebServiceResponse {
-	admin, err := usecase.Store.GetAdminById(context.Background(), req.ID)
-	if err != nil {
-		return util.ToWebServiceResponse("Id tidak terdaftar sebagai admin", http.StatusUnauthorized, nil)
-	}
-
-	if admin.ExamID != req.ExamID {
-		return util.ToWebServiceResponse("Tidak diperbolehkan menampilkan data akun admin ujian lain", http.StatusUnauthorized, nil)
-	}
+func (usecase *superUsecaseImpl) GetAdminById(req model.ByIdRequest) model.WebServiceResponse {
+	admin, _ := usecase.Store.GetAdminById(context.Background(), req.ID)
 
 	return util.ToWebServiceResponse("Data admin ditemukan", http.StatusOK, gin.H{
 		"admin": model.Operator{

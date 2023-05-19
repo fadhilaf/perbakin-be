@@ -10,11 +10,7 @@ import (
 )
 
 func (usecase *superUsecaseImpl) GetExamById(req model.ByIdRequest) model.WebServiceResponse {
-	exam, err := usecase.Store.GetExamById(context.Background(), req.ID)
-	if err != nil {
-		return util.ToWebServiceResponse("Data ujian tidak ditemukan", http.StatusUnauthorized, nil)
-	}
-
+	exam, _ := usecase.Store.GetExamById(context.Background(), req.ID)
 	return util.ToWebServiceResponse("Data ujian ditemukan", http.StatusOK, gin.H{
 		"exam": model.Exam{
 			ID:        exam.ID,

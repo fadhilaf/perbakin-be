@@ -12,16 +12,14 @@ import (
 )
 
 func (usecase *adminSuperUsecaseImpl) UpdateResultByShooterId(req model.UpdateResultByShooterIdRequest) model.WebServiceResponse {
-	_, err := usecase.Store.GetResultByShooterId(context.Background(), req.ShooterID)
-	if err != nil {
-		return util.ToWebServiceResponse("Tidak ditemukan hasil ujian dengan ID yang diberikan", http.StatusNotFound, nil)
-	}
-
 	newResult, err := usecase.Store.UpdateResultByShooterId(context.Background(), respositoryModel.UpdateResultByShooterIdParams{
 		ShooterID: req.ShooterID,
 		Failed:    req.Body.Failed,
 		Stage:     req.Body.Stage,
 	})
+	if err != nil {
+		return util.ToWebServiceResponse("Gagal mengubah hasil ujian: "+err.Error(), http.StatusInternalServerError, nil)
+	}
 
 	return util.ToWebServiceResponse("Berhasil mengubah hasil ujian", http.StatusOK, gin.H{
 		"result": model.Result{

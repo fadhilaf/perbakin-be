@@ -195,6 +195,20 @@ func (q *Queries) GetScorerByUsername(ctx context.Context, username string) (Get
 	return i, err
 }
 
+const getScorerRelationById = `-- name: GetScorerRelationById :one
+SELECT scorers.id, user_id, exam_id FROM scorers 
+INNER JOIN users ON scorers.user_id = users.id
+WHERE scorers.id = $1
+`
+
+// untuk ngambil data relasi scorer berdasarkan id (all role)
+func (q *Queries) GetScorerRelationById(ctx context.Context, id pgtype.UUID) (Scorer, error) {
+	row := q.db.QueryRow(ctx, getScorerRelationById, id)
+	var i Scorer
+	err := row.Scan(&i.ID, &i.UserID, &i.ExamID)
+	return i, err
+}
+
 const getScorerRelationByUserId = `-- name: GetScorerRelationByUserId :one
 SELECT scorers.id, user_id, exam_id FROM scorers 
 INNER JOIN users ON scorers.user_id = users.id

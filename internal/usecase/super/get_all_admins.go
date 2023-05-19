@@ -12,7 +12,7 @@ import (
 func (usecase *superUsecaseImpl) GetAllAdmins() model.WebServiceResponse {
 	admins, err := usecase.Store.GetAllAdmins(context.Background())
 	if err != nil {
-		return util.ToWebServiceResponse("Gagal mendapatkan data admin", http.StatusInternalServerError, nil)
+		return util.ToWebServiceResponse("Gagal mendapatkan data admin: "+err.Error(), http.StatusInternalServerError, nil)
 	}
 
 	var adminsData []model.OperatorDisplayExamData

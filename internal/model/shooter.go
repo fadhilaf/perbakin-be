@@ -16,6 +16,11 @@ type Shooter struct {
 	UpdatedAt time.Time   `json:"updated_at"`
 }
 
+type ShooterRelation struct {
+	ID       pgtype.UUID `json:"id"`
+	ScorerID pgtype.UUID `json:"scorer_id"`
+}
+
 // untuk GetAllShooters
 type ShooterDisplayExamData struct {
 	Exam     string `json:"exam"`
@@ -69,8 +74,6 @@ type UpdateShooterBodyRequest struct {
 }
 
 type UpdateShooterRequest struct {
-	ID       pgtype.UUID
-	ExamID   pgtype.UUID
-	ScorerID pgtype.UUID
-	Body     UpdateShooterBodyRequest
+	ID   pgtype.UUID
+	Body UpdateShooterBodyRequest
 }

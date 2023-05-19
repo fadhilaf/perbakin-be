@@ -157,6 +157,25 @@ func (q *Queries) GetShooterById(ctx context.Context, id pgtype.UUID) (Shooter, 
 	return i, err
 }
 
+const getShooterRelationById = `-- name: GetShooterRelationById :one
+SELECT id, scorer_id
+FROM shooters
+WHERE id = $1
+`
+
+type GetShooterRelationByIdRow struct {
+	ID       pgtype.UUID
+	ScorerID pgtype.UUID
+}
+
+// untuk mengambil relasi shooter berdasarkan id (all role)
+func (q *Queries) GetShooterRelationById(ctx context.Context, id pgtype.UUID) (GetShooterRelationByIdRow, error) {
+	row := q.db.QueryRow(ctx, getShooterRelationById, id)
+	var i GetShooterRelationByIdRow
+	err := row.Scan(&i.ID, &i.ScorerID)
+	return i, err
+}
+
 const getShootersByScorerId = `-- name: GetShootersByScorerId :many
 SELECT id, name, province, club
 FROM shooters

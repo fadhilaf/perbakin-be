@@ -15,6 +15,11 @@ type Result struct {
 	UpdatedAt time.Time   `json:"updated_at"`
 }
 
+type ResultRelation struct {
+	ID        pgtype.UUID `json:"id"`
+	ShooterID pgtype.UUID `json:"shooter_id"`
+}
+
 type ByShooterIdRequest struct {
 	ShooterID pgtype.UUID
 }

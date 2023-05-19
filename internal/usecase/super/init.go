@@ -12,12 +12,14 @@ type SuperUsecase interface {
 
 	GetSuperByUserId(model.UserByUserIdRequest) model.WebServiceResponse
 
+	GetAdminRelationById(model.ByIdRequest) (model.OperatorRelation, error)
+
 	CreateAdmin(model.CreateOperatorRequest) model.WebServiceResponse
 	GetAllAdmins() model.WebServiceResponse
 	GetAdminsByExamId(model.ByExamIdRequest) model.WebServiceResponse
-	GetAdminById(model.OperatorByIdRequest) model.WebServiceResponse
+	GetAdminById(model.ByIdRequest) model.WebServiceResponse
 	UpdateAdmin(model.UpdateOperatorRequest) model.WebServiceResponse
-	DeleteAdmin(model.OperatorByIdRequest) model.WebServiceResponse
+	DeleteAdmin(model.UserByUserIdRequest) model.WebServiceResponse
 
 	GetExamById(model.ByIdRequest) model.WebServiceResponse
 	GetAllExams() model.WebServiceResponse
