@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS results (
   id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
   shooter_id uuid NOT NULL UNIQUE,
   failed boolean NOT NULL DEFAULT false,
-  stage stages DEFAULT NOT NULL DEFAULT '0',
+  stage stages NOT NULL DEFAULT '0',
   created_at timestamp NOT NULL DEFAULT NOW(),
   updated_at timestamp NOT NULL DEFAULT NOW(),
   CONSTRAINT shooter_id
