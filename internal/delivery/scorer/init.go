@@ -10,11 +10,19 @@ import (
 type ScorerDelivery interface {
 	ScorerLogin(c *gin.Context)
 
+	MustScorerMiddleware() gin.HandlerFunc
 	CheckScorerLogin(c *gin.Context)
 
-	MustScorerMiddleware() gin.HandlerFunc
-
 	GetShootersByScorerId(c *gin.Context)
+
+	MustShooterMiddleware() gin.HandlerFunc
+
+	CreateResult(c *gin.Context)
+	GetResultByShooterId(c *gin.Context)
+
+	MustResultMiddleware() gin.HandlerFunc
+
+	CreateStage0(c *gin.Context)
 }
 
 var _ ScorerDelivery = &scorerHandler{}
