@@ -98,7 +98,7 @@ func (app *App) createHandlers() http.Handler {
 	router.Use(cors.New(corsCfg))
 	router.Use(middleware.LoadSessionMiddleware())
 
-	v1 := router.Group("/v1/")
+	v1 := router.Group("/api/v1")
 	app.handlerV1(v1)
 
 	routes := router.Routes()
