@@ -12,10 +12,11 @@ import (
 
 func (usecase *adminSuperUsecaseImpl) CreateShooter(req model.CreateShooterRequest) model.WebServiceResponse {
 	shooter, err := usecase.Store.CreateShooter(context.Background(), repositoryModel.CreateShooterParams{
-		ScorerID: req.ScorerID,
-		Name:     req.Body.Name,
-		Province: req.Body.Province,
-		Club:     req.Body.Club,
+		ScorerID:  req.ScorerID,
+		Name:      req.Body.Name,
+		ImagePath: req.ImagePath,
+		Province:  req.Body.Province,
+		Club:      req.Body.Club,
 	})
 	if err != nil {
 		return util.ToWebServiceResponse("Gagal membuat penembak: "+err.Error(), http.StatusInternalServerError, nil)
@@ -26,6 +27,7 @@ func (usecase *adminSuperUsecaseImpl) CreateShooter(req model.CreateShooterReque
 			ID:        shooter.ID,
 			ScorerID:  shooter.ScorerID,
 			Name:      shooter.Name,
+			ImagePath: shooter.ImagePath,
 			Province:  shooter.Province,
 			Club:      shooter.Club,
 			CreatedAt: shooter.CreatedAt.Time,

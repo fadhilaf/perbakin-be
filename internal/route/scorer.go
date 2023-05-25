@@ -27,4 +27,6 @@ func ScorerRoutes(router *gin.RouterGroup, delivery delivery.ScorerDelivery) {
 	stage0Router := resultRouter.Group("/stage0", delivery.MustStage0Middleware())
 	stage0Router.GET("/", delivery.GetStage0ById)
 	stage0Router.PUT("/series/:series", delivery.UpdateStage0Series)
+	stage0Router.PATCH("/next", delivery.UpdateStage0NextSeries)
+	stage0Router.PATCH("/finish", delivery.UpdateStage0Finish)
 }

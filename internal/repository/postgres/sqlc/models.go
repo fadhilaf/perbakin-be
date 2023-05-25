@@ -148,6 +148,7 @@ type Shooter struct {
 	ID        pgtype.UUID
 	ScorerID  pgtype.UUID
 	Name      string
+	ImagePath string
 	Province  string
 	Club      string
 	CreatedAt pgtype.Timestamp

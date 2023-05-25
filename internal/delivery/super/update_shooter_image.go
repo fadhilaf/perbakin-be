@@ -6,14 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *superHandler) CreateShooter(c *gin.Context) {
-	scorer := c.MustGet("scorer").(model.OperatorRelation)
-
-	var req model.CreateShooterBodyRequest
-
-	if ok := util.BindFormAndValidate(c, &req); !ok {
-		return
-	}
+func (handler *superHandler) UpdateShooterImage(c *gin.Context) {
+	shooter := c.MustGet("shooter").(model.ShooterRelation)
 
 	// Simpan upload file ke folder assets/images
 	imagePath, ok := util.SaveFileFromForm(c, "image", "media/")
@@ -21,10 +15,9 @@ func (handler *superHandler) CreateShooter(c *gin.Context) {
 		return
 	}
 
-	res := handler.AdminSuperUsecase.CreateShooter(model.CreateShooterRequest{
-		ScorerID:  scorer.ID,
+	res := handler.AdminSuperUsecase.UpdateShooterImage(model.UpdateShooterImageRequest{
+		ID:        shooter.ID,
 		ImagePath: imagePath,
-		Body:      req,
 	})
 
 	c.JSON(res.Status, res)

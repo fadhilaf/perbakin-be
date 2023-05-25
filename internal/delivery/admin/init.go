@@ -34,6 +34,7 @@ type AdminDelivery interface {
 
 	GetShooterById(c *gin.Context)
 	UpdateShooter(c *gin.Context)
+	UpdateShooterImage(c *gin.Context)
 	DeleteShooter(c *gin.Context)
 }
 

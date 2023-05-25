@@ -12,16 +12,17 @@ import (
 )
 
 const createShooter = `-- name: CreateShooter :one
-INSERT INTO shooters (scorer_id, name, province, club)
-VALUES ($1, $2, $3, $4)
-RETURNING id, scorer_id, name, province, club, created_at, updated_at
+INSERT INTO shooters (scorer_id, name, image_path, province, club)
+VALUES ($1, $2, $3, $4, $5)
+RETURNING id, scorer_id, name, image_path, province, club, created_at, updated_at
 `
 
 type CreateShooterParams struct {
-	ScorerID pgtype.UUID
-	Name     string
-	Province string
-	Club     string
+	ScorerID  pgtype.UUID
+	Name      string
+	ImagePath string
+	Province  string
+	Club      string
 }
 
 // membuat shooter baru (admin-super role)
@@ -29,6 +30,7 @@ func (q *Queries) CreateShooter(ctx context.Context, arg CreateShooterParams) (S
 	row := q.db.QueryRow(ctx, createShooter,
 		arg.ScorerID,
 		arg.Name,
+		arg.ImagePath,
 		arg.Province,
 		arg.Club,
 	)
@@ -37,6 +39,7 @@ func (q *Queries) CreateShooter(ctx context.Context, arg CreateShooterParams) (S
 		&i.ID,
 		&i.ScorerID,
 		&i.Name,
+		&i.ImagePath,
 		&i.Province,
 		&i.Club,
 		&i.CreatedAt,
@@ -57,15 +60,16 @@ func (q *Queries) DeleteShooter(ctx context.Context, id pgtype.UUID) error {
 }
 
 const getAllShooters = `-- name: GetAllShooters :many
-SELECT exams.name AS exam, shooters.name AS name, province, club
+SELECT exams.name AS exam, shooters.name AS name, image_path, province, club
 FROM shooters INNER JOIN scorers ON shooters.scorer_id = scorers.id INNER JOIN exams ON scorers.exam_id = exams.id
 `
 
 type GetAllShootersRow struct {
-	Exam     string
-	Name     string
-	Province string
-	Club     string
+	Exam      string
+	Name      string
+	ImagePath string
+	Province  string
+	Club      string
 }
 
 // untuk mengambil seluruh shooter (admin-super role)
@@ -81,6 +85,7 @@ func (q *Queries) GetAllShooters(ctx context.Context) ([]GetAllShootersRow, erro
 		if err := rows.Scan(
 			&i.Exam,
 			&i.Name,
+			&i.ImagePath,
 			&i.Province,
 			&i.Club,
 		); err != nil {
@@ -95,18 +100,19 @@ func (q *Queries) GetAllShooters(ctx context.Context) ([]GetAllShootersRow, erro
 }
 
 const getShooterByExamId = `-- name: GetShooterByExamId :many
-SELECT shooters.id, scorer_id, users.name AS scorer, shooters.name AS name, province, club
+SELECT shooters.id, scorer_id, users.name AS scorer, shooters.name AS name, image_path, province, club
 FROM shooters INNER JOIN scorers ON shooters.scorer_id = scorers.id INNER JOIN users ON scorers.user_id = users.id
 WHERE scorers.exam_id = $1
 `
 
 type GetShooterByExamIdRow struct {
-	ID       pgtype.UUID
-	ScorerID pgtype.UUID
-	Scorer   string
-	Name     string
-	Province string
-	Club     string
+	ID        pgtype.UUID
+	ScorerID  pgtype.UUID
+	Scorer    string
+	Name      string
+	ImagePath string
+	Province  string
+	Club      string
 }
 
 // untuk mengambil shooter berdasarkan exam_id (admin-super role)
@@ -124,6 +130,7 @@ func (q *Queries) GetShooterByExamId(ctx context.Context, examID pgtype.UUID) ([
 			&i.ScorerID,
 			&i.Scorer,
 			&i.Name,
+			&i.ImagePath,
 			&i.Province,
 			&i.Club,
 		); err != nil {
@@ -138,7 +145,7 @@ func (q *Queries) GetShooterByExamId(ctx context.Context, examID pgtype.UUID) ([
 }
 
 const getShooterById = `-- name: GetShooterById :one
-SELECT id, scorer_id, name, province, club, created_at, updated_at
+SELECT id, scorer_id, name, image_path, province, club, created_at, updated_at
 FROM shooters
 WHERE id = $1
 `
@@ -151,6 +158,7 @@ func (q *Queries) GetShooterById(ctx context.Context, id pgtype.UUID) (Shooter, 
 		&i.ID,
 		&i.ScorerID,
 		&i.Name,
+		&i.ImagePath,
 		&i.Province,
 		&i.Club,
 		&i.CreatedAt,
@@ -179,16 +187,17 @@ func (q *Queries) GetShooterRelationById(ctx context.Context, id pgtype.UUID) (G
 }
 
 const getShootersByScorerId = `-- name: GetShootersByScorerId :many
-SELECT id, name, province, club
+SELECT id, name, image_path, province, club
 FROM shooters
 WHERE scorer_id = $1
 `
 
 type GetShootersByScorerIdRow struct {
-	ID       pgtype.UUID
-	Name     string
-	Province string
-	Club     string
+	ID        pgtype.UUID
+	Name      string
+	ImagePath string
+	Province  string
+	Club      string
 }
 
 // untuk mengambil shooter berdasarkan scorer_id (all role)
@@ -204,6 +213,7 @@ func (q *Queries) GetShootersByScorerId(ctx context.Context, scorerID pgtype.UUI
 		if err := rows.Scan(
 			&i.ID,
 			&i.Name,
+			&i.ImagePath,
 			&i.Province,
 			&i.Club,
 		); err != nil {
@@ -232,8 +242,18 @@ type UpdateShooterParams struct {
 	Club     string
 }
 
+type UpdateShooterRow struct {
+	ID        pgtype.UUID
+	ScorerID  pgtype.UUID
+	Name      string
+	Province  string
+	Club      string
+	CreatedAt pgtype.Timestamp
+	UpdatedAt pgtype.Timestamp
+}
+
 // untuk mengupdate shooter berdasarkan id (admin-super role)
-func (q *Queries) UpdateShooter(ctx context.Context, arg UpdateShooterParams) (Shooter, error) {
+func (q *Queries) UpdateShooter(ctx context.Context, arg UpdateShooterParams) (UpdateShooterRow, error) {
 	row := q.db.QueryRow(ctx, updateShooter,
 		arg.ID,
 		arg.ScorerID,
@@ -241,11 +261,40 @@ func (q *Queries) UpdateShooter(ctx context.Context, arg UpdateShooterParams) (S
 		arg.Province,
 		arg.Club,
 	)
+	var i UpdateShooterRow
+	err := row.Scan(
+		&i.ID,
+		&i.ScorerID,
+		&i.Name,
+		&i.Province,
+		&i.Club,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const updateShooterImage = `-- name: UpdateShooterImage :one
+UPDATE shooters 
+SET image_path = $2, updated_at = NOW()
+WHERE id = $1
+RETURNING id, scorer_id, name, image_path, province, club, created_at, updated_at
+`
+
+type UpdateShooterImageParams struct {
+	ID        pgtype.UUID
+	ImagePath string
+}
+
+// untuk mengupdate foto shooter berdasarkan id (admin-super role)
+func (q *Queries) UpdateShooterImage(ctx context.Context, arg UpdateShooterImageParams) (Shooter, error) {
+	row := q.db.QueryRow(ctx, updateShooterImage, arg.ID, arg.ImagePath)
 	var i Shooter
 	err := row.Scan(
 		&i.ID,
 		&i.ScorerID,
 		&i.Name,
+		&i.ImagePath,
 		&i.Province,
 		&i.Club,
 		&i.CreatedAt,

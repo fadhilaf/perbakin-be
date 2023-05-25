@@ -9,19 +9,36 @@ SELECT id, shooter_id, failed, stage, created_at, updated_at
 FROM results
 WHERE id = $1;
 
+-- name: GetResultStage :one
+SELECT stage
+FROM results
+WHERE id = $1;
+
 -- name: GetResultRelationByShooterId :one
 SELECT id, shooter_id
 FROM results
 WHERE shooter_id = $1;
 
--- (admin-super role) dibuat by shooter id, kareno shooter dan result itu 1:1
--- name: UpdateResultByShooterId :one
+-- (admin-super role) dibuat by id
+-- name: UpdateResult :one
 UPDATE results 
 SET failed = $2, stage = $3, updated_at = NOW()
-WHERE shooter_id = $1
+WHERE id = $1
 RETURNING id, shooter_id, failed, stage, created_at, updated_at;
 
--- (admin-super role) dibuat by shooter id, kareno shooter dan result itu 1:1
--- name: DeleteResultByShooterId :exec
+-- (scorer role) dibuat by id, utk update stage 
+-- name: UpdateResultNextStage :exec
+UPDATE results 
+SET stage = $2, updated_at = NOW()
+WHERE id = $1;
+
+-- (scorer role) dibuat by id, utk update failed
+-- name: UpdateResultFailed :exec
+UPDATE results 
+SET failed = true, updated_at = NOW()
+WHERE id = $1;
+
+-- (admin-super role) dibuat by id
+-- name: DeleteResult :exec
 DELETE FROM results
-WHERE shooter_id = $1;
+WHERE id = $1;

@@ -29,7 +29,7 @@ type UpdateResultByShooterIdBodyRequest struct {
 	Stage  string `json:"stage" binding:"required,oneof=0 1 2 3 4 5 6 7"`
 }
 
-type UpdateResultByShooterIdRequest struct {
-	ShooterID pgtype.UUID
-	Body      UpdateResultByShooterIdBodyRequest
+type UpdateResultRequest struct {
+	ID   pgtype.UUID
+	Body UpdateResultByShooterIdBodyRequest
 }

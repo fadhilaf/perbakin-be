@@ -16,16 +16,18 @@ func (usecase *allUsecaseImpl) GetStage0ById(req model.ByIdRequest) model.WebSer
 	}
 
 	return util.ToWebServiceResponse("Berhasil mendapatkan hasil ujian kualifikasi", http.StatusOK, gin.H{
-		"stage0": model.Stage0{
-			ID:        stage0.ID,
-			ResultID:  stage0.ResultID,
-			Status:    string(stage0.Status),
-			Series1:   util.ScoresToIntArray(stage0.Series1),
-			Series2:   util.ScoresToIntArray(stage0.Series2),
-			Series3:   util.ScoresToIntArray(stage0.Series3),
-			Series4:   util.ScoresToIntArray(stage0.Series4),
-			Series5:   util.ScoresToIntArray(stage0.Series5),
-			CreatedAt: stage0.CreatedAt.Time,
-			UpdatedAt: stage0.UpdatedAt.Time,
+		"stage_0": model.Stage0{
+			ID:          stage0.ID,
+			ResultID:    stage0.ResultID,
+			Status:      string(stage0.Status),
+			Series1:     util.ScoresToIntArray(stage0.Series1),
+			Series2:     util.ScoresToIntArray(stage0.Series2),
+			Series3:     util.ScoresToIntArray(stage0.Series3),
+			Series4:     util.ScoresToIntArray(stage0.Series4),
+			Series5:     util.ScoresToIntArray(stage0.Series5),
+			ShooterSign: stage0.ShooterSign,
+			ScorerSign:  stage0.ScorerSign,
+			CreatedAt:   stage0.CreatedAt.Time,
+			UpdatedAt:   stage0.UpdatedAt.Time,
 		}})
 }

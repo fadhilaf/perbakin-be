@@ -18,12 +18,13 @@ func (usecase *adminSuperUsecaseImpl) GetShootersByExamId(req model.ByExamIdRequ
 	var shootersData []model.ShooterDisplayScorerData
 	for _, shooter := range shooters {
 		shootersData = append(shootersData, model.ShooterDisplayScorerData{
-			ID:       shooter.ID,
-			ScorerID: shooter.ScorerID,
-			Scorer:   shooter.Scorer,
-			Name:     shooter.Name,
-			Province: shooter.Province,
-			Club:     shooter.Club,
+			ID:        shooter.ID,
+			ScorerID:  shooter.ScorerID,
+			Scorer:    shooter.Scorer,
+			Name:      shooter.Name,
+			ImagePath: shooter.ImagePath,
+			Province:  shooter.Province,
+			Club:      shooter.Club,
 		})
 	}
 

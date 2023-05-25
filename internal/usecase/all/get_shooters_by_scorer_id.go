@@ -18,10 +18,11 @@ func (usecase *allUsecaseImpl) GetShootersByScorerId(req model.ByScorerIdRequest
 	var shootersData []model.ShooterDisplayData
 	for _, shooter := range shooters {
 		shootersData = append(shootersData, model.ShooterDisplayData{
-			ID:       shooter.ID,
-			Name:     shooter.Name,
-			Province: shooter.Province,
-			Club:     shooter.Club,
+			ID:        shooter.ID,
+			Name:      shooter.Name,
+			ImagePath: shooter.ImagePath,
+			Province:  shooter.Province,
+			Club:      shooter.Club,
 		})
 	}
 

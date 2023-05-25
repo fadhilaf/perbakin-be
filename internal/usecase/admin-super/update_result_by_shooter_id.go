@@ -11,11 +11,11 @@ import (
 	"github.com/FadhilAF/perbakin-be/internal/util"
 )
 
-func (usecase *adminSuperUsecaseImpl) UpdateResultByShooterId(req model.UpdateResultByShooterIdRequest) model.WebServiceResponse {
-	newResult, err := usecase.Store.UpdateResultByShooterId(context.Background(), repositoryModel.UpdateResultByShooterIdParams{
-		ShooterID: req.ShooterID,
-		Failed:    req.Body.Failed,
-		Stage:     repositoryModel.NullStages{Stages: repositoryModel.Stages(req.Body.Stage), Valid: true},
+func (usecase *adminSuperUsecaseImpl) UpdateResult(req model.UpdateResultRequest) model.WebServiceResponse {
+	newResult, err := usecase.Store.UpdateResult(context.Background(), repositoryModel.UpdateResultParams{
+		ID:     req.ID,
+		Failed: req.Body.Failed,
+		Stage:  repositoryModel.NullStages{Stages: repositoryModel.Stages(req.Body.Stage), Valid: true},
 	})
 	if err != nil {
 		return util.ToWebServiceResponse("Gagal mengubah hasil ujian: "+err.Error(), http.StatusInternalServerError, nil)

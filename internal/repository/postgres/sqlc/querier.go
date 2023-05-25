@@ -24,8 +24,8 @@ type Querier interface {
 	CreateStage0(ctx context.Context, resultID pgtype.UUID) (CreateStage0Row, error)
 	// untuk menghapus exam (super role)
 	DeleteExam(ctx context.Context, id pgtype.UUID) error
-	// (admin-super role) dibuat by shooter id, kareno shooter dan result itu 1:1
-	DeleteResultByShooterId(ctx context.Context, shooterID pgtype.UUID) error
+	// (admin-super role) dibuat by id
+	DeleteResult(ctx context.Context, id pgtype.UUID) error
 	// untuk menghapus shooter berdasarkan id (admin-super role)
 	DeleteShooter(ctx context.Context, id pgtype.UUID) error
 	// dipake untuk delete user
@@ -62,6 +62,7 @@ type Querier interface {
 	GetExamsBySuperId(ctx context.Context, superID pgtype.UUID) ([]GetExamsBySuperIdRow, error)
 	GetResultById(ctx context.Context, id pgtype.UUID) (Result, error)
 	GetResultRelationByShooterId(ctx context.Context, shooterID pgtype.UUID) (GetResultRelationByShooterIdRow, error)
+	GetResultStage(ctx context.Context, id pgtype.UUID) (NullStages, error)
 	// untuk ngambil data akun scorer berdasarkan id (admin-super role)
 	GetScorerById(ctx context.Context, id pgtype.UUID) (GetScorerByIdRow, error)
 	// untuk ngambil data lengkap scorer berdasarkan user id (scorer role)
@@ -82,8 +83,9 @@ type Querier interface {
 	GetShooterRelationById(ctx context.Context, id pgtype.UUID) (GetShooterRelationByIdRow, error)
 	// untuk mengambil shooter berdasarkan scorer_id (all role)
 	GetShootersByScorerId(ctx context.Context, scorerID pgtype.UUID) ([]GetShootersByScorerIdRow, error)
-	GetStage0ById(ctx context.Context, id pgtype.UUID) (GetStage0ByIdRow, error)
+	GetStage0ById(ctx context.Context, id pgtype.UUID) (Stage0Result, error)
 	GetStage0RelationByResultId(ctx context.Context, resultID pgtype.UUID) (GetStage0RelationByResultIdRow, error)
+	GetStage0Status(ctx context.Context, id pgtype.UUID) (Stage0Status, error)
 	// untuk ngambil data lengkap super admin berdasarkan user id (super role)
 	GetSuperByUserId(ctx context.Context, userID pgtype.UUID) (GetSuperByUserIdRow, error)
 	// untuk ngambil data display super admin berdasarkan username (super role)
@@ -100,8 +102,12 @@ type Querier interface {
 	UpdateAdminPassword(ctx context.Context, arg UpdateAdminPasswordParams) (pgtype.UUID, error)
 	// untuk memperbarui exam (super role)
 	UpdateExam(ctx context.Context, arg UpdateExamParams) (Exam, error)
-	// (admin-super role) dibuat by shooter id, kareno shooter dan result itu 1:1
-	UpdateResultByShooterId(ctx context.Context, arg UpdateResultByShooterIdParams) (Result, error)
+	// (admin-super role) dibuat by id
+	UpdateResult(ctx context.Context, arg UpdateResultParams) (Result, error)
+	// (scorer role) dibuat by id, utk update failed
+	UpdateResultFailed(ctx context.Context, id pgtype.UUID) error
+	// (scorer role) dibuat by id, utk update stage
+	UpdateResultNextStage(ctx context.Context, arg UpdateResultNextStageParams) error
 	// untuk update data akun admin (super role) TODO: return sebanyak get admin by id
 	UpdateScorer(ctx context.Context, arg UpdateScorerParams) (UpdateScorerRow, error)
 	// low prio
@@ -109,17 +115,13 @@ type Querier interface {
 	// low prio
 	UpdateScorerPassword(ctx context.Context, arg UpdateScorerPasswordParams) (pgtype.UUID, error)
 	// untuk mengupdate shooter berdasarkan id (admin-super role)
-	UpdateShooter(ctx context.Context, arg UpdateShooterParams) (Shooter, error)
+	UpdateShooter(ctx context.Context, arg UpdateShooterParams) (UpdateShooterRow, error)
+	// untuk mengupdate foto shooter berdasarkan id (admin-super role)
+	UpdateShooterImage(ctx context.Context, arg UpdateShooterImageParams) (Shooter, error)
 	// (scorer role)
-	UpdateStage0NextSeries2(ctx context.Context, arg UpdateStage0NextSeries2Params) (UpdateStage0NextSeries2Row, error)
+	UpdateStage0Finish(ctx context.Context, arg UpdateStage0FinishParams) (UpdateStage0FinishRow, error)
 	// (scorer role)
-	UpdateStage0NextSeries3(ctx context.Context, arg UpdateStage0NextSeries3Params) (UpdateStage0NextSeries3Row, error)
-	// (scorer role)
-	UpdateStage0NextSeries4(ctx context.Context, arg UpdateStage0NextSeries4Params) (UpdateStage0NextSeries4Row, error)
-	// (scorer role)
-	UpdateStage0NextSeries5(ctx context.Context, arg UpdateStage0NextSeries5Params) (UpdateStage0NextSeries5Row, error)
-	// (scorer role)
-	UpdateStage0NextSeries6(ctx context.Context, arg UpdateStage0NextSeries6Params) (UpdateStage0NextSeries6Row, error)
+	UpdateStage0NextSeries(ctx context.Context, arg UpdateStage0NextSeriesParams) (Stage0Status, error)
 	// (scorer role)
 	UpdateStage0Series1(ctx context.Context, arg UpdateStage0Series1Params) (string, error)
 	// (scorer role)

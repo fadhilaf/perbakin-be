@@ -32,14 +32,14 @@ func (q *Queries) CreateResult(ctx context.Context, shooterID pgtype.UUID) (Resu
 	return i, err
 }
 
-const deleteResultByShooterId = `-- name: DeleteResultByShooterId :exec
+const deleteResult = `-- name: DeleteResult :exec
 DELETE FROM results
-WHERE shooter_id = $1
+WHERE id = $1
 `
 
-// (admin-super role) dibuat by shooter id, kareno shooter dan result itu 1:1
-func (q *Queries) DeleteResultByShooterId(ctx context.Context, shooterID pgtype.UUID) error {
-	_, err := q.db.Exec(ctx, deleteResultByShooterId, shooterID)
+// (admin-super role) dibuat by id
+func (q *Queries) DeleteResult(ctx context.Context, id pgtype.UUID) error {
+	_, err := q.db.Exec(ctx, deleteResult, id)
 	return err
 }
 
@@ -81,22 +81,35 @@ func (q *Queries) GetResultRelationByShooterId(ctx context.Context, shooterID pg
 	return i, err
 }
 
-const updateResultByShooterId = `-- name: UpdateResultByShooterId :one
+const getResultStage = `-- name: GetResultStage :one
+SELECT stage
+FROM results
+WHERE id = $1
+`
+
+func (q *Queries) GetResultStage(ctx context.Context, id pgtype.UUID) (NullStages, error) {
+	row := q.db.QueryRow(ctx, getResultStage, id)
+	var stage NullStages
+	err := row.Scan(&stage)
+	return stage, err
+}
+
+const updateResult = `-- name: UpdateResult :one
 UPDATE results 
 SET failed = $2, stage = $3, updated_at = NOW()
-WHERE shooter_id = $1
+WHERE id = $1
 RETURNING id, shooter_id, failed, stage, created_at, updated_at
 `
 
-type UpdateResultByShooterIdParams struct {
-	ShooterID pgtype.UUID
-	Failed    bool
-	Stage     NullStages
+type UpdateResultParams struct {
+	ID     pgtype.UUID
+	Failed bool
+	Stage  NullStages
 }
 
-// (admin-super role) dibuat by shooter id, kareno shooter dan result itu 1:1
-func (q *Queries) UpdateResultByShooterId(ctx context.Context, arg UpdateResultByShooterIdParams) (Result, error) {
-	row := q.db.QueryRow(ctx, updateResultByShooterId, arg.ShooterID, arg.Failed, arg.Stage)
+// (admin-super role) dibuat by id
+func (q *Queries) UpdateResult(ctx context.Context, arg UpdateResultParams) (Result, error) {
+	row := q.db.QueryRow(ctx, updateResult, arg.ID, arg.Failed, arg.Stage)
 	var i Result
 	err := row.Scan(
 		&i.ID,
@@ -107,4 +120,33 @@ func (q *Queries) UpdateResultByShooterId(ctx context.Context, arg UpdateResultB
 		&i.UpdatedAt,
 	)
 	return i, err
+}
+
+const updateResultFailed = `-- name: UpdateResultFailed :exec
+UPDATE results 
+SET failed = true, updated_at = NOW()
+WHERE id = $1
+`
+
+// (scorer role) dibuat by id, utk update failed
+func (q *Queries) UpdateResultFailed(ctx context.Context, id pgtype.UUID) error {
+	_, err := q.db.Exec(ctx, updateResultFailed, id)
+	return err
+}
+
+const updateResultNextStage = `-- name: UpdateResultNextStage :exec
+UPDATE results 
+SET stage = $2, updated_at = NOW()
+WHERE id = $1
+`
+
+type UpdateResultNextStageParams struct {
+	ID    pgtype.UUID
+	Stage NullStages
+}
+
+// (scorer role) dibuat by id, utk update stage
+func (q *Queries) UpdateResultNextStage(ctx context.Context, arg UpdateResultNextStageParams) error {
+	_, err := q.db.Exec(ctx, updateResultNextStage, arg.ID, arg.Stage)
+	return err
 }

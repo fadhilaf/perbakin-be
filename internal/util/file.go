@@ -1,7 +1,7 @@
 package util
 
 import (
-	"fmt"
+	"net/http"
 	"path/filepath"
 
 	"github.com/gin-gonic/gin"
@@ -11,7 +11,10 @@ import (
 func SaveFileFromForm(ctx *gin.Context, field string, path string) (filename string, ok bool) {
 	file, err := ctx.FormFile(field)
 	if err != nil {
-		fmt.Println("Gagal mendapatkan file dari form: ", err)
+		res := ToWebServiceResponse("Tidak ada file '"+field+"' dari form", http.StatusBadRequest, nil)
+		ctx.JSON(http.StatusBadRequest, res)
+		ctx.Abort()
+
 		return "", false
 	}
 
@@ -20,7 +23,9 @@ func SaveFileFromForm(ctx *gin.Context, field string, path string) (filename str
 	newFileName := uuid.New().String() + extension
 
 	if err := ctx.SaveUploadedFile(file, path+newFileName); err != nil {
-		fmt.Println("Gagal menyimpan file ke folder: ", err)
+		res := ToWebServiceResponse("Gagal menyimpan file ke folder", http.StatusInternalServerError, nil)
+		ctx.JSON(http.StatusInternalServerError, res)
+		ctx.Abort()
 		return "", false
 	}
 

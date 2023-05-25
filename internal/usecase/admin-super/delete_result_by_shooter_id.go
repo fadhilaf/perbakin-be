@@ -8,8 +8,8 @@ import (
 	"github.com/FadhilAF/perbakin-be/internal/util"
 )
 
-func (usecase *adminSuperUsecaseImpl) DeleteResultByShooterId(req model.ByShooterIdRequest) model.WebServiceResponse {
-	if err := usecase.Store.DeleteResultByShooterId(context.Background(), req.ShooterID); err != nil {
+func (usecase *adminSuperUsecaseImpl) DeleteResult(req model.ByIdRequest) model.WebServiceResponse {
+	if err := usecase.Store.DeleteResult(context.Background(), req.ID); err != nil {
 		return util.ToWebServiceResponse("Gagal menghapus hasil ujian: "+err.Error(), http.StatusInternalServerError, nil)
 	}
 

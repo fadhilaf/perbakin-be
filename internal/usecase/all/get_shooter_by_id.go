@@ -17,6 +17,7 @@ func (usecase *allUsecaseImpl) GetShooterById(req model.ByIdRequest) model.WebSe
 			ID:        shooter.ID,
 			ScorerID:  shooter.ScorerID,
 			Name:      shooter.Name,
+			ImagePath: shooter.ImagePath,
 			Province:  shooter.Province,
 			Club:      shooter.Club,
 			CreatedAt: shooter.CreatedAt.Time,

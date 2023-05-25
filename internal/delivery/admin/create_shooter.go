@@ -11,13 +11,20 @@ func (handler *adminHandler) CreateShooter(c *gin.Context) {
 
 	var req model.CreateShooterBodyRequest
 
-	if ok := util.BindJSONAndValidate(c, &req); !ok {
+	if ok := util.BindFormAndValidate(c, &req); !ok {
+		return
+	}
+
+	// Simpan upload file ke folder assets/images
+	imagePath, ok := util.SaveFileFromForm(c, "image", "media/")
+	if !ok {
 		return
 	}
 
 	res := handler.AdminSuperUsecase.CreateShooter(model.CreateShooterRequest{
-		ScorerID: scorer.ID,
-		Body:     req,
+		ScorerID:  scorer.ID,
+		ImagePath: imagePath,
+		Body:      req,
 	})
 
 	c.JSON(res.Status, res)
