@@ -3,6 +3,7 @@ package validation
 import (
 	"fmt"
 	"reflect"
+	"strings"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -59,6 +60,12 @@ func registerCustomErrors() {
 	}
 
 	customError["oneof"] = func(field validator.FieldError, translatedFieldName string) string {
-		return fmt.Sprintf("'%s' harus salah satu dari %s", translatedFieldName, field.Param())
+		words := strings.Split(field.Param(), " ")
+		lastWord := words[len(words)-1]
+
+		param := strings.Join(words[:len(words)-1], ", ")
+		param += ", atau " + lastWord
+
+		return fmt.Sprintf("%s yang dipilih harus salah satu dari %s", translatedFieldName, param)
 	}
 }

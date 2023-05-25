@@ -1,5 +1,5 @@
 package validation
 
 func registerCustomMessages() {
-	// customMessage["year"] = "Tahun"
+	customMessage["Series"] = "Seri"
 }
