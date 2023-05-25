@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (usecase *adminSuperUsecaseImpl) GetShooterById(req model.ByIdRequest) model.WebServiceResponse {
+func (usecase *allUsecaseImpl) GetShooterById(req model.ByIdRequest) model.WebServiceResponse {
 	shooter, _ := usecase.Store.GetShooterById(context.Background(), req.ID)
 
 	return util.ToWebServiceResponse("Data penembak ditemukan", http.StatusOK, gin.H{

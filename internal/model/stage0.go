@@ -19,6 +19,22 @@ type Stage0 struct {
 	UpdatedAt time.Time   `json:"updated_at"`
 }
 
-type ByResultIdRequest struct {
+type Stage0Relation struct {
+	ID       pgtype.UUID `json:"id"`
 	ResultID pgtype.UUID `json:"result_id"`
+}
+
+type ByResultIdRequest struct {
+	ResultID pgtype.UUID
+}
+
+type UpdateStage0SeriesBodyRequest struct {
+	Series string `json:"series" binding:"required,oneof=1 2 3 4 5"`
+	Scores []int  `json:"scores" binding:"required,dive,oneof=0 1 2 3 4 5 6 7 8 9 10"`
+}
+
+type UpdateStage0SeriesRequest struct {
+	ID     pgtype.UUID
+	Series string
+	Scores string
 }

@@ -15,11 +15,16 @@ func ScorerRoutes(router *gin.RouterGroup, delivery delivery.ScorerDelivery) {
 	scorerRouter.GET("/shooter", delivery.GetShootersByScorerId)
 
 	shooterRouter := scorerRouter.Group("/shooter/:shooter_id", delivery.MustShooterMiddleware())
+	shooterRouter.GET("/", delivery.GetShooterById)
 
-	shooterRouter.GET("/result", delivery.GetResultByShooterId)
 	shooterRouter.POST("/result", delivery.CreateResult)
 
-	resultRouter := shooterRouter.Group("/result/:result_id", delivery.MustResultMiddleware())
+	resultRouter := shooterRouter.Group("/result", delivery.MustResultMiddleware())
+	resultRouter.GET("/", delivery.GetResultById)
 
 	resultRouter.POST("/stage0", delivery.CreateStage0)
+
+	stage0Router := resultRouter.Group("/stage0", delivery.MustStage0Middleware())
+	stage0Router.GET("/", delivery.GetStage0ById)
+	stage0Router.PATCH("/", delivery.UpdateStage0Series)
 }

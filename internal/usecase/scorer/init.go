@@ -11,6 +11,8 @@ type ScorerUsecase interface {
 	GetScorerRelationByUserId(model.UserByUserIdRequest) (model.OperatorRelation, error)
 
 	GetScorerByUserId(model.UserByUserIdRequest) model.WebServiceResponse
+
+	UpdateStage0Series(model.UpdateStage0SeriesRequest) model.WebServiceResponse
 }
 
 var _ ScorerUsecase = &scorerUsecaseImpl{}

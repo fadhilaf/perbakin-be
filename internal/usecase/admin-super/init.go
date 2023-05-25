@@ -17,7 +17,6 @@ type AdminSuperUsecase interface {
 	CreateShooter(model.CreateShooterRequest) model.WebServiceResponse
 	GetAllShooters() model.WebServiceResponse
 	GetShootersByExamId(model.ByExamIdRequest) model.WebServiceResponse
-	GetShooterById(model.ByIdRequest) model.WebServiceResponse
 	UpdateShooter(model.UpdateShooterRequest) model.WebServiceResponse
 	DeleteShooter(model.ByIdRequest) model.WebServiceResponse
 

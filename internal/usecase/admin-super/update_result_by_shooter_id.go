@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	respositoryModel "github.com/FadhilAF/perbakin-be/internal/repository/postgres/sqlc"
+	repositoryModel "github.com/FadhilAF/perbakin-be/internal/repository/postgres/sqlc"
 	"github.com/gin-gonic/gin"
 
 	"github.com/FadhilAF/perbakin-be/internal/model"
@@ -12,10 +12,10 @@ import (
 )
 
 func (usecase *adminSuperUsecaseImpl) UpdateResultByShooterId(req model.UpdateResultByShooterIdRequest) model.WebServiceResponse {
-	newResult, err := usecase.Store.UpdateResultByShooterId(context.Background(), respositoryModel.UpdateResultByShooterIdParams{
+	newResult, err := usecase.Store.UpdateResultByShooterId(context.Background(), repositoryModel.UpdateResultByShooterIdParams{
 		ShooterID: req.ShooterID,
 		Failed:    req.Body.Failed,
-		Stage:     req.Body.Stage,
+		Stage:     repositoryModel.NullStages{Stages: repositoryModel.Stages(req.Body.Stage), Valid: true},
 	})
 	if err != nil {
 		return util.ToWebServiceResponse("Gagal mengubah hasil ujian: "+err.Error(), http.StatusInternalServerError, nil)
@@ -26,7 +26,7 @@ func (usecase *adminSuperUsecaseImpl) UpdateResultByShooterId(req model.UpdateRe
 			ID:        newResult.ID,
 			ShooterID: newResult.ShooterID,
 			Failed:    newResult.Failed,
-			Stage:     newResult.Stage.(string),
+			Stage:     string(newResult.Stage.Stages),
 			CreatedAt: newResult.CreatedAt.Time,
 			UpdatedAt: newResult.UpdatedAt.Time,
 		}})

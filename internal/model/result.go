@@ -24,14 +24,9 @@ type ByShooterIdRequest struct {
 	ShooterID pgtype.UUID
 }
 
-type UpdateResultByShooterIdBodyStringRequest struct {
-	Failed string `json:"failed" binding:"required,boolean"`
-	Stage  string `json:"stage" binding:"required,number,excludes=.,gte=0,lte=6"`
-}
-
 type UpdateResultByShooterIdBodyRequest struct {
-	Failed bool
-	Stage  string
+	Failed bool   `json:"failed" binding:"required,boolean"`
+	Stage  string `json:"stage" binding:"required,oneof=0 1 2 3 4 5 6 7"`
 }
 
 type UpdateResultByShooterIdRequest struct {

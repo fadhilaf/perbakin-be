@@ -26,11 +26,10 @@ func SessionHandler(handler *gin.Engine, dbPool *pgxpool.Pool, config env.Config
 	SessionManager.Cookie.Path = "/"
 	SessionManager.Cookie.Name = "session"
 
-	SessionManager.Cookie.Domain = config.AppDomain
-
 	if config.Env == env.EnvProd {
 		SessionManager.Cookie.SameSite = http.SameSiteStrictMode
 		SessionManager.Cookie.Secure = true
+		SessionManager.Cookie.Domain = config.AppDomain
 	} else {
 		SessionManager.Cookie.SameSite = http.SameSiteNoneMode
 		SessionManager.Cookie.Secure = false

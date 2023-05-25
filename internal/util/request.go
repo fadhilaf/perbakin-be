@@ -64,9 +64,9 @@ func validate(ctx *gin.Context, err error) {
 	if errValidation, ok := err.(validator.ValidationErrors); ok {
 		res := validation.HandleValidationErrors(errValidation)
 		ctx.JSON(res.Status, res)
-	} else if _, ok := err.(*json.UnmarshalTypeError); ok {
+	} else if err, ok := err.(*json.UnmarshalTypeError); ok {
 		ctx.JSON(http.StatusBadRequest, model.WebServiceResponse{
-			Message: "Schema request tidak valid",
+			Message: "Schema request tidak valid: " + err.Error(),
 			Status:  http.StatusBadRequest,
 			Data:    nil,
 		})

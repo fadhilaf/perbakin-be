@@ -8,7 +8,7 @@ import (
 func (handler *superHandler) GetShooterById(c *gin.Context) {
 	shooter := c.MustGet("shooter").(model.ShooterRelation)
 
-	res := handler.AdminSuperUsecase.GetShooterById(model.ByIdRequest{
+	res := handler.AllUsecase.GetShooterById(model.ByIdRequest{
 		ID: shooter.ID,
 	})
 

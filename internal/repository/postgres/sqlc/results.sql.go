@@ -43,14 +43,14 @@ func (q *Queries) DeleteResultByShooterId(ctx context.Context, shooterID pgtype.
 	return err
 }
 
-const getResultByShooterId = `-- name: GetResultByShooterId :one
+const getResultById = `-- name: GetResultById :one
 SELECT id, shooter_id, failed, stage, created_at, updated_at
 FROM results
-WHERE shooter_id = $1
+WHERE id = $1
 `
 
-func (q *Queries) GetResultByShooterId(ctx context.Context, shooterID pgtype.UUID) (Result, error) {
-	row := q.db.QueryRow(ctx, getResultByShooterId, shooterID)
+func (q *Queries) GetResultById(ctx context.Context, id pgtype.UUID) (Result, error) {
+	row := q.db.QueryRow(ctx, getResultById, id)
 	var i Result
 	err := row.Scan(
 		&i.ID,
@@ -91,7 +91,7 @@ RETURNING id, shooter_id, failed, stage, created_at, updated_at
 type UpdateResultByShooterIdParams struct {
 	ShooterID pgtype.UUID
 	Failed    bool
-	Stage     interface{}
+	Stage     NullStages
 }
 
 // (admin-super role) dibuat by shooter id, kareno shooter dan result itu 1:1

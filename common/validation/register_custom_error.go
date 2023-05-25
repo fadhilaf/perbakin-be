@@ -57,4 +57,8 @@ func registerCustomErrors() {
 	customError["lte"] = func(field validator.FieldError, translatedFieldName string) string {
 		return fmt.Sprintf("'%s' harus kurang dari %s", translatedFieldName, field.Param())
 	}
+
+	customError["oneof"] = func(field validator.FieldError, translatedFieldName string) string {
+		return fmt.Sprintf("'%s' harus salah satu dari %s", translatedFieldName, field.Param())
+	}
 }

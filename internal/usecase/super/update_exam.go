@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	respositoryModel "github.com/FadhilAF/perbakin-be/internal/repository/postgres/sqlc"
+	repositoryModel "github.com/FadhilAF/perbakin-be/internal/repository/postgres/sqlc"
 	"github.com/gin-gonic/gin"
 
 	"github.com/FadhilAF/perbakin-be/internal/model"
@@ -12,7 +12,7 @@ import (
 )
 
 func (usecase *superUsecaseImpl) UpdateExam(req model.UpdateExamRequest) model.WebServiceResponse {
-	newExam, err := usecase.Store.UpdateExam(context.Background(), respositoryModel.UpdateExamParams{
+	newExam, err := usecase.Store.UpdateExam(context.Background(), repositoryModel.UpdateExamParams{
 		ID:        req.ID,
 		Name:      req.Body.Name,
 		Location:  req.Body.Location,

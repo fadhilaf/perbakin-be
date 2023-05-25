@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	respositoryModel "github.com/FadhilAF/perbakin-be/internal/repository/postgres/sqlc"
+	repositoryModel "github.com/FadhilAF/perbakin-be/internal/repository/postgres/sqlc"
 	"github.com/gin-gonic/gin"
 
 	"github.com/FadhilAF/perbakin-be/internal/model"
@@ -21,7 +21,7 @@ func (usecase *adminSuperUsecaseImpl) UpdateShooter(req model.UpdateShooterReque
 		return util.ToWebServiceResponse("Tidak dapat mengubah penguji penembak dengan penguji ujian lain", http.StatusUnauthorized, nil)
 	}
 
-	newShooter, err := usecase.Store.UpdateShooter(context.Background(), respositoryModel.UpdateShooterParams{
+	newShooter, err := usecase.Store.UpdateShooter(context.Background(), repositoryModel.UpdateShooterParams{
 		ID:       req.ID,
 		ScorerID: req.Body.ScorerID,
 		Name:     req.Body.Name,

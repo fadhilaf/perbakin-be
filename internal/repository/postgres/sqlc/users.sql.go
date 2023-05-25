@@ -22,26 +22,14 @@ func (q *Queries) DeleteUser(ctx context.Context, id pgtype.UUID) error {
 }
 
 const getUserByUsername = `-- name: GetUserByUsername :one
-SELECT id, username, password, name FROM users
+SELECT id FROM users
 WHERE username = $1
 `
 
-type GetUserByUsernameRow struct {
-	ID       pgtype.UUID
-	Username string
-	Password string
-	Name     string
-}
-
 // dipake untuk mengecek username ketika create user baru
-func (q *Queries) GetUserByUsername(ctx context.Context, username string) (GetUserByUsernameRow, error) {
+func (q *Queries) GetUserByUsername(ctx context.Context, username string) (pgtype.UUID, error) {
 	row := q.db.QueryRow(ctx, getUserByUsername, username)
-	var i GetUserByUsernameRow
-	err := row.Scan(
-		&i.ID,
-		&i.Username,
-		&i.Password,
-		&i.Name,
-	)
-	return i, err
+	var id pgtype.UUID
+	err := row.Scan(&id)
+	return id, err
 }

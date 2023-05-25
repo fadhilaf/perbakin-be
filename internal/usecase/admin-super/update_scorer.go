@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	respositoryModel "github.com/FadhilAF/perbakin-be/internal/repository/postgres/sqlc"
+	repositoryModel "github.com/FadhilAF/perbakin-be/internal/repository/postgres/sqlc"
 	"github.com/gin-gonic/gin"
 
 	"github.com/FadhilAF/perbakin-be/internal/model"
@@ -17,7 +17,7 @@ func (usecase *adminSuperUsecaseImpl) UpdateScorer(req model.UpdateOperatorReque
 		return util.ToWebServiceResponse("Gagal proses hash password: "+err.Error(), http.StatusInternalServerError, nil)
 	}
 
-	newScorer, err := usecase.Store.UpdateScorer(context.Background(), respositoryModel.UpdateScorerParams{
+	newScorer, err := usecase.Store.UpdateScorer(context.Background(), repositoryModel.UpdateScorerParams{
 		ID:       req.ID,
 		Username: req.Body.Username,
 		Password: passwordHash,

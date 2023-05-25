@@ -10,7 +10,7 @@ import (
 )
 
 func (usecase *allUsecaseImpl) CreateResult(req model.ByShooterIdRequest) model.WebServiceResponse {
-	if _, err := usecase.Store.GetResultByShooterId(context.Background(), req.ShooterID); err == nil {
+	if _, err := usecase.Store.GetResultRelationByShooterId(context.Background(), req.ShooterID); err == nil {
 		return util.ToWebServiceResponse("Hasil ujian sudah ada", http.StatusConflict, nil)
 	}
 
@@ -24,7 +24,7 @@ func (usecase *allUsecaseImpl) CreateResult(req model.ByShooterIdRequest) model.
 			ID:        result.ID,
 			ShooterID: result.ShooterID,
 			Failed:    result.Failed,
-			Stage:     result.Stage.(string),
+			Stage:     string(result.Stage.Stages),
 			CreatedAt: result.CreatedAt.Time,
 			UpdatedAt: result.UpdatedAt.Time,
 		}})

@@ -21,7 +21,7 @@ SELECT
   added_stage0.updated_at
 FROM added_stage0;
 
--- name: GetStage0 :one
+-- name: GetStage0ById :one
 SELECT 
   stage0_results.id, 
   stage0_results.result_id, 
@@ -30,7 +30,16 @@ SELECT
   stage0_results.series2, 
   stage0_results.series3, 
   stage0_results.series4, 
-  stage0_results.series5
+  stage0_results.series5,
+  stage0_results.created_at,
+  stage0_results.updated_at
+FROM stage0_results
+WHERE stage0_results.id = $1;
+
+-- name: GetStage0RelationByResultId :one
+SELECT 
+  stage0_results.id, 
+  stage0_results.result_id
 FROM stage0_results
 WHERE stage0_results.result_id = $1;
 
@@ -38,68 +47,70 @@ WHERE stage0_results.result_id = $1;
 -- name: UpdateStage0Series1 :one
 UPDATE stage0_results
 SET series1 = $2, updated_at = NOW()
-WHERE result_id = $1
+WHERE id = $1
 RETURNING series1;
 
 -- (scorer role)
 -- name: UpdateStage0NextSeries2 :one
 UPDATE stage0_results
 SET series1 = $2, status = 2, updated_at = NOW()
-WHERE result_id = $1 
+WHERE id = $1 
 RETURNING series1, status;
 
 -- (scorer role)
 -- name: UpdateStage0Series2 :one
 UPDATE stage0_results
 SET series2 = $2, updated_at = NOW()
-WHERE result_id = $1
+WHERE id = $1
 RETURNING series2;
 
 -- (scorer role)
 -- name: UpdateStage0NextSeries3 :one
 UPDATE stage0_results
 SET series2 = $2, status = 3, updated_at = NOW()
-WHERE result_id = $1 
+WHERE id = $1 
 RETURNING series2, status;
 
 -- (scorer role)
 -- name: UpdateStage0Series3 :one
 UPDATE stage0_results
 SET series3 = $2, updated_at = NOW()
-WHERE result_id = $1
+WHERE id = $1
 RETURNING series3;
 
 -- (scorer role)
 -- name: UpdateStage0NextSeries4 :one
 UPDATE stage0_results
 SET series3 = $2, status = 4, updated_at = NOW()
-WHERE result_id = $1 
+WHERE id = $1 
 RETURNING series3, status;
 
 -- (scorer role)
 -- name: UpdateStage0Series4 :one
 UPDATE stage0_results
 SET series4 = $2, updated_at = NOW()
-WHERE result_id = $1 
+WHERE id = $1 
 RETURNING series4;
 
 -- (scorer role)
 -- name: UpdateStage0NextSeries5 :one
 UPDATE stage0_results
 SET series4 = $2, status = 5, updated_at = NOW()
-WHERE result_id = $1 
+WHERE id = $1 
 RETURNING series4, status;
 
 -- (scorer role)
 -- name: UpdateStage0Series5 :one
 UPDATE stage0_results
 SET series5 = $2, updated_at = NOW()
-WHERE result_id = $1 
+WHERE id = $1 
 RETURNING series5;
 
 -- (scorer role)
 -- name: UpdateStage0NextSeries6 :one
 UPDATE stage0_results
 SET series5 = $2, status = 6, updated_at = NOW()
-WHERE result_id = $1 
+WHERE id = $1 
 RETURNING series5, status;
+
+-- nanti buat ini TODO: UpdateStage0Clear :one

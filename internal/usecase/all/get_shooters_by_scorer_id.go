@@ -12,7 +12,7 @@ import (
 func (usecase *allUsecaseImpl) GetShootersByScorerId(req model.ByScorerIdRequest) model.WebServiceResponse {
 	shooters, err := usecase.Store.GetShootersByScorerId(context.Background(), req.ScorerID)
 	if err != nil {
-		return util.ToWebServiceResponse("Gagal mendapatkan data penembak", http.StatusInternalServerError, nil)
+		return util.ToWebServiceResponse("Gagal mendapatkan data penembak: "+err.Error(), http.StatusInternalServerError, nil)
 	}
 
 	var shootersData []model.ShooterDisplayData

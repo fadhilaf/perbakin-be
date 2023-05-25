@@ -9,17 +9,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (usecase *allUsecaseImpl) CreateStage0(req model.ByResultIdRequest) model.WebServiceResponse {
-	if _, err := usecase.Store.GetStage0RelationByResultId(context.Background(), req.ResultID); err == nil {
-		return util.ToWebServiceResponse("Hasil ujian kualifikasi sudah ada", http.StatusConflict, nil)
-	}
-
-	stage0, err := usecase.Store.CreateStage0(context.Background(), req.ResultID)
+func (usecase *allUsecaseImpl) GetStage0ById(req model.ByIdRequest) model.WebServiceResponse {
+	stage0, err := usecase.Store.GetStage0ById(context.Background(), req.ID)
 	if err != nil {
-		return util.ToWebServiceResponse("Gagal membuat hasil ujian kualifikasi: "+err.Error(), http.StatusInternalServerError, nil)
+		return util.ToWebServiceResponse("Hasil ujian kualifikasi tidak ada: "+err.Error(), http.StatusNotFound, nil)
 	}
 
-	return util.ToWebServiceResponse("Berhasil membuat hasil ujian kualifikasi", http.StatusCreated, gin.H{
+	return util.ToWebServiceResponse("Berhasil mendapatkan hasil ujian kualifikasi", http.StatusOK, gin.H{
 		"stage0": model.Stage0{
 			ID:        stage0.ID,
 			ResultID:  stage0.ResultID,
@@ -31,6 +27,5 @@ func (usecase *allUsecaseImpl) CreateStage0(req model.ByResultIdRequest) model.W
 			Series5:   util.ScoresToIntArray(stage0.Series5),
 			CreatedAt: stage0.CreatedAt.Time,
 			UpdatedAt: stage0.UpdatedAt.Time,
-		},
-	})
+		}})
 }

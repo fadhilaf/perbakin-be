@@ -5,8 +5,105 @@
 package postgres
 
 import (
+	"database/sql/driver"
+	"fmt"
+
 	"github.com/jackc/pgx/v5/pgtype"
 )
+
+type Stage0Status string
+
+const (
+	Stage0Status1 Stage0Status = "1"
+	Stage0Status2 Stage0Status = "2"
+	Stage0Status3 Stage0Status = "3"
+	Stage0Status4 Stage0Status = "4"
+	Stage0Status5 Stage0Status = "5"
+	Stage0Status6 Stage0Status = "6"
+)
+
+func (e *Stage0Status) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = Stage0Status(s)
+	case string:
+		*e = Stage0Status(s)
+	default:
+		return fmt.Errorf("unsupported scan type for Stage0Status: %T", src)
+	}
+	return nil
+}
+
+type NullStage0Status struct {
+	Stage0Status Stage0Status
+	Valid        bool // Valid is true if Stage0Status is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullStage0Status) Scan(value interface{}) error {
+	if value == nil {
+		ns.Stage0Status, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.Stage0Status.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullStage0Status) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.Stage0Status), nil
+}
+
+type Stages string
+
+const (
+	Stages0 Stages = "0"
+	Stages1 Stages = "1"
+	Stages2 Stages = "2"
+	Stages3 Stages = "3"
+	Stages4 Stages = "4"
+	Stages5 Stages = "5"
+	Stages6 Stages = "6"
+	Stages7 Stages = "7"
+)
+
+func (e *Stages) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = Stages(s)
+	case string:
+		*e = Stages(s)
+	default:
+		return fmt.Errorf("unsupported scan type for Stages: %T", src)
+	}
+	return nil
+}
+
+type NullStages struct {
+	Stages Stages
+	Valid  bool // Valid is true if Stages is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullStages) Scan(value interface{}) error {
+	if value == nil {
+		ns.Stages, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.Stages.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullStages) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.Stages), nil
+}
 
 type Admin struct {
 	ID     pgtype.UUID
@@ -30,7 +127,7 @@ type Result struct {
 	ID        pgtype.UUID
 	ShooterID pgtype.UUID
 	Failed    bool
-	Stage     interface{}
+	Stage     NullStages
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
 }
@@ -58,16 +155,18 @@ type Shooter struct {
 }
 
 type Stage0Result struct {
-	ID        pgtype.UUID
-	ResultID  pgtype.UUID
-	Status    interface{}
-	Series1   interface{}
-	Series2   interface{}
-	Series3   interface{}
-	Series4   interface{}
-	Series5   interface{}
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
+	ID          pgtype.UUID
+	ResultID    pgtype.UUID
+	Status      Stage0Status
+	Series1     string
+	Series2     string
+	Series3     string
+	Series4     string
+	Series5     string
+	ShooterSign pgtype.Text
+	ScorerSign  pgtype.Text
+	CreatedAt   pgtype.Timestamp
+	UpdatedAt   pgtype.Timestamp
 }
 
 type Super struct {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	respositoryModel "github.com/FadhilAF/perbakin-be/internal/repository/postgres/sqlc"
+	repositoryModel "github.com/FadhilAF/perbakin-be/internal/repository/postgres/sqlc"
 	"github.com/gin-gonic/gin"
 
 	"github.com/FadhilAF/perbakin-be/internal/model"
@@ -17,7 +17,7 @@ func (usecase *superUsecaseImpl) UpdateAdmin(req model.UpdateOperatorRequest) mo
 		return util.ToWebServiceResponse("Gagal proses hash password: "+err.Error(), http.StatusInternalServerError, nil)
 	}
 
-	newAdmin, err := usecase.Store.UpdateAdmin(context.Background(), respositoryModel.UpdateAdminParams{
+	newAdmin, err := usecase.Store.UpdateAdmin(context.Background(), repositoryModel.UpdateAdminParams{
 		ID:       req.ID,
 		Username: req.Body.Username,
 		Password: passwordHash,
