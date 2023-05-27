@@ -2,10 +2,12 @@ package delivery
 
 import (
 	allUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/all"
-	// "github.com/gin-gonic/gin"
+
+	"github.com/gin-gonic/gin"
 )
 
 type AllDelivery interface {
+	CreateResult(c *gin.Context)
 }
 
 var _ AllDelivery = &allHandler{}

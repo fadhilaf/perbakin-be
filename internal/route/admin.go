@@ -1,12 +1,13 @@
 package route
 
 import (
-	delivery "github.com/FadhilAF/perbakin-be/internal/delivery/admin"
+	adminDelivery "github.com/FadhilAF/perbakin-be/internal/delivery/admin"
+	allDelivery "github.com/FadhilAF/perbakin-be/internal/delivery/all"
 
 	"github.com/gin-gonic/gin"
 )
 
-func AdminRoutes(router *gin.RouterGroup, delivery delivery.AdminDelivery) {
+func AdminRoutes(router *gin.RouterGroup, delivery adminDelivery.AdminDelivery, allDelivery allDelivery.AllDelivery) {
 	router.POST("/login", delivery.AdminLogin)
 
 	adminRouter := router.Group("/", delivery.MustAdminMiddleware())

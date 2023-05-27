@@ -1,12 +1,13 @@
 package route
 
 import (
-	delivery "github.com/FadhilAF/perbakin-be/internal/delivery/super"
+	allDelivery "github.com/FadhilAF/perbakin-be/internal/delivery/all"
+	superDelivery "github.com/FadhilAF/perbakin-be/internal/delivery/super"
 
 	"github.com/gin-gonic/gin"
 )
 
-func SuperRoutes(router *gin.RouterGroup, delivery delivery.SuperDelivery) {
+func SuperRoutes(router *gin.RouterGroup, delivery superDelivery.SuperDelivery, allDelivery allDelivery.AllDelivery) {
 	router.POST("/login", delivery.SuperLogin)
 
 	superRouter := router.Group("/", delivery.MustSuperMiddleware())
