@@ -1,15 +1,12 @@
 package delivery
 
 import (
-	"net/http"
-
 	"github.com/FadhilAF/perbakin-be/internal/model"
 	"github.com/FadhilAF/perbakin-be/internal/util"
 	"github.com/gin-gonic/gin"
 )
 
 func (handler *scorerHandler) UpdateStage0Series(c *gin.Context) {
-	// result := c.MustGet("result").(model.ResultRelation)
 	stage0 := c.MustGet("stage0").(model.Stage0Relation)
 
 	var uri model.UpdateStage0SeriesUriRequest
@@ -25,10 +22,7 @@ func (handler *scorerHandler) UpdateStage0Series(c *gin.Context) {
 	}
 
 	//validate scores
-	if ok, message := util.CheckStage0SeriesScoresArray(req.Scores); !ok {
-		res := util.ToWebServiceResponse(message, http.StatusBadRequest, nil)
-		c.JSON(res.Status, res)
-		c.Abort()
+	if ok := util.CheckScores(c, req.Scores, 11, 10); !ok {
 		return
 	}
 

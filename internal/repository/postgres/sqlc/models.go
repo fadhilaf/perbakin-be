@@ -164,6 +164,7 @@ type Stage0Result struct {
 	Series3     string
 	Series4     string
 	Series5     string
+	Checkmarks  string
 	ShooterSign pgtype.Text
 	ScorerSign  pgtype.Text
 	CreatedAt   pgtype.Timestamp

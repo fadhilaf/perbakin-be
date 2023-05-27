@@ -15,6 +15,7 @@ type Stage0 struct {
 	Series3     []int       `json:"series_3"`
 	Series4     []int       `json:"series_4"`
 	Series5     []int       `json:"series_5"`
+	Checkmarks  []bool      `json:"checkmarks"`
 	ShooterSign pgtype.Text `json:"shooter_sign"`
 	ScorerSign  pgtype.Text `json:"scorer_sign"`
 	CreatedAt   time.Time   `json:"created_at"`
@@ -48,6 +49,15 @@ type UpdateStage0SeriesRequest struct {
 	ID     pgtype.UUID
 	Series string
 	Scores string
+}
+
+type UpdateStage0CheckmarksBodyRequest struct {
+	Checkmarks []bool `json:"checkmarks" binding:"required,dive,boolean"`
+}
+
+type UpdateStage0CheckmarksRequest struct {
+	ID         pgtype.UUID
+	Checkmarks string
 }
 
 type UpdateStage0FinishBodyRequest struct {

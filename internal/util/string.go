@@ -64,3 +64,48 @@ func IntArrayToScores(input []int) string {
 	// Convert the buffer to a string and return it
 	return string(buf)
 }
+
+func CheckmarksToArray(input string) []bool {
+	// Remove the parentheses from the input string
+	input = strings.Trim(input, "()")
+
+	// Split the remaining string into substrings
+	substrings := strings.Split(input, ",")
+
+	// Create a slice with the same length as the number of substrings
+	output := make([]bool, len(substrings))
+
+	// Iterate over the substrings and set the corresponding values in the output slice
+	for i, substring := range substrings {
+		// The substring is "f" for false or "t" for true
+		switch substring {
+		case "f":
+			output[i] = false
+		case "t":
+			output[i] = true
+		}
+	}
+
+	return output
+}
+
+func BoolArrayToCheckmarks(input []bool) string {
+	// Create an empty string
+	output := ""
+
+	// Iterate over the input slice and append "f" for false and "t" for true
+	for _, value := range input {
+		if value {
+			output += "t"
+		} else {
+			output += "f"
+		}
+
+		output += ","
+	}
+
+	// Remove the trailing comma and wrap the string in parentheses
+	output = "(" + strings.TrimRight(output, ",") + ")"
+
+	return output
+}

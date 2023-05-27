@@ -28,8 +28,11 @@ type ScorerDelivery interface {
 
 	MustStage0Middleware() gin.HandlerFunc
 	GetStage0ById(c *gin.Context)
+
+	MustStage0ModifyMiddleware() gin.HandlerFunc
 	UpdateStage0Series(c *gin.Context)
 	UpdateStage0NextSeries(c *gin.Context)
+	UpdateStage0Checkmarks(c *gin.Context)
 	UpdateStage0Finish(c *gin.Context)
 }
 

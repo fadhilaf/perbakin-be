@@ -9,7 +9,7 @@ SELECT id, shooter_id, failed, stage, created_at, updated_at
 FROM results
 WHERE id = $1;
 
--- name: GetResultStage :one
+-- name: GetResultStageById :one
 SELECT stage
 FROM results
 WHERE id = $1;
