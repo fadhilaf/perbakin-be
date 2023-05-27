@@ -26,6 +26,7 @@ func (handler *scorerHandler) MustStage0ModifyMiddleware() gin.HandlerFunc {
 			res := util.ToWebServiceResponse("Hasil ujian kualifikasi tidak lulus", http.StatusForbidden, nil)
 			c.JSON(res.Status, res)
 			c.Abort()
+			return
 		}
 
 		if status.Stage != "0" {
