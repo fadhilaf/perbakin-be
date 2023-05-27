@@ -17,5 +17,5 @@ func (app *App) handlerV1(router *gin.RouterGroup) {
 	route.AdminRoutes(adminGroup, app.delivery.admin, app.delivery.all, app.delivery.adminSuper)
 
 	scorerGroup := router.Group("/scorer")
-	route.ScorerRoutes(scorerGroup, app.delivery.scorer)
+	route.ScorerRoutes(scorerGroup, app.delivery.scorer, app.delivery.all)
 }
