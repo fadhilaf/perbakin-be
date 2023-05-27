@@ -24,7 +24,7 @@ func (usecase *allUsecaseImpl) CreateResult(req model.ByShooterIdRequest) model.
 			ID:        result.ID,
 			ShooterID: result.ShooterID,
 			Failed:    result.Failed,
-			Stage:     string(result.Stage.Stages),
+			Stage:     string(result.Stage),
 			CreatedAt: result.CreatedAt.Time,
 			UpdatedAt: result.UpdatedAt.Time,
 		}})

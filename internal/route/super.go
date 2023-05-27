@@ -1,13 +1,14 @@
 package route
 
 import (
+	adminSuperDelivery "github.com/FadhilAF/perbakin-be/internal/delivery/admin-super"
 	allDelivery "github.com/FadhilAF/perbakin-be/internal/delivery/all"
 	superDelivery "github.com/FadhilAF/perbakin-be/internal/delivery/super"
 
 	"github.com/gin-gonic/gin"
 )
 
-func SuperRoutes(router *gin.RouterGroup, delivery superDelivery.SuperDelivery, allDelivery allDelivery.AllDelivery) {
+func SuperRoutes(router *gin.RouterGroup, delivery superDelivery.SuperDelivery, allDelivery allDelivery.AllDelivery, adminSuperDelivery adminSuperDelivery.AdminSuperDelivery) {
 	router.POST("/login", delivery.SuperLogin)
 
 	superRouter := router.Group("/", delivery.MustSuperMiddleware())
@@ -58,4 +59,5 @@ func SuperRoutes(router *gin.RouterGroup, delivery superDelivery.SuperDelivery, 
 	shooterRouter.DELETE("/", delivery.DeleteShooter)
 
 	ResultAllRoutes(shooterRouter, allDelivery)
+	ResultAdminSuperRoutes(shooterRouter, adminSuperDelivery)
 }

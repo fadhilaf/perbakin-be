@@ -89,7 +89,7 @@ WHERE id = $1
 
 type GetResultStatusByIdRow struct {
 	Failed bool
-	Stage  NullStages
+	Stage  Stages
 }
 
 func (q *Queries) GetResultStatusById(ctx context.Context, id pgtype.UUID) (GetResultStatusByIdRow, error) {
@@ -109,7 +109,7 @@ RETURNING id, shooter_id, failed, stage, created_at, updated_at
 type UpdateResultParams struct {
 	ID     pgtype.UUID
 	Failed bool
-	Stage  NullStages
+	Stage  Stages
 }
 
 // (admin-super role) dibuat by id

@@ -2,16 +2,18 @@ package app
 
 import (
 	adminDelivery "github.com/FadhilAF/perbakin-be/internal/delivery/admin"
+	adminSuperDelivery "github.com/FadhilAF/perbakin-be/internal/delivery/admin-super"
 	allDelivery "github.com/FadhilAF/perbakin-be/internal/delivery/all"
 	scorerDelivery "github.com/FadhilAF/perbakin-be/internal/delivery/scorer"
 	superDelivery "github.com/FadhilAF/perbakin-be/internal/delivery/super"
 )
 
 type deliveries struct {
-	super  superDelivery.SuperDelivery
-	admin  adminDelivery.AdminDelivery
-	scorer scorerDelivery.ScorerDelivery
-	all    allDelivery.AllDelivery
+	super      superDelivery.SuperDelivery
+	admin      adminDelivery.AdminDelivery
+	scorer     scorerDelivery.ScorerDelivery
+	all        allDelivery.AllDelivery
+	adminSuper adminSuperDelivery.AdminSuperDelivery
 }
 
 func (app *App) initDelivery() {
@@ -21,6 +23,7 @@ func (app *App) initDelivery() {
 	deliveries.admin = adminDelivery.NewAdminDelivery(app.usecase.admin, app.usecase.adminSuper, app.usecase.all)
 	deliveries.scorer = scorerDelivery.NewScorerDelivery(app.usecase.scorer, app.usecase.all)
 	deliveries.all = allDelivery.NewAllDelivery(app.usecase.all)
+	deliveries.adminSuper = adminSuperDelivery.NewAdminSuperDelivery(app.usecase.adminSuper, app.usecase.all)
 
 	app.delivery = deliveries
 }

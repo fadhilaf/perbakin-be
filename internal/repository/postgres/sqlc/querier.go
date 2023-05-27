@@ -21,13 +21,15 @@ type Querier interface {
 	CreateScorer(ctx context.Context, arg CreateScorerParams) (CreateScorerRow, error)
 	// membuat shooter baru (admin-super role)
 	CreateShooter(ctx context.Context, arg CreateShooterParams) (Shooter, error)
-	CreateStage0(ctx context.Context, resultID pgtype.UUID) (CreateStage0Row, error)
+	CreateStage0(ctx context.Context, resultID pgtype.UUID) (Stage0Result, error)
 	// untuk menghapus exam (super role)
 	DeleteExam(ctx context.Context, id pgtype.UUID) error
 	// (admin-super role) dibuat by id
 	DeleteResult(ctx context.Context, id pgtype.UUID) error
 	// untuk menghapus shooter berdasarkan id (admin-super role)
 	DeleteShooter(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
+	DeleteStage0(ctx context.Context, id pgtype.UUID) error
 	// dipake untuk delete user
 	DeleteUser(ctx context.Context, id pgtype.UUID) error
 	// untuk ngambil data akun admin berdasarkan id (super role)

@@ -12,51 +12,14 @@ import (
 )
 
 const createStage0 = `-- name: CreateStage0 :one
-WITH added_stage0 AS (
-  INSERT INTO stage0_results (result_id)
-  VALUES ($1)
-  RETURNING id, result_id, status, series1, series2, series3, series4, series5, checkmarks, shooter_sign, scorer_sign, created_at, updated_at
-), updated_result AS (
-  UPDATE results
-  SET stage = '0', updated_at = NOW()
-  WHERE id = $1
-)
-SELECT 
-  added_stage0.id, 
-  added_stage0.result_id, 
-  added_stage0.status, 
-  added_stage0.series1, 
-  added_stage0.series2, 
-  added_stage0.series3, 
-  added_stage0.series4, 
-  added_stage0.series5, 
-  added_stage0.checkmarks,
-  added_stage0.shooter_sign,
-  added_stage0.scorer_sign,
-  added_stage0.created_at, 
-  added_stage0.updated_at
-FROM added_stage0
+INSERT INTO stage0_results (result_id)
+VALUES ($1)
+RETURNING id, result_id, status, series1, series2, series3, series4, series5, checkmarks, shooter_sign, scorer_sign, created_at, updated_at
 `
 
-type CreateStage0Row struct {
-	ID          pgtype.UUID
-	ResultID    pgtype.UUID
-	Status      Stage0Status
-	Series1     string
-	Series2     string
-	Series3     string
-	Series4     string
-	Series5     string
-	Checkmarks  string
-	ShooterSign pgtype.Text
-	ScorerSign  pgtype.Text
-	CreatedAt   pgtype.Timestamp
-	UpdatedAt   pgtype.Timestamp
-}
-
-func (q *Queries) CreateStage0(ctx context.Context, resultID pgtype.UUID) (CreateStage0Row, error) {
+func (q *Queries) CreateStage0(ctx context.Context, resultID pgtype.UUID) (Stage0Result, error) {
 	row := q.db.QueryRow(ctx, createStage0, resultID)
-	var i CreateStage0Row
+	var i Stage0Result
 	err := row.Scan(
 		&i.ID,
 		&i.ResultID,
@@ -73,6 +36,23 @@ func (q *Queries) CreateStage0(ctx context.Context, resultID pgtype.UUID) (Creat
 		&i.UpdatedAt,
 	)
 	return i, err
+}
+
+const deleteStage0 = `-- name: DeleteStage0 :exec
+WITH deleted_stage0 AS (
+  DELETE FROM stage0_results
+  WHERE stage0_results.id = $1
+  RETURNING result_id
+)
+UPDATE results 
+SET stage = '0', updated_at = NOW()
+WHERE id = (SELECT result_id FROM deleted_stage0)
+`
+
+// (admin-super role)
+func (q *Queries) DeleteStage0(ctx context.Context, id pgtype.UUID) error {
+	_, err := q.db.Exec(ctx, deleteStage0, id)
+	return err
 }
 
 const getStage0ById = `-- name: GetStage0ById :one
@@ -157,7 +137,7 @@ WHERE id = $1
 
 type UpdateResultNextStageParams struct {
 	ID    pgtype.UUID
-	Stage NullStages
+	Stage Stages
 }
 
 // (scorer role) dibuat by id, utk update stage

@@ -14,8 +14,8 @@ import (
 func (usecase *adminSuperUsecaseImpl) UpdateResult(req model.UpdateResultRequest) model.WebServiceResponse {
 	newResult, err := usecase.Store.UpdateResult(context.Background(), repositoryModel.UpdateResultParams{
 		ID:     req.ID,
-		Failed: req.Body.Failed,
-		Stage:  repositoryModel.NullStages{Stages: repositoryModel.Stages(req.Body.Stage), Valid: true},
+		Failed: *req.Body.Failed,
+		Stage:  repositoryModel.Stages(req.Body.Stage),
 	})
 	if err != nil {
 		return util.ToWebServiceResponse("Gagal mengubah hasil ujian: "+err.Error(), http.StatusInternalServerError, nil)
@@ -26,7 +26,7 @@ func (usecase *adminSuperUsecaseImpl) UpdateResult(req model.UpdateResultRequest
 			ID:        newResult.ID,
 			ShooterID: newResult.ShooterID,
 			Failed:    newResult.Failed,
-			Stage:     string(newResult.Stage.Stages),
+			Stage:     string(newResult.Stage),
 			CreatedAt: newResult.CreatedAt.Time,
 			UpdatedAt: newResult.UpdatedAt.Time,
 		}})

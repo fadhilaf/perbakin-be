@@ -9,5 +9,5 @@ import (
 func (usecase *scorerUsecaseImpl) GetResultStatusById(req model.ByIdRequest) (model.ResultStatus, error) {
 	status, err := usecase.Store.GetResultStatusById(context.Background(), req.ID)
 
-	return model.ResultStatus{Failed: status.Failed, Stage: string(status.Stage.Stages)}, err
+	return model.ResultStatus{Failed: status.Failed, Stage: string(status.Stage)}, err
 }

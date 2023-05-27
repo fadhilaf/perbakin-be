@@ -55,9 +55,9 @@ type UpdateStage0CheckmarksRequest struct {
 	Checkmarks string
 }
 
-// yang ini kalo dak pake type string, kito masukin false dio error binding malahan, jadi pake string aja
+// samo, kalo pake bool kalo kito kasih value 'false' (boolean json) dio malah jadi kosong dianggapny. jadi pake *bool
 type UpdateStage0FinishBodyRequest struct {
-	Success string `form:"success" binding:"required,boolean"`
+	Success *bool `form:"success" binding:"required,boolean"`
 }
 
 type UpdateStage0FinishRequest struct {

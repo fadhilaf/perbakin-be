@@ -127,7 +127,7 @@ type Result struct {
 	ID        pgtype.UUID
 	ShooterID pgtype.UUID
 	Failed    bool
-	Stage     NullStages
+	Stage     Stages
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
 }

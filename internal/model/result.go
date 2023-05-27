@@ -29,12 +29,13 @@ type ByShooterIdRequest struct {
 	ShooterID pgtype.UUID
 }
 
-type UpdateResultByShooterIdBodyRequest struct {
-	Failed bool   `json:"failed" binding:"required,boolean"`
+// samo, kalo Failed pake bool kalo kito kasih value 'false' (boolean json) dio malah jadi kosong dianggapny. jadi pake *bool
+type UpdateResultBodyRequest struct {
+	Failed *bool  `json:"failed" binding:"required,boolean"`
 	Stage  string `json:"stage" binding:"required,oneof=0 1 2 3 4 5 6 7"`
 }
 
 type UpdateResultRequest struct {
 	ID   pgtype.UUID
-	Body UpdateResultByShooterIdBodyRequest
+	Body UpdateResultBodyRequest
 }

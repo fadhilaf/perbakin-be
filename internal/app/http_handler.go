@@ -11,10 +11,10 @@ func (app *App) handlerV1(router *gin.RouterGroup) {
 	router.POST("/logout", logoutController.Logout)
 
 	superGroup := router.Group("/super")
-	route.SuperRoutes(superGroup, app.delivery.super, app.delivery.all)
+	route.SuperRoutes(superGroup, app.delivery.super, app.delivery.all, app.delivery.adminSuper)
 
 	adminGroup := router.Group("/admin")
-	route.AdminRoutes(adminGroup, app.delivery.admin, app.delivery.all)
+	route.AdminRoutes(adminGroup, app.delivery.admin, app.delivery.all, app.delivery.adminSuper)
 
 	scorerGroup := router.Group("/scorer")
 	route.ScorerRoutes(scorerGroup, app.delivery.scorer)
