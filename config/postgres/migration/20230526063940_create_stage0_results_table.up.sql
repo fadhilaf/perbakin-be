@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS stage0_results (
   series3 stage0_series NOT NULL DEFAULT (ROW(0,0,0,0,0,0,0,0,0,0,0)),
   series4 stage0_series NOT NULL DEFAULT (ROW(0,0,0,0,0,0,0,0,0,0,0)),
   series5 stage0_series NOT NULL DEFAULT (ROW(0,0,0,0,0,0,0,0,0,0,0)),
-  checkmark stage0_checkmarks NOT NULL DEFAULT (ROW(f,f,f,f,f)),
+  checkmark stage0_checkmarks NOT NULL DEFAULT (ROW(false,false,false,false,false)),
   shooter_sign varchar(255) DEFAULT NULL,
   scorer_sign varchar(255) DEFAULT NULL,
   created_at timestamp NOT NULL DEFAULT NOW(),
