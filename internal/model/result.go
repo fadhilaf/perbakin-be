@@ -20,6 +20,11 @@ type ResultRelation struct {
 	ShooterID pgtype.UUID `json:"shooter_id"`
 }
 
+type ResultStatus struct {
+	Failed bool   `json:"failed"`
+	Stage  string `json:"stage"`
+}
+
 type ByShooterIdRequest struct {
 	ShooterID pgtype.UUID
 }

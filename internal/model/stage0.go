@@ -57,7 +57,7 @@ type UpdateStage0CheckmarksRequest struct {
 
 // yang ini kalo dak pake type string, kito masukin false dio error binding malahan, jadi pake string aja
 type UpdateStage0FinishBodyRequest struct {
-	Success string `form:"success" binding:"required,boolean"`
+	Success bool `form:"success" binding:"boolean"`
 }
 
 type UpdateStage0FinishRequest struct {

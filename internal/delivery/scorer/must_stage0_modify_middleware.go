@@ -12,7 +12,7 @@ func (handler *scorerHandler) MustStage0ModifyMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		result := c.MustGet("result").(model.ResultRelation)
 
-		stage, err := handler.Usecase.GetResultStageById(model.ByIdRequest{
+		status, err := handler.Usecase.GetResultStatusById(model.ByIdRequest{
 			ID: result.ID,
 		})
 		if err != nil {
@@ -22,15 +22,14 @@ func (handler *scorerHandler) MustStage0ModifyMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		if stage == "" {
-			res := util.ToWebServiceResponse("Hasil ujian kualifikasi belum ada", http.StatusNotFound, nil)
+		if status.Failed {
+			res := util.ToWebServiceResponse("Hasil ujian kualifikasi tidak lulus", http.StatusForbidden, nil)
 			c.JSON(res.Status, res)
 			c.Abort()
-			return
 		}
 
-		if stage != "0" {
-			res := util.ToWebServiceResponse("Tidak dapat mengubah babak kualifikasi, sekarang sedang mengisi babak "+stage, http.StatusForbidden, nil)
+		if status.Stage != "0" {
+			res := util.ToWebServiceResponse("Tidak dapat mengubah babak kualifikasi, sekarang sedang mengisi babak "+status.Stage, http.StatusForbidden, nil)
 			c.JSON(res.Status, res)
 			c.Abort()
 			return

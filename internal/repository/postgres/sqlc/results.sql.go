@@ -81,17 +81,22 @@ func (q *Queries) GetResultRelationByShooterId(ctx context.Context, shooterID pg
 	return i, err
 }
 
-const getResultStageById = `-- name: GetResultStageById :one
-SELECT stage
+const getResultStatusById = `-- name: GetResultStatusById :one
+SELECT failed, stage
 FROM results
 WHERE id = $1
 `
 
-func (q *Queries) GetResultStageById(ctx context.Context, id pgtype.UUID) (NullStages, error) {
-	row := q.db.QueryRow(ctx, getResultStageById, id)
-	var stage NullStages
-	err := row.Scan(&stage)
-	return stage, err
+type GetResultStatusByIdRow struct {
+	Failed bool
+	Stage  NullStages
+}
+
+func (q *Queries) GetResultStatusById(ctx context.Context, id pgtype.UUID) (GetResultStatusByIdRow, error) {
+	row := q.db.QueryRow(ctx, getResultStatusById, id)
+	var i GetResultStatusByIdRow
+	err := row.Scan(&i.Failed, &i.Stage)
+	return i, err
 }
 
 const updateResult = `-- name: UpdateResult :one

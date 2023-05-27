@@ -62,7 +62,7 @@ type Querier interface {
 	GetExamsBySuperId(ctx context.Context, superID pgtype.UUID) ([]GetExamsBySuperIdRow, error)
 	GetResultById(ctx context.Context, id pgtype.UUID) (Result, error)
 	GetResultRelationByShooterId(ctx context.Context, shooterID pgtype.UUID) (GetResultRelationByShooterIdRow, error)
-	GetResultStageById(ctx context.Context, id pgtype.UUID) (NullStages, error)
+	GetResultStatusById(ctx context.Context, id pgtype.UUID) (GetResultStatusByIdRow, error)
 	// untuk ngambil data akun scorer berdasarkan id (admin-super role)
 	GetScorerById(ctx context.Context, id pgtype.UUID) (GetScorerByIdRow, error)
 	// untuk ngambil data lengkap scorer berdasarkan user id (scorer role)
