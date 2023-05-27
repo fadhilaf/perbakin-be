@@ -1,13 +1,12 @@
 package route
 
 import (
-	allDelivery "github.com/FadhilAF/perbakin-be/internal/delivery/all"
 	scorerDelivery "github.com/FadhilAF/perbakin-be/internal/delivery/scorer"
 
 	"github.com/gin-gonic/gin"
 )
 
-func ScorerRoutes(router *gin.RouterGroup, delivery scorerDelivery.ScorerDelivery, all allDelivery.AllDelivery) {
+func ScorerRoutes(router *gin.RouterGroup, delivery scorerDelivery.ScorerDelivery) {
 	router.POST("/login", delivery.ScorerLogin)
 
 	scorerRouter := router.Group("/", delivery.MustScorerMiddleware())
