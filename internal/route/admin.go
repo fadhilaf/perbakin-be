@@ -2,11 +2,12 @@ package route
 
 import (
 	adminDelivery "github.com/FadhilAF/perbakin-be/internal/delivery/admin"
+	allDelivery "github.com/FadhilAF/perbakin-be/internal/delivery/all"
 
 	"github.com/gin-gonic/gin"
 )
 
-func AdminRoutes(router *gin.RouterGroup, delivery adminDelivery.AdminDelivery) {
+func AdminRoutes(router *gin.RouterGroup, delivery adminDelivery.AdminDelivery, allDelivery allDelivery.AllDelivery) {
 	router.POST("/login", delivery.AdminLogin)
 
 	adminRouter := router.Group("/", delivery.MustAdminMiddleware())
@@ -35,4 +36,6 @@ func AdminRoutes(router *gin.RouterGroup, delivery adminDelivery.AdminDelivery) 
 	shooterRouter.PUT("/", delivery.UpdateShooter)
 	shooterRouter.PUT("/image", delivery.UpdateShooterImage)
 	shooterRouter.DELETE("/", delivery.DeleteShooter)
+
+	ResultAllRoutes(shooterRouter, allDelivery)
 }

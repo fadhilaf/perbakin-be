@@ -8,6 +8,9 @@ import (
 
 type AllDelivery interface {
 	CreateResult(c *gin.Context)
+
+	MustResultMiddleware() gin.HandlerFunc
+	GetResultById(c *gin.Context)
 }
 
 var _ AllDelivery = &allHandler{}
