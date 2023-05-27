@@ -149,6 +149,23 @@ func (q *Queries) GetStage0Status(ctx context.Context, id pgtype.UUID) (Stage0St
 	return status, err
 }
 
+const updateResultNextStage = `-- name: UpdateResultNextStage :exec
+UPDATE results 
+SET stage = $2, updated_at = NOW()
+WHERE id = $1
+`
+
+type UpdateResultNextStageParams struct {
+	ID    pgtype.UUID
+	Stage NullStages
+}
+
+// (scorer role) dibuat by id, utk update stage
+func (q *Queries) UpdateResultNextStage(ctx context.Context, arg UpdateResultNextStageParams) error {
+	_, err := q.db.Exec(ctx, updateResultNextStage, arg.ID, arg.Stage)
+	return err
+}
+
 const updateStage0Checkmarks = `-- name: UpdateStage0Checkmarks :one
 UPDATE stage0_results
 SET checkmarks = $2, updated_at = NOW()
@@ -169,38 +186,58 @@ func (q *Queries) UpdateStage0Checkmarks(ctx context.Context, arg UpdateStage0Ch
 	return checkmarks, err
 }
 
-const updateStage0Finish = `-- name: UpdateStage0Finish :one
-UPDATE stage0_results
-SET status = '6', shooter_sign = $2, scorer_sign = $3, updated_at = NOW()
-WHERE id = $1
-RETURNING status, shooter_sign, scorer_sign
+const updateStage0FinishFailed = `-- name: UpdateStage0FinishFailed :exec
+WITH updated_stage0 AS (
+  UPDATE stage0_results
+  SET status = '6', shooter_sign = $2, scorer_sign = $3, updated_at = NOW()
+  WHERE stage0_results.id = $1
+  RETURNING result_id
+)
+UPDATE results
+SET failed = true, updated_at = NOW()
+WHERE id = (SELECT result_id FROM updated_stage0)
 `
 
-type UpdateStage0FinishParams struct {
+type UpdateStage0FinishFailedParams struct {
 	ID          pgtype.UUID
 	ShooterSign pgtype.Text
 	ScorerSign  pgtype.Text
 }
 
-type UpdateStage0FinishRow struct {
-	Status      Stage0Status
+// (scorer role)
+func (q *Queries) UpdateStage0FinishFailed(ctx context.Context, arg UpdateStage0FinishFailedParams) error {
+	_, err := q.db.Exec(ctx, updateStage0FinishFailed, arg.ID, arg.ShooterSign, arg.ScorerSign)
+	return err
+}
+
+const updateStage0FinishSuccess = `-- name: UpdateStage0FinishSuccess :exec
+WITH  updated_stage0 AS (
+  UPDATE stage0_results
+  SET status = '6', shooter_sign = $2, scorer_sign = $3, updated_at = NOW()
+  WHERE stage0_results.id = $1
+  RETURNING result_id
+)
+UPDATE results
+SET stage = '1', updated_at = NOW()
+WHERE id = (SELECT result_id FROM updated_stage0)
+`
+
+type UpdateStage0FinishSuccessParams struct {
+	ID          pgtype.UUID
 	ShooterSign pgtype.Text
 	ScorerSign  pgtype.Text
 }
 
 // (scorer role)
-func (q *Queries) UpdateStage0Finish(ctx context.Context, arg UpdateStage0FinishParams) (UpdateStage0FinishRow, error) {
-	row := q.db.QueryRow(ctx, updateStage0Finish, arg.ID, arg.ShooterSign, arg.ScorerSign)
-	var i UpdateStage0FinishRow
-	err := row.Scan(&i.Status, &i.ShooterSign, &i.ScorerSign)
-	return i, err
+func (q *Queries) UpdateStage0FinishSuccess(ctx context.Context, arg UpdateStage0FinishSuccessParams) error {
+	_, err := q.db.Exec(ctx, updateStage0FinishSuccess, arg.ID, arg.ShooterSign, arg.ScorerSign)
+	return err
 }
 
-const updateStage0NextSeries = `-- name: UpdateStage0NextSeries :one
+const updateStage0NextSeries = `-- name: UpdateStage0NextSeries :exec
 UPDATE stage0_results
 SET status = $2, updated_at = NOW()
-WHERE id = $1 
-RETURNING status
+WHERE id = $1
 `
 
 type UpdateStage0NextSeriesParams struct {
@@ -209,11 +246,9 @@ type UpdateStage0NextSeriesParams struct {
 }
 
 // (scorer role)
-func (q *Queries) UpdateStage0NextSeries(ctx context.Context, arg UpdateStage0NextSeriesParams) (Stage0Status, error) {
-	row := q.db.QueryRow(ctx, updateStage0NextSeries, arg.ID, arg.Status)
-	var status Stage0Status
-	err := row.Scan(&status)
-	return status, err
+func (q *Queries) UpdateStage0NextSeries(ctx context.Context, arg UpdateStage0NextSeriesParams) error {
+	_, err := q.db.Exec(ctx, updateStage0NextSeries, arg.ID, arg.Status)
+	return err
 }
 
 const updateStage0Series1 = `-- name: UpdateStage0Series1 :one

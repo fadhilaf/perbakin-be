@@ -63,18 +63,40 @@ WHERE id = $1
 RETURNING checkmarks;
 
 -- (scorer role)
--- name: UpdateStage0NextSeries :one
+-- name: UpdateStage0NextSeries :exec
 UPDATE stage0_results
 SET status = $2, updated_at = NOW()
-WHERE id = $1 
-RETURNING status;
+WHERE id = $1;
 
 -- (scorer role)
--- name: UpdateStage0Finish :one
-UPDATE stage0_results
-SET status = '6', shooter_sign = $2, scorer_sign = $3, updated_at = NOW()
-WHERE id = $1
-RETURNING status, shooter_sign, scorer_sign;
+-- name: UpdateStage0FinishSuccess :exec
+WITH  updated_stage0 AS (
+  UPDATE stage0_results
+  SET status = '6', shooter_sign = $2, scorer_sign = $3, updated_at = NOW()
+  WHERE stage0_results.id = $1
+  RETURNING result_id
+)
+UPDATE results
+SET stage = '1', updated_at = NOW()
+WHERE id = (SELECT result_id FROM updated_stage0);
+
+-- (scorer role)
+-- name: UpdateStage0FinishFailed :exec
+WITH updated_stage0 AS (
+  UPDATE stage0_results
+  SET status = '6', shooter_sign = $2, scorer_sign = $3, updated_at = NOW()
+  WHERE stage0_results.id = $1
+  RETURNING result_id
+)
+UPDATE results
+SET failed = true, updated_at = NOW()
+WHERE id = (SELECT result_id FROM updated_stage0);
+
+-- (scorer role) dibuat by id, utk update stage 
+-- name: UpdateResultNextStage :exec
+UPDATE results 
+SET stage = $2, updated_at = NOW()
+WHERE id = $1;
 
 -- (scorer role)
 -- name: UpdateStage0Series1 :one

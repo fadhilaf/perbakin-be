@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	repositoryModel "github.com/FadhilAF/perbakin-be/internal/repository/postgres/sqlc"
-	"github.com/gin-gonic/gin"
 
 	"github.com/FadhilAF/perbakin-be/internal/model"
 	"github.com/FadhilAF/perbakin-be/internal/util"
@@ -19,16 +18,15 @@ func (usecase *scorerUsecaseImpl) UpdateStage0NextSeries(req model.ByIdRequest) 
 	}
 
 	intStatus, _ := strconv.Atoi(string(status))
+	newStatus := strconv.Itoa(intStatus + 1)
 
-	newStatus, err := usecase.Store.UpdateStage0NextSeries(context.Background(), repositoryModel.UpdateStage0NextSeriesParams{
+	err := usecase.Store.UpdateStage0NextSeries(context.Background(), repositoryModel.UpdateStage0NextSeriesParams{
 		ID:     req.ID,
-		Status: repositoryModel.Stage0Status(strconv.Itoa(intStatus + 1)),
+		Status: repositoryModel.Stage0Status(newStatus),
 	})
 	if err != nil {
 		return util.ToWebServiceResponse("Gagal melanjutkan seri kualifikasi: "+err.Error(), http.StatusInternalServerError, nil)
 	}
 
-	return util.ToWebServiceResponse("Berhasil melanjutkan seri kualifikasi ke seri "+string(newStatus), http.StatusOK, gin.H{
-		"series": newStatus,
-	})
+	return util.ToWebServiceResponse("Berhasil melanjutkan seri kualifikasi ke seri "+newStatus, http.StatusOK, nil)
 }

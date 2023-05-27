@@ -26,18 +26,6 @@ SET failed = $2, stage = $3, updated_at = NOW()
 WHERE id = $1
 RETURNING id, shooter_id, failed, stage, created_at, updated_at;
 
--- (scorer role) dibuat by id, utk update stage 
--- name: UpdateResultNextStage :exec
-UPDATE results 
-SET stage = $2, updated_at = NOW()
-WHERE id = $1;
-
--- (scorer role) dibuat by id, utk update failed
--- name: UpdateResultFailed :exec
-UPDATE results 
-SET failed = true, updated_at = NOW()
-WHERE id = $1;
-
 -- (admin-super role) dibuat by id
 -- name: DeleteResult :exec
 DELETE FROM results

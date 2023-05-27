@@ -104,8 +104,6 @@ type Querier interface {
 	UpdateExam(ctx context.Context, arg UpdateExamParams) (Exam, error)
 	// (admin-super role) dibuat by id
 	UpdateResult(ctx context.Context, arg UpdateResultParams) (Result, error)
-	// (scorer role) dibuat by id, utk update failed
-	UpdateResultFailed(ctx context.Context, id pgtype.UUID) error
 	// (scorer role) dibuat by id, utk update stage
 	UpdateResultNextStage(ctx context.Context, arg UpdateResultNextStageParams) error
 	// untuk update data akun admin (super role) TODO: return sebanyak get admin by id
@@ -121,9 +119,11 @@ type Querier interface {
 	// (scorer role)
 	UpdateStage0Checkmarks(ctx context.Context, arg UpdateStage0CheckmarksParams) (string, error)
 	// (scorer role)
-	UpdateStage0Finish(ctx context.Context, arg UpdateStage0FinishParams) (UpdateStage0FinishRow, error)
+	UpdateStage0FinishFailed(ctx context.Context, arg UpdateStage0FinishFailedParams) error
 	// (scorer role)
-	UpdateStage0NextSeries(ctx context.Context, arg UpdateStage0NextSeriesParams) (Stage0Status, error)
+	UpdateStage0FinishSuccess(ctx context.Context, arg UpdateStage0FinishSuccessParams) error
+	// (scorer role)
+	UpdateStage0NextSeries(ctx context.Context, arg UpdateStage0NextSeriesParams) error
 	// (scorer role)
 	UpdateStage0Series1(ctx context.Context, arg UpdateStage0Series1Params) (string, error)
 	// (scorer role)

@@ -1,6 +1,8 @@
 package delivery
 
 import (
+	"strconv"
+
 	"github.com/FadhilAF/perbakin-be/internal/model"
 	"github.com/FadhilAF/perbakin-be/internal/util"
 	"github.com/gin-gonic/gin"
@@ -8,7 +10,6 @@ import (
 )
 
 func (handler *scorerHandler) UpdateStage0Finish(c *gin.Context) {
-	result := c.MustGet("result").(model.ResultRelation)
 	stage0 := c.MustGet("stage0").(model.Stage0Relation)
 
 	var req model.UpdateStage0FinishBodyRequest
@@ -35,12 +36,13 @@ func (handler *scorerHandler) UpdateStage0Finish(c *gin.Context) {
 	shooterSignText.Scan(shooterSign)
 	scorerSignText.Scan(scorerSign)
 
+	success, _ := strconv.ParseBool(req.Success)
+
 	res := handler.Usecase.UpdateStage0Finish(model.UpdateStage0FinishRequest{
 		ID:          stage0.ID,
-		ResultID:    result.ID,
+		Success:     success,
 		ScorerSign:  scorerSignText,
 		ShooterSign: shooterSignText,
-		Body:        req,
 	})
 
 	c.JSON(res.Status, res)

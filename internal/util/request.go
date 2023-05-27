@@ -71,6 +71,6 @@ func validate(ctx *gin.Context, err error) {
 			Data:    nil,
 		})
 	} else {
-		ctx.JSON(http.StatusInternalServerError, ToWebServiceResponse("Error membaca request body: "+err.Error(), http.StatusInternalServerError, nil))
+		ctx.JSON(http.StatusInternalServerError, ToWebServiceResponse("Error membaca request body", http.StatusInternalServerError, nil))
 	}
 }

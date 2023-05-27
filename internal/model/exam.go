@@ -41,7 +41,7 @@ type ExamRelation struct {
 	SuperID pgtype.UUID `json:"super_id"`
 }
 
-// Bentuk struct yang biso di validasi itu type ny harus string
+// Bentuk struct yang biso di validasi itu type ny harus string, kalo idak agek dapat error anehh (internal server error)
 type CreateExamBodyStringRequest struct {
 	Name      string `json:"name" binding:"required"`
 	Location  string `json:"location" binding:"required"`

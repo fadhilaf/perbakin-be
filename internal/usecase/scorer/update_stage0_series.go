@@ -17,13 +17,7 @@ func (usecase *scorerUsecaseImpl) UpdateStage0Series(req model.UpdateStage0Serie
 
 	status, _ := usecase.Store.GetStage0Status(context.Background(), req.ID)
 	if status != repositoryModel.Stage0Status(req.Series) {
-		var msg string
-		if status == "6" {
-			msg = "Gagal mengupdate kualifikasi seri " + req.Series + ", pencatatan data kualifikasi sudah selesai"
-		} else {
-			msg = "Gagal mengupdate kualifikasi seri " + req.Series + ", sekarang sedang seri " + string(status)
-		}
-		return util.ToWebServiceResponse(msg, http.StatusForbidden, nil)
+		return util.ToWebServiceResponse("Gagal mengupdate kualifikasi seri "+req.Series+", sekarang sedang seri "+string(status), http.StatusForbidden, nil)
 	}
 
 	switch req.Series {

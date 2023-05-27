@@ -27,12 +27,6 @@ type Stage0Relation struct {
 	ResultID pgtype.UUID `json:"result_id"`
 }
 
-type FinishStage0Response struct {
-	Status      string      `json:"status"`
-	ShooterSign pgtype.Text `json:"shooter_sign"`
-	ScorerSign  pgtype.Text `json:"scorer_sign"`
-}
-
 type ByResultIdRequest struct {
 	ResultID pgtype.UUID
 }
@@ -51,6 +45,7 @@ type UpdateStage0SeriesRequest struct {
 	Scores string
 }
 
+// yang ini kalo dio salah type, error message nyo jelek, tapi salah dewek lh
 type UpdateStage0CheckmarksBodyRequest struct {
 	Checkmarks []bool `json:"checkmarks" binding:"required,dive,boolean"`
 }
@@ -60,14 +55,14 @@ type UpdateStage0CheckmarksRequest struct {
 	Checkmarks string
 }
 
+// yang ini kalo dak pake type string, kito masukin false dio error binding malahan, jadi pake string aja
 type UpdateStage0FinishBodyRequest struct {
-	Success bool `form:"success" binding:"required,boolean"`
+	Success string `form:"success" binding:"required,boolean"`
 }
 
 type UpdateStage0FinishRequest struct {
 	ID          pgtype.UUID
-	ResultID    pgtype.UUID
-	Body        UpdateStage0FinishBodyRequest
+	Success     bool
 	ShooterSign pgtype.Text
 	ScorerSign  pgtype.Text
 }

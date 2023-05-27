@@ -121,32 +121,3 @@ func (q *Queries) UpdateResult(ctx context.Context, arg UpdateResultParams) (Res
 	)
 	return i, err
 }
-
-const updateResultFailed = `-- name: UpdateResultFailed :exec
-UPDATE results 
-SET failed = true, updated_at = NOW()
-WHERE id = $1
-`
-
-// (scorer role) dibuat by id, utk update failed
-func (q *Queries) UpdateResultFailed(ctx context.Context, id pgtype.UUID) error {
-	_, err := q.db.Exec(ctx, updateResultFailed, id)
-	return err
-}
-
-const updateResultNextStage = `-- name: UpdateResultNextStage :exec
-UPDATE results 
-SET stage = $2, updated_at = NOW()
-WHERE id = $1
-`
-
-type UpdateResultNextStageParams struct {
-	ID    pgtype.UUID
-	Stage NullStages
-}
-
-// (scorer role) dibuat by id, utk update stage
-func (q *Queries) UpdateResultNextStage(ctx context.Context, arg UpdateResultNextStageParams) error {
-	_, err := q.db.Exec(ctx, updateResultNextStage, arg.ID, arg.Stage)
-	return err
-}
