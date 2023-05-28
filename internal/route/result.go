@@ -27,6 +27,7 @@ func ResultAdminSuperRoutes(shooterRouter *gin.RouterGroup, delivery adminSuperD
 	resultRouter.DELETE("/", delivery.DeleteResult)
 
 	stage0Router := resultRouter.Group("/stage0", delivery.MustStage0Middleware())
-	// stage0Router.PUT("/", delivery.UpdateStage0)
+	stage0Router.PUT("/", delivery.UpdateStage0)
+	stage0Router.PUT("/sign", delivery.UpdateStage0Signs)
 	stage0Router.DELETE("/", delivery.DeleteStage0)
 }

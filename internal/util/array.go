@@ -7,10 +7,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CheckCheckmarks(c *gin.Context, arr []bool, length, max int) bool {
+func CheckSeries(c *gin.Context, series [][]int, stageType string) bool {
+	for _, value := range series {
+		if ok := CheckScores(c, value, stageType); !ok {
+			return false
+		}
+	}
+
+	return true
+}
+
+func CheckCheckmarks(c *gin.Context, arr []bool, stageType string) bool {
+	stage := make(map[string][2]int)
+	stage["stage0"] = [2]int{5, 3} // {{panjang array}, {jumlah centang}}
+
 	// The input slice should have a length of $length
-	if len(arr) != length {
-		res := ToWebServiceResponse("Panjang array 'checkmarks' harus "+fmt.Sprint(length), http.StatusBadRequest, nil)
+	if len(arr) != stage[stageType][0] {
+		res := ToWebServiceResponse("Panjang array 'checkmarks' harus "+fmt.Sprint(stage[stageType][0]), http.StatusBadRequest, nil)
 		c.JSON(res.Status, res)
 		c.Abort()
 		return false
@@ -26,8 +39,8 @@ func CheckCheckmarks(c *gin.Context, arr []bool, length, max int) bool {
 	}
 
 	// The maximum number of true values is $max
-	if numTrue > 3 {
-		res := ToWebServiceResponse("Total jumlah centang tidak boleh lebih dari "+fmt.Sprint(max), http.StatusBadRequest, nil)
+	if numTrue > stage[stageType][1] {
+		res := ToWebServiceResponse("Total jumlah centang tidak boleh lebih dari "+fmt.Sprint(stage[stageType][1]), http.StatusBadRequest, nil)
 		c.JSON(res.Status, res)
 		c.Abort()
 		return false
@@ -36,10 +49,14 @@ func CheckCheckmarks(c *gin.Context, arr []bool, length, max int) bool {
 	return true
 }
 
-func CheckScores(c *gin.Context, arr []int, length, max int) bool {
+func CheckScores(c *gin.Context, arr []int, stageType string) bool {
+	//nyimpen tipe tipe stage
+	stage := make(map[string][2]int)
+	stage["stage0"] = [2]int{11, 10} // {{panjang array}, {jumlah tembakan}}
+
 	// The input slice should have a length of $length
-	if len(arr) != length {
-		res := ToWebServiceResponse("Panjang array 'scores' harus "+fmt.Sprint(length), http.StatusBadRequest, nil)
+	if len(arr) != stage[stageType][0] {
+		res := ToWebServiceResponse("Panjang array seri harus "+fmt.Sprint(stage[stageType][0]), http.StatusBadRequest, nil)
 		c.JSON(res.Status, res)
 		c.Abort()
 		return false
@@ -52,8 +69,8 @@ func CheckScores(c *gin.Context, arr []int, length, max int) bool {
 	}
 
 	// The maximum number of true values is $max
-	if sum > max {
-		res := ToWebServiceResponse("Total jumlah tembakan per seri tidak boleh lebih dari "+fmt.Sprint(max), http.StatusBadRequest, nil)
+	if sum > stage[stageType][1] {
+		res := ToWebServiceResponse("Total jumlah tembakan per seri tidak boleh lebih dari "+fmt.Sprint(stage[stageType][1]), http.StatusBadRequest, nil)
 		c.JSON(res.Status, res)
 		c.Abort()
 		return false

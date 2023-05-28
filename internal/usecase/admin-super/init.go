@@ -23,7 +23,8 @@ type AdminSuperUsecase interface {
 
 	UpdateResult(model.UpdateResultRequest) model.WebServiceResponse
 	DeleteResult(model.ByIdRequest) model.WebServiceResponse
-
+	UpdateStage0(model.UpdateStage0Request) model.WebServiceResponse
+	UpdateStage0Signs(model.UpdateStage0SignsRequest) model.WebServiceResponse
 	DeleteStage0(model.ByIdRequest) model.WebServiceResponse
 }
 

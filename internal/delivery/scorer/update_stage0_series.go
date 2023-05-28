@@ -22,11 +22,15 @@ func (handler *scorerHandler) UpdateStage0Series(c *gin.Context) {
 	}
 
 	//validate scores
-	if ok := util.CheckScores(c, req.Scores, 11, 10); !ok {
+	if ok := util.CheckScores(c, req.Scores, "stage0"); !ok {
 		return
 	}
 
-	res := handler.Usecase.UpdateStage0Series(model.UpdateStage0SeriesRequest{ID: stage0.ID, Series: uri.Series, Scores: util.IntArrayToScores(req.Scores)})
+	res := handler.Usecase.UpdateStage0Series(model.UpdateStage0SeriesRequest{
+		ID:     stage0.ID,
+		Series: uri.Series,
+		Scores: util.IntArrayToScores(req.Scores),
+	})
 
 	c.JSON(res.Status, res)
 }

@@ -18,10 +18,9 @@ func AdminRoutes(router *gin.RouterGroup, delivery adminDelivery.AdminDelivery, 
 	adminRouter.GET("/shooters", delivery.GetAllShooters)
 
 	adminRouter.GET("/scorer", delivery.GetScorersByExamId)
-	adminRouter.POST("/scorer", delivery.CreateScorer)
-
 	adminRouter.GET("/shooter", delivery.GetShootersByExamId)
 
+	adminRouter.POST("/scorer", delivery.CreateScorer)
 	scorerRouter := adminRouter.Group("/scorer/:scorer_id", delivery.MustScorerMiddleware())
 
 	scorerRouter.GET("/", delivery.GetScorerById)

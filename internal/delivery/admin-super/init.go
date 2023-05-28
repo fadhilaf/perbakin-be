@@ -13,7 +13,8 @@ type AdminSuperDelivery interface {
 	DeleteResult(c *gin.Context)
 
 	MustStage0Middleware() gin.HandlerFunc
-
+	UpdateStage0(c *gin.Context)
+	UpdateStage0Signs(c *gin.Context)
 	DeleteStage0(c *gin.Context)
 }
 

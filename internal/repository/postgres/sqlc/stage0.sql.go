@@ -146,6 +146,75 @@ func (q *Queries) UpdateResultNextStage(ctx context.Context, arg UpdateResultNex
 	return err
 }
 
+const updateStage0 = `-- name: UpdateStage0 :one
+UPDATE stage0_results
+SET 
+  status = $2, 
+  series1 = $3, 
+  series2 = $4,
+  series3 = $5,
+  series4 = $6,
+  series5 = $7,
+  checkmarks = $8,
+  updated_at = NOW()
+WHERE id = $1 
+RETURNING id, result_id, status, series1, series2, series3, series4, series5, checkmarks, created_at, updated_at
+`
+
+type UpdateStage0Params struct {
+	ID         pgtype.UUID
+	Status     Stage0Status
+	Series1    string
+	Series2    string
+	Series3    string
+	Series4    string
+	Series5    string
+	Checkmarks string
+}
+
+type UpdateStage0Row struct {
+	ID         pgtype.UUID
+	ResultID   pgtype.UUID
+	Status     Stage0Status
+	Series1    string
+	Series2    string
+	Series3    string
+	Series4    string
+	Series5    string
+	Checkmarks string
+	CreatedAt  pgtype.Timestamp
+	UpdatedAt  pgtype.Timestamp
+}
+
+// (admin-super role)
+func (q *Queries) UpdateStage0(ctx context.Context, arg UpdateStage0Params) (UpdateStage0Row, error) {
+	row := q.db.QueryRow(ctx, updateStage0,
+		arg.ID,
+		arg.Status,
+		arg.Series1,
+		arg.Series2,
+		arg.Series3,
+		arg.Series4,
+		arg.Series5,
+		arg.Checkmarks,
+	)
+	var i UpdateStage0Row
+	err := row.Scan(
+		&i.ID,
+		&i.ResultID,
+		&i.Status,
+		&i.Series1,
+		&i.Series2,
+		&i.Series3,
+		&i.Series4,
+		&i.Series5,
+		&i.Checkmarks,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const updateStage0Checkmarks = `-- name: UpdateStage0Checkmarks :one
 UPDATE stage0_results
 SET checkmarks = $2, updated_at = NOW()
@@ -329,4 +398,34 @@ func (q *Queries) UpdateStage0Series5(ctx context.Context, arg UpdateStage0Serie
 	var series5 string
 	err := row.Scan(&series5)
 	return series5, err
+}
+
+const updateStage0Signs = `-- name: UpdateStage0Signs :one
+UPDATE stage0_results
+SET 
+  shooter_sign = $2, 
+  scorer_sign = $3, 
+  updated_at = NOW()
+WHERE id = $1
+RETURNING shooter_sign, scorer_sign, updated_at
+`
+
+type UpdateStage0SignsParams struct {
+	ID          pgtype.UUID
+	ShooterSign pgtype.Text
+	ScorerSign  pgtype.Text
+}
+
+type UpdateStage0SignsRow struct {
+	ShooterSign pgtype.Text
+	ScorerSign  pgtype.Text
+	UpdatedAt   pgtype.Timestamp
+}
+
+// (admin-super role)
+func (q *Queries) UpdateStage0Signs(ctx context.Context, arg UpdateStage0SignsParams) (UpdateStage0SignsRow, error) {
+	row := q.db.QueryRow(ctx, updateStage0Signs, arg.ID, arg.ShooterSign, arg.ScorerSign)
+	var i UpdateStage0SignsRow
+	err := row.Scan(&i.ShooterSign, &i.ScorerSign, &i.UpdatedAt)
+	return i, err
 }

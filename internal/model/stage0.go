@@ -31,6 +31,53 @@ type ByResultIdRequest struct {
 	ResultID pgtype.UUID
 }
 
+type UpdateStage0BodyRequest struct {
+	Status     string `json:"status" binding:"required,oneof=1 2 3 4 5 6"`
+	Series1    []int  `json:"series_1" binding:"required,dive,oneof=0 1 2 3 4 5 6 7 8 9 10"`
+	Series2    []int  `json:"series_2" binding:"required,dive,oneof=0 1 2 3 4 5 6 7 8 9 10"`
+	Series3    []int  `json:"series_3" binding:"required,dive,oneof=0 1 2 3 4 5 6 7 8 9 10"`
+	Series4    []int  `json:"series_4" binding:"required,dive,oneof=0 1 2 3 4 5 6 7 8 9 10"`
+	Series5    []int  `json:"series_5" binding:"required,dive,oneof=0 1 2 3 4 5 6 7 8 9 10"`
+	Checkmarks []bool `json:"checkmarks" binding:"required,dive,boolean"`
+}
+
+type UpdateStage0Request struct {
+	ID         pgtype.UUID
+	Status     string
+	Series1    string
+	Series2    string
+	Series3    string
+	Series4    string
+	Series5    string
+	Checkmarks string
+}
+
+type UpdateStage0Response struct {
+	ID         pgtype.UUID `json:"id"`
+	ResultID   pgtype.UUID `json:"result_id"`
+	Status     string      `json:"status"`
+	Series1    []int       `json:"series_1"`
+	Series2    []int       `json:"series_2"`
+	Series3    []int       `json:"series_3"`
+	Series4    []int       `json:"series_4"`
+	Series5    []int       `json:"series_5"`
+	Checkmarks []bool      `json:"checkmarks"`
+	CreatedAt  time.Time   `json:"created_at"`
+	UpdatedAt  time.Time   `json:"updated_at"`
+}
+
+type UpdateStage0SignsResponse struct {
+	ShooterSign pgtype.Text `json:"shooter_sign"`
+	ScorerSign  pgtype.Text `json:"scorer_sign"`
+	UpdatedAt   time.Time   `json:"updated_at"`
+}
+
+type UpdateStage0SignsRequest struct {
+	ID          pgtype.UUID
+	ShooterSign pgtype.Text
+	ScorerSign  pgtype.Text
+}
+
 type UpdateStage0SeriesUriRequest struct {
 	Series string `uri:"series" binding:"required,oneof=1 2 3 4 5"`
 }

@@ -113,6 +113,31 @@ WHERE id = $1
 RETURNING series5;
 
 -- (admin-super role)
+-- name: UpdateStage0 :one
+UPDATE stage0_results
+SET 
+  status = $2, 
+  series1 = $3, 
+  series2 = $4,
+  series3 = $5,
+  series4 = $6,
+  series5 = $7,
+  checkmarks = $8,
+  updated_at = NOW()
+WHERE id = $1 
+RETURNING id, result_id, status, series1, series2, series3, series4, series5, checkmarks, created_at, updated_at;
+
+-- (admin-super role)
+-- name: UpdateStage0Signs :one
+UPDATE stage0_results
+SET 
+  shooter_sign = $2, 
+  scorer_sign = $3, 
+  updated_at = NOW()
+WHERE id = $1
+RETURNING shooter_sign, scorer_sign, updated_at;
+
+-- (admin-super role)
 -- name: DeleteStage0 :exec
 WITH deleted_stage0 AS (
   DELETE FROM stage0_results

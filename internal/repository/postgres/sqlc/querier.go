@@ -118,6 +118,8 @@ type Querier interface {
 	UpdateShooter(ctx context.Context, arg UpdateShooterParams) (UpdateShooterRow, error)
 	// untuk mengupdate foto shooter berdasarkan id (admin-super role)
 	UpdateShooterImage(ctx context.Context, arg UpdateShooterImageParams) (Shooter, error)
+	// (admin-super role)
+	UpdateStage0(ctx context.Context, arg UpdateStage0Params) (UpdateStage0Row, error)
 	// (scorer role)
 	UpdateStage0Checkmarks(ctx context.Context, arg UpdateStage0CheckmarksParams) (string, error)
 	// (scorer role)
@@ -136,6 +138,8 @@ type Querier interface {
 	UpdateStage0Series4(ctx context.Context, arg UpdateStage0Series4Params) (string, error)
 	// (scorer role)
 	UpdateStage0Series5(ctx context.Context, arg UpdateStage0Series5Params) (string, error)
+	// (admin-super role)
+	UpdateStage0Signs(ctx context.Context, arg UpdateStage0SignsParams) (UpdateStage0SignsRow, error)
 }
 
 var _ Querier = (*Queries)(nil)
