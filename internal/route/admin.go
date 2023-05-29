@@ -17,26 +17,7 @@ func AdminRoutes(router *gin.RouterGroup, delivery adminDelivery.AdminDelivery, 
 	adminRouter.GET("/scorers", delivery.GetAllScorers)
 	adminRouter.GET("/shooters", delivery.GetAllShooters)
 
-	adminRouter.GET("/scorer", delivery.GetScorersByExamId)
-	adminRouter.GET("/shooter", delivery.GetShootersByExamId)
+	ExamAdminSuperRoutes(adminRouter, adminSuperDelivery)
 
-	adminRouter.POST("/scorer", delivery.CreateScorer)
-	scorerRouter := adminRouter.Group("/scorer/:scorer_id", delivery.MustScorerMiddleware())
-
-	scorerRouter.GET("/", delivery.GetScorerById)
-	scorerRouter.PUT("/", delivery.UpdateScorer)
-	scorerRouter.DELETE("/", delivery.DeleteScorer)
-
-	scorerRouter.GET("/shooter", delivery.GetShootersByScorerId)
-	scorerRouter.POST("/shooter", delivery.CreateShooter)
-
-	shooterRouter := scorerRouter.Group("/shooter/:shooter_id", delivery.MustShooterMiddleware())
-
-	shooterRouter.GET("/", delivery.GetShooterById)
-	shooterRouter.PUT("/", delivery.UpdateShooter)
-	shooterRouter.PUT("/image", delivery.UpdateShooterImage)
-	shooterRouter.DELETE("/", delivery.DeleteShooter)
-
-	ResultAllRoutes(shooterRouter, allDelivery)
-	ResultAdminSuperRoutes(shooterRouter, adminSuperDelivery)
+	AdminSuperRoutes(adminRouter, adminSuperDelivery, allDelivery)
 }
