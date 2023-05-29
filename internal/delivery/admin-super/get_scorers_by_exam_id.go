@@ -5,10 +5,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *superHandler) GetScorersByExamId(c *gin.Context) {
+func (handler *adminSuperHandler) GetScorersByExamId(c *gin.Context) {
 	exam := c.MustGet("exam").(model.ExamRelation)
 
-	res := handler.AdminSuperUsecase.GetScorersByExamId(model.ByExamIdRequest{
+	res := handler.Usecase.GetScorersByExamId(model.ByExamIdRequest{
 		ExamID: exam.ID,
 	})
 

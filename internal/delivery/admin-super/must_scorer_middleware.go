@@ -8,9 +8,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *adminHandler) MustScorerMiddleware() gin.HandlerFunc {
+func (handler *adminSuperHandler) MustScorerMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		admin := c.MustGet("admin").(model.OperatorRelation)
+		exam := c.MustGet("exam").(model.ExamRelation)
 
 		scorerId, ok := util.GetIdParam(c, "scorer_id")
 		if !ok {
@@ -18,7 +18,7 @@ func (handler *adminHandler) MustScorerMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		scorer, err := handler.AdminSuperUsecase.GetScorerRelationById(model.ByIdRequest{ID: scorerId})
+		scorer, err := handler.Usecase.GetScorerRelationById(model.ByIdRequest{ID: scorerId})
 		if err != nil {
 			res := util.ToWebServiceResponse("Penguji tidak ditemukan", http.StatusNotFound, nil)
 			c.JSON(res.Status, res)
@@ -26,7 +26,7 @@ func (handler *adminHandler) MustScorerMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		if scorer.ExamID != admin.ExamID {
+		if scorer.ExamID != exam.ID {
 			res := util.ToWebServiceResponse("Tidak dapat mengakses penguji ujian lain", http.StatusUnauthorized, nil)
 			c.JSON(res.Status, res)
 			c.Abort()

@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *adminHandler) CreateShooter(c *gin.Context) {
+func (handler *adminSuperHandler) CreateShooter(c *gin.Context) {
 	scorer := c.MustGet("scorer").(model.OperatorRelation)
 
 	var req model.CreateShooterBodyRequest
@@ -21,7 +21,7 @@ func (handler *adminHandler) CreateShooter(c *gin.Context) {
 		return
 	}
 
-	res := handler.AdminSuperUsecase.CreateShooter(model.CreateShooterRequest{
+	res := handler.Usecase.CreateShooter(model.CreateShooterRequest{
 		ScorerID:  scorer.ID,
 		ImagePath: imagePath,
 		Body:      req,

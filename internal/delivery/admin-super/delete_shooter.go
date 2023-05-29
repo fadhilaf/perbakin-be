@@ -5,10 +5,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *adminHandler) GetShooterById(c *gin.Context) {
+func (handler *adminSuperHandler) DeleteShooter(c *gin.Context) {
 	shooter := c.MustGet("shooter").(model.ShooterRelation)
 
-	res := handler.AllUsecase.GetShooterById(model.ByIdRequest{
+	res := handler.Usecase.DeleteShooter(model.ByIdRequest{
 		ID: shooter.ID,
 	})
 

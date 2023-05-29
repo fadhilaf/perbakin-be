@@ -5,10 +5,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *scorerHandler) GetShootersByScorerId(c *gin.Context) {
+func (handler *adminSuperHandler) DeleteScorer(c *gin.Context) {
 	scorer := c.MustGet("scorer").(model.OperatorRelation)
 
-	res := handler.AllUsecase.GetShootersByScorerId(model.ByScorerIdRequest{ScorerID: scorer.ID})
+	res := handler.Usecase.DeleteScorer(model.UserByUserIdRequest{
+		UserID: scorer.UserID,
+	})
 
 	c.JSON(res.Status, res)
 }

@@ -9,12 +9,18 @@ import (
 
 // for shooterRouter return resultRouter
 func ResultAllRoutes(shooterRouter *gin.RouterGroup, delivery allDelivery.AllDelivery) *gin.RouterGroup {
-	shooterRouter.POST("/result", delivery.CreateResult)
+	shooterRouter.POST("/result", delivery.CreateResult) //done
 
-	resultRouter := shooterRouter.Group("/result", delivery.MustResultMiddleware())
-	resultRouter.GET("/", delivery.GetResultById)
+	resultRouter := shooterRouter.Group("/result", delivery.MustResultMiddleware()) //done
+	resultRouter.GET("/", delivery.GetResultById)                                   //done
 
 	return resultRouter
+}
+
+// for resultRouter
+func ResultAdminSuperRoutes(resultRouter *gin.RouterGroup, delivery adminSuperDelivery.AdminSuperDelivery) {
+	resultRouter.PUT("/", delivery.UpdateResult)    //done
+	resultRouter.DELETE("/", delivery.DeleteResult) //done
 }
 
 // for resultRouter return stage0Router
@@ -25,12 +31,6 @@ func Stage0AllRoutes(resultRouter *gin.RouterGroup, delivery allDelivery.AllDeli
 	stage0Router.GET("/", delivery.GetStage0ById)
 
 	return stage0Router
-}
-
-// for resultRouter
-func ResultAdminSuperRoutes(resultRouter *gin.RouterGroup, delivery adminSuperDelivery.AdminSuperDelivery) {
-	resultRouter.PUT("/", delivery.UpdateResult)
-	resultRouter.DELETE("/", delivery.DeleteResult)
 }
 
 // for stage0Router

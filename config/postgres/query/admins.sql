@@ -24,10 +24,11 @@ SELECT admins.id, name FROM admins
 INNER JOIN users ON admins.user_id = users.id
 WHERE exam_id = $1;
 
--- untuk ngambil data relasi admin berdasarkan user id (all role)
--- name: GetAdminRelationByUserId :one
-SELECT admins.id, user_id, exam_id FROM admins
-INNER JOIN users ON admins.user_id = users.id
+-- untuk ngambil data relasi admin dan relasi exam berdasarkan user id (all role)
+-- name: GetAdminExamRelationByUserId :one
+SELECT admins.id, user_id, exam_id, super_id FROM admins
+INNER JOIN users ON admins.user_id = users.id 
+INNER JOIN exams ON admins.exam_id = exams.id
 WHERE user_id = $1;
 
 -- untuk ngambil data relasi admin berdasarkan id (all role)

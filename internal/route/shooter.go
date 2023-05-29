@@ -9,20 +9,20 @@ import (
 
 // for scorerRouter
 func ShooterAllRoutes(scorerRouter *gin.RouterGroup, delivery allDelivery.AllDelivery) *gin.RouterGroup {
-	scorerRouter.GET("/shooter", delivery.GetShootersByScorerId)
+	scorerRouter.GET("/shooter", delivery.GetShootersByScorerId) //done
 
 	shooterRouter := scorerRouter.Group("/shooter/:shooter_id", delivery.MustShooterMiddleware())
-	shooterRouter.GET("/", delivery.GetShooterById)
+	shooterRouter.GET("/", delivery.GetShooterById) //done
 
 	return shooterRouter
 }
 
 // for scorerRouter, return shooterRouter
 func ShooterAdminSuperRoutes(scorerRouter *gin.RouterGroup, delivery adminSuperDelivery.AdminSuperDelivery, allDelivery allDelivery.AllDelivery) {
-	scorerRouter.POST("/shooter", delivery.CreateShooter)
+	scorerRouter.POST("/shooter", delivery.CreateShooter) //done
 
 	shooterRouter := scorerRouter.Group("/shooter/:shooter_id", allDelivery.MustShooterMiddleware())
-	shooterRouter.PUT("/", delivery.UpdateShooter)
-	shooterRouter.PUT("/image", delivery.UpdateShooterImage)
-	shooterRouter.DELETE("/", delivery.DeleteShooter)
+	shooterRouter.PUT("/", delivery.UpdateShooter)           //done
+	shooterRouter.PUT("/image", delivery.UpdateShooterImage) //done
+	shooterRouter.DELETE("/", delivery.DeleteShooter)        //done
 }

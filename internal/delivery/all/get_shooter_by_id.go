@@ -5,10 +5,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *scorerHandler) GetShooterById(c *gin.Context) {
+func (handler *allHandler) GetShooterById(c *gin.Context) {
 	shooter := c.MustGet("shooter").(model.ShooterRelation)
 
-	res := handler.AllUsecase.GetShooterById(model.ByIdRequest{
+	res := handler.Usecase.GetShooterById(model.ByIdRequest{
 		ID: shooter.ID,
 	})
 

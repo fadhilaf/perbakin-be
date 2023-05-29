@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *adminHandler) MustShooterMiddleware() gin.HandlerFunc {
+func (handler *allHandler) MustShooterMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		scorer := c.MustGet("scorer").(model.OperatorRelation)
 
@@ -18,7 +18,7 @@ func (handler *adminHandler) MustShooterMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		shooter, err := handler.AllUsecase.GetShooterRelationById(model.ByIdRequest{ID: shooterId})
+		shooter, err := handler.Usecase.GetShooterRelationById(model.ByIdRequest{ID: shooterId})
 		if err != nil {
 			res := util.ToWebServiceResponse("Penembak tidak ditemukan", http.StatusNotFound, nil)
 			c.JSON(res.Status, res)

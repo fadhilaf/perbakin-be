@@ -16,6 +16,13 @@ type OperatorRelation struct {
 	UserID pgtype.UUID `json:"user_id"`
 }
 
+type OperatorAndExamRelation struct {
+	ID      pgtype.UUID `json:"id"`
+	ExamID  pgtype.UUID `json:"exam_id"`
+	UserID  pgtype.UUID `json:"user_id"`
+	SuperID pgtype.UUID `json:"super_id"`
+}
+
 // untuk GetAllOperators
 type OperatorDisplayExamData struct {
 	Exam string `json:"exam"`

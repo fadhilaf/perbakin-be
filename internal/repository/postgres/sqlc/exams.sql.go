@@ -71,7 +71,8 @@ func (q *Queries) DeleteExam(ctx context.Context, id pgtype.UUID) error {
 
 const getAllExams = `-- name: GetAllExams :many
 SELECT exams.name, users.name as super, location, organizer, begin, finish 
-FROM exams JOIN users ON exams.super_id = users.id
+FROM exams JOIN supers ON exams.super_id = supers.id 
+JOIN users ON supers.user_id = users.id
 `
 
 type GetAllExamsRow struct {

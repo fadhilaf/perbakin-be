@@ -13,15 +13,6 @@ type ScorerDelivery interface {
 	MustScorerMiddleware() gin.HandlerFunc
 	CheckScorerLogin(c *gin.Context)
 
-	GetShootersByScorerId(c *gin.Context)
-	GetShooterById(c *gin.Context)
-
-	MustShooterMiddleware() gin.HandlerFunc
-
-	MustResultMiddleware() gin.HandlerFunc
-
-	MustStage0Middleware() gin.HandlerFunc
-
 	MustStage0ModifyMiddleware() gin.HandlerFunc
 	UpdateStage0Series(c *gin.Context)
 	UpdateStage0NextSeries(c *gin.Context)

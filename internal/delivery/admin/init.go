@@ -12,30 +12,6 @@ type AdminDelivery interface {
 
 	MustAdminMiddleware() gin.HandlerFunc
 	CheckAdminLogin(c *gin.Context)
-
-	GetAllScorers(c *gin.Context)
-	GetAllShooters(c *gin.Context)
-
-	CreateScorer(c *gin.Context)
-	GetScorersByExamId(c *gin.Context)
-
-	GetShootersByExamId(c *gin.Context)
-
-	MustScorerMiddleware() gin.HandlerFunc
-
-	GetScorerById(c *gin.Context)
-	UpdateScorer(c *gin.Context)
-	DeleteScorer(c *gin.Context)
-
-	GetShootersByScorerId(c *gin.Context)
-	CreateShooter(c *gin.Context)
-
-	MustShooterMiddleware() gin.HandlerFunc
-
-	GetShooterById(c *gin.Context)
-	UpdateShooter(c *gin.Context)
-	UpdateShooterImage(c *gin.Context)
-	DeleteShooter(c *gin.Context)
 }
 
 var _ AdminDelivery = &adminHandler{}

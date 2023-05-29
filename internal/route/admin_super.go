@@ -9,6 +9,8 @@ import (
 
 // for adminRouter or examRouter (for super), return scorerRouter
 func AdminSuperRoutes(adminExamRouter *gin.RouterGroup, delivery adminSuperDelivery.AdminSuperDelivery, allDelivery allDelivery.AllDelivery) {
+	ExamAdminSuperRoutes(adminExamRouter, delivery)
+
 	scorerRouter := ScorerAdminSuperRoutes(adminExamRouter, delivery)
 
 	shooterRouter := ShooterAllRoutes(scorerRouter, allDelivery)
@@ -17,6 +19,6 @@ func AdminSuperRoutes(adminExamRouter *gin.RouterGroup, delivery adminSuperDeliv
 	resultRouter := ResultAllRoutes(shooterRouter, allDelivery)
 	ResultAdminSuperRoutes(resultRouter, delivery)
 
-	stage0Router := Stage0AllRoutes(shooterRouter, allDelivery)
+	stage0Router := Stage0AllRoutes(resultRouter, allDelivery)
 	Stage0AdminSuperRoutes(stage0Router, delivery)
 }

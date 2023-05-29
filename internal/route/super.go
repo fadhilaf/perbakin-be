@@ -14,31 +14,27 @@ func SuperRoutes(router *gin.RouterGroup, delivery superDelivery.SuperDelivery, 
 	superRouter := router.Group("/", delivery.MustSuperMiddleware())
 	superRouter.GET("/", delivery.CheckSuperLogin)
 
-	superRouter.GET("/exams", delivery.GetAllExams)
-	superRouter.GET("/admins", delivery.GetAllAdmins)
-	superRouter.GET("/scorers", delivery.GetAllScorers)
-	superRouter.GET("/shooters", delivery.GetAllShooters)
+	superRouter.GET("/exams", delivery.GetAllExams)                 //done
+	superRouter.GET("/admins", delivery.GetAllAdmins)               //done
+	superRouter.GET("/scorers", adminSuperDelivery.GetAllScorers)   //done
+	superRouter.GET("/shooters", adminSuperDelivery.GetAllShooters) //done
 
-	superRouter.GET("/exam", delivery.GetExamsBySuperId)
-
-	superRouter.POST("/exam", delivery.CreateExam)
+	superRouter.GET("/exam", delivery.GetExamsBySuperId) //done
+	superRouter.POST("/exam", delivery.CreateExam)       //done
 
 	examRouter := superRouter.Group("/exam/:exam_id", delivery.MustExamMiddleware())
-
-	examRouter.GET("/", delivery.GetExamById)
-	examRouter.PUT("/", delivery.UpdateExam)
-	examRouter.DELETE("/", delivery.DeleteExam)
-
-	examRouter.GET("/admin", delivery.GetAdminsByExamId)
-	ExamAdminSuperRoutes(examRouter, adminSuperDelivery)
-
-	examRouter.POST("/admin", delivery.CreateAdmin)
-
-	adminRouter := examRouter.Group("/admin/:admin_id", delivery.MustAdminMiddleware())
-
-	adminRouter.GET("/", delivery.GetAdminById)
-	adminRouter.PUT("/", delivery.UpdateAdmin)
-	adminRouter.DELETE("/", delivery.DeleteAdmin)
+	examRouter.GET("/", delivery.GetExamById)   //done
+	examRouter.PUT("/", delivery.UpdateExam)    //done
+	examRouter.DELETE("/", delivery.DeleteExam) //done
 
 	AdminSuperRoutes(examRouter, adminSuperDelivery, allDelivery)
+
+	examRouter.GET("/admin", delivery.GetAdminsByExamId) //done
+	examRouter.POST("/admin", delivery.CreateAdmin)      //done
+
+	adminRouter := examRouter.Group("/admin/:admin_id", delivery.MustAdminMiddleware())
+	adminRouter.GET("/", delivery.GetAdminById)   //done
+	adminRouter.PUT("/", delivery.UpdateAdmin)    //done
+	adminRouter.DELETE("/", delivery.DeleteAdmin) //done
+
 }

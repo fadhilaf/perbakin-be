@@ -163,6 +163,33 @@ func (q *Queries) GetAdminByUsername(ctx context.Context, username string) (GetA
 	return i, err
 }
 
+const getAdminExamRelationByUserId = `-- name: GetAdminExamRelationByUserId :one
+SELECT admins.id, user_id, exam_id, super_id FROM admins
+INNER JOIN users ON admins.user_id = users.id 
+INNER JOIN exams ON admins.exam_id = exams.id
+WHERE user_id = $1
+`
+
+type GetAdminExamRelationByUserIdRow struct {
+	ID      pgtype.UUID
+	UserID  pgtype.UUID
+	ExamID  pgtype.UUID
+	SuperID pgtype.UUID
+}
+
+// untuk ngambil data relasi admin dan relasi exam berdasarkan user id (all role)
+func (q *Queries) GetAdminExamRelationByUserId(ctx context.Context, userID pgtype.UUID) (GetAdminExamRelationByUserIdRow, error) {
+	row := q.db.QueryRow(ctx, getAdminExamRelationByUserId, userID)
+	var i GetAdminExamRelationByUserIdRow
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.ExamID,
+		&i.SuperID,
+	)
+	return i, err
+}
+
 const getAdminRelationById = `-- name: GetAdminRelationById :one
 SELECT admins.id, user_id, exam_id FROM admins 
 INNER JOIN users ON admins.user_id = users.id
@@ -172,20 +199,6 @@ WHERE admins.id = $1
 // untuk ngambil data relasi admin berdasarkan id (all role)
 func (q *Queries) GetAdminRelationById(ctx context.Context, id pgtype.UUID) (Admin, error) {
 	row := q.db.QueryRow(ctx, getAdminRelationById, id)
-	var i Admin
-	err := row.Scan(&i.ID, &i.UserID, &i.ExamID)
-	return i, err
-}
-
-const getAdminRelationByUserId = `-- name: GetAdminRelationByUserId :one
-SELECT admins.id, user_id, exam_id FROM admins
-INNER JOIN users ON admins.user_id = users.id
-WHERE user_id = $1
-`
-
-// untuk ngambil data relasi admin berdasarkan user id (all role)
-func (q *Queries) GetAdminRelationByUserId(ctx context.Context, userID pgtype.UUID) (Admin, error) {
-	row := q.db.QueryRow(ctx, getAdminRelationByUserId, userID)
 	var i Admin
 	err := row.Scan(&i.ID, &i.UserID, &i.ExamID)
 	return i, err

@@ -7,6 +7,11 @@ import (
 )
 
 type AllDelivery interface {
+	GetShootersByScorerId(c *gin.Context)
+
+	MustShooterMiddleware() gin.HandlerFunc
+	GetShooterById(c *gin.Context)
+
 	CreateResult(c *gin.Context)
 
 	MustResultMiddleware() gin.HandlerFunc

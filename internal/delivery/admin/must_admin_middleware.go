@@ -21,7 +21,7 @@ func (handler *adminHandler) MustAdminMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		admin, err := handler.Usecase.GetAdminRelationByUserId(model.UserByUserIdRequest{UserID: userId})
+		adminExam, err := handler.Usecase.GetAdminExamRelationByUserId(model.UserByUserIdRequest{UserID: userId})
 		if err != nil {
 			res := util.ToWebServiceResponse("User bukan merupakan admin", http.StatusUnauthorized, nil)
 			c.JSON(res.Status, res)
@@ -29,7 +29,8 @@ func (handler *adminHandler) MustAdminMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		c.Set("admin", admin)
+		c.Set("admin", model.OperatorRelation{ID: adminExam.ID, UserID: adminExam.UserID, ExamID: adminExam.ExamID})
+		c.Set("exam", model.ExamRelation{ID: adminExam.ExamID, SuperID: adminExam.SuperID})
 		c.Next()
 	}
 }

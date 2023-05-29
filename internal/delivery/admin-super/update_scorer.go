@@ -6,8 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *superHandler) CreateScorer(c *gin.Context) {
-	exam := c.MustGet("exam").(model.ExamRelation)
+func (handler *adminSuperHandler) UpdateScorer(c *gin.Context) {
+	scorer := c.MustGet("scorer").(model.OperatorRelation)
 
 	var req model.OperatorBodyRequest
 
@@ -15,10 +15,7 @@ func (handler *superHandler) CreateScorer(c *gin.Context) {
 		return
 	}
 
-	res := handler.AdminSuperUsecase.CreateScorer(model.CreateOperatorRequest{
-		ExamID: exam.ID,
-		Body:   req,
-	})
+	res := handler.Usecase.UpdateScorer(model.UpdateOperatorRequest{ID: scorer.ID, Body: req})
 
 	c.JSON(res.Status, res)
 }

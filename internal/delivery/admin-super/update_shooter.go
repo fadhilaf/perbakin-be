@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *superHandler) UpdateShooter(c *gin.Context) {
+func (handler *adminSuperHandler) UpdateShooter(c *gin.Context) {
 	exam := c.MustGet("exam").(model.ExamRelation)
 	shooter := c.MustGet("shooter").(model.ShooterRelation)
 
@@ -16,7 +16,7 @@ func (handler *superHandler) UpdateShooter(c *gin.Context) {
 		return
 	}
 
-	res := handler.AdminSuperUsecase.UpdateShooter(model.UpdateShooterRequest{ID: shooter.ID, ExamID: exam.ID, Body: req})
+	res := handler.Usecase.UpdateShooter(model.UpdateShooterRequest{ID: shooter.ID, ExamID: exam.ID, Body: req})
 
 	c.JSON(res.Status, res)
 }

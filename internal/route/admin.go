@@ -14,10 +14,8 @@ func AdminRoutes(router *gin.RouterGroup, delivery adminDelivery.AdminDelivery, 
 	adminRouter := router.Group("/", delivery.MustAdminMiddleware())
 	adminRouter.GET("/", delivery.CheckAdminLogin)
 
-	adminRouter.GET("/scorers", delivery.GetAllScorers)
-	adminRouter.GET("/shooters", delivery.GetAllShooters)
-
-	ExamAdminSuperRoutes(adminRouter, adminSuperDelivery)
+	adminRouter.GET("/scorers", adminSuperDelivery.GetAllScorers)
+	adminRouter.GET("/shooters", adminSuperDelivery.GetAllShooters)
 
 	AdminSuperRoutes(adminRouter, adminSuperDelivery, allDelivery)
 }
