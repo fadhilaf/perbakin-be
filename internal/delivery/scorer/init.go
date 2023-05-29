@@ -1,7 +1,6 @@
 package delivery
 
 import (
-	allUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/all"
 	scorerUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/scorer"
 
 	"github.com/gin-gonic/gin"
@@ -22,14 +21,12 @@ type ScorerDelivery interface {
 
 var _ ScorerDelivery = &scorerHandler{}
 
-func NewScorerDelivery(usecase scorerUsecase.ScorerUsecase, allUsecase allUsecase.AllUsecase) ScorerDelivery {
+func NewScorerDelivery(usecase scorerUsecase.ScorerUsecase) ScorerDelivery {
 	return &scorerHandler{
-		Usecase:    usecase,
-		AllUsecase: allUsecase,
+		Usecase: usecase,
 	}
 }
 
 type scorerHandler struct {
-	Usecase    scorerUsecase.ScorerUsecase
-	AllUsecase allUsecase.AllUsecase
+	Usecase scorerUsecase.ScorerUsecase
 }

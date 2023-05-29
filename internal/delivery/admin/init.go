@@ -2,8 +2,6 @@ package delivery
 
 import (
 	adminUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/admin"
-	adminSuperUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/admin-super"
-	allUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/all"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,16 +14,12 @@ type AdminDelivery interface {
 
 var _ AdminDelivery = &adminHandler{}
 
-func NewAdminDelivery(usecase adminUsecase.AdminUsecase, adminSuperUsecase adminSuperUsecase.AdminSuperUsecase, allUsecase allUsecase.AllUsecase) AdminDelivery {
+func NewAdminDelivery(usecase adminUsecase.AdminUsecase) AdminDelivery {
 	return &adminHandler{
-		Usecase:           usecase,
-		AdminSuperUsecase: adminSuperUsecase,
-		AllUsecase:        allUsecase,
+		Usecase: usecase,
 	}
 }
 
 type adminHandler struct {
-	Usecase           adminUsecase.AdminUsecase
-	AdminSuperUsecase adminSuperUsecase.AdminSuperUsecase
-	AllUsecase        allUsecase.AllUsecase
+	Usecase adminUsecase.AdminUsecase
 }

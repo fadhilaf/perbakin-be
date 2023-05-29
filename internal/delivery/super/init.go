@@ -1,8 +1,6 @@
 package delivery
 
 import (
-	adminSuperUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/admin-super"
-	allUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/all"
 	superUsecase "github.com/FadhilAF/perbakin-be/internal/usecase/super"
 
 	"github.com/gin-gonic/gin"
@@ -15,9 +13,11 @@ type SuperDelivery interface {
 
 	CheckSuperLogin(c *gin.Context)
 
-	CreateExam(c *gin.Context)
-	GetExamsBySuperId(c *gin.Context)
 	GetAllExams(c *gin.Context)
+
+	GetExamsBySuperId(c *gin.Context)
+	CreateExam(c *gin.Context)
+
 	GetExamById(c *gin.Context)
 	UpdateExam(c *gin.Context)
 	DeleteExam(c *gin.Context)
@@ -38,16 +38,12 @@ type SuperDelivery interface {
 
 var _ SuperDelivery = &superHandler{}
 
-func NewSuperDelivery(usecase superUsecase.SuperUsecase, adminSuperUsecase adminSuperUsecase.AdminSuperUsecase, allUsecase allUsecase.AllUsecase) SuperDelivery {
+func NewSuperDelivery(usecase superUsecase.SuperUsecase) SuperDelivery {
 	return &superHandler{
-		Usecase:           usecase,
-		AdminSuperUsecase: adminSuperUsecase,
-		AllUsecase:        allUsecase,
+		Usecase: usecase,
 	}
 }
 
 type superHandler struct {
-	Usecase           superUsecase.SuperUsecase
-	AdminSuperUsecase adminSuperUsecase.AdminSuperUsecase
-	AllUsecase        allUsecase.AllUsecase
+	Usecase superUsecase.SuperUsecase
 }
