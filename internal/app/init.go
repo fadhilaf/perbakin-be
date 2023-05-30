@@ -91,10 +91,10 @@ func (app *App) createHandlers() http.Handler {
 	corsCfg.AllowCredentials = true //karena pake cookie, harus allowCredentials
 
 	if app.Config.Env == env.EnvProd {
-		corsCfg.AllowOrigins = app.Config.AllowedOrigins
+		corsCfg.AllowOrigins = []string{app.Config.AllowedOrigin}
 		gin.SetMode(gin.ReleaseMode)
 	} else {
-		corsCfg.AllowOrigins = app.Config.AllowedOrigins //ini klo pake cookie, jadi origin ny harus explicitly kita ketik http://localhost:5173
+		corsCfg.AllowOrigins = []string{app.Config.AllowedOrigin} //ini klo pake cookie, jadi origin ny harus explicitly kita ketik http://localhost:5173
 		// corsCfg.AllowAllOrigins = true //kalo dak pake cookie, kalo pake dk biso (keno cors). pas allow all kito dk biso kirim cookie
 
 		gin.SetMode(gin.TestMode) //kalo nak jadi lebih cepet sikit tnpa debug

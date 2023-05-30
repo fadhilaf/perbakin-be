@@ -22,7 +22,6 @@ func SessionHandler(handler *gin.Engine, dbPool *pgxpool.Pool, config env.Config
 	SessionManager.Lifetime = 24 * time.Hour
 	SessionManager.IdleTimeout = 3 * time.Hour
 	SessionManager.Cookie.Persist = true
-	SessionManager.Cookie.Domain = config.AppDomain
 	SessionManager.Cookie.Path = "/"
 	SessionManager.Cookie.Name = "session"
 	SessionManager.Cookie.HttpOnly = true
@@ -40,8 +39,11 @@ func SessionHandler(handler *gin.Engine, dbPool *pgxpool.Pool, config env.Config
 
 	if config.Env == env.EnvProd {
 		SessionManager.Cookie.SameSite = http.SameSiteStrictMode
+		SessionManager.Cookie.Domain = config.AppHost
 	} else {
 		SessionManager.Cookie.SameSite = http.SameSiteNoneMode
+		//domain itu siapa saja yang bisa akses cookie ini (dari url mana saja yg bleh)
+		SessionManager.Cookie.Domain = config.AllowedOrigin
 	}
 
 	return SessionManager.LoadAndSave(handler)
