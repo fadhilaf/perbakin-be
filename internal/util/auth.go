@@ -23,7 +23,10 @@ func SetAuthStatusCookie(c *gin.Context, value string) {
 		Name:     "auth_status",
 		Value:    value,
 		Path:     "/",
+		Domain:   session.SessionManager.Cookie.Domain,
 		HttpOnly: false,
+		Secure:   session.SessionManager.Cookie.Secure,
+		SameSite: session.SessionManager.Cookie.SameSite,
 		MaxAge:   10800, //3 jam
 	}
 
@@ -35,7 +38,10 @@ func DeleteAuthStatusCookie(c *gin.Context) {
 		Name:     "auth_status",
 		Value:    "",
 		Path:     "/",
+		Domain:   session.SessionManager.Cookie.Domain,
 		HttpOnly: false,
+		Secure:   session.SessionManager.Cookie.Secure,
+		SameSite: session.SessionManager.Cookie.SameSite,
 		MaxAge:   -1,
 	}
 
