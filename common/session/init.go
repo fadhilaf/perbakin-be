@@ -43,7 +43,7 @@ func SessionHandler(handler *gin.Engine, dbPool *pgxpool.Pool, config env.Config
 	} else {
 		SessionManager.Cookie.SameSite = http.SameSiteNoneMode
 		//domain itu siapa saja yang bisa akses cookie ini (dari url mana saja yg bleh)
-		SessionManager.Cookie.Domain = config.AllowedOrigin
+		SessionManager.Cookie.Domain = config.ClientDomain
 	}
 
 	return SessionManager.LoadAndSave(handler)

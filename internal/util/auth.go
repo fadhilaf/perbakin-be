@@ -42,7 +42,7 @@ func DeleteAuthStatusCookie(c *gin.Context) {
 		HttpOnly: false,
 		Secure:   session.SessionManager.Cookie.Secure,
 		SameSite: session.SessionManager.Cookie.SameSite,
-		MaxAge:   -1,
+		MaxAge:   10800, //3 jam
 	}
 
 	http.SetCookie(c.Writer, cookie)
