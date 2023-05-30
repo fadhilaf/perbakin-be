@@ -20,7 +20,7 @@ func SaveUserToSession(c *gin.Context, uuid pgtype.UUID) {
 
 func SetAuthStatusCookie(c *gin.Context, value string) {
 	cookie := &http.Cookie{
-		Name:     "auth_status",
+		Name:     "auth",
 		Value:    value,
 		Path:     "/",
 		Domain:   session.SessionManager.Cookie.Domain,
@@ -35,7 +35,7 @@ func SetAuthStatusCookie(c *gin.Context, value string) {
 
 func DeleteAuthStatusCookie(c *gin.Context) {
 	cookie := &http.Cookie{
-		Name:     "auth_status",
+		Name:     "auth",
 		Value:    "",
 		Path:     "/",
 		Domain:   session.SessionManager.Cookie.Domain,
