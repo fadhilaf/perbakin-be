@@ -10,8 +10,8 @@ import (
 func ScorerRoutes(router *gin.RouterGroup, delivery scorerDelivery.ScorerDelivery, allDelivery allDelivery.AllDelivery) {
 	router.POST("/login", delivery.ScorerLogin)
 
-	scorerRouter := router.Group("/", delivery.MustScorerMiddleware())
-	scorerRouter.GET("/", delivery.CheckScorerLogin)
+	scorerRouter := router.Group("", delivery.MustScorerMiddleware())
+	scorerRouter.GET("", delivery.CheckScorerLogin)
 
 	shooterRouter := ShooterAllRoutes(scorerRouter, allDelivery)
 
@@ -19,7 +19,7 @@ func ScorerRoutes(router *gin.RouterGroup, delivery scorerDelivery.ScorerDeliver
 
 	stage0Router := Stage0AllRoutes(resultRouter, allDelivery)
 
-	stage0ModifyRouter := stage0Router.Group("/", delivery.MustStage0ModifyMiddleware())
+	stage0ModifyRouter := stage0Router.Group("", delivery.MustStage0ModifyMiddleware())
 	stage0ModifyRouter.PUT("/series/:series", delivery.UpdateStage0Series)
 	stage0ModifyRouter.PUT("/checkmarks", delivery.UpdateStage0Checkmarks)
 	stage0ModifyRouter.PATCH("/next", delivery.UpdateStage0NextSeries)

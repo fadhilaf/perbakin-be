@@ -11,8 +11,8 @@ import (
 func SuperRoutes(router *gin.RouterGroup, delivery superDelivery.SuperDelivery, allDelivery allDelivery.AllDelivery, adminSuperDelivery adminSuperDelivery.AdminSuperDelivery) {
 	router.POST("/login", delivery.SuperLogin)
 
-	superRouter := router.Group("/", delivery.MustSuperMiddleware())
-	superRouter.GET("/", delivery.CheckSuperLogin)
+	superRouter := router.Group("", delivery.MustSuperMiddleware())
+	superRouter.GET("", delivery.CheckSuperLogin)
 
 	superRouter.GET("/exams", delivery.GetAllExams)
 	superRouter.GET("/admins", delivery.GetAllAdmins)
@@ -23,9 +23,9 @@ func SuperRoutes(router *gin.RouterGroup, delivery superDelivery.SuperDelivery, 
 	superRouter.POST("/exam", delivery.CreateExam)
 
 	examRouter := superRouter.Group("/exam/:exam_id", delivery.MustExamMiddleware())
-	examRouter.GET("/", delivery.GetExamById)
-	examRouter.PUT("/", delivery.UpdateExam)
-	examRouter.DELETE("/", delivery.DeleteExam)
+	examRouter.GET("", delivery.GetExamById)
+	examRouter.PUT("", delivery.UpdateExam)
+	examRouter.DELETE("", delivery.DeleteExam)
 
 	AdminSuperRoutes(examRouter, adminSuperDelivery, allDelivery)
 
@@ -33,8 +33,8 @@ func SuperRoutes(router *gin.RouterGroup, delivery superDelivery.SuperDelivery, 
 	examRouter.POST("/admin", delivery.CreateAdmin)
 
 	adminRouter := examRouter.Group("/admin/:admin_id", delivery.MustAdminMiddleware())
-	adminRouter.GET("/", delivery.GetAdminById)
-	adminRouter.PUT("/", delivery.UpdateAdmin)
-	adminRouter.DELETE("/", delivery.DeleteAdmin)
+	adminRouter.GET("", delivery.GetAdminById)
+	adminRouter.PUT("", delivery.UpdateAdmin)
+	adminRouter.DELETE("", delivery.DeleteAdmin)
 
 }

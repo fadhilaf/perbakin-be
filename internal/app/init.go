@@ -88,11 +88,16 @@ func (app *App) createHandlers() http.Handler {
 	corsCfg := cors.DefaultConfig()
 	corsCfg.AllowHeaders = append(corsCfg.AllowHeaders, "Accept")
 
+	corsCfg.AllowCredentials = true //karena pake cookie
+
 	if app.Config.Env == env.EnvProd {
-		corsCfg.AllowAllOrigins = false
 		corsCfg.AllowOrigins = app.Config.AllowedOrigins
+		gin.SetMode(gin.ReleaseMode)
 	} else {
-		corsCfg.AllowAllOrigins = true
+		corsCfg.AllowOrigins = app.Config.AllowedOrigins //ini klo pake cookie, jadi origin ny harus explicitly kita ketik http://localhost:5173
+		// corsCfg.AllowAllOrigins = true //kalo dak pake cookie, kalo pake dk biso (keno cors). pas allow all kito dk biso kirim cookie
+
+		// gin.SetMode(gin.TestMode) //kalo nak jadi lebih cepet sikit tnpa debug
 	}
 
 	router.Use(cors.New(corsCfg))

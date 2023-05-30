@@ -12,7 +12,7 @@ func ShooterAllRoutes(scorerRouter *gin.RouterGroup, delivery allDelivery.AllDel
 	scorerRouter.GET("/shooter", delivery.GetShootersByScorerId)
 
 	shooterRouter := scorerRouter.Group("/shooter/:shooter_id", delivery.MustShooterMiddleware())
-	shooterRouter.GET("/", delivery.GetShooterById)
+	shooterRouter.GET("", delivery.GetShooterById)
 
 	return shooterRouter
 }
@@ -22,7 +22,7 @@ func ShooterAdminSuperRoutes(scorerRouter *gin.RouterGroup, delivery adminSuperD
 	scorerRouter.POST("/shooter", delivery.CreateShooter)
 
 	shooterRouter := scorerRouter.Group("/shooter/:shooter_id", allDelivery.MustShooterMiddleware())
-	shooterRouter.PUT("/", delivery.UpdateShooter)
+	shooterRouter.PUT("", delivery.UpdateShooter)
 	shooterRouter.PUT("/image", delivery.UpdateShooterImage)
-	shooterRouter.DELETE("/", delivery.DeleteShooter)
+	shooterRouter.DELETE("", delivery.DeleteShooter)
 }
