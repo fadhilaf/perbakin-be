@@ -26,25 +26,8 @@ func SessionHandler(handler *gin.Engine, dbPool *pgxpool.Pool, config env.Config
 	SessionManager.Cookie.Name = "session"
 	SessionManager.Cookie.HttpOnly = true
 	SessionManager.Cookie.Secure = true
-	// kalo mau same site none, harus pake secure
-	// kalo mau httpOnly true, harus pake secure
-
-	// jadi tidak ada cara lain selain pake secure cookie.
-
-	//kalo meskipun masih development, tetep pake secure cookie
-	//soalnyo kalo engga, cookie engga bakal kebaca di browser
-	//jika same site none dan httpOnly false, maka secure harus true (aturanny)
-	//kita ada salah satu cookie yg mesti bisa dibaca di browser, yaitu cookie "auth"
-	//tapi, kalo kito pake secure cookie, cookie auth engga bakal kebaca di browser, karena localhost engga pake https TT-TT
-
-	if config.Env == env.EnvProd {
-		SessionManager.Cookie.SameSite = http.SameSiteStrictMode
-		SessionManager.Cookie.Domain = config.AppHost
-	} else {
-		SessionManager.Cookie.SameSite = http.SameSiteNoneMode
-		//domain itu siapa saja yang bisa akses cookie ini (dari url mana saja yg bleh)
-		SessionManager.Cookie.Domain = config.ClientDomain
-	}
+	SessionManager.Cookie.Domain = config.ClientDomain
+	SessionManager.Cookie.SameSite = http.SameSiteStrictMode
 
 	return SessionManager.LoadAndSave(handler)
 }

@@ -1,0 +1,23 @@
+jadi niat awalny, untuk development pengen nge deploy app backend ini ke cloud. trus client nyo tetep di local machine localhost biaso.
+
+jadi kareno itu kan dio beda server, jadi kudu dio set CORS nya. kalo dio local machine, kudu dio set CORS nya di backend.
+nah, kalo kito nak ngirim cookie, CORS allowed domain nyo dak boleh pake wildcard (*) tapi harus dio set secara spesifik.
+jadi CORS di set ke "localhost".
+
+nah trus, kan ini jelas jelas jadi beda domain antara backend dan frontend. 
+jadi di set cookie, sameSite: none. tapi ternyata, kalo sameSite: none, kudu pake secure: true.
+nah, kukiro kalo secure: true itu, kudu pake https. tapi ternyata, dak usah pake https juga bisa.
+
+trus, kareno kukiro harus https tadi aku buat localhost jadi https untuk dapetin cookie dari backend yg di deploy itu.
+ternyata ada yang baru lagi, cookie domain. cookie domain itu nentuin cookie nyo bisa di akses dari domain mana aja. 
+(url client nyo yg seperti apa) kalo dio set ke localhost, maka cookie nyo cuma bisa di akses dari localhost.
+
+nah jadi setelah di set ke localhost domainny, tetep dak biso, kareno domain localhost di mesin remote samo mesin lokal itu beda.
+
+jadi in the end. dk biso ngedevelop app ny pake niat awal ini.
+
+jadi sekarang backend di run di local, tapi pake database remote (biar dk susah susah donlot database ny si pengembang frontend).
+trus samesite: strict, secure: true, domain: localhost.
+
+kenapa samesite:strict? karena percuma, domain cookie (url client) harus samo dengan (url backend) biar diterima cookie ny oleh browser.
+kenapa secure:true? karena mau https atau http sama sama biso 2 2 ny

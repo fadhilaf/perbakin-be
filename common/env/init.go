@@ -34,6 +34,7 @@ func New(filePath string) Config {
 
 	viper.SetDefault("APP_HOST", "0.0.0.0")
 	viper.SetDefault("APP_PORT", "8000")
+	viper.SetDefault("CLIENT_DOMAIN", "localhost")
 	viper.SetDefault("ENV", EnvDev)
 	viper.SetDefault("ORIGIN", "http://localhost:5173")
 	viper.Unmarshal(&config)
