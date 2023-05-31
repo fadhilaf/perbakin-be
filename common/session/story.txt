@@ -17,7 +17,7 @@ nah jadi setelah di set ke localhost domainny, tetep dak biso, kareno domain loc
 jadi in the end. dk biso ngedevelop app ny pake niat awal ini.
 
 jadi sekarang backend di run di local, tapi pake database remote (biar dk susah susah donlot database ny si pengembang frontend).
-trus samesite: strict, secure: true, domain: localhost.
+trus samesite: strict, secure: false, domain: localhost.
 
 kenapa samesite:strict? karena percuma, domain cookie (url client) harus samo dengan (url backend) biar diterima cookie ny oleh browser.
-kenapa secure:true? karena mau https atau http sama sama biso 2 2 ny
+kenapa secure:false? meskipun karena mau https atau http sama sama biso 2 2 ny di browser. tapi postman dk mau ngirim cookie secure kalo dk pake secure.
