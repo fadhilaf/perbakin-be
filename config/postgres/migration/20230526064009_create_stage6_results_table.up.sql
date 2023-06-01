@@ -8,21 +8,21 @@ CREATE TABLE IF NOT EXISTS stage6_results (
         ROW(0,0,0),
         ROW(0,0,0)
       ),
-      '00:00:00' 
+      ROW(0,0,0)
     ),
     ROW(
       ROW(
         ROW(0,0,0),
         ROW(0,0,0)
       ),
-      '00:00:00' 
+      ROW(0,0,0)
     ),
     ROW(
       ROW(
         ROW(0,0,0),
         ROW(0,0,0)
       ),
-      '00:00:00' 
+      ROW(0,0,0)
     ),
     ROW(false,false,false)
   ),

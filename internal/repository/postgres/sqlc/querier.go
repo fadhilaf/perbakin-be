@@ -21,7 +21,10 @@ type Querier interface {
 	CreateScorer(ctx context.Context, arg CreateScorerParams) (CreateScorerRow, error)
 	// membuat shooter baru (admin-super role)
 	CreateShooter(ctx context.Context, arg CreateShooterParams) (Shooter, error)
+	// (all role)
 	CreateStage0(ctx context.Context, resultID pgtype.UUID) (Stage0Result, error)
+	CreateStage1(ctx context.Context, resultID pgtype.UUID) (CreateStage1Row, error)
+	CreateStage1try2(ctx context.Context, resultID pgtype.UUID) (CreateStage1try2Row, error)
 	// untuk menghapus exam (super role)
 	DeleteExam(ctx context.Context, id pgtype.UUID) error
 	// (admin-super role) dibuat by id
@@ -30,6 +33,8 @@ type Querier interface {
 	DeleteShooter(ctx context.Context, id pgtype.UUID) error
 	// (admin-super role)
 	DeleteStage0(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
+	DeleteStage1(ctx context.Context, id pgtype.UUID) error
 	// dipake untuk delete user
 	DeleteUser(ctx context.Context, id pgtype.UUID) error
 	// untuk ngambil data akun admin berdasarkan id (super role)
@@ -85,9 +90,16 @@ type Querier interface {
 	GetShooterRelationById(ctx context.Context, id pgtype.UUID) (GetShooterRelationByIdRow, error)
 	// untuk mengambil shooter berdasarkan scorer_id (all role)
 	GetShootersByScorerId(ctx context.Context, scorerID pgtype.UUID) ([]GetShootersByScorerIdRow, error)
+	// (all role)
 	GetStage0ById(ctx context.Context, id pgtype.UUID) (Stage0Result, error)
+	// (all role)
 	GetStage0RelationByResultId(ctx context.Context, resultID pgtype.UUID) (GetStage0RelationByResultIdRow, error)
 	GetStage0Status(ctx context.Context, id pgtype.UUID) (Stage0Status, error)
+	// (all role)
+	GetStage1try1ById(ctx context.Context, id pgtype.UUID) (GetStage1try1ByIdRow, error)
+	// (all role)
+	GetStage1try1RelationByResultId(ctx context.Context, resultID pgtype.UUID) (GetStage1try1RelationByResultIdRow, error)
+	GetStage1try1Status(ctx context.Context, id pgtype.UUID) (interface{}, error)
 	// untuk ngambil data lengkap super admin berdasarkan user id (super role)
 	GetSuperByUserId(ctx context.Context, userID pgtype.UUID) (GetSuperByUserIdRow, error)
 	// untuk ngambil data display super admin berdasarkan username (super role)
@@ -140,6 +152,30 @@ type Querier interface {
 	UpdateStage0Series5(ctx context.Context, arg UpdateStage0Series5Params) (string, error)
 	// (admin-super role)
 	UpdateStage0Signs(ctx context.Context, arg UpdateStage0SignsParams) (UpdateStage0SignsRow, error)
+	// (scorer role)
+	UpdateStage1FinishFailed(ctx context.Context, arg UpdateStage1FinishFailedParams) error
+	// (scorer role)
+	UpdateStage1FinishSuccess(ctx context.Context, arg UpdateStage1FinishSuccessParams) error
+	// (admin-super role)
+	UpdateStage1Signs(ctx context.Context, arg UpdateStage1SignsParams) (UpdateStage1SignsRow, error)
+	// (scorer role)
+	UpdateStage1try1(ctx context.Context, arg UpdateStage1try1Params) (UpdateStage1try1Row, error)
+	// (scorer role)
+	UpdateStage1try1Checkmarks(ctx context.Context, arg UpdateStage1try1CheckmarksParams) (interface{}, error)
+	// (scorer role)
+	UpdateStage1try1NextNo(ctx context.Context, arg UpdateStage1try1NextNoParams) error
+	// (scorer role)
+	UpdateStage1try1No1(ctx context.Context, arg UpdateStage1try1No1Params) (UpdateStage1try1No1Row, error)
+	// (scorer role)
+	UpdateStage1try1No2(ctx context.Context, arg UpdateStage1try1No2Params) (UpdateStage1try1No2Row, error)
+	// (scorer role)
+	UpdateStage1try1No3(ctx context.Context, arg UpdateStage1try1No3Params) (UpdateStage1try1No3Row, error)
+	// (scorer role)
+	UpdateStage1try1No4(ctx context.Context, arg UpdateStage1try1No4Params) (UpdateStage1try1No4Row, error)
+	// (scorer role)
+	UpdateStage1try1No5(ctx context.Context, arg UpdateStage1try1No5Params) (UpdateStage1try1No5Row, error)
+	// (scorer role)
+	UpdateStage1try1No6(ctx context.Context, arg UpdateStage1try1No6Params) (UpdateStage1try1No6Row, error)
 }
 
 var _ Querier = (*Queries)(nil)

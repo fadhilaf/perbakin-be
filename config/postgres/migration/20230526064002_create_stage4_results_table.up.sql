@@ -5,7 +5,7 @@ CREATE TYPE stage46_score_types AS (
 
 CREATE TYPE stage46_numbers AS (
   score_types stage46_score_types,
-  duration interval
+  duration stage123456_durations
 );
 
 CREATE TYPE stage46_tries AS (
@@ -26,21 +26,21 @@ CREATE TABLE IF NOT EXISTS stage4_results (
         ROW(0,0,0),
         ROW(0,0,0)
       ),
-      '00:00:00' 
+      ROW(0,0,0)
     ),
     ROW(
       ROW(
         ROW(0,0,0),
         ROW(0,0,0)
       ),
-      '00:00:00' 
+      ROW(0,0,0)
     ),
     ROW(
       ROW(
         ROW(0,0,0),
         ROW(0,0,0)
       ),
-      '00:00:00' 
+      ROW(0,0,0)
     ),
     ROW(false,false,false)
   ),

@@ -1,3 +1,9 @@
+CREATE TYPE stage123456_durations AS (
+  minute integer,
+  second integer,
+  millisecond integer
+);
+
 CREATE TYPE stage123456_scores AS (
   score_a integer,
   score_c integer,
@@ -6,7 +12,7 @@ CREATE TYPE stage123456_scores AS (
 
 CREATE TYPE stage123_numbers AS (
   scores stage123456_scores,
-  duration interval
+  duration stage123456_durations
 );
 
 CREATE TYPE stage13_checkmarks AS (
@@ -38,27 +44,27 @@ CREATE TABLE IF NOT EXISTS stage1_results (
     '1',
     ROW(
       ROW(0,0,0),
-      '00:00:00'
+      ROW(0,0,0)
     ),
     ROW(
       ROW(0,0,0),
-      '00:00:00'
+      ROW(0,0,0)
     ),
     ROW(
       ROW(0,0,0),
-      '00:00:00'
+      ROW(0,0,0)
     ),
     ROW(
       ROW(0,0,0),
-      '00:00:00'
+      ROW(0,0,0)
     ),
     ROW(
       ROW(0,0,0),
-      '00:00:00'
+      ROW(0,0,0)
     ),
     ROW(
       ROW(0,0,0),
-      '00:00:00'
+      ROW(0,0,0)
     ),
     ROW(false,false,false,false,false,false)
   ),

@@ -6,7 +6,7 @@ CREATE TYPE stage5_score_types AS (
 
 CREATE TYPE stage5_numbers AS (
   score_types stage5_score_types,
-  duration interval
+  duration stage123456_durations
 );
 
 CREATE TYPE stage5_checkmarks AS (
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS stage5_results (
         ROW(0,0,0),
         ROW(0,0,0)
       ),
-      '00:00:00' 
+      ROW(0,0,0)
     ),
     ROW(
       ROW(
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS stage5_results (
         ROW(0,0,0),
         ROW(0,0,0)
       ),
-      '00:00:00' 
+      ROW(0,0,0)
     ),
     ROW(false,false)
   ),

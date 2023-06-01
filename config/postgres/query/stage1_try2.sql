@@ -1,4 +1,4 @@
--- name: CreateStage0try2 :one
+-- name: CreateStage1try2 :one
 UPDATE stage1_results
 SET 
   is_try2 = true,
@@ -6,27 +6,27 @@ SET
     '1',
     ROW(
       ROW(0,0,0),
-      '00:00:00'
+      ROW(0,0,0)
     ),
     ROW(
       ROW(0,0,0),
-      '00:00:00'
+      ROW(0,0,0)
     ),
     ROW(
       ROW(0,0,0),
-      '00:00:00'
+      ROW(0,0,0)
     ),
     ROW(
       ROW(0,0,0),
-      '00:00:00'
+      ROW(0,0,0)
     ),
     ROW(
       ROW(0,0,0),
-      '00:00:00'
+      ROW(0,0,0)
     ),
     ROW(
       ROW(0,0,0),
-      '00:00:00'
+      ROW(0,0,0)
     ),
     ROW(false,false,false,false,false,false)
   )

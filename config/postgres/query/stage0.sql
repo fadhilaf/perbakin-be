@@ -1,38 +1,54 @@
+-- (all role)
 -- name: CreateStage0 :one
 INSERT INTO stage0_results (result_id)
 VALUES ($1)
-RETURNING id, result_id, status, series1, series2, series3, series4, series5, checkmarks, shooter_sign, scorer_sign, created_at, updated_at;
+RETURNING 
+  id, 
+  result_id, 
+  status, 
+  series1, 
+  series2, 
+  series3, 
+  series4, 
+  series5, 
+  checkmarks, 
+  shooter_sign, 
+  scorer_sign, 
+  created_at, 
+  updated_at;
 
+-- (all role)
 -- name: GetStage0ById :one
 SELECT 
-  stage0_results.id, 
-  stage0_results.result_id, 
-  stage0_results.status, 
-  stage0_results.series1, 
-  stage0_results.series2, 
-  stage0_results.series3, 
-  stage0_results.series4, 
-  stage0_results.series5,
-  stage0_results.checkmarks,
-  stage0_results.shooter_sign,
-  stage0_results.scorer_sign,
-  stage0_results.created_at,
-  stage0_results.updated_at
+  id, 
+  result_id, 
+  status, 
+  series1, 
+  series2, 
+  series3, 
+  series4, 
+  series5,
+  checkmarks,
+  shooter_sign,
+  scorer_sign,
+  created_at,
+  updated_at
 FROM stage0_results
-WHERE stage0_results.id = $1;
+WHERE id = $1;
 
+-- (all role)
 -- name: GetStage0RelationByResultId :one
 SELECT 
-  stage0_results.id, 
-  stage0_results.result_id
+  id, 
+  result_id
 FROM stage0_results
-WHERE stage0_results.result_id = $1;
+WHERE result_id = $1;
 
 -- name: GetStage0Status :one
 SELECT 
-  stage0_results.status
+  status
 FROM stage0_results
-WHERE stage0_results.id = $1;
+WHERE id = $1;
 
 -- (scorer role)
 -- name: UpdateStage0Checkmarks :one

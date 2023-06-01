@@ -5,6 +5,7 @@
 package postgres
 
 import (
+	"database/sql"
 	"database/sql/driver"
 	"fmt"
 
@@ -55,6 +56,140 @@ func (ns NullStage0Status) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return string(ns.Stage0Status), nil
+}
+
+type Stage13Status string
+
+const (
+	Stage13Status1 Stage13Status = "1"
+	Stage13Status2 Stage13Status = "2"
+	Stage13Status3 Stage13Status = "3"
+	Stage13Status4 Stage13Status = "4"
+	Stage13Status5 Stage13Status = "5"
+	Stage13Status6 Stage13Status = "6"
+	Stage13Status7 Stage13Status = "7"
+)
+
+func (e *Stage13Status) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = Stage13Status(s)
+	case string:
+		*e = Stage13Status(s)
+	default:
+		return fmt.Errorf("unsupported scan type for Stage13Status: %T", src)
+	}
+	return nil
+}
+
+type NullStage13Status struct {
+	Stage13Status Stage13Status
+	Valid         bool // Valid is true if Stage13Status is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullStage13Status) Scan(value interface{}) error {
+	if value == nil {
+		ns.Stage13Status, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.Stage13Status.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullStage13Status) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.Stage13Status), nil
+}
+
+type Stage246Status string
+
+const (
+	Stage246Status1 Stage246Status = "1"
+	Stage246Status2 Stage246Status = "2"
+	Stage246Status3 Stage246Status = "3"
+	Stage246Status4 Stage246Status = "4"
+)
+
+func (e *Stage246Status) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = Stage246Status(s)
+	case string:
+		*e = Stage246Status(s)
+	default:
+		return fmt.Errorf("unsupported scan type for Stage246Status: %T", src)
+	}
+	return nil
+}
+
+type NullStage246Status struct {
+	Stage246Status Stage246Status
+	Valid          bool // Valid is true if Stage246Status is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullStage246Status) Scan(value interface{}) error {
+	if value == nil {
+		ns.Stage246Status, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.Stage246Status.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullStage246Status) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.Stage246Status), nil
+}
+
+type Stage5Status string
+
+const (
+	Stage5Status1 Stage5Status = "1"
+	Stage5Status2 Stage5Status = "2"
+	Stage5Status3 Stage5Status = "3"
+)
+
+func (e *Stage5Status) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = Stage5Status(s)
+	case string:
+		*e = Stage5Status(s)
+	default:
+		return fmt.Errorf("unsupported scan type for Stage5Status: %T", src)
+	}
+	return nil
+}
+
+type NullStage5Status struct {
+	Stage5Status Stage5Status
+	Valid        bool // Valid is true if Stage5Status is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullStage5Status) Scan(value interface{}) error {
+	if value == nil {
+		ns.Stage5Status, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.Stage5Status.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullStage5Status) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.Stage5Status), nil
 }
 
 type Stages string
@@ -165,6 +300,78 @@ type Stage0Result struct {
 	Series4     string
 	Series5     string
 	Checkmarks  string
+	ShooterSign pgtype.Text
+	ScorerSign  pgtype.Text
+	CreatedAt   pgtype.Timestamp
+	UpdatedAt   pgtype.Timestamp
+}
+
+type Stage1Result struct {
+	ID          pgtype.UUID
+	ResultID    pgtype.UUID
+	Try1        string
+	Try2        sql.NullString
+	IsTry2      bool
+	ShooterSign pgtype.Text
+	ScorerSign  pgtype.Text
+	CreatedAt   pgtype.Timestamp
+	UpdatedAt   pgtype.Timestamp
+}
+
+type Stage2Result struct {
+	ID          pgtype.UUID
+	ResultID    pgtype.UUID
+	Try1        string
+	Try2        sql.NullString
+	IsTry2      bool
+	ShooterSign pgtype.Text
+	ScorerSign  pgtype.Text
+	CreatedAt   pgtype.Timestamp
+	UpdatedAt   pgtype.Timestamp
+}
+
+type Stage3Result struct {
+	ID          pgtype.UUID
+	ResultID    pgtype.UUID
+	Try1        string
+	Try2        sql.NullString
+	IsTry2      bool
+	ShooterSign pgtype.Text
+	ScorerSign  pgtype.Text
+	CreatedAt   pgtype.Timestamp
+	UpdatedAt   pgtype.Timestamp
+}
+
+type Stage4Result struct {
+	ID          pgtype.UUID
+	ResultID    pgtype.UUID
+	Try1        string
+	Try2        sql.NullString
+	IsTry2      bool
+	ShooterSign pgtype.Text
+	ScorerSign  pgtype.Text
+	CreatedAt   pgtype.Timestamp
+	UpdatedAt   pgtype.Timestamp
+}
+
+type Stage5Result struct {
+	ID          pgtype.UUID
+	ResultID    pgtype.UUID
+	Try1        string
+	Try2        sql.NullString
+	IsTry2      bool
+	ShooterSign pgtype.Text
+	ScorerSign  pgtype.Text
+	CreatedAt   pgtype.Timestamp
+	UpdatedAt   pgtype.Timestamp
+}
+
+type Stage6Result struct {
+	ID          pgtype.UUID
+	ResultID    pgtype.UUID
+	Try1        string
+	Try2        sql.NullString
+	IsTry2      bool
 	ShooterSign pgtype.Text
 	ScorerSign  pgtype.Text
 	CreatedAt   pgtype.Timestamp
