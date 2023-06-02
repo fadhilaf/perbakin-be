@@ -25,6 +25,7 @@ func SuperRoutes(router *gin.RouterGroup, delivery superDelivery.SuperDelivery, 
 	examRouter := superRouter.Group("/exam/:exam_id", delivery.MustExamMiddleware())
 	examRouter.GET("", delivery.GetExamById)
 	examRouter.PUT("", delivery.UpdateExam)
+	examRouter.PATCH("", delivery.UpdateExamStatus)
 	examRouter.DELETE("", delivery.DeleteExam)
 
 	AdminSuperRoutes(examRouter, adminSuperDelivery, allDelivery)

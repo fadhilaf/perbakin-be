@@ -130,8 +130,9 @@ func (q *Queries) GetAdminByUserId(ctx context.Context, userID pgtype.UUID) (Get
 }
 
 const getAdminByUsername = `-- name: GetAdminByUsername :one
-SELECT admins.id, user_id, exam_id, username, password, name, created_at, updated_at FROM users
+SELECT admins.id, user_id, exam_id, username, password, users.name, active, users.created_at, users.updated_at FROM users
 INNER JOIN admins ON admins.user_id = users.id
+INNER JOIN exams ON admins.exam_id = exams.id
 WHERE username = $1
 `
 
@@ -142,6 +143,7 @@ type GetAdminByUsernameRow struct {
 	Username  string
 	Password  string
 	Name      string
+	Active    bool
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
 }
@@ -157,6 +159,7 @@ func (q *Queries) GetAdminByUsername(ctx context.Context, username string) (GetA
 		&i.Username,
 		&i.Password,
 		&i.Name,
+		&i.Active,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -164,7 +167,7 @@ func (q *Queries) GetAdminByUsername(ctx context.Context, username string) (GetA
 }
 
 const getAdminExamRelationByUserId = `-- name: GetAdminExamRelationByUserId :one
-SELECT admins.id, user_id, exam_id, super_id FROM admins
+SELECT admins.id, user_id, exam_id, super_id, active FROM admins
 INNER JOIN users ON admins.user_id = users.id 
 INNER JOIN exams ON admins.exam_id = exams.id
 WHERE user_id = $1
@@ -175,6 +178,7 @@ type GetAdminExamRelationByUserIdRow struct {
 	UserID  pgtype.UUID
 	ExamID  pgtype.UUID
 	SuperID pgtype.UUID
+	Active  bool
 }
 
 // untuk ngambil data relasi admin dan relasi exam berdasarkan user id (all role)
@@ -186,6 +190,7 @@ func (q *Queries) GetAdminExamRelationByUserId(ctx context.Context, userID pgtyp
 		&i.UserID,
 		&i.ExamID,
 		&i.SuperID,
+		&i.Active,
 	)
 	return i, err
 }

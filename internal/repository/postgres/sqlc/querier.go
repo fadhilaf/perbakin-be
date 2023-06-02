@@ -14,7 +14,7 @@ type Querier interface {
 	// untuk ngebuat admin (super role) TODO: return sebanyak get admin by id
 	CreateAdmin(ctx context.Context, arg CreateAdminParams) (CreateAdminRow, error)
 	// untuk membuat exam (super role)
-	CreateExam(ctx context.Context, arg CreateExamParams) (CreateExamRow, error)
+	CreateExam(ctx context.Context, arg CreateExamParams) (Exam, error)
 	// (all role)
 	CreateResult(ctx context.Context, shooterID pgtype.UUID) (Result, error)
 	// untuk ngebuat scorer (admin-super role) TODO: return sebanyak get scorer by id
@@ -79,7 +79,7 @@ type Querier interface {
 	// untuk ngambil data relasi scorer berdasarkan id (all role)
 	GetScorerRelationById(ctx context.Context, id pgtype.UUID) (Scorer, error)
 	// untuk ngambil data relasi scorer berdasarkan user id (all role)
-	GetScorerRelationByUserId(ctx context.Context, userID pgtype.UUID) (Scorer, error)
+	GetScorerRelationByUserId(ctx context.Context, userID pgtype.UUID) (GetScorerRelationByUserIdRow, error)
 	// untuk ngambil data akun seluruh scorer dalam satu exam (admin-super role)
 	GetScorersByExamId(ctx context.Context, examID pgtype.UUID) ([]GetScorersByExamIdRow, error)
 	// untuk mengambil shooter berdasarkan exam_id (admin-super role)
@@ -115,7 +115,9 @@ type Querier interface {
 	// low prio
 	UpdateAdminPassword(ctx context.Context, arg UpdateAdminPasswordParams) (pgtype.UUID, error)
 	// untuk memperbarui exam (super role)
-	UpdateExam(ctx context.Context, arg UpdateExamParams) (Exam, error)
+	UpdateExam(ctx context.Context, arg UpdateExamParams) (UpdateExamRow, error)
+	// untuk mengubah status exam (super role)
+	UpdateExamStatus(ctx context.Context, id pgtype.UUID) (bool, error)
 	// (admin-super role) dibuat by id
 	UpdateResult(ctx context.Context, arg UpdateResultParams) (Result, error)
 	// (scorer role) dibuat by id, utk update stage

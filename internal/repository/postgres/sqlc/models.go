@@ -254,6 +254,7 @@ type Exam struct {
 	Organizer string
 	Begin     pgtype.Date
 	Finish    pgtype.Date
+	Active    bool
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
 }

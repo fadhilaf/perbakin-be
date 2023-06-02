@@ -24,6 +24,7 @@ func (usecase *superUsecaseImpl) GetExamsBySuperId(req model.GetExamsBySuperIdRe
 			Organizer: exam.Organizer,
 			Begin:     exam.Begin,
 			Finish:    exam.Finish,
+			Active:    exam.Active,
 		})
 	}
 

@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS exams (
   organizer varchar(255) NOT NULL,
   begin date NOT NULL,
   finish date NOT NULL,
+  active boolean NOT NULL DEFAULT true,
   created_at timestamp NOT NULL DEFAULT NOW(),
   updated_at timestamp NOT NULL DEFAULT NOW(),
   CONSTRAINT super_id

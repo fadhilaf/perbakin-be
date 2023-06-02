@@ -9,7 +9,7 @@ type AdminUsecase interface {
 	AdminLogin(model.LoginRequest) model.WebServiceResponse
 	GetAdminByUserId(model.UserByUserIdRequest) model.WebServiceResponse
 
-	GetAdminExamRelationByUserId(model.UserByUserIdRequest) (model.OperatorAndExamRelation, error)
+	GetAdminExamRelationByUserId(model.UserByUserIdRequest) (model.OperatorAndExamRelationAndStatus, error)
 }
 
 var _ AdminUsecase = &adminUsecaseImpl{}

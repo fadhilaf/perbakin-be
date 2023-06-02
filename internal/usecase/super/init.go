@@ -26,6 +26,7 @@ type SuperUsecase interface {
 	GetExamsBySuperId(model.GetExamsBySuperIdRequest) model.WebServiceResponse
 	CreateExam(model.CreateExamRequest) model.WebServiceResponse
 	UpdateExam(model.UpdateExamRequest) model.WebServiceResponse
+	UpdateExamStatus(model.ByIdRequest) model.WebServiceResponse
 	DeleteExam(model.ByIdRequest) model.WebServiceResponse
 
 	GetExamRelationById(model.ByIdRequest) (model.ExamRelation, error)

@@ -162,8 +162,9 @@ func (q *Queries) GetScorerByUserId(ctx context.Context, userID pgtype.UUID) (Ge
 }
 
 const getScorerByUsername = `-- name: GetScorerByUsername :one
-SELECT scorers.id, user_id, exam_id, username, password, name, created_at, updated_at FROM users
+SELECT scorers.id, user_id, exam_id, username, password, users.name, active, users.created_at, users.updated_at FROM users
 INNER JOIN scorers ON scorers.user_id = users.id
+INNER JOIN exams ON scorers.exam_id = exams.id
 WHERE username = $1
 `
 
@@ -174,6 +175,7 @@ type GetScorerByUsernameRow struct {
 	Username  string
 	Password  string
 	Name      string
+	Active    bool
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
 }
@@ -189,6 +191,7 @@ func (q *Queries) GetScorerByUsername(ctx context.Context, username string) (Get
 		&i.Username,
 		&i.Password,
 		&i.Name,
+		&i.Active,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -210,16 +213,29 @@ func (q *Queries) GetScorerRelationById(ctx context.Context, id pgtype.UUID) (Sc
 }
 
 const getScorerRelationByUserId = `-- name: GetScorerRelationByUserId :one
-SELECT scorers.id, user_id, exam_id FROM scorers 
+SELECT scorers.id, user_id, exam_id, active FROM scorers 
 INNER JOIN users ON scorers.user_id = users.id
+INNER JOIN exams ON scorers.exam_id = exams.id
 WHERE user_id = $1
 `
 
+type GetScorerRelationByUserIdRow struct {
+	ID     pgtype.UUID
+	UserID pgtype.UUID
+	ExamID pgtype.UUID
+	Active bool
+}
+
 // untuk ngambil data relasi scorer berdasarkan user id (all role)
-func (q *Queries) GetScorerRelationByUserId(ctx context.Context, userID pgtype.UUID) (Scorer, error) {
+func (q *Queries) GetScorerRelationByUserId(ctx context.Context, userID pgtype.UUID) (GetScorerRelationByUserIdRow, error) {
 	row := q.db.QueryRow(ctx, getScorerRelationByUserId, userID)
-	var i Scorer
-	err := row.Scan(&i.ID, &i.UserID, &i.ExamID)
+	var i GetScorerRelationByUserIdRow
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.ExamID,
+		&i.Active,
+	)
 	return i, err
 }
 

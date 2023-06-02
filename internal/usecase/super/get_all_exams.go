@@ -24,6 +24,7 @@ func (usecase *superUsecaseImpl) GetAllExams() model.WebServiceResponse {
 			Organizer: exam.Organizer,
 			Begin:     exam.Begin,
 			Finish:    exam.Finish,
+			Active:    exam.Active,
 		})
 	}
 

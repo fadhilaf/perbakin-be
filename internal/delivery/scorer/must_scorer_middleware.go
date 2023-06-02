@@ -29,7 +29,16 @@ func (handler *scorerHandler) MustScorerMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		c.Set("scorer", scorer)
+		if !scorer.Active {
+			res := util.ToWebServiceResponse("Ujian tidak aktif", http.StatusForbidden, nil)
+			util.RemoveAuthSession(c)
+			util.DeleteAuthStatusCookie(c)
+			c.JSON(res.Status, res)
+			c.Abort()
+			return
+		}
+
+		c.Set("scorer", model.OperatorRelation{ID: scorer.ID, ExamID: scorer.ExamID, UserID: scorer.UserID})
 		c.Next()
 	}
 }

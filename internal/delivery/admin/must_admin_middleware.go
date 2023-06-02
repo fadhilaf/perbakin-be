@@ -29,6 +29,15 @@ func (handler *adminHandler) MustAdminMiddleware() gin.HandlerFunc {
 			return
 		}
 
+		if !adminExam.Active {
+			res := util.ToWebServiceResponse("Ujian tidak aktif", http.StatusForbidden, nil)
+			util.RemoveAuthSession(c)
+			util.DeleteAuthStatusCookie(c)
+			c.JSON(res.Status, res)
+			c.Abort()
+			return
+		}
+
 		c.Set("admin", model.OperatorRelation{ID: adminExam.ID, UserID: adminExam.UserID, ExamID: adminExam.ExamID})
 		c.Set("exam", model.ExamRelation{ID: adminExam.ExamID, SuperID: adminExam.SuperID})
 		c.Next()

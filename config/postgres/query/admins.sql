@@ -26,7 +26,7 @@ WHERE exam_id = $1;
 
 -- untuk ngambil data relasi admin dan relasi exam berdasarkan user id (all role)
 -- name: GetAdminExamRelationByUserId :one
-SELECT admins.id, user_id, exam_id, super_id FROM admins
+SELECT admins.id, user_id, exam_id, super_id, active FROM admins
 INNER JOIN users ON admins.user_id = users.id 
 INNER JOIN exams ON admins.exam_id = exams.id
 WHERE user_id = $1;
@@ -45,8 +45,9 @@ WHERE user_id = $1;
 
 -- untuk ngambil data display admin berdasarkan username (admin role)
 -- name: GetAdminByUsername :one
-SELECT admins.id, user_id, exam_id, username, password, name, created_at, updated_at FROM users
+SELECT admins.id, user_id, exam_id, username, password, users.name, active, users.created_at, users.updated_at FROM users
 INNER JOIN admins ON admins.user_id = users.id
+INNER JOIN exams ON admins.exam_id = exams.id
 WHERE username = $1;
 
 -- untuk ngambil data akun admin berdasarkan id (super role)

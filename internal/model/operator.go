@@ -10,17 +10,25 @@ type Operator struct {
 	User
 }
 
-type OperatorRelation struct {
+type OperatorRelationAndStatus struct {
 	ID     pgtype.UUID `json:"id"`
 	ExamID pgtype.UUID `json:"exam_id"`
 	UserID pgtype.UUID `json:"user_id"`
+	Active bool        `json:"active"`
 }
 
-type OperatorAndExamRelation struct {
+type OperatorAndExamRelationAndStatus struct {
 	ID      pgtype.UUID `json:"id"`
 	ExamID  pgtype.UUID `json:"exam_id"`
 	UserID  pgtype.UUID `json:"user_id"`
 	SuperID pgtype.UUID `json:"super_id"`
+	Active  bool        `json:"active"`
+}
+
+type OperatorRelation struct {
+	ID     pgtype.UUID `json:"id"`
+	ExamID pgtype.UUID `json:"exam_id"`
+	UserID pgtype.UUID `json:"user_id"`
 }
 
 // untuk GetAllOperators

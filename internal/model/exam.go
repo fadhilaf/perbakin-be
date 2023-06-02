@@ -14,6 +14,7 @@ type Exam struct {
 	Organizer string      `json:"organizer"`
 	Begin     pgtype.Date `json:"begin"`
 	Finish    pgtype.Date `json:"finish"`
+	Active    bool        `json:"active"`
 	CreatedAt time.Time   `json:"created_at"`
 	UpdatedAt time.Time   `json:"updated_at"`
 }
@@ -25,6 +26,7 @@ type ExamDisplaySuperData struct {
 	Organizer string      `json:"organizer"`
 	Begin     pgtype.Date `json:"begin"`
 	Finish    pgtype.Date `json:"finish"`
+	Active    bool        `json:"active"`
 }
 
 type ExamDisplayData struct {
@@ -34,6 +36,7 @@ type ExamDisplayData struct {
 	Organizer string      `json:"organizer"`
 	Begin     pgtype.Date `json:"begin"`
 	Finish    pgtype.Date `json:"finish"`
+	Active    bool        `json:"active"`
 }
 
 type ExamRelation struct {

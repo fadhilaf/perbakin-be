@@ -14,7 +14,7 @@ import (
 const createExam = `-- name: CreateExam :one
 INSERT INTO exams (super_id, name, location, organizer, begin, finish)
 VALUES ($1, $2, $3, $4, $5, $6)
-RETURNING id, super_id, name, location, organizer, begin, finish
+RETURNING id, super_id, name, location, organizer, begin, finish, active, created_at, updated_at
 `
 
 type CreateExamParams struct {
@@ -26,18 +26,8 @@ type CreateExamParams struct {
 	Finish    pgtype.Date
 }
 
-type CreateExamRow struct {
-	ID        pgtype.UUID
-	SuperID   pgtype.UUID
-	Name      string
-	Location  string
-	Organizer string
-	Begin     pgtype.Date
-	Finish    pgtype.Date
-}
-
 // untuk membuat exam (super role)
-func (q *Queries) CreateExam(ctx context.Context, arg CreateExamParams) (CreateExamRow, error) {
+func (q *Queries) CreateExam(ctx context.Context, arg CreateExamParams) (Exam, error) {
 	row := q.db.QueryRow(ctx, createExam,
 		arg.SuperID,
 		arg.Name,
@@ -46,7 +36,7 @@ func (q *Queries) CreateExam(ctx context.Context, arg CreateExamParams) (CreateE
 		arg.Begin,
 		arg.Finish,
 	)
-	var i CreateExamRow
+	var i Exam
 	err := row.Scan(
 		&i.ID,
 		&i.SuperID,
@@ -55,6 +45,9 @@ func (q *Queries) CreateExam(ctx context.Context, arg CreateExamParams) (CreateE
 		&i.Organizer,
 		&i.Begin,
 		&i.Finish,
+		&i.Active,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }
@@ -70,7 +63,7 @@ func (q *Queries) DeleteExam(ctx context.Context, id pgtype.UUID) error {
 }
 
 const getAllExams = `-- name: GetAllExams :many
-SELECT exams.name, users.name as super, location, organizer, begin, finish 
+SELECT exams.name, users.name as super, location, organizer, begin, finish, active
 FROM exams JOIN supers ON exams.super_id = supers.id 
 JOIN users ON supers.user_id = users.id
 `
@@ -82,6 +75,7 @@ type GetAllExamsRow struct {
 	Organizer string
 	Begin     pgtype.Date
 	Finish    pgtype.Date
+	Active    bool
 }
 
 // untuk mengambil seluruh exam (super role)
@@ -101,6 +95,7 @@ func (q *Queries) GetAllExams(ctx context.Context) ([]GetAllExamsRow, error) {
 			&i.Organizer,
 			&i.Begin,
 			&i.Finish,
+			&i.Active,
 		); err != nil {
 			return nil, err
 		}
@@ -113,7 +108,7 @@ func (q *Queries) GetAllExams(ctx context.Context) ([]GetAllExamsRow, error) {
 }
 
 const getExamById = `-- name: GetExamById :one
-SELECT id, super_id, name, location, organizer, begin, finish, created_at, updated_at 
+SELECT id, super_id, name, location, organizer, begin, finish, active, created_at, updated_at 
 FROM exams 
 WHERE id = $1
 `
@@ -130,6 +125,7 @@ func (q *Queries) GetExamById(ctx context.Context, id pgtype.UUID) (Exam, error)
 		&i.Organizer,
 		&i.Begin,
 		&i.Finish,
+		&i.Active,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -170,7 +166,7 @@ func (q *Queries) GetExamRelationById(ctx context.Context, id pgtype.UUID) (GetE
 }
 
 const getExamsBySuperId = `-- name: GetExamsBySuperId :many
-SELECT id, name, location, organizer, begin, finish 
+SELECT id, name, location, organizer, begin, finish, active
 FROM exams 
 WHERE super_id = $1
 `
@@ -182,6 +178,7 @@ type GetExamsBySuperIdRow struct {
 	Organizer string
 	Begin     pgtype.Date
 	Finish    pgtype.Date
+	Active    bool
 }
 
 // untuk mengambil seluruh exam (super role)
@@ -201,6 +198,7 @@ func (q *Queries) GetExamsBySuperId(ctx context.Context, superID pgtype.UUID) ([
 			&i.Organizer,
 			&i.Begin,
 			&i.Finish,
+			&i.Active,
 		); err != nil {
 			return nil, err
 		}
@@ -234,8 +232,20 @@ type UpdateExamParams struct {
 	Finish    pgtype.Date
 }
 
+type UpdateExamRow struct {
+	ID        pgtype.UUID
+	SuperID   pgtype.UUID
+	Name      string
+	Location  string
+	Organizer string
+	Begin     pgtype.Date
+	Finish    pgtype.Date
+	CreatedAt pgtype.Timestamp
+	UpdatedAt pgtype.Timestamp
+}
+
 // untuk memperbarui exam (super role)
-func (q *Queries) UpdateExam(ctx context.Context, arg UpdateExamParams) (Exam, error) {
+func (q *Queries) UpdateExam(ctx context.Context, arg UpdateExamParams) (UpdateExamRow, error) {
 	row := q.db.QueryRow(ctx, updateExam,
 		arg.ID,
 		arg.Name,
@@ -244,7 +254,7 @@ func (q *Queries) UpdateExam(ctx context.Context, arg UpdateExamParams) (Exam, e
 		arg.Begin,
 		arg.Finish,
 	)
-	var i Exam
+	var i UpdateExamRow
 	err := row.Scan(
 		&i.ID,
 		&i.SuperID,
@@ -257,4 +267,24 @@ func (q *Queries) UpdateExam(ctx context.Context, arg UpdateExamParams) (Exam, e
 		&i.UpdatedAt,
 	)
 	return i, err
+}
+
+const updateExamStatus = `-- name: UpdateExamStatus :one
+UPDATE exams 
+  SET active = CASE 
+    WHEN active = true 
+      THEN false 
+      ELSE true 
+    END, 
+  updated_at = NOW()
+WHERE id = $1
+RETURNING active
+`
+
+// untuk mengubah status exam (super role)
+func (q *Queries) UpdateExamStatus(ctx context.Context, id pgtype.UUID) (bool, error) {
+	row := q.db.QueryRow(ctx, updateExamStatus, id)
+	var active bool
+	err := row.Scan(&active)
+	return active, err
 }

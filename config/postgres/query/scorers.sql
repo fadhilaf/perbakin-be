@@ -26,8 +26,9 @@ WHERE exam_id = $1;
 
 -- untuk ngambil data relasi scorer berdasarkan user id (all role)
 -- name: GetScorerRelationByUserId :one
-SELECT scorers.id, user_id, exam_id FROM scorers 
+SELECT scorers.id, user_id, exam_id, active FROM scorers 
 INNER JOIN users ON scorers.user_id = users.id
+INNER JOIN exams ON scorers.exam_id = exams.id
 WHERE user_id = $1;
 
 -- untuk ngambil data relasi scorer berdasarkan id (all role)
@@ -44,8 +45,9 @@ WHERE user_id = $1;
 
 -- untuk ngambil data display scorer berdasarkan username (scorer role)
 -- name: GetScorerByUsername :one
-SELECT scorers.id, user_id, exam_id, username, password, name, created_at, updated_at FROM users
+SELECT scorers.id, user_id, exam_id, username, password, users.name, active, users.created_at, users.updated_at FROM users
 INNER JOIN scorers ON scorers.user_id = users.id
+INNER JOIN exams ON scorers.exam_id = exams.id
 WHERE username = $1;
 
 -- untuk ngambil data akun scorer berdasarkan id (admin-super role)

@@ -20,6 +20,7 @@ type SuperDelivery interface {
 
 	GetExamById(c *gin.Context)
 	UpdateExam(c *gin.Context)
+	UpdateExamStatus(c *gin.Context)
 	DeleteExam(c *gin.Context)
 
 	GetAllAdmins(c *gin.Context)

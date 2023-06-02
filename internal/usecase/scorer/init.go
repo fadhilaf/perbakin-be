@@ -8,7 +8,7 @@ import (
 type ScorerUsecase interface {
 	ScorerLogin(model.LoginRequest) model.WebServiceResponse
 
-	GetScorerRelationByUserId(model.UserByUserIdRequest) (model.OperatorRelation, error)
+	GetScorerRelationByUserId(model.UserByUserIdRequest) (model.OperatorRelationAndStatus, error)
 
 	GetScorerByUserId(model.UserByUserIdRequest) model.WebServiceResponse
 

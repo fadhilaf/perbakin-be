@@ -28,6 +28,17 @@ func (usecase *superUsecaseImpl) CreateExam(req model.CreateExamRequest) model.W
 	}
 
 	return util.ToWebServiceResponse("Berhasil membuat ujian", http.StatusCreated, gin.H{
-		"exam": exam,
+		"exam": model.Exam{
+			ID:        exam.ID,
+			SuperID:   exam.SuperID,
+			Name:      exam.Name,
+			Location:  exam.Location,
+			Organizer: exam.Organizer,
+			Begin:     exam.Begin,
+			Finish:    exam.Finish,
+			Active:    exam.Active,
+			CreatedAt: exam.CreatedAt.Time,
+			UpdatedAt: exam.UpdatedAt.Time,
+		},
 	})
 }
