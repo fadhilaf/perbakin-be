@@ -39,3 +39,10 @@ func Stage0AdminSuperRoutes(stage0Router *gin.RouterGroup, delivery adminSuperDe
 	stage0Router.PUT("/sign", delivery.UpdateStage0Signs)
 	stage0Router.DELETE("", delivery.DeleteStage0)
 }
+
+// for resultRouter return stage0Router
+func Stage1AllRoutes(resultRouter *gin.RouterGroup, delivery allDelivery.AllDelivery) *gin.RouterGroup {
+	resultRouter.POST("/stage1", delivery.CreateStage1)
+
+	return resultRouter
+}

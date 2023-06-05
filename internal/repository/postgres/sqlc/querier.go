@@ -6,6 +6,7 @@ package postgres
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/jackc/pgx/v5/pgtype"
 )
@@ -24,7 +25,7 @@ type Querier interface {
 	// (all role)
 	CreateStage0(ctx context.Context, resultID pgtype.UUID) (Stage0Result, error)
 	CreateStage1(ctx context.Context, resultID pgtype.UUID) (CreateStage1Row, error)
-	CreateStage1try2(ctx context.Context, resultID pgtype.UUID) (CreateStage1try2Row, error)
+	CreateStage1try2(ctx context.Context, id pgtype.UUID) (CreateStage1try2Row, error)
 	// untuk menghapus exam (super role)
 	DeleteExam(ctx context.Context, id pgtype.UUID) error
 	// (admin-super role) dibuat by id
@@ -96,10 +97,12 @@ type Querier interface {
 	GetStage0RelationByResultId(ctx context.Context, resultID pgtype.UUID) (GetStage0RelationByResultIdRow, error)
 	GetStage0Status(ctx context.Context, id pgtype.UUID) (Stage0Status, error)
 	// (all role)
-	GetStage1try1ById(ctx context.Context, id pgtype.UUID) (GetStage1try1ByIdRow, error)
+	GetStage1ById(ctx context.Context, id pgtype.UUID) (GetStage1ByIdRow, error)
 	// (all role)
-	GetStage1try1RelationByResultId(ctx context.Context, resultID pgtype.UUID) (GetStage1try1RelationByResultIdRow, error)
-	GetStage1try1Status(ctx context.Context, id pgtype.UUID) (interface{}, error)
+	GetStage1RelationByResultId(ctx context.Context, resultID pgtype.UUID) (GetStage1RelationByResultIdRow, error)
+	GetStage1try1Status(ctx context.Context, id pgtype.UUID) (NullStage13Status, error)
+	// (all role)
+	GetStage1try2Status(ctx context.Context, id pgtype.UUID) (NullStage13Status, error)
 	// untuk ngambil data lengkap super admin berdasarkan user id (super role)
 	GetSuperByUserId(ctx context.Context, userID pgtype.UUID) (GetSuperByUserIdRow, error)
 	// untuk ngambil data display super admin berdasarkan username (super role)
@@ -155,29 +158,53 @@ type Querier interface {
 	// (admin-super role)
 	UpdateStage0Signs(ctx context.Context, arg UpdateStage0SignsParams) (UpdateStage0SignsRow, error)
 	// (scorer role)
-	UpdateStage1FinishFailed(ctx context.Context, arg UpdateStage1FinishFailedParams) error
-	// (scorer role)
-	UpdateStage1FinishSuccess(ctx context.Context, arg UpdateStage1FinishSuccessParams) error
+	UpdateStage1NextTry(ctx context.Context, id pgtype.UUID) error
 	// (admin-super role)
 	UpdateStage1Signs(ctx context.Context, arg UpdateStage1SignsParams) (UpdateStage1SignsRow, error)
-	// (scorer role)
+	// (admin-super role)
 	UpdateStage1try1(ctx context.Context, arg UpdateStage1try1Params) (UpdateStage1try1Row, error)
 	// (scorer role)
-	UpdateStage1try1Checkmarks(ctx context.Context, arg UpdateStage1try1CheckmarksParams) (interface{}, error)
+	UpdateStage1try1Checkmarks(ctx context.Context, arg UpdateStage1try1CheckmarksParams) (sql.NullString, error)
+	// (scorer role)
+	UpdateStage1try1FinishFailed(ctx context.Context, arg UpdateStage1try1FinishFailedParams) error
+	// (scorer role)
+	UpdateStage1try1FinishSuccess(ctx context.Context, arg UpdateStage1try1FinishSuccessParams) error
 	// (scorer role)
 	UpdateStage1try1NextNo(ctx context.Context, arg UpdateStage1try1NextNoParams) error
 	// (scorer role)
-	UpdateStage1try1No1(ctx context.Context, arg UpdateStage1try1No1Params) (UpdateStage1try1No1Row, error)
+	UpdateStage1try1No1(ctx context.Context, arg UpdateStage1try1No1Params) (sql.NullString, error)
 	// (scorer role)
-	UpdateStage1try1No2(ctx context.Context, arg UpdateStage1try1No2Params) (UpdateStage1try1No2Row, error)
+	UpdateStage1try1No2(ctx context.Context, arg UpdateStage1try1No2Params) (sql.NullString, error)
 	// (scorer role)
-	UpdateStage1try1No3(ctx context.Context, arg UpdateStage1try1No3Params) (UpdateStage1try1No3Row, error)
+	UpdateStage1try1No3(ctx context.Context, arg UpdateStage1try1No3Params) (sql.NullString, error)
 	// (scorer role)
-	UpdateStage1try1No4(ctx context.Context, arg UpdateStage1try1No4Params) (UpdateStage1try1No4Row, error)
+	UpdateStage1try1No4(ctx context.Context, arg UpdateStage1try1No4Params) (sql.NullString, error)
 	// (scorer role)
-	UpdateStage1try1No5(ctx context.Context, arg UpdateStage1try1No5Params) (UpdateStage1try1No5Row, error)
+	UpdateStage1try1No5(ctx context.Context, arg UpdateStage1try1No5Params) (sql.NullString, error)
 	// (scorer role)
-	UpdateStage1try1No6(ctx context.Context, arg UpdateStage1try1No6Params) (UpdateStage1try1No6Row, error)
+	UpdateStage1try1No6(ctx context.Context, arg UpdateStage1try1No6Params) (sql.NullString, error)
+	// (admin-super role)
+	UpdateStage1try2(ctx context.Context, arg UpdateStage1try2Params) (UpdateStage1try2Row, error)
+	// (scorer role)
+	UpdateStage1try2Checkmarks(ctx context.Context, arg UpdateStage1try2CheckmarksParams) (sql.NullString, error)
+	// (scorer role)
+	UpdateStage1try2FinishFailed(ctx context.Context, arg UpdateStage1try2FinishFailedParams) error
+	// (scorer role)
+	UpdateStage1try2FinishSuccess(ctx context.Context, arg UpdateStage1try2FinishSuccessParams) error
+	// (scorer role)
+	UpdateStage1try2NextNo(ctx context.Context, arg UpdateStage1try2NextNoParams) error
+	// (scorer role)
+	UpdateStage1try2No1(ctx context.Context, arg UpdateStage1try2No1Params) (sql.NullString, error)
+	// (scorer role)
+	UpdateStage1try2No2(ctx context.Context, arg UpdateStage1try2No2Params) (sql.NullString, error)
+	// (scorer role)
+	UpdateStage1try2No3(ctx context.Context, arg UpdateStage1try2No3Params) (sql.NullString, error)
+	// (scorer role)
+	UpdateStage1try2No4(ctx context.Context, arg UpdateStage1try2No4Params) (sql.NullString, error)
+	// (scorer role)
+	UpdateStage1try2No5(ctx context.Context, arg UpdateStage1try2No5Params) (sql.NullString, error)
+	// (scorer role)
+	UpdateStage1try2No6(ctx context.Context, arg UpdateStage1try2No6Params) (sql.NullString, error)
 }
 
 var _ Querier = (*Queries)(nil)

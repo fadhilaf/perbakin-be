@@ -1,35 +1,8 @@
 CREATE TABLE IF NOT EXISTS stage3_results (
   id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
   result_id uuid NOT NULL UNIQUE,
-  try1 stage13_tries NOT NULL DEFAULT ROW( 
-    '1',
-    ROW(
-      ROW(0,0,0),
-      ROW(0,0,0)
-    ),
-    ROW(
-      ROW(0,0,0),
-      ROW(0,0,0)
-    ),
-    ROW(
-      ROW(0,0,0),
-      ROW(0,0,0)
-    ),
-    ROW(
-      ROW(0,0,0),
-      ROW(0,0,0)
-    ),
-    ROW(
-      ROW(0,0,0),
-      ROW(0,0,0)
-    ),
-    ROW(
-      ROW(0,0,0),
-      ROW(0,0,0)
-    ),
-    ROW(false,false,false,false,false,false)
-  ),
-  try2 stage13_tries DEFAULT NULL,  
+  try1 uuid NOT NULL,
+  try2 uuid DEFAULT NULL,  
   is_try2 boolean NOT NULL DEFAULT FALSE,
   shooter_sign varchar(255) DEFAULT NULL,
   scorer_sign varchar(255) DEFAULT NULL,

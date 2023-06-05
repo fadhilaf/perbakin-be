@@ -26,49 +26,23 @@ CREATE TYPE stage13_checkmarks AS (
 
 CREATE TYPE stage13_status AS ENUM ('1', '2', '3', '4', '5', '6', '7');
 
-CREATE TYPE stage13_tries AS (
-  status stage13_status,
-  no1 stage123_numbers,
-  no2 stage123_numbers,
-  no3 stage123_numbers,
-  no4 stage123_numbers,
-  no5 stage123_numbers,
-  no6 stage123_numbers,
-  checkmarks stage13_checkmarks
+CREATE TABLE IF NOT EXISTS stage13_tries (
+  id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
+  status stage13_status DEFAULT '1',
+  no1 stage123_numbers DEFAULT (ROW(0, 0, 0), ROW(0, 0, 0)),
+  no2 stage123_numbers DEFAULT (ROW(0, 0, 0), ROW(0, 0, 0)),
+  no3 stage123_numbers DEFAULT (ROW(0, 0, 0), ROW(0, 0, 0)),
+  no4 stage123_numbers DEFAULT (ROW(0, 0, 0), ROW(0, 0, 0)),
+  no5 stage123_numbers DEFAULT (ROW(0, 0, 0), ROW(0, 0, 0)),
+  no6 stage123_numbers DEFAULT (ROW(0, 0, 0), ROW(0, 0, 0)),
+  checkmarks stage13_checkmarks DEFAULT (ROW(false, false, false, false, false, false))
 );
 
 CREATE TABLE IF NOT EXISTS stage1_results (
   id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
   result_id uuid NOT NULL UNIQUE,
-  try1 stage13_tries NOT NULL DEFAULT ROW( 
-    '1',
-    ROW(
-      ROW(0,0,0),
-      ROW(0,0,0)
-    ),
-    ROW(
-      ROW(0,0,0),
-      ROW(0,0,0)
-    ),
-    ROW(
-      ROW(0,0,0),
-      ROW(0,0,0)
-    ),
-    ROW(
-      ROW(0,0,0),
-      ROW(0,0,0)
-    ),
-    ROW(
-      ROW(0,0,0),
-      ROW(0,0,0)
-    ),
-    ROW(
-      ROW(0,0,0),
-      ROW(0,0,0)
-    ),
-    ROW(false,false,false,false,false,false)
-  ),
-  try2 stage13_tries DEFAULT NULL,
+  try1_id uuid NOT NULL UNIQUE,
+  try2_id uuid DEFAULT NULL UNIQUE,
   is_try2 boolean NOT NULL DEFAULT FALSE,
   shooter_sign varchar(255) DEFAULT NULL,
   scorer_sign varchar(255) DEFAULT NULL,
@@ -76,5 +50,11 @@ CREATE TABLE IF NOT EXISTS stage1_results (
   updated_at timestamp NOT NULL DEFAULT NOW(),
   CONSTRAINT result_id
     FOREIGN KEY (result_id) 
-      REFERENCES results (id) ON DELETE CASCADE
+      REFERENCES results (id) ON DELETE CASCADE,
+  CONSTRAINT try1_id 
+    FOREIGN KEY (try1_id) 
+      REFERENCES stage13_tries (id) ON DELETE CASCADE,
+  CONSTRAINT try2_id 
+    FOREIGN KEY (try2_id) 
+      REFERENCES stage13_tries (id) ON DELETE SET NULL
 );

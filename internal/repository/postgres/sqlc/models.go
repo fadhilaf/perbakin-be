@@ -307,11 +307,23 @@ type Stage0Result struct {
 	UpdatedAt   pgtype.Timestamp
 }
 
+type Stage13Try struct {
+	ID         pgtype.UUID
+	Status     NullStage13Status
+	No1        sql.NullString
+	No2        sql.NullString
+	No3        sql.NullString
+	No4        sql.NullString
+	No5        sql.NullString
+	No6        sql.NullString
+	Checkmarks sql.NullString
+}
+
 type Stage1Result struct {
 	ID          pgtype.UUID
 	ResultID    pgtype.UUID
-	Try1        string
-	Try2        sql.NullString
+	Try1ID      pgtype.UUID
+	Try2ID      pgtype.UUID
 	IsTry2      bool
 	ShooterSign pgtype.Text
 	ScorerSign  pgtype.Text
@@ -334,8 +346,8 @@ type Stage2Result struct {
 type Stage3Result struct {
 	ID          pgtype.UUID
 	ResultID    pgtype.UUID
-	Try1        string
-	Try2        sql.NullString
+	Try1        pgtype.UUID
+	Try2        pgtype.UUID
 	IsTry2      bool
 	ShooterSign pgtype.Text
 	ScorerSign  pgtype.Text

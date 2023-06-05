@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS stage1_results;
 
-DROP TYPE IF EXISTS stage13_tries;
+DROP TABLE IF EXISTS stage13_tries;
 
 DROP TYPE IF EXISTS stage13_status;
 DROP TYPE IF EXISTS stage13_checkmarks;

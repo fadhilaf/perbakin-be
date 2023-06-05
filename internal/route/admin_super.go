@@ -21,4 +21,6 @@ func AdminSuperRoutes(adminExamRouter *gin.RouterGroup, delivery adminSuperDeliv
 
 	stage0Router := Stage0AllRoutes(resultRouter, allDelivery)
 	Stage0AdminSuperRoutes(stage0Router, delivery)
+
+	Stage1AllRoutes(resultRouter, allDelivery)
 }

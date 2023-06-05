@@ -24,6 +24,6 @@ migrate-drop:
 migrate-fresh: migrate-down migrate-up
 
 sqlc:
-	sqlc -f sqlc.yaml generate
+	sqlc generate
 
 .PHONY:	migrate-up migrate-down sqlc

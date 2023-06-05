@@ -7,53 +7,55 @@ package postgres
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createStage1 = `-- name: CreateStage1 :one
-INSERT INTO stage1_results (result_id)
-VALUES ($1)
-RETURNING 
-  id, 
+WITH added_stage13_tries AS (
+  INSERT INTO stage13_tries DEFAULT VALUES
+  RETURNING id, status, no1, no2, no3, no4, no5, no6, checkmarks
+), added_stage1_results AS (
+  INSERT INTO stage1_results (result_id, try1_id)
+  SELECT $1, id FROM added_stage13_tries
+  RETURNING id, result_id, try1_id, is_try2, shooter_sign, scorer_sign, created_at, updated_at
+)
+SELECT
+  added_stage1_results.id, 
   result_id, 
-  ( try1 ).status,
-  ( try1 ).no1.scores,
-  ( try1 ).no1.duration,
-  ( try1 ).no2.scores,
-  ( try1 ).no2.duration,
-  ( try1 ).no3.scores,
-  ( try1 ).no3.duration,
-  ( try1 ).no4.scores,
-  ( try1 ).no4.duration,
-  ( try1 ).no5.scores,
-  ( try1 ).no5.duration,
-  ( try1 ).no6.scores,
-  ( try1 ).no6.duration,
-  ( try1 ).checkmarks,
+  status,
+  no1,
+  no2,
+  no3,
+  no4,
+  no5,
+  no6,
+  checkmarks,
+  is_try2,
+  shooter_sign,
+  scorer_sign,
   created_at,
   updated_at
+FROM added_stage13_tries, added_stage1_results
 `
 
 type CreateStage1Row struct {
-	ID        pgtype.UUID
-	ResultID  pgtype.UUID
-	Column3   interface{}
-	Column4   interface{}
-	Column5   interface{}
-	Column6   interface{}
-	Column7   interface{}
-	Column8   interface{}
-	Column9   interface{}
-	Column10  interface{}
-	Column11  interface{}
-	Column12  interface{}
-	Column13  interface{}
-	Column14  interface{}
-	Column15  interface{}
-	Column16  interface{}
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
+	ID          pgtype.UUID
+	ResultID    pgtype.UUID
+	Status      NullStage13Status
+	No1         sql.NullString
+	No2         sql.NullString
+	No3         sql.NullString
+	No4         sql.NullString
+	No5         sql.NullString
+	No6         sql.NullString
+	Checkmarks  sql.NullString
+	IsTry2      bool
+	ShooterSign pgtype.Text
+	ScorerSign  pgtype.Text
+	CreatedAt   pgtype.Timestamp
+	UpdatedAt   pgtype.Timestamp
 }
 
 func (q *Queries) CreateStage1(ctx context.Context, resultID pgtype.UUID) (CreateStage1Row, error) {
@@ -62,20 +64,17 @@ func (q *Queries) CreateStage1(ctx context.Context, resultID pgtype.UUID) (Creat
 	err := row.Scan(
 		&i.ID,
 		&i.ResultID,
-		&i.Column3,
-		&i.Column4,
-		&i.Column5,
-		&i.Column6,
-		&i.Column7,
-		&i.Column8,
-		&i.Column9,
-		&i.Column10,
-		&i.Column11,
-		&i.Column12,
-		&i.Column13,
-		&i.Column14,
-		&i.Column15,
-		&i.Column16,
+		&i.Status,
+		&i.No1,
+		&i.No2,
+		&i.No3,
+		&i.No4,
+		&i.No5,
+		&i.No6,
+		&i.Checkmarks,
+		&i.IsTry2,
+		&i.ShooterSign,
+		&i.ScorerSign,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -86,7 +85,13 @@ const deleteStage1 = `-- name: DeleteStage1 :exec
 WITH deleted_stage1 AS (
   DELETE FROM stage1_results
   WHERE stage1_results.id = $1
-  RETURNING result_id
+  RETURNING result_id, try1_id, try2_id
+), deleted_stage1try1 AS (
+  DELETE FROM stage13_tries
+  WHERE stage13_tries.id = (SELECT try1_id FROM deleted_stage1)
+), deleted_stage1try2 AS (
+  DELETE FROM stage13_tries
+  WHERE stage13_tries.id = (SELECT try2_id FROM deleted_stage1 WHERE try2_id IS NOT NULL)
 )
 UPDATE results 
 SET stage = '1', updated_at = NOW()
@@ -99,79 +104,96 @@ func (q *Queries) DeleteStage1(ctx context.Context, id pgtype.UUID) error {
 	return err
 }
 
-const getStage1try1ById = `-- name: GetStage1try1ById :one
+const getStage1ById = `-- name: GetStage1ById :one
 SELECT 
-  id,
+  stage1_results.id,
   result_id, 
-  ( try1 ).status,
-  ( try1 ).no1.scores,
-  ( try1 ).no1.duration,
-  ( try1 ).no2.scores,
-  ( try1 ).no2.duration,
-  ( try1 ).no3.scores,
-  ( try1 ).no3.duration,
-  ( try1 ).no4.scores,
-  ( try1 ).no4.duration,
-  ( try1 ).no5.scores,
-  ( try1 ).no5.duration,
-  ( try1 ).no6.scores,
-  ( try1 ).no6.duration,
-  ( try1 ).checkmarks,
+  try1.status AS try1_status,
+  try1.no1 AS try1_no1,
+  try1.no2 AS try1_no2,
+  try1.no3 AS try1_no3,
+  try1.no4 AS try1_no4,
+  try1.no5 AS try1_no5,
+  try1.no6 AS try1_no6,
+  try1.checkmarks AS try1_checkmarks,
+  try2.status AS try2_status,
+  try2.no1 AS try2_no1,
+  try2.no2 AS try2_no2,
+  try2.no3 AS try2_no3,
+  try2.no4 AS try2_no4,
+  try2.no5 AS try2_no5,
+  try2.no6 AS try2_no6,
+  try2.checkmarks AS try2_checkmarks,
+  is_try2,
+  shooter_sign,
+  scorer_sign,
   created_at,
   updated_at
 FROM stage1_results
-WHERE id = $1
+INNER JOIN stage13_tries AS try1 ON try1.id = stage1_results.try1_id
+LEFT JOIN stage13_tries AS try2 ON try2.id = stage1_results.try2_id
+WHERE stage1_results.id = $1
 `
 
-type GetStage1try1ByIdRow struct {
-	ID        pgtype.UUID
-	ResultID  pgtype.UUID
-	Column3   interface{}
-	Column4   interface{}
-	Column5   interface{}
-	Column6   interface{}
-	Column7   interface{}
-	Column8   interface{}
-	Column9   interface{}
-	Column10  interface{}
-	Column11  interface{}
-	Column12  interface{}
-	Column13  interface{}
-	Column14  interface{}
-	Column15  interface{}
-	Column16  interface{}
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
+type GetStage1ByIdRow struct {
+	ID             pgtype.UUID
+	ResultID       pgtype.UUID
+	Try1Status     NullStage13Status
+	Try1No1        sql.NullString
+	Try1No2        sql.NullString
+	Try1No3        sql.NullString
+	Try1No4        sql.NullString
+	Try1No5        sql.NullString
+	Try1No6        sql.NullString
+	Try1Checkmarks sql.NullString
+	Try2Status     NullStage13Status
+	Try2No1        sql.NullString
+	Try2No2        sql.NullString
+	Try2No3        sql.NullString
+	Try2No4        sql.NullString
+	Try2No5        sql.NullString
+	Try2No6        sql.NullString
+	Try2Checkmarks sql.NullString
+	IsTry2         bool
+	ShooterSign    pgtype.Text
+	ScorerSign     pgtype.Text
+	CreatedAt      pgtype.Timestamp
+	UpdatedAt      pgtype.Timestamp
 }
 
 // (all role)
-func (q *Queries) GetStage1try1ById(ctx context.Context, id pgtype.UUID) (GetStage1try1ByIdRow, error) {
-	row := q.db.QueryRow(ctx, getStage1try1ById, id)
-	var i GetStage1try1ByIdRow
+func (q *Queries) GetStage1ById(ctx context.Context, id pgtype.UUID) (GetStage1ByIdRow, error) {
+	row := q.db.QueryRow(ctx, getStage1ById, id)
+	var i GetStage1ByIdRow
 	err := row.Scan(
 		&i.ID,
 		&i.ResultID,
-		&i.Column3,
-		&i.Column4,
-		&i.Column5,
-		&i.Column6,
-		&i.Column7,
-		&i.Column8,
-		&i.Column9,
-		&i.Column10,
-		&i.Column11,
-		&i.Column12,
-		&i.Column13,
-		&i.Column14,
-		&i.Column15,
-		&i.Column16,
+		&i.Try1Status,
+		&i.Try1No1,
+		&i.Try1No2,
+		&i.Try1No3,
+		&i.Try1No4,
+		&i.Try1No5,
+		&i.Try1No6,
+		&i.Try1Checkmarks,
+		&i.Try2Status,
+		&i.Try2No1,
+		&i.Try2No2,
+		&i.Try2No3,
+		&i.Try2No4,
+		&i.Try2No5,
+		&i.Try2No6,
+		&i.Try2Checkmarks,
+		&i.IsTry2,
+		&i.ShooterSign,
+		&i.ScorerSign,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
 	return i, err
 }
 
-const getStage1try1RelationByResultId = `-- name: GetStage1try1RelationByResultId :one
+const getStage1RelationByResultId = `-- name: GetStage1RelationByResultId :one
 SELECT 
   id, 
   result_id
@@ -179,78 +201,51 @@ FROM stage1_results
 WHERE result_id = $1
 `
 
-type GetStage1try1RelationByResultIdRow struct {
+type GetStage1RelationByResultIdRow struct {
 	ID       pgtype.UUID
 	ResultID pgtype.UUID
 }
 
 // (all role)
-func (q *Queries) GetStage1try1RelationByResultId(ctx context.Context, resultID pgtype.UUID) (GetStage1try1RelationByResultIdRow, error) {
-	row := q.db.QueryRow(ctx, getStage1try1RelationByResultId, resultID)
-	var i GetStage1try1RelationByResultIdRow
+func (q *Queries) GetStage1RelationByResultId(ctx context.Context, resultID pgtype.UUID) (GetStage1RelationByResultIdRow, error) {
+	row := q.db.QueryRow(ctx, getStage1RelationByResultId, resultID)
+	var i GetStage1RelationByResultIdRow
 	err := row.Scan(&i.ID, &i.ResultID)
 	return i, err
 }
 
 const getStage1try1Status = `-- name: GetStage1try1Status :one
 SELECT 
-  ( try1 ).status
+  status
 FROM stage1_results
-WHERE id = $1
+INNER JOIN stage13_tries ON stage13_tries.id = stage1_results.try1_id
+WHERE stage1_results.id = $1
 `
 
-func (q *Queries) GetStage1try1Status(ctx context.Context, id pgtype.UUID) (interface{}, error) {
+func (q *Queries) GetStage1try1Status(ctx context.Context, id pgtype.UUID) (NullStage13Status, error) {
 	row := q.db.QueryRow(ctx, getStage1try1Status, id)
-	var column_1 interface{}
-	err := row.Scan(&column_1)
-	return column_1, err
+	var status NullStage13Status
+	err := row.Scan(&status)
+	return status, err
 }
 
-const updateStage1FinishFailed = `-- name: UpdateStage1FinishFailed :exec
-WITH updated_stage1 AS (
+const updateStage1NextTry = `-- name: UpdateStage1NextTry :exec
+WITH updated_stage1_results AS (
   UPDATE stage1_results
-  SET try1.status = '7', shooter_sign = $2, scorer_sign = $3, updated_at = NOW()
+  SET 
+    is_try2 = true,
+    updated_at = NOW()
   WHERE stage1_results.id = $1
-  RETURNING result_id
+  RETURNING try1_id
 )
-UPDATE results 
-SET failed = true, updated_at = NOW()
-WHERE id = (SELECT result_id FROM updated_stage1)
+UPDATE stage13_tries
+SET status = '7'
+WHERE id = (SELECT try1_id FROM stage1_results)
 `
 
-type UpdateStage1FinishFailedParams struct {
-	ID          pgtype.UUID
-	ShooterSign pgtype.Text
-	ScorerSign  pgtype.Text
-}
-
 // (scorer role)
-func (q *Queries) UpdateStage1FinishFailed(ctx context.Context, arg UpdateStage1FinishFailedParams) error {
-	_, err := q.db.Exec(ctx, updateStage1FinishFailed, arg.ID, arg.ShooterSign, arg.ScorerSign)
-	return err
-}
-
-const updateStage1FinishSuccess = `-- name: UpdateStage1FinishSuccess :exec
-WITH updated_stage1 AS (
-  UPDATE stage1_results
-  SET try1.status = '7', shooter_sign = $2, scorer_sign = $3, updated_at = NOW()
-  WHERE stage1_results.id = $1
-  RETURNING result_id
-)
-UPDATE results 
-SET stage = '2', updated_at = NOW()
-WHERE id = (SELECT result_id FROM updated_stage1)
-`
-
-type UpdateStage1FinishSuccessParams struct {
-	ID          pgtype.UUID
-	ShooterSign pgtype.Text
-	ScorerSign  pgtype.Text
-}
-
-// (scorer role)
-func (q *Queries) UpdateStage1FinishSuccess(ctx context.Context, arg UpdateStage1FinishSuccessParams) error {
-	_, err := q.db.Exec(ctx, updateStage1FinishSuccess, arg.ID, arg.ShooterSign, arg.ScorerSign)
+func (q *Queries) UpdateStage1NextTry(ctx context.Context, id pgtype.UUID) error {
+	_, err := q.db.Exec(ctx, updateStage1NextTry, id)
 	return err
 }
 
@@ -285,306 +280,371 @@ func (q *Queries) UpdateStage1Signs(ctx context.Context, arg UpdateStage1SignsPa
 }
 
 const updateStage1try1 = `-- name: UpdateStage1try1 :one
-UPDATE stage1_results
-SET 
-  try1.status = $2,
-  try1.no1.scores = $3, try1.no1.duration = $4,
-  try1.no2.scores = $5, try1.no2.duration = $6,
-  try1.no3.scores = $7, try1.no3.duration = $8,
-  try1.no4.scores = $9, try1.no4.duration = $10,
-  try1.no5.scores = $11, try1.no5.duration = $12,
-  try1.no6.scores = $13, try1.no6.duration = $14,
-  try1.checkmarks = $15,
-  updated_at = NOW()
-WHERE id = $1 
-RETURNING 
-  ( try1 ).status,
-  ( try1 ).no1.scores,
-  ( try1 ).no1.duration,
-  ( try1 ).no2.scores,
-  ( try1 ).no2.duration,
-  ( try1 ).no3.scores,
-  ( try1 ).no3.duration,
-  ( try1 ).no4.scores,
-  ( try1 ).no4.duration,
-  ( try1 ).no5.scores,
-  ( try1 ).no5.duration,
-  ( try1 ).no6.scores,
-  ( try1 ).no6.duration,
-  ( try1 ).checkmarks,
-  created_at,
+WITH updated_stage1_results AS (
+  UPDATE stage1_results
+  SET
+    updated_at = NOW()
+  WHERE stage1_results.id = $1 
+  RETURNING try1_id, updated_at
+), updated_stage13_tries AS (
+  UPDATE stage13_tries
+  SET 
+    status = $2, 
+    no1 = $3, 
+    no2 = $4, 
+    no3 = $5, 
+    no4 = $6,
+    no5 = $7, 
+    no6 = $8, 
+    checkmarks = $9
+  WHERE id = (SELECT try1_id FROM stage1_results)
+  RETURNING 
+    status,
+    no1,
+    no2,
+    no3,
+    no4,
+    no5,
+    no6,
+    checkmarks
+)
+SELECT 
+  status,
+  no1,
+  no2,
+  no3,
+  no4,
+  no5,
+  no6,
+  checkmarks,
   updated_at
+FROM updated_stage1_results, updated_stage13_tries
 `
 
 type UpdateStage1try1Params struct {
-	ID      pgtype.UUID
-	Try1    string
-	Try1_2  string
-	Try1_3  string
-	Try1_4  string
-	Try1_5  string
-	Try1_6  string
-	Try1_7  string
-	Try1_8  string
-	Try1_9  string
-	Try1_10 string
-	Try1_11 string
-	Try1_12 string
-	Try1_13 string
-	Try1_14 string
+	ID         pgtype.UUID
+	Status     NullStage13Status
+	No1        sql.NullString
+	No2        sql.NullString
+	No3        sql.NullString
+	No4        sql.NullString
+	No5        sql.NullString
+	No6        sql.NullString
+	Checkmarks sql.NullString
 }
 
 type UpdateStage1try1Row struct {
-	Column1   interface{}
-	Column2   interface{}
-	Column3   interface{}
-	Column4   interface{}
-	Column5   interface{}
-	Column6   interface{}
-	Column7   interface{}
-	Column8   interface{}
-	Column9   interface{}
-	Column10  interface{}
-	Column11  interface{}
-	Column12  interface{}
-	Column13  interface{}
-	Column14  interface{}
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
+	Status     NullStage13Status
+	No1        sql.NullString
+	No2        sql.NullString
+	No3        sql.NullString
+	No4        sql.NullString
+	No5        sql.NullString
+	No6        sql.NullString
+	Checkmarks sql.NullString
+	UpdatedAt  pgtype.Timestamp
 }
 
-// (scorer role)
+// (admin-super role)
 func (q *Queries) UpdateStage1try1(ctx context.Context, arg UpdateStage1try1Params) (UpdateStage1try1Row, error) {
 	row := q.db.QueryRow(ctx, updateStage1try1,
 		arg.ID,
-		arg.Try1,
-		arg.Try1_2,
-		arg.Try1_3,
-		arg.Try1_4,
-		arg.Try1_5,
-		arg.Try1_6,
-		arg.Try1_7,
-		arg.Try1_8,
-		arg.Try1_9,
-		arg.Try1_10,
-		arg.Try1_11,
-		arg.Try1_12,
-		arg.Try1_13,
-		arg.Try1_14,
+		arg.Status,
+		arg.No1,
+		arg.No2,
+		arg.No3,
+		arg.No4,
+		arg.No5,
+		arg.No6,
+		arg.Checkmarks,
 	)
 	var i UpdateStage1try1Row
 	err := row.Scan(
-		&i.Column1,
-		&i.Column2,
-		&i.Column3,
-		&i.Column4,
-		&i.Column5,
-		&i.Column6,
-		&i.Column7,
-		&i.Column8,
-		&i.Column9,
-		&i.Column10,
-		&i.Column11,
-		&i.Column12,
-		&i.Column13,
-		&i.Column14,
-		&i.CreatedAt,
+		&i.Status,
+		&i.No1,
+		&i.No2,
+		&i.No3,
+		&i.No4,
+		&i.No5,
+		&i.No6,
+		&i.Checkmarks,
 		&i.UpdatedAt,
 	)
 	return i, err
 }
 
 const updateStage1try1Checkmarks = `-- name: UpdateStage1try1Checkmarks :one
-UPDATE stage1_results
+WITH updated_stage1_results AS (
+  UPDATE stage1_results
+  SET
+    updated_at = NOW()
+  WHERE stage1_results.id = $1
+  RETURNING try1_id
+)
+UPDATE stage13_tries
 SET 
-  try1.checkmarks = $2, 
-  updated_at = NOW()
-WHERE id = $1
-RETURNING ( try1 ).checkmarks
+  checkmarks = $2
+WHERE id = (SELECT try1_id FROM stage1_results)
+RETURNING checkmarks
 `
 
 type UpdateStage1try1CheckmarksParams struct {
-	ID   pgtype.UUID
-	Try1 string
+	ID         pgtype.UUID
+	Checkmarks sql.NullString
 }
 
 // (scorer role)
-func (q *Queries) UpdateStage1try1Checkmarks(ctx context.Context, arg UpdateStage1try1CheckmarksParams) (interface{}, error) {
-	row := q.db.QueryRow(ctx, updateStage1try1Checkmarks, arg.ID, arg.Try1)
-	var column_1 interface{}
-	err := row.Scan(&column_1)
-	return column_1, err
+func (q *Queries) UpdateStage1try1Checkmarks(ctx context.Context, arg UpdateStage1try1CheckmarksParams) (sql.NullString, error) {
+	row := q.db.QueryRow(ctx, updateStage1try1Checkmarks, arg.ID, arg.Checkmarks)
+	var checkmarks sql.NullString
+	err := row.Scan(&checkmarks)
+	return checkmarks, err
+}
+
+const updateStage1try1FinishFailed = `-- name: UpdateStage1try1FinishFailed :exec
+WITH updated_stage1_results AS (
+  UPDATE stage1_results
+  SET
+    updated_at = NOW(), 
+  	shooter_sign = $2, 
+  	scorer_sign = $3
+  WHERE stage1_results.id = $1
+  RETURNING result_id, try1_id
+), updated_stage13_tries AS (
+  UPDATE stage13_tries
+    SET status = '7'
+  WHERE id = (SELECT try1_id FROM updated_stage1_results)
+)
+UPDATE results 
+SET failed = true, updated_at = NOW()
+WHERE id = (SELECT result_id FROM updated_stage1_results)
+`
+
+type UpdateStage1try1FinishFailedParams struct {
+	ID          pgtype.UUID
+	ShooterSign pgtype.Text
+	ScorerSign  pgtype.Text
+}
+
+// (scorer role)
+func (q *Queries) UpdateStage1try1FinishFailed(ctx context.Context, arg UpdateStage1try1FinishFailedParams) error {
+	_, err := q.db.Exec(ctx, updateStage1try1FinishFailed, arg.ID, arg.ShooterSign, arg.ScorerSign)
+	return err
+}
+
+const updateStage1try1FinishSuccess = `-- name: UpdateStage1try1FinishSuccess :exec
+WITH updated_stage1_results AS (
+  UPDATE stage1_results
+  SET
+    updated_at = NOW(), 
+  	shooter_sign = $2, 
+  	scorer_sign = $3
+  WHERE stage1_results.id = $1
+  RETURNING result_id, try1_id
+), updated_stage13_tries AS (
+  UPDATE stage13_tries
+    SET status = '7'
+  WHERE id = (SELECT try1_id FROM updated_stage1_results)
+)
+UPDATE results 
+SET stage = '2', updated_at = NOW()
+WHERE id = (SELECT result_id FROM updated_stage1_results)
+`
+
+type UpdateStage1try1FinishSuccessParams struct {
+	ID          pgtype.UUID
+	ShooterSign pgtype.Text
+	ScorerSign  pgtype.Text
+}
+
+// (scorer role)
+func (q *Queries) UpdateStage1try1FinishSuccess(ctx context.Context, arg UpdateStage1try1FinishSuccessParams) error {
+	_, err := q.db.Exec(ctx, updateStage1try1FinishSuccess, arg.ID, arg.ShooterSign, arg.ScorerSign)
+	return err
 }
 
 const updateStage1try1NextNo = `-- name: UpdateStage1try1NextNo :exec
-UPDATE stage1_results
-SET try1.status = $2, updated_at = NOW()
-WHERE id = $1
+WITH updated_stage1_results AS (
+  UPDATE stage1_results
+  SET
+    updated_at = NOW()
+  WHERE stage1_results.id = $1
+  RETURNING try1_id
+)
+UPDATE stage13_tries
+  SET status = $2
+WHERE id = (SELECT try1_id FROM stage1_results)
 `
 
 type UpdateStage1try1NextNoParams struct {
-	ID   pgtype.UUID
-	Try1 string
+	ID     pgtype.UUID
+	Status NullStage13Status
 }
 
 // (scorer role)
 func (q *Queries) UpdateStage1try1NextNo(ctx context.Context, arg UpdateStage1try1NextNoParams) error {
-	_, err := q.db.Exec(ctx, updateStage1try1NextNo, arg.ID, arg.Try1)
+	_, err := q.db.Exec(ctx, updateStage1try1NextNo, arg.ID, arg.Status)
 	return err
 }
 
 const updateStage1try1No1 = `-- name: UpdateStage1try1No1 :one
-UPDATE stage1_results
-SET try1.no1.scores = $2, try1.no1.duration = $3, updated_at = NOW()
-WHERE id = $1 
-RETURNING ( try1 ).no1.scores, ( try1 ).no1.duration
+WITH updated_stage1_results AS (
+  UPDATE stage1_results
+  SET
+    updated_at = NOW()
+  WHERE stage1_results.id = $1
+  RETURNING try1_id
+)
+UPDATE stage13_tries
+SET no1 = $2
+WHERE id = (SELECT try1_id FROM stage1_results)
+RETURNING no1
 `
 
 type UpdateStage1try1No1Params struct {
-	ID     pgtype.UUID
-	Try1   string
-	Try1_2 string
-}
-
-type UpdateStage1try1No1Row struct {
-	Column1 interface{}
-	Column2 interface{}
+	ID  pgtype.UUID
+	No1 sql.NullString
 }
 
 // (scorer role)
-func (q *Queries) UpdateStage1try1No1(ctx context.Context, arg UpdateStage1try1No1Params) (UpdateStage1try1No1Row, error) {
-	row := q.db.QueryRow(ctx, updateStage1try1No1, arg.ID, arg.Try1, arg.Try1_2)
-	var i UpdateStage1try1No1Row
-	err := row.Scan(&i.Column1, &i.Column2)
-	return i, err
+func (q *Queries) UpdateStage1try1No1(ctx context.Context, arg UpdateStage1try1No1Params) (sql.NullString, error) {
+	row := q.db.QueryRow(ctx, updateStage1try1No1, arg.ID, arg.No1)
+	var no1 sql.NullString
+	err := row.Scan(&no1)
+	return no1, err
 }
 
 const updateStage1try1No2 = `-- name: UpdateStage1try1No2 :one
-UPDATE stage1_results
-SET try1.no2.scores = $2, try1.no2.duration = $3, updated_at = NOW()
-WHERE id = $1 
-RETURNING ( try1 ).no2.scores, ( try1 ).no2.duration
+WITH updated_stage1_results AS (
+  UPDATE stage1_results
+  SET
+    updated_at = NOW()
+  WHERE stage1_results.id = $1
+  RETURNING try1_id
+)
+UPDATE stage13_tries 
+SET no2 = $2
+WHERE id = (SELECT try1_id FROM stage1_results)
+RETURNING no2
 `
 
 type UpdateStage1try1No2Params struct {
-	ID     pgtype.UUID
-	Try1   string
-	Try1_2 string
-}
-
-type UpdateStage1try1No2Row struct {
-	Column1 interface{}
-	Column2 interface{}
+	ID  pgtype.UUID
+	No2 sql.NullString
 }
 
 // (scorer role)
-func (q *Queries) UpdateStage1try1No2(ctx context.Context, arg UpdateStage1try1No2Params) (UpdateStage1try1No2Row, error) {
-	row := q.db.QueryRow(ctx, updateStage1try1No2, arg.ID, arg.Try1, arg.Try1_2)
-	var i UpdateStage1try1No2Row
-	err := row.Scan(&i.Column1, &i.Column2)
-	return i, err
+func (q *Queries) UpdateStage1try1No2(ctx context.Context, arg UpdateStage1try1No2Params) (sql.NullString, error) {
+	row := q.db.QueryRow(ctx, updateStage1try1No2, arg.ID, arg.No2)
+	var no2 sql.NullString
+	err := row.Scan(&no2)
+	return no2, err
 }
 
 const updateStage1try1No3 = `-- name: UpdateStage1try1No3 :one
-UPDATE stage1_results
-SET try1.no3.scores = $2, try1.no3.duration = $3, updated_at = NOW()
-WHERE id = $1 
-RETURNING ( try1 ).no3.scores, ( try1 ).no3.duration
+WITH updated_stage1_results AS (
+  UPDATE stage1_results
+  SET
+    updated_at = NOW()
+  WHERE stage1_results.id = $1
+  RETURNING try1_id
+)
+UPDATE stage13_tries
+SET no3 = $2
+WHERE id = (SELECT try1_id FROM stage1_results) 
+RETURNING no3
 `
 
 type UpdateStage1try1No3Params struct {
-	ID     pgtype.UUID
-	Try1   string
-	Try1_2 string
-}
-
-type UpdateStage1try1No3Row struct {
-	Column1 interface{}
-	Column2 interface{}
+	ID  pgtype.UUID
+	No3 sql.NullString
 }
 
 // (scorer role)
-func (q *Queries) UpdateStage1try1No3(ctx context.Context, arg UpdateStage1try1No3Params) (UpdateStage1try1No3Row, error) {
-	row := q.db.QueryRow(ctx, updateStage1try1No3, arg.ID, arg.Try1, arg.Try1_2)
-	var i UpdateStage1try1No3Row
-	err := row.Scan(&i.Column1, &i.Column2)
-	return i, err
+func (q *Queries) UpdateStage1try1No3(ctx context.Context, arg UpdateStage1try1No3Params) (sql.NullString, error) {
+	row := q.db.QueryRow(ctx, updateStage1try1No3, arg.ID, arg.No3)
+	var no3 sql.NullString
+	err := row.Scan(&no3)
+	return no3, err
 }
 
 const updateStage1try1No4 = `-- name: UpdateStage1try1No4 :one
-UPDATE stage1_results
-SET try1.no4.scores = $2, try1.no4.duration = $3, updated_at = NOW()
-WHERE id = $1 
-RETURNING ( try1 ).no4.scores, ( try1 ).no4.duration
+WITH updated_stage1_results AS (
+  UPDATE stage1_results
+  SET
+    updated_at = NOW()
+  WHERE stage1_results.id = $1
+  RETURNING try1_id
+)
+UPDATE stage13_tries
+SET no4 = $2
+WHERE id = (SELECT try1_id FROM stage1_results) 
+RETURNING no4
 `
 
 type UpdateStage1try1No4Params struct {
-	ID     pgtype.UUID
-	Try1   string
-	Try1_2 string
-}
-
-type UpdateStage1try1No4Row struct {
-	Column1 interface{}
-	Column2 interface{}
+	ID  pgtype.UUID
+	No4 sql.NullString
 }
 
 // (scorer role)
-func (q *Queries) UpdateStage1try1No4(ctx context.Context, arg UpdateStage1try1No4Params) (UpdateStage1try1No4Row, error) {
-	row := q.db.QueryRow(ctx, updateStage1try1No4, arg.ID, arg.Try1, arg.Try1_2)
-	var i UpdateStage1try1No4Row
-	err := row.Scan(&i.Column1, &i.Column2)
-	return i, err
+func (q *Queries) UpdateStage1try1No4(ctx context.Context, arg UpdateStage1try1No4Params) (sql.NullString, error) {
+	row := q.db.QueryRow(ctx, updateStage1try1No4, arg.ID, arg.No4)
+	var no4 sql.NullString
+	err := row.Scan(&no4)
+	return no4, err
 }
 
 const updateStage1try1No5 = `-- name: UpdateStage1try1No5 :one
-UPDATE stage1_results
-SET try1.no5.scores = $2, try1.no5.duration = $3, updated_at = NOW()
-WHERE id = $1 
-RETURNING ( try1 ).no5.scores, ( try1 ).no5.duration
+WITH updated_stage1_results AS (
+  UPDATE stage1_results
+  SET
+    updated_at = NOW()
+  WHERE stage1_results.id = $1
+  RETURNING try1_id
+) 
+UPDATE stage13_tries 
+SET no5 = $2
+WHERE id = (SELECT try1_id FROM stage1_results) 
+RETURNING no5
 `
 
 type UpdateStage1try1No5Params struct {
-	ID     pgtype.UUID
-	Try1   string
-	Try1_2 string
-}
-
-type UpdateStage1try1No5Row struct {
-	Column1 interface{}
-	Column2 interface{}
+	ID  pgtype.UUID
+	No5 sql.NullString
 }
 
 // (scorer role)
-func (q *Queries) UpdateStage1try1No5(ctx context.Context, arg UpdateStage1try1No5Params) (UpdateStage1try1No5Row, error) {
-	row := q.db.QueryRow(ctx, updateStage1try1No5, arg.ID, arg.Try1, arg.Try1_2)
-	var i UpdateStage1try1No5Row
-	err := row.Scan(&i.Column1, &i.Column2)
-	return i, err
+func (q *Queries) UpdateStage1try1No5(ctx context.Context, arg UpdateStage1try1No5Params) (sql.NullString, error) {
+	row := q.db.QueryRow(ctx, updateStage1try1No5, arg.ID, arg.No5)
+	var no5 sql.NullString
+	err := row.Scan(&no5)
+	return no5, err
 }
 
 const updateStage1try1No6 = `-- name: UpdateStage1try1No6 :one
-UPDATE stage1_results
-SET try1.no6.scores = $2, try1.no6.duration = $3, updated_at = NOW()
-WHERE id = $1 
-RETURNING ( try1 ).no6.scores, ( try1 ).no6.duration
+WITH updated_stage1_results AS (
+  UPDATE stage1_results
+  SET
+    updated_at = NOW()
+  WHERE stage1_results.id = $1 
+  RETURNING try1_id
+) 
+UPDATE stage13_tries
+SET no6 = $2
+WHERE id = (SELECT try1_id FROM stage1_results)
+RETURNING no6
 `
 
 type UpdateStage1try1No6Params struct {
-	ID     pgtype.UUID
-	Try1   string
-	Try1_2 string
-}
-
-type UpdateStage1try1No6Row struct {
-	Column1 interface{}
-	Column2 interface{}
+	ID  pgtype.UUID
+	No6 sql.NullString
 }
 
 // (scorer role)
-func (q *Queries) UpdateStage1try1No6(ctx context.Context, arg UpdateStage1try1No6Params) (UpdateStage1try1No6Row, error) {
-	row := q.db.QueryRow(ctx, updateStage1try1No6, arg.ID, arg.Try1, arg.Try1_2)
-	var i UpdateStage1try1No6Row
-	err := row.Scan(&i.Column1, &i.Column2)
-	return i, err
+func (q *Queries) UpdateStage1try1No6(ctx context.Context, arg UpdateStage1try1No6Params) (sql.NullString, error) {
+	row := q.db.QueryRow(ctx, updateStage1try1No6, arg.ID, arg.No6)
+	var no6 sql.NullString
+	err := row.Scan(&no6)
+	return no6, err
 }
