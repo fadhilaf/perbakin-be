@@ -309,14 +309,14 @@ type Stage0Result struct {
 
 type Stage13Try struct {
 	ID         pgtype.UUID
-	Status     NullStage13Status
-	No1        sql.NullString
-	No2        sql.NullString
-	No3        sql.NullString
-	No4        sql.NullString
-	No5        sql.NullString
-	No6        sql.NullString
-	Checkmarks sql.NullString
+	Status     Stage13Status
+	No1        string
+	No2        string
+	No3        string
+	No4        string
+	No5        string
+	No6        string
+	Checkmarks string
 }
 
 type Stage1Result struct {

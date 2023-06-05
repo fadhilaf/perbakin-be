@@ -43,14 +43,14 @@ FROM added_stage13_tries, added_stage1_results
 type CreateStage1Row struct {
 	ID          pgtype.UUID
 	ResultID    pgtype.UUID
-	Status      NullStage13Status
-	No1         sql.NullString
-	No2         sql.NullString
-	No3         sql.NullString
-	No4         sql.NullString
-	No5         sql.NullString
-	No6         sql.NullString
-	Checkmarks  sql.NullString
+	Status      Stage13Status
+	No1         string
+	No2         string
+	No3         string
+	No4         string
+	No5         string
+	No6         string
+	Checkmarks  string
 	IsTry2      bool
 	ShooterSign pgtype.Text
 	ScorerSign  pgtype.Text
@@ -138,14 +138,14 @@ WHERE stage1_results.id = $1
 type GetStage1ByIdRow struct {
 	ID             pgtype.UUID
 	ResultID       pgtype.UUID
-	Try1Status     NullStage13Status
-	Try1No1        sql.NullString
-	Try1No2        sql.NullString
-	Try1No3        sql.NullString
-	Try1No4        sql.NullString
-	Try1No5        sql.NullString
-	Try1No6        sql.NullString
-	Try1Checkmarks sql.NullString
+	Try1Status     Stage13Status
+	Try1No1        string
+	Try1No2        string
+	Try1No3        string
+	Try1No4        string
+	Try1No5        string
+	Try1No6        string
+	Try1Checkmarks string
 	Try2Status     NullStage13Status
 	Try2No1        sql.NullString
 	Try2No2        sql.NullString
@@ -222,9 +222,9 @@ INNER JOIN stage13_tries ON stage13_tries.id = stage1_results.try1_id
 WHERE stage1_results.id = $1
 `
 
-func (q *Queries) GetStage1try1Status(ctx context.Context, id pgtype.UUID) (NullStage13Status, error) {
+func (q *Queries) GetStage1try1Status(ctx context.Context, id pgtype.UUID) (Stage13Status, error) {
 	row := q.db.QueryRow(ctx, getStage1try1Status, id)
-	var status NullStage13Status
+	var status Stage13Status
 	err := row.Scan(&status)
 	return status, err
 }
@@ -323,25 +323,25 @@ FROM updated_stage1_results, updated_stage13_tries
 
 type UpdateStage1try1Params struct {
 	ID         pgtype.UUID
-	Status     NullStage13Status
-	No1        sql.NullString
-	No2        sql.NullString
-	No3        sql.NullString
-	No4        sql.NullString
-	No5        sql.NullString
-	No6        sql.NullString
-	Checkmarks sql.NullString
+	Status     Stage13Status
+	No1        string
+	No2        string
+	No3        string
+	No4        string
+	No5        string
+	No6        string
+	Checkmarks string
 }
 
 type UpdateStage1try1Row struct {
-	Status     NullStage13Status
-	No1        sql.NullString
-	No2        sql.NullString
-	No3        sql.NullString
-	No4        sql.NullString
-	No5        sql.NullString
-	No6        sql.NullString
-	Checkmarks sql.NullString
+	Status     Stage13Status
+	No1        string
+	No2        string
+	No3        string
+	No4        string
+	No5        string
+	No6        string
+	Checkmarks string
 	UpdatedAt  pgtype.Timestamp
 }
 
@@ -390,13 +390,13 @@ RETURNING checkmarks
 
 type UpdateStage1try1CheckmarksParams struct {
 	ID         pgtype.UUID
-	Checkmarks sql.NullString
+	Checkmarks string
 }
 
 // (scorer role)
-func (q *Queries) UpdateStage1try1Checkmarks(ctx context.Context, arg UpdateStage1try1CheckmarksParams) (sql.NullString, error) {
+func (q *Queries) UpdateStage1try1Checkmarks(ctx context.Context, arg UpdateStage1try1CheckmarksParams) (string, error) {
 	row := q.db.QueryRow(ctx, updateStage1try1Checkmarks, arg.ID, arg.Checkmarks)
-	var checkmarks sql.NullString
+	var checkmarks string
 	err := row.Scan(&checkmarks)
 	return checkmarks, err
 }
@@ -478,7 +478,7 @@ WHERE id = (SELECT try1_id FROM stage1_results)
 
 type UpdateStage1try1NextNoParams struct {
 	ID     pgtype.UUID
-	Status NullStage13Status
+	Status Stage13Status
 }
 
 // (scorer role)
@@ -503,13 +503,13 @@ RETURNING no1
 
 type UpdateStage1try1No1Params struct {
 	ID  pgtype.UUID
-	No1 sql.NullString
+	No1 string
 }
 
 // (scorer role)
-func (q *Queries) UpdateStage1try1No1(ctx context.Context, arg UpdateStage1try1No1Params) (sql.NullString, error) {
+func (q *Queries) UpdateStage1try1No1(ctx context.Context, arg UpdateStage1try1No1Params) (string, error) {
 	row := q.db.QueryRow(ctx, updateStage1try1No1, arg.ID, arg.No1)
-	var no1 sql.NullString
+	var no1 string
 	err := row.Scan(&no1)
 	return no1, err
 }
@@ -530,13 +530,13 @@ RETURNING no2
 
 type UpdateStage1try1No2Params struct {
 	ID  pgtype.UUID
-	No2 sql.NullString
+	No2 string
 }
 
 // (scorer role)
-func (q *Queries) UpdateStage1try1No2(ctx context.Context, arg UpdateStage1try1No2Params) (sql.NullString, error) {
+func (q *Queries) UpdateStage1try1No2(ctx context.Context, arg UpdateStage1try1No2Params) (string, error) {
 	row := q.db.QueryRow(ctx, updateStage1try1No2, arg.ID, arg.No2)
-	var no2 sql.NullString
+	var no2 string
 	err := row.Scan(&no2)
 	return no2, err
 }
@@ -557,13 +557,13 @@ RETURNING no3
 
 type UpdateStage1try1No3Params struct {
 	ID  pgtype.UUID
-	No3 sql.NullString
+	No3 string
 }
 
 // (scorer role)
-func (q *Queries) UpdateStage1try1No3(ctx context.Context, arg UpdateStage1try1No3Params) (sql.NullString, error) {
+func (q *Queries) UpdateStage1try1No3(ctx context.Context, arg UpdateStage1try1No3Params) (string, error) {
 	row := q.db.QueryRow(ctx, updateStage1try1No3, arg.ID, arg.No3)
-	var no3 sql.NullString
+	var no3 string
 	err := row.Scan(&no3)
 	return no3, err
 }
@@ -584,13 +584,13 @@ RETURNING no4
 
 type UpdateStage1try1No4Params struct {
 	ID  pgtype.UUID
-	No4 sql.NullString
+	No4 string
 }
 
 // (scorer role)
-func (q *Queries) UpdateStage1try1No4(ctx context.Context, arg UpdateStage1try1No4Params) (sql.NullString, error) {
+func (q *Queries) UpdateStage1try1No4(ctx context.Context, arg UpdateStage1try1No4Params) (string, error) {
 	row := q.db.QueryRow(ctx, updateStage1try1No4, arg.ID, arg.No4)
-	var no4 sql.NullString
+	var no4 string
 	err := row.Scan(&no4)
 	return no4, err
 }
@@ -611,13 +611,13 @@ RETURNING no5
 
 type UpdateStage1try1No5Params struct {
 	ID  pgtype.UUID
-	No5 sql.NullString
+	No5 string
 }
 
 // (scorer role)
-func (q *Queries) UpdateStage1try1No5(ctx context.Context, arg UpdateStage1try1No5Params) (sql.NullString, error) {
+func (q *Queries) UpdateStage1try1No5(ctx context.Context, arg UpdateStage1try1No5Params) (string, error) {
 	row := q.db.QueryRow(ctx, updateStage1try1No5, arg.ID, arg.No5)
-	var no5 sql.NullString
+	var no5 string
 	err := row.Scan(&no5)
 	return no5, err
 }
@@ -638,13 +638,13 @@ RETURNING no6
 
 type UpdateStage1try1No6Params struct {
 	ID  pgtype.UUID
-	No6 sql.NullString
+	No6 string
 }
 
 // (scorer role)
-func (q *Queries) UpdateStage1try1No6(ctx context.Context, arg UpdateStage1try1No6Params) (sql.NullString, error) {
+func (q *Queries) UpdateStage1try1No6(ctx context.Context, arg UpdateStage1try1No6Params) (string, error) {
 	row := q.db.QueryRow(ctx, updateStage1try1No6, arg.ID, arg.No6)
-	var no6 sql.NullString
+	var no6 string
 	err := row.Scan(&no6)
 	return no6, err
 }

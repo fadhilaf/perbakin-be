@@ -28,14 +28,14 @@ CREATE TYPE stage13_status AS ENUM ('1', '2', '3', '4', '5', '6', '7');
 
 CREATE TABLE IF NOT EXISTS stage13_tries (
   id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
-  status stage13_status DEFAULT '1',
-  no1 stage123_numbers DEFAULT (ROW(0, 0, 0), ROW(0, 0, 0)),
-  no2 stage123_numbers DEFAULT (ROW(0, 0, 0), ROW(0, 0, 0)),
-  no3 stage123_numbers DEFAULT (ROW(0, 0, 0), ROW(0, 0, 0)),
-  no4 stage123_numbers DEFAULT (ROW(0, 0, 0), ROW(0, 0, 0)),
-  no5 stage123_numbers DEFAULT (ROW(0, 0, 0), ROW(0, 0, 0)),
-  no6 stage123_numbers DEFAULT (ROW(0, 0, 0), ROW(0, 0, 0)),
-  checkmarks stage13_checkmarks DEFAULT (ROW(false, false, false, false, false, false))
+  status stage13_status NOT NULL DEFAULT '1',
+  no1 stage123_numbers NOT NULL DEFAULT (ROW(0, 0, 0), ROW(0, 0, 0)),
+  no2 stage123_numbers NOT NULL DEFAULT (ROW(0, 0, 0), ROW(0, 0, 0)),
+  no3 stage123_numbers NOT NULL DEFAULT (ROW(0, 0, 0), ROW(0, 0, 0)),
+  no4 stage123_numbers NOT NULL DEFAULT (ROW(0, 0, 0), ROW(0, 0, 0)),
+  no5 stage123_numbers NOT NULL DEFAULT (ROW(0, 0, 0), ROW(0, 0, 0)),
+  no6 stage123_numbers NOT NULL DEFAULT (ROW(0, 0, 0), ROW(0, 0, 0)),
+  checkmarks stage13_checkmarks NOT NULL DEFAULT (ROW(false, false, false, false, false, false))
 );
 
 CREATE TABLE IF NOT EXISTS stage1_results (
