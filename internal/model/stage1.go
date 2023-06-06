@@ -6,24 +6,49 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type Stage13Try struct {
+	ID         pgtype.UUID `json:"id"`
+	Status     string      `json:"status"`
+	No1        [][]int     `json:"no_1"`
+	No2        [][]int     `json:"no_2"`
+	No3        [][]int     `json:"no_3"`
+	No4        [][]int     `json:"no_4"`
+	No5        [][]int     `json:"no_5"`
+	No6        [][]int     `json:"no_6"`
+	Checkmarks []bool      `json:"checkmarks"`
+}
+
 type Stage1 struct {
-	ID       pgtype.UUID `json:"id"`
-	ResultID pgtype.UUID `json:"result_id"`
-	Status   string      `json:"status"`
-	// Scores1     []int       `json:"scores_1"`
-	// Duration1   []int       `json:"duration_1"`
-	// Scores2     []int       `json:"scores_2"`
-	// Duration2   []int       `json:"duration_2"`
-	// Scores3     []int       `json:"scores_3"`
-	// Duration3   []int       `json:"duration_3"`
-	// Scores4     []int       `json:"scores_4"`
-	// Duration4   []int       `json:"duration_4"`
-	// Scores5     []int       `json:"scores_5"`
-	// Duration5   []int       `json:"duration_5"`
-	// Scores6     []int       `json:"scores_6"`
-	// Duration6   []int       `json:"duration_6"`
+	ID          pgtype.UUID `json:"id"`
+	ResultID    pgtype.UUID `json:"result_id"`
+	Try1        Stage13Try  `json:"try_1"`
+	IsTry2      bool        `json:"is_try_2"`
 	ShooterSign pgtype.Text `json:"shooter_sign"`
 	ScorerSign  pgtype.Text `json:"scorer_sign"`
 	CreatedAt   time.Time   `json:"created_at"`
 	UpdatedAt   time.Time   `json:"updated_at"`
+}
+
+type Stage1Full struct {
+	ID          pgtype.UUID `json:"id"`
+	ResultID    pgtype.UUID `json:"result_id"`
+	Try1        Stage13Try  `json:"try_1"`
+	Try2        Stage13Try  `json:"try_2"`
+	IsTry2      bool        `json:"is_try_2"`
+	ShooterSign pgtype.Text `json:"shooter_sign"`
+	ScorerSign  pgtype.Text `json:"scorer_sign"`
+	CreatedAt   time.Time   `json:"created_at"`
+	UpdatedAt   time.Time   `json:"updated_at"`
+}
+
+type Stage1Relation struct {
+	ID       pgtype.UUID `json:"id"`
+	ResultID pgtype.UUID `json:"result_id"`
+	Try1ID   pgtype.UUID `json:"try_1_id"`
+	Try2ID   pgtype.UUID `json:"try_2_id"`
+	IsTry2   bool        `json:"is_try_2"`
+}
+
+type Stage123456Try struct {
+	Try string `uri:"try" binding:"required,oneof=1 2"`
 }

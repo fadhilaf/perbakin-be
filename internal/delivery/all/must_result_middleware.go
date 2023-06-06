@@ -16,7 +16,7 @@ func (handler *allHandler) MustResultMiddleware() gin.HandlerFunc {
 			ShooterID: shooter.ID,
 		})
 		if err != nil {
-			res := util.ToWebServiceResponse("Hasil ujian belum ada", http.StatusNotFound, nil)
+			res := util.ToWebServiceResponse("Gagal mengambil hasil ujian: "+err.Error(), http.StatusInternalServerError, nil)
 			c.JSON(res.Status, res)
 			c.Abort()
 			return

@@ -8,21 +8,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *allHandler) MustStage0Middleware() gin.HandlerFunc {
+func (handler *allHandler) MustStage1Middleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		result := c.MustGet("result").(model.ResultRelation)
 
-		stage0, err := handler.Usecase.GetStage0RelationByResultId(model.ByResultIdRequest{
+		stage1, err := handler.Usecase.GetStage1RelationByResultId(model.ByResultIdRequest{
 			ResultID: result.ID,
 		})
 		if err != nil {
-			res := util.ToWebServiceResponse("Gagal mengambil hasil ujian kualifikasi: "+err.Error(), http.StatusInternalServerError, nil)
+			res := util.ToWebServiceResponse("Hasil ujian stage 1 belum ada", http.StatusNotFound, nil)
 			c.JSON(res.Status, res)
 			c.Abort()
 			return
 		}
 
-		c.Set("stage0", stage0)
+		c.Set("stage1", stage1)
 		c.Next()
 	}
 }

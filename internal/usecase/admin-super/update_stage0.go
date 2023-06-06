@@ -36,7 +36,7 @@ func (usecase *adminSuperUsecaseImpl) UpdateStage0(req model.UpdateStage0Request
 			Series3:    util.ScoresToIntArray(newStage0.Series3),
 			Series4:    util.ScoresToIntArray(newStage0.Series4),
 			Series5:    util.ScoresToIntArray(newStage0.Series5),
-			Checkmarks: util.CheckmarksToArray(newStage0.Checkmarks),
+			Checkmarks: util.CheckmarksToBoolArray(newStage0.Checkmarks),
 			CreatedAt:  newStage0.CreatedAt.Time,
 			UpdatedAt:  newStage0.UpdatedAt.Time,
 		}})

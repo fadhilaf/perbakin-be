@@ -16,14 +16,14 @@ func (handler *scorerHandler) MustStage0ModifyMiddleware() gin.HandlerFunc {
 			ID: result.ID,
 		})
 		if err != nil {
-			res := util.ToWebServiceResponse("Hasil ujian belum ada", http.StatusNotFound, nil)
+			res := util.ToWebServiceResponse("Gagal mengambil hasil ujian: "+err.Error(), http.StatusInternalServerError, nil)
 			c.JSON(res.Status, res)
 			c.Abort()
 			return
 		}
 
 		if status.Failed {
-			res := util.ToWebServiceResponse("Hasil ujian kualifikasi tidak lulus", http.StatusForbidden, nil)
+			res := util.ToWebServiceResponse("Hasil ujian tidak lulus", http.StatusForbidden, nil)
 			c.JSON(res.Status, res)
 			c.Abort()
 			return

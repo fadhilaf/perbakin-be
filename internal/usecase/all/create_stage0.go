@@ -29,6 +29,7 @@ func (usecase *allUsecaseImpl) CreateStage0(req model.ByResultIdRequest) model.W
 			Series3:     util.ScoresToIntArray(stage0.Series3),
 			Series4:     util.ScoresToIntArray(stage0.Series4),
 			Series5:     util.ScoresToIntArray(stage0.Series5),
+			Checkmarks:  util.CheckmarksToBoolArray(stage0.Checkmarks),
 			ShooterSign: stage0.ShooterSign,
 			ScorerSign:  stage0.ScorerSign,
 			CreatedAt:   stage0.CreatedAt.Time,

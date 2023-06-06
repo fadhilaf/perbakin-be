@@ -25,6 +25,6 @@ func (usecase *scorerUsecaseImpl) UpdateStage0Checkmarks(req model.UpdateStage0C
 	}
 
 	return util.ToWebServiceResponse("Berhasil mengupdate kualifikasi centang hasil", http.StatusOK, gin.H{
-		"scores": util.CheckmarksToArray(checkmarks),
+		"scores": util.CheckmarksToBoolArray(checkmarks),
 	})
 }

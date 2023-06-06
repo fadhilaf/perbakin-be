@@ -25,7 +25,7 @@ func (usecase *allUsecaseImpl) GetStage0ById(req model.ByIdRequest) model.WebSer
 			Series3:     util.ScoresToIntArray(stage0.Series3),
 			Series4:     util.ScoresToIntArray(stage0.Series4),
 			Series5:     util.ScoresToIntArray(stage0.Series5),
-			Checkmarks:  util.CheckmarksToArray(stage0.Checkmarks),
+			Checkmarks:  util.CheckmarksToBoolArray(stage0.Checkmarks),
 			ShooterSign: stage0.ShooterSign,
 			ScorerSign:  stage0.ScorerSign,
 			CreatedAt:   stage0.CreatedAt.Time,

@@ -40,9 +40,12 @@ func Stage0AdminSuperRoutes(stage0Router *gin.RouterGroup, delivery adminSuperDe
 	stage0Router.DELETE("", delivery.DeleteStage0)
 }
 
-// for resultRouter return stage0Router
+// for resultRouter return stage1Router
 func Stage1AllRoutes(resultRouter *gin.RouterGroup, delivery allDelivery.AllDelivery) *gin.RouterGroup {
 	resultRouter.POST("/stage1", delivery.CreateStage1)
 
-	return resultRouter
+	stage1Router := resultRouter.Group("/stage1", delivery.MustStage1Middleware())
+	stage1Router.GET("", delivery.GetStage1ById)
+
+	return stage1Router
 }

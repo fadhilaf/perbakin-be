@@ -5,6 +5,17 @@ import (
 	"strings"
 )
 
+func NumbersToIntArrayArray(input string) [][]int {
+	nums := strings.Split(strings.Trim(strings.Trim(input, "(\")"), "\""), "\",\"")
+	result := make([][]int, len(nums))
+
+	for i, numStr := range nums {
+		result[i] = ScoresToIntArray(numStr)
+	}
+
+	return result
+}
+
 func ScoresToIntArray(input string) []int {
 	// Remove parentheses and split the string into individual numbers
 	numsStr := strings.Trim(input, "()")
@@ -65,7 +76,7 @@ func IntArrayToScores(input []int) string {
 	return string(buf)
 }
 
-func CheckmarksToArray(input string) []bool {
+func CheckmarksToBoolArray(input string) []bool {
 	// Remove the parentheses from the input string
 	input = strings.Trim(input, "()")
 
