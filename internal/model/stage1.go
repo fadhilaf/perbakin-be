@@ -65,7 +65,7 @@ type UpdateStage123456NoUriRequest struct {
 }
 
 type UpdateStage123NoBodyRequest struct {
-	Scores   []int `json:"scores" binding:"required,len=3,dive,oneof=0 1 2 3 4 5 6 7 8 9 10"`
+	Scores   []int `json:"scores" binding:"required,len=3"`
 	Duration []int `json:"duration" binding:"required,len=3,dive,lte=99,gte=0"`
 }
 

@@ -101,6 +101,8 @@ type Querier interface {
 	GetStage1RelationByResultId(ctx context.Context, resultID pgtype.UUID) (GetStage1RelationByResultIdRow, error)
 	GetStage1try1Status(ctx context.Context, id pgtype.UUID) (Stage13Status, error)
 	// (all role)
+	GetStage1try2ExistById(ctx context.Context, id pgtype.UUID) (bool, error)
+	// (all role)
 	GetStage1try2Status(ctx context.Context, id pgtype.UUID) (Stage13Status, error)
 	// untuk ngambil data lengkap super admin berdasarkan user id (super role)
 	GetSuperByUserId(ctx context.Context, userID pgtype.UUID) (GetSuperByUserIdRow, error)

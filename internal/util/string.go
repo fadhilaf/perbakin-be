@@ -80,7 +80,7 @@ func IntArraysToScores(scores ...[]int) string {
 	scoresStr := "("
 
 	for i, score := range scores {
-		scoresStr += IntArrayToScores(score)
+		scoresStr += "\"" + IntArrayToScores(score) + "\""
 
 		if i != len(scores)-1 {
 			scoresStr += ","

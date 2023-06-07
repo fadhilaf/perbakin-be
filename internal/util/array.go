@@ -67,7 +67,7 @@ func CheckScores(c *gin.Context, arr []int, stageType string) bool {
 
 func CheckDuration(c *gin.Context, duration []int) bool {
 	if duration[0] > 59 || duration[1] > 59 {
-		res := ToWebServiceResponse("Durasi menit dan detik tidak boleh lebih dari 59", http.StatusBadRequest, nil)
+		res := ToWebServiceResponse("Durasi menit(duration[0]) dan detik(duration[1]) tidak boleh lebih dari 59", http.StatusBadRequest, nil)
 		c.JSON(res.Status, res)
 		c.Abort()
 		return false

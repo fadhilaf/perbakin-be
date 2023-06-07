@@ -65,6 +65,13 @@ SELECT
 FROM stage1_results
 WHERE result_id = $1;
 
+-- (all role)
+-- name: GetStage1try2ExistById :one
+SELECT 
+  is_try2
+FROM stage1_results
+WHERE id = $1;
+
 -- name: GetStage1try1Status :one
 SELECT 
   status

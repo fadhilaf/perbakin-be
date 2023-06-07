@@ -231,6 +231,21 @@ func (q *Queries) GetStage1try1Status(ctx context.Context, id pgtype.UUID) (Stag
 	return status, err
 }
 
+const getStage1try2ExistById = `-- name: GetStage1try2ExistById :one
+SELECT 
+  is_try2
+FROM stage1_results
+WHERE id = $1
+`
+
+// (all role)
+func (q *Queries) GetStage1try2ExistById(ctx context.Context, id pgtype.UUID) (bool, error) {
+	row := q.db.QueryRow(ctx, getStage1try2ExistById, id)
+	var is_try2 bool
+	err := row.Scan(&is_try2)
+	return is_try2, err
+}
+
 const updateStage1NextTry = `-- name: UpdateStage1NextTry :exec
 WITH updated_stage1_results AS (
   UPDATE stage1_results
