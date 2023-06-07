@@ -9,7 +9,7 @@ import (
 func (handler *scorerHandler) UpdateStage0Checkmarks(c *gin.Context) {
 	stage0 := c.MustGet("stage0").(model.Stage0Relation)
 
-	var req model.UpdateStage0CheckmarksBodyRequest
+	var req model.UpdateStageCheckmarksBodyRequest
 
 	if ok := util.BindJSONAndValidate(c, &req); !ok {
 		return

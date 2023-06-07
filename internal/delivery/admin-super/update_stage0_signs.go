@@ -27,7 +27,7 @@ func (handler *adminSuperHandler) UpdateStage0Signs(c *gin.Context) {
 	shooterSignText.Scan(shooterSign)
 	scorerSignText.Scan(scorerSign)
 
-	res := handler.Usecase.UpdateStage0Signs(model.UpdateStage0SignsRequest{
+	res := handler.Usecase.UpdateStage0Signs(model.UpdateStageSignsRequest{
 		ID:          stage0.ID,
 		ShooterSign: shooterSignText,
 		ScorerSign:  scorerSignText,

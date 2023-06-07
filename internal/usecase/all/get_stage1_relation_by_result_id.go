@@ -5,7 +5,6 @@ import (
 
 	"github.com/FadhilAF/perbakin-be/internal/model"
 	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 func (usecase *allUsecaseImpl) GetStage1RelationByResultId(req model.ByResultIdRequest) (model.Stage1Relation, error) {
@@ -18,8 +17,8 @@ func (usecase *allUsecaseImpl) GetStage1RelationByResultId(req model.ByResultIdR
 			return model.Stage1Relation{}, err
 		}
 
-		return model.Stage1Relation{ID: stage1.ID, ResultID: stage1.ResultID, Try1ID: stage1.Try1ID, Try2ID: pgtype.UUID{}, IsTry2: stage1.IsTry2}, nil
+		return model.Stage1Relation{ID: stage1.ID, ResultID: stage1.ResultID, IsTry2: stage1.IsTry2}, nil
 	}
 
-	return model.Stage1Relation{ID: stage1.ID, ResultID: stage1.ResultID, Try1ID: stage1.Try1ID, Try2ID: stage1.Try2ID, IsTry2: stage1.IsTry2}, err
+	return model.Stage1Relation{ID: stage1.ID, ResultID: stage1.ResultID, IsTry2: stage1.IsTry2}, err
 }

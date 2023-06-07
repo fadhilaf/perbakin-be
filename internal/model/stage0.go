@@ -66,13 +66,13 @@ type UpdateStage0Response struct {
 	UpdatedAt  time.Time   `json:"updated_at"`
 }
 
-type UpdateStage0SignsResponse struct {
+type UpdateStageSignsResponse struct {
 	ShooterSign pgtype.Text `json:"shooter_sign"`
 	ScorerSign  pgtype.Text `json:"scorer_sign"`
 	UpdatedAt   time.Time   `json:"updated_at"`
 }
 
-type UpdateStage0SignsRequest struct {
+type UpdateStageSignsRequest struct {
 	ID          pgtype.UUID
 	ShooterSign pgtype.Text
 	ScorerSign  pgtype.Text
@@ -82,7 +82,7 @@ type UpdateStage0SeriesUriRequest struct {
 	Series string `uri:"series" binding:"required,oneof=1 2 3 4 5"`
 }
 
-type UpdateStage0SeriesBodyRequest struct {
+type UpdateStageScoresBodyRequest struct {
 	Scores []int `json:"scores" binding:"required,dive,oneof=0 1 2 3 4 5 6 7 8 9 10"`
 }
 
@@ -93,7 +93,7 @@ type UpdateStage0SeriesRequest struct {
 }
 
 // yang ini kalo dio salah type, error message nyo jelek, tapi salah dewek lh
-type UpdateStage0CheckmarksBodyRequest struct {
+type UpdateStageCheckmarksBodyRequest struct {
 	Checkmarks []bool `json:"checkmarks" binding:"required,dive,boolean"`
 }
 
@@ -103,11 +103,11 @@ type UpdateStage0CheckmarksRequest struct {
 }
 
 // samo, kalo pake bool kalo kito kasih value 'false' (boolean json) dio malah jadi kosong dianggapny. jadi pake *bool
-type UpdateStage0FinishBodyRequest struct {
+type UpdateStageFinishBodyRequest struct {
 	Success *bool `form:"success" binding:"required,boolean"`
 }
 
-type UpdateStage0FinishRequest struct {
+type UpdateStageFinishRequest struct {
 	ID          pgtype.UUID
 	Success     bool
 	ShooterSign pgtype.Text

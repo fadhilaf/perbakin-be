@@ -15,7 +15,7 @@ func (handler *scorerHandler) UpdateStage0Series(c *gin.Context) {
 		return
 	}
 
-	var req model.UpdateStage0SeriesBodyRequest
+	var req model.UpdateStageScoresBodyRequest
 
 	if ok := util.BindJSONAndValidate(c, &req); !ok {
 		return

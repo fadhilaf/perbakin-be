@@ -23,7 +23,6 @@ func (usecase *allUsecaseImpl) GetStage1ById(req model.ByIdRequest) model.WebSer
 				ID:       stage1.ID,
 				ResultID: stage1.ResultID,
 				Try1: model.Stage13Try{
-					ID:         stage1.Try1ID,
 					Status:     string(stage1.Try1Status),
 					No1:        util.NumbersToIntArrayArray(stage1.Try1No1),
 					No2:        util.NumbersToIntArrayArray(stage1.Try1No2),
@@ -34,7 +33,6 @@ func (usecase *allUsecaseImpl) GetStage1ById(req model.ByIdRequest) model.WebSer
 					Checkmarks: util.CheckmarksToBoolArray(stage1.Try1Checkmarks),
 				},
 				Try2: model.Stage13Try{
-					ID:         stage1.Try2ID,
 					Status:     string(stage1.Try2Status.Stage13Status),
 					No1:        util.NumbersToIntArrayArray(stage1.Try2No1.String),
 					No2:        util.NumbersToIntArrayArray(stage1.Try2No2.String),
@@ -56,7 +54,6 @@ func (usecase *allUsecaseImpl) GetStage1ById(req model.ByIdRequest) model.WebSer
 				ID:       stage1.ID,
 				ResultID: stage1.ResultID,
 				Try1: model.Stage13Try{
-					ID:         stage1.Try1ID,
 					Status:     string(stage1.Try1Status),
 					No1:        util.NumbersToIntArrayArray(stage1.Try1No1),
 					No2:        util.NumbersToIntArrayArray(stage1.Try1No2),

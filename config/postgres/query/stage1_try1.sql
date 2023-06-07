@@ -11,7 +11,6 @@ SELECT
   added_stage1_results.id, 
   result_id, 
   status,
-  try1_id,
   no1,
   no2,
   no3,
@@ -31,7 +30,6 @@ FROM added_stage13_tries, added_stage1_results;
 SELECT 
   stage1_results.id,
   result_id, 
-  try1_id,
   try1.status AS try1_status,
   try1.no1 AS try1_no1,
   try1.no2 AS try1_no2,
@@ -40,7 +38,6 @@ SELECT
   try1.no5 AS try1_no5,
   try1.no6 AS try1_no6,
   try1.checkmarks AS try1_checkmarks,
-  try2_id,
   try2.status AS try2_status,
   try2.no1 AS try2_no1,
   try2.no2 AS try2_no2,
@@ -64,8 +61,6 @@ WHERE stage1_results.id = $1;
 SELECT 
   id, 
   result_id,
-  try1_id,
-  try2_id,
   is_try2
 FROM stage1_results
 WHERE result_id = $1;

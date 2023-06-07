@@ -25,7 +25,6 @@ SELECT
   added_stage1_results.id, 
   result_id, 
   status,
-  try1_id,
   no1,
   no2,
   no3,
@@ -45,7 +44,6 @@ type CreateStage1Row struct {
 	ID          pgtype.UUID
 	ResultID    pgtype.UUID
 	Status      Stage13Status
-	Try1ID      pgtype.UUID
 	No1         string
 	No2         string
 	No3         string
@@ -67,7 +65,6 @@ func (q *Queries) CreateStage1(ctx context.Context, resultID pgtype.UUID) (Creat
 		&i.ID,
 		&i.ResultID,
 		&i.Status,
-		&i.Try1ID,
 		&i.No1,
 		&i.No2,
 		&i.No3,
@@ -111,7 +108,6 @@ const getStage1ById = `-- name: GetStage1ById :one
 SELECT 
   stage1_results.id,
   result_id, 
-  try1_id,
   try1.status AS try1_status,
   try1.no1 AS try1_no1,
   try1.no2 AS try1_no2,
@@ -120,7 +116,6 @@ SELECT
   try1.no5 AS try1_no5,
   try1.no6 AS try1_no6,
   try1.checkmarks AS try1_checkmarks,
-  try2_id,
   try2.status AS try2_status,
   try2.no1 AS try2_no1,
   try2.no2 AS try2_no2,
@@ -143,7 +138,6 @@ WHERE stage1_results.id = $1
 type GetStage1ByIdRow struct {
 	ID             pgtype.UUID
 	ResultID       pgtype.UUID
-	Try1ID         pgtype.UUID
 	Try1Status     Stage13Status
 	Try1No1        string
 	Try1No2        string
@@ -152,7 +146,6 @@ type GetStage1ByIdRow struct {
 	Try1No5        string
 	Try1No6        string
 	Try1Checkmarks string
-	Try2ID         pgtype.UUID
 	Try2Status     NullStage13Status
 	Try2No1        sql.NullString
 	Try2No2        sql.NullString
@@ -175,7 +168,6 @@ func (q *Queries) GetStage1ById(ctx context.Context, id pgtype.UUID) (GetStage1B
 	err := row.Scan(
 		&i.ID,
 		&i.ResultID,
-		&i.Try1ID,
 		&i.Try1Status,
 		&i.Try1No1,
 		&i.Try1No2,
@@ -184,7 +176,6 @@ func (q *Queries) GetStage1ById(ctx context.Context, id pgtype.UUID) (GetStage1B
 		&i.Try1No5,
 		&i.Try1No6,
 		&i.Try1Checkmarks,
-		&i.Try2ID,
 		&i.Try2Status,
 		&i.Try2No1,
 		&i.Try2No2,
@@ -206,8 +197,6 @@ const getStage1RelationByResultId = `-- name: GetStage1RelationByResultId :one
 SELECT 
   id, 
   result_id,
-  try1_id,
-  try2_id,
   is_try2
 FROM stage1_results
 WHERE result_id = $1
@@ -216,8 +205,6 @@ WHERE result_id = $1
 type GetStage1RelationByResultIdRow struct {
 	ID       pgtype.UUID
 	ResultID pgtype.UUID
-	Try1ID   pgtype.UUID
-	Try2ID   pgtype.UUID
 	IsTry2   bool
 }
 
@@ -225,13 +212,7 @@ type GetStage1RelationByResultIdRow struct {
 func (q *Queries) GetStage1RelationByResultId(ctx context.Context, resultID pgtype.UUID) (GetStage1RelationByResultIdRow, error) {
 	row := q.db.QueryRow(ctx, getStage1RelationByResultId, resultID)
 	var i GetStage1RelationByResultIdRow
-	err := row.Scan(
-		&i.ID,
-		&i.ResultID,
-		&i.Try1ID,
-		&i.Try2ID,
-		&i.IsTry2,
-	)
+	err := row.Scan(&i.ID, &i.ResultID, &i.IsTry2)
 	return i, err
 }
 

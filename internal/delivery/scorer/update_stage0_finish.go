@@ -10,7 +10,7 @@ import (
 func (handler *scorerHandler) UpdateStage0Finish(c *gin.Context) {
 	stage0 := c.MustGet("stage0").(model.Stage0Relation)
 
-	var req model.UpdateStage0FinishBodyRequest
+	var req model.UpdateStageFinishBodyRequest
 
 	if ok := util.BindFormAndValidate(c, &req); !ok {
 		return
@@ -34,7 +34,7 @@ func (handler *scorerHandler) UpdateStage0Finish(c *gin.Context) {
 	shooterSignText.Scan(shooterSign)
 	scorerSignText.Scan(scorerSign)
 
-	res := handler.Usecase.UpdateStage0Finish(model.UpdateStage0FinishRequest{
+	res := handler.Usecase.UpdateStage0Finish(model.UpdateStageFinishRequest{
 		ID:          stage0.ID,
 		Success:     *req.Success,
 		ScorerSign:  scorerSignText,

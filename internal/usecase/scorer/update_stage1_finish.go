@@ -10,7 +10,7 @@ import (
 	"github.com/FadhilAF/perbakin-be/internal/util"
 )
 
-func (usecase *scorerUsecaseImpl) UpdateStage0Finish(req model.UpdateStageFinishRequest) model.WebServiceResponse {
+func (usecase *scorerUsecaseImpl) UpdateStage1Finish(req model.UpdateStageFinishRequest) model.WebServiceResponse {
 	status, _ := usecase.Store.GetStage0Status(context.Background(), req.ID)
 	if status != "5" {
 		return util.ToWebServiceResponse("Tidak dapat menyelesaikan, masih pada seri ke-"+string(status), http.StatusForbidden, nil)

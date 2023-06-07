@@ -12,15 +12,21 @@ import (
 )
 
 const createStage1try2 = `-- name: CreateStage1try2 :one
-WITH added_stage13_tries AS (
+WITH added_stage1_try2 AS (
   INSERT INTO stage13_tries DEFAULT VALUES
   RETURNING id, status, no1, no2, no3, no4, no5, no6, checkmarks
 ), updated_stage1_results AS (
   UPDATE stage1_results
   SET 
-    try2_id = (SELECT id FROM added_stage13_tries),
+    try2_id = (SELECT id FROM added_stage1_try2),
+    is_try2 = true,
     updated_at = NOW()
   WHERE stage1_results.id = $1
+  RETURNING try1_id
+), updated_stage1_try1 AS (
+  UPDATE stage13_tries
+  SET status = '7'
+  WHERE id = (SELECT try1_id FROM updated_stage1_results)
 )
 SELECT 
   status,
@@ -31,7 +37,7 @@ SELECT
   no5,
   no6,
   checkmarks
-FROM added_stage13_tries
+FROM added_stage1_try2
 `
 
 type CreateStage1try2Row struct {

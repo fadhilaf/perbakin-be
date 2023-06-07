@@ -7,15 +7,14 @@ import (
 )
 
 type Stage13Try struct {
-	ID         pgtype.UUID `json:"id"`
-	Status     string      `json:"status"`
-	No1        [][]int     `json:"no_1"`
-	No2        [][]int     `json:"no_2"`
-	No3        [][]int     `json:"no_3"`
-	No4        [][]int     `json:"no_4"`
-	No5        [][]int     `json:"no_5"`
-	No6        [][]int     `json:"no_6"`
-	Checkmarks []bool      `json:"checkmarks"`
+	Status     string  `json:"status"`
+	No1        [][]int `json:"no_1"`
+	No2        [][]int `json:"no_2"`
+	No3        [][]int `json:"no_3"`
+	No4        [][]int `json:"no_4"`
+	No5        [][]int `json:"no_5"`
+	No6        [][]int `json:"no_6"`
+	Checkmarks []bool  `json:"checkmarks"`
 }
 
 type Stage1 struct {
@@ -44,11 +43,22 @@ type Stage1Full struct {
 type Stage1Relation struct {
 	ID       pgtype.UUID `json:"id"`
 	ResultID pgtype.UUID `json:"result_id"`
-	Try1ID   pgtype.UUID `json:"try_1_id"`
-	Try2ID   pgtype.UUID `json:"try_2_id"`
 	IsTry2   bool        `json:"is_try_2"`
 }
 
 type Stage123456Try struct {
 	Try string `uri:"try" binding:"required,oneof=1 2"`
+}
+
+type UpdateStage123456NoRequest struct {
+	ID     pgtype.UUID `json:"id"`
+	Try    string      `json:"try"`
+	No     string      `json:"no"`
+	Scores string      `json:"scores"`
+}
+
+type UpdateStage123456CheckmarksRequest struct {
+	ID         pgtype.UUID
+	Try        string
+	Checkmarks string
 }

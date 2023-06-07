@@ -11,7 +11,7 @@ import (
 	"github.com/FadhilAF/perbakin-be/internal/util"
 )
 
-func (usecase *adminSuperUsecaseImpl) UpdateStage0Signs(req model.UpdateStage0SignsRequest) model.WebServiceResponse {
+func (usecase *adminSuperUsecaseImpl) UpdateStage0Signs(req model.UpdateStageSignsRequest) model.WebServiceResponse {
 	updatedSign, err := usecase.Store.UpdateStage0Signs(context.Background(), repositoryModel.UpdateStage0SignsParams{
 		ID:          req.ID,
 		ShooterSign: req.ShooterSign,
@@ -22,7 +22,7 @@ func (usecase *adminSuperUsecaseImpl) UpdateStage0Signs(req model.UpdateStage0Si
 	}
 
 	return util.ToWebServiceResponse("Berhasil mengubah tanda tangan babak kualifikasi", http.StatusOK, gin.H{
-		"stage_0": model.UpdateStage0SignsResponse{
+		"stage_0": model.UpdateStageSignsResponse{
 			ShooterSign: updatedSign.ShooterSign,
 			ScorerSign:  updatedSign.ScorerSign,
 			UpdatedAt:   updatedSign.UpdatedAt.Time,

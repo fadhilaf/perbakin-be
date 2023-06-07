@@ -24,7 +24,6 @@ func (usecase *allUsecaseImpl) CreateStage1(req model.ByResultIdRequest) model.W
 			ID:       stage1.ID,
 			ResultID: stage1.ResultID,
 			Try1: model.Stage13Try{
-				ID:         stage1.Try1ID,
 				Status:     string(stage1.Status),
 				No1:        util.NumbersToIntArrayArray(stage1.No1),
 				No2:        util.NumbersToIntArrayArray(stage1.No2),
