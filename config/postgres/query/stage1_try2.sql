@@ -187,43 +187,19 @@ WHERE id = (SELECT try2_id FROM stage1_results)
 RETURNING no6;
 
 -- (admin-super role)
--- name: UpdateStage1try2 :one
-WITH updated_stage1_results AS (
+-- name: DeleteStage1try2 :exec
+WITH deleted_stage1_try2 AS (
+  DELETE FROM stage13_tries
+  WHERE stage13_tries.id = (SELECT try2_id FROM stage1_results WHERE stage1_results.id = $1)
+), updated_stage1_results AS (
   UPDATE stage1_results
   SET
+    try2_id = NULL,
+    is_try2 = false,
     updated_at = NOW()
-  WHERE stage1_results.id = $1 
-  RETURNING try2_id, updated_at
-), updated_stage13_tries AS (
-  UPDATE stage13_tries
-  SET 
-    status = $2, 
-    no1 = $3, 
-    no2 = $4, 
-    no3 = $5, 
-    no4 = $6,
-    no5 = $7, 
-    no6 = $8, 
-    checkmarks = $9
-  WHERE id = (SELECT try2_id FROM stage1_results)
-  RETURNING 
-    status,
-    no1,
-    no2,
-    no3,
-    no4,
-    no5,
-    no6,
-    checkmarks
+  WHERE stage1_results.id = $1
+  RETURNING try1_id
 )
-SELECT 
-  status,
-  no1,
-  no2,
-  no3,
-  no4,
-  no5,
-  no6,
-  checkmarks,
-  updated_at
-FROM updated_stage1_results, updated_stage13_tries;
+UPDATE stage13_tries
+SET status = '6'
+WHERE stage13_tries.id = (SELECT try1_id FROM updated_stage1_results);

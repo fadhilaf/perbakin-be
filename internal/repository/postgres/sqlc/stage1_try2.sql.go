@@ -70,6 +70,30 @@ func (q *Queries) CreateStage1try2(ctx context.Context, id pgtype.UUID) (CreateS
 	return i, err
 }
 
+const deleteStage1try2 = `-- name: DeleteStage1try2 :exec
+WITH deleted_stage1_try2 AS (
+  DELETE FROM stage13_tries
+  WHERE stage13_tries.id = (SELECT try2_id FROM stage1_results WHERE stage1_results.id = $1)
+), updated_stage1_results AS (
+  UPDATE stage1_results
+  SET
+    try2_id = NULL,
+    is_try2 = false,
+    updated_at = NOW()
+  WHERE stage1_results.id = $1
+  RETURNING try1_id
+)
+UPDATE stage13_tries
+SET status = '6'
+WHERE stage13_tries.id = (SELECT try1_id FROM updated_stage1_results)
+`
+
+// (admin-super role)
+func (q *Queries) DeleteStage1try2(ctx context.Context, id pgtype.UUID) error {
+	_, err := q.db.Exec(ctx, deleteStage1try2, id)
+	return err
+}
+
 const getStage1try2Status = `-- name: GetStage1try2Status :one
 SELECT 
   status
@@ -84,100 +108,6 @@ func (q *Queries) GetStage1try2Status(ctx context.Context, id pgtype.UUID) (Stag
 	var status Stage13Status
 	err := row.Scan(&status)
 	return status, err
-}
-
-const updateStage1try2 = `-- name: UpdateStage1try2 :one
-WITH updated_stage1_results AS (
-  UPDATE stage1_results
-  SET
-    updated_at = NOW()
-  WHERE stage1_results.id = $1 
-  RETURNING try2_id, updated_at
-), updated_stage13_tries AS (
-  UPDATE stage13_tries
-  SET 
-    status = $2, 
-    no1 = $3, 
-    no2 = $4, 
-    no3 = $5, 
-    no4 = $6,
-    no5 = $7, 
-    no6 = $8, 
-    checkmarks = $9
-  WHERE id = (SELECT try2_id FROM stage1_results)
-  RETURNING 
-    status,
-    no1,
-    no2,
-    no3,
-    no4,
-    no5,
-    no6,
-    checkmarks
-)
-SELECT 
-  status,
-  no1,
-  no2,
-  no3,
-  no4,
-  no5,
-  no6,
-  checkmarks,
-  updated_at
-FROM updated_stage1_results, updated_stage13_tries
-`
-
-type UpdateStage1try2Params struct {
-	ID         pgtype.UUID
-	Status     Stage13Status
-	No1        string
-	No2        string
-	No3        string
-	No4        string
-	No5        string
-	No6        string
-	Checkmarks string
-}
-
-type UpdateStage1try2Row struct {
-	Status     Stage13Status
-	No1        string
-	No2        string
-	No3        string
-	No4        string
-	No5        string
-	No6        string
-	Checkmarks string
-	UpdatedAt  pgtype.Timestamp
-}
-
-// (admin-super role)
-func (q *Queries) UpdateStage1try2(ctx context.Context, arg UpdateStage1try2Params) (UpdateStage1try2Row, error) {
-	row := q.db.QueryRow(ctx, updateStage1try2,
-		arg.ID,
-		arg.Status,
-		arg.No1,
-		arg.No2,
-		arg.No3,
-		arg.No4,
-		arg.No5,
-		arg.No6,
-		arg.Checkmarks,
-	)
-	var i UpdateStage1try2Row
-	err := row.Scan(
-		&i.Status,
-		&i.No1,
-		&i.No2,
-		&i.No3,
-		&i.No4,
-		&i.No5,
-		&i.No6,
-		&i.Checkmarks,
-		&i.UpdatedAt,
-	)
-	return i, err
 }
 
 const updateStage1try2Checkmarks = `-- name: UpdateStage1try2Checkmarks :one

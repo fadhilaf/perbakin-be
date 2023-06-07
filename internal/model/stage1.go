@@ -51,6 +51,10 @@ type Stage1Relation struct {
 	IsTry2   bool        `json:"is_try_2"`
 }
 
+type UpdateStage13BodyRequest struct {
+	Status Stage13Try `json:"status"`
+}
+
 type Stage123456Try struct {
 	Try string `uri:"try" binding:"required,oneof=1 2"`
 }

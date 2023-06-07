@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CheckSeries(c *gin.Context, stageType string, series ...[]int) bool {
+func CheckNumbers(c *gin.Context, stageType string, series ...[]int) bool {
 	for _, value := range series {
 		if ok := CheckScores(c, value, stageType); !ok {
 			return false

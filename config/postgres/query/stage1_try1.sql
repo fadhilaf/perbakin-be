@@ -243,26 +243,57 @@ SET no6 = $2
 WHERE id = (SELECT try1_id FROM stage1_results)
 RETURNING no6;
 
+-- (admin-super role) 
+-- name: UpdateStage1Signs :one
+UPDATE stage1_results 
+SET 
+  shooter_sign = $2, 
+  scorer_sign = $3, 
+  updated_at = NOW()
+WHERE id = $1
+RETURNING shooter_sign, scorer_sign, updated_at;
+
 -- (admin-super role)
--- name: UpdateStage1try1 :one 
+-- name: UpdateStage1 :one 
 WITH updated_stage1_results AS (
   UPDATE stage1_results
   SET
     updated_at = NOW()
   WHERE stage1_results.id = $1 
-  RETURNING try1_id, updated_at
-), updated_stage13_tries AS (
+  RETURNING try1_id, try2_id, is_try2, updated_at
+), updated_stage1_try1 AS (
   UPDATE stage13_tries
   SET 
-    status = $2, 
-    no1 = $3, 
-    no2 = $4, 
-    no3 = $5, 
-    no4 = $6,
-    no5 = $7, 
-    no6 = $8, 
-    checkmarks = $9
+    status = sqlc.arg(try1_status)::text, 
+    no1 = sqlc.arg(try1_no1)::text,
+    no2 = sqlc.arg(try1_no2)::text,
+    no3 = sqlc.arg(try1_no3)::text,
+    no4 = sqlc.arg(try1_no4)::text,
+    no5 = sqlc.arg(try1_no5)::text,
+    no6 = sqlc.arg(try1_no6)::text,
+    checkmarks = sqlc.arg(try1_checkmarks)::text
   WHERE id = (SELECT try1_id FROM stage1_results)
+  RETURNING 
+    status,
+    no1,
+    no2,
+    no3,
+    no4,
+    no5,
+    no6,
+    checkmarks
+), updated_stage1_try2 AS (
+  UPDATE stage13_tries
+  SET 
+    status = coalesce(sqlc.narg(try2_status)::text, status),
+    no1 = coalesce(sqlc.narg(try2_no1)::text, no1),
+    no2 = coalesce(sqlc.narg(try2_no2)::text, no2),
+    no3 = coalesce(sqlc.narg(try2_no3)::text, no3),
+    no4 = coalesce(sqlc.narg(try2_no4)::text, no4),
+    no5 = coalesce(sqlc.narg(try2_no5)::text, no5),
+    no6 = coalesce(sqlc.narg(try2_no6)::text, no6),
+    checkmarks = coalesce(sqlc.narg(try2_checkmarks)::text, checkmarks)
+  WHERE id = (SELECT try2_id FROM stage1_results WHERE try2_id IS NOT NULL)
   RETURNING 
     status,
     no1,
@@ -274,26 +305,25 @@ WITH updated_stage1_results AS (
     checkmarks
 )
 SELECT 
-  status,
-  no1,
-  no2,
-  no3,
-  no4,
-  no5,
-  no6,
-  checkmarks,
+  updated_stage1_try1.status AS try1_status,
+  updated_stage1_try1.no1 AS try1_no1,
+  updated_stage1_try1.no2 AS try1_no2,
+  updated_stage1_try1.no3 AS try1_no3,
+  updated_stage1_try1.no4 AS try1_no4,
+  updated_stage1_try1.no5 AS try1_no5,
+  updated_stage1_try1.no6 AS try1_no6,
+  updated_stage1_try1.checkmarks AS try1_checkmarks,
+  updated_stage1_try2.status AS try2_status,
+  updated_stage1_try2.no1 AS try2_no1,
+  updated_stage1_try2.no2 AS try2_no2,
+  updated_stage1_try2.no3 AS try2_no3,
+  updated_stage1_try2.no4 AS try2_no4,
+  updated_stage1_try2.no5 AS try2_no5,
+  updated_stage1_try2.no6 AS try2_no6,
+  updated_stage1_try2.checkmarks AS try2_checkmarks,
+  is_try2,
   updated_at
-FROM updated_stage1_results, updated_stage13_tries;
-
--- (admin-super role) 
--- name: UpdateStage1Signs :one
-UPDATE stage1_results 
-SET 
-  shooter_sign = $2, 
-  scorer_sign = $3, 
-  updated_at = NOW()
-WHERE id = $1
-RETURNING shooter_sign, scorer_sign, updated_at;
+FROM updated_stage1_results, updated_stage1_try1, updated_stage1_try2;
 
 -- (admin-super role) 
 -- name: DeleteStage1 :exec

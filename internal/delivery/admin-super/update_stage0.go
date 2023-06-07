@@ -16,7 +16,7 @@ func (handler *adminSuperHandler) UpdateStage0(c *gin.Context) {
 	}
 
 	//check series
-	if ok := util.CheckSeries(c, "stage0",
+	if ok := util.CheckNumbers(c, "stage0",
 		req.Series1,
 		req.Series2,
 		req.Series3,

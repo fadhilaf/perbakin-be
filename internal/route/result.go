@@ -50,3 +50,11 @@ func Stage1AllRoutes(resultRouter *gin.RouterGroup, delivery allDelivery.AllDeli
 
 	return stage1Router
 }
+
+// for stage1Router
+func Stage1AdminSuperRoutes(stage1Router *gin.RouterGroup, delivery adminSuperDelivery.AdminSuperDelivery) {
+	stage1Router.PUT("", delivery.UpdateStage1)
+	stage1Router.PUT("/sign", delivery.UpdateStage1Signs)
+	stage1Router.DELETE("", delivery.DeleteStage1)
+	stage1Router.DELETE("/2", delivery.DeleteStage1try2)
+}
