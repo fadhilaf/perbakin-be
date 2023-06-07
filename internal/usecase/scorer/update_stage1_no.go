@@ -19,7 +19,7 @@ func (usecase *scorerUsecaseImpl) UpdateStage1No(req model.UpdateStage123456NoRe
 	case "1":
 		status, _ := usecase.Store.GetStage1try1Status(context.Background(), req.ID)
 		if status != repositoryModel.Stage13Status(req.No) {
-			return util.ToWebServiceResponse("Gagal mengupdate babak 1 No "+req.No+", sekarang sedang No "+string(status), http.StatusForbidden, nil)
+			return util.ToWebServiceResponse("Gagal mengupdate stage 1 percobaan 1 no "+req.No+", sekarang sedang no "+string(status), http.StatusForbidden, nil)
 		}
 
 		switch req.No {
@@ -29,7 +29,7 @@ func (usecase *scorerUsecaseImpl) UpdateStage1No(req model.UpdateStage123456NoRe
 				No1: req.Scores,
 			})
 			if err != nil {
-				return util.ToWebServiceResponse("Gagal mengupdate babak 1 No 1: "+err.Error(), http.StatusInternalServerError, nil)
+				return util.ToWebServiceResponse("Gagal mengupdate stage 1 percobaan 1 no 1: "+err.Error(), http.StatusInternalServerError, nil)
 			}
 		case "2":
 			scores, err = usecase.Store.UpdateStage1try1No2(context.Background(), repositoryModel.UpdateStage1try1No2Params{
@@ -37,7 +37,7 @@ func (usecase *scorerUsecaseImpl) UpdateStage1No(req model.UpdateStage123456NoRe
 				No2: req.Scores,
 			})
 			if err != nil {
-				return util.ToWebServiceResponse("Gagal mengupdate babak 1 No 2: "+err.Error(), http.StatusInternalServerError, nil)
+				return util.ToWebServiceResponse("Gagal mengupdate stage 1 percobaan 1 no 2: "+err.Error(), http.StatusInternalServerError, nil)
 			}
 		case "3":
 			scores, err = usecase.Store.UpdateStage1try1No3(context.Background(), repositoryModel.UpdateStage1try1No3Params{
@@ -45,7 +45,7 @@ func (usecase *scorerUsecaseImpl) UpdateStage1No(req model.UpdateStage123456NoRe
 				No3: req.Scores,
 			})
 			if err != nil {
-				return util.ToWebServiceResponse("Gagal mengupdate babak 1 No 3: "+err.Error(), http.StatusInternalServerError, nil)
+				return util.ToWebServiceResponse("Gagal mengupdate stage 1 percobaan 1 no 3: "+err.Error(), http.StatusInternalServerError, nil)
 			}
 		case "4":
 			scores, err = usecase.Store.UpdateStage1try1No4(context.Background(), repositoryModel.UpdateStage1try1No4Params{
@@ -53,7 +53,7 @@ func (usecase *scorerUsecaseImpl) UpdateStage1No(req model.UpdateStage123456NoRe
 				No4: req.Scores,
 			})
 			if err != nil {
-				return util.ToWebServiceResponse("Gagal mengupdate babak 1 No 4: "+err.Error(), http.StatusInternalServerError, nil)
+				return util.ToWebServiceResponse("Gagal mengupdate stage 1 percobaan 1 no 4: "+err.Error(), http.StatusInternalServerError, nil)
 			}
 		case "5":
 			scores, err = usecase.Store.UpdateStage1try1No5(context.Background(), repositoryModel.UpdateStage1try1No5Params{
@@ -61,13 +61,21 @@ func (usecase *scorerUsecaseImpl) UpdateStage1No(req model.UpdateStage123456NoRe
 				No5: req.Scores,
 			})
 			if err != nil {
-				return util.ToWebServiceResponse("Gagal mengupdate babak 1 No 5: "+err.Error(), http.StatusInternalServerError, nil)
+				return util.ToWebServiceResponse("Gagal mengupdate stage 1 percobaan 1 no 5: "+err.Error(), http.StatusInternalServerError, nil)
+			}
+		case "6":
+			scores, err = usecase.Store.UpdateStage1try1No6(context.Background(), repositoryModel.UpdateStage1try1No6Params{
+				ID:  req.ID,
+				No6: req.Scores,
+			})
+			if err != nil {
+				return util.ToWebServiceResponse("Gagal mengupdate stage 1 percobaan 1 no 5: "+err.Error(), http.StatusInternalServerError, nil)
 			}
 		}
 	case "2":
 		status, _ := usecase.Store.GetStage1try2Status(context.Background(), req.ID)
 		if status != repositoryModel.Stage13Status(req.No) {
-			return util.ToWebServiceResponse("Gagal mengupdate babak 1 No "+req.No+", sekarang sedang No "+string(status), http.StatusForbidden, nil)
+			return util.ToWebServiceResponse("Gagal mengupdate stage 1 percobaan 2 no "+req.No+", sekarang sedang no "+string(status), http.StatusForbidden, nil)
 		}
 
 		switch req.No {
@@ -77,7 +85,7 @@ func (usecase *scorerUsecaseImpl) UpdateStage1No(req model.UpdateStage123456NoRe
 				No1: req.Scores,
 			})
 			if err != nil {
-				return util.ToWebServiceResponse("Gagal mengupdate babak 1 seri 1: "+err.Error(), http.StatusInternalServerError, nil)
+				return util.ToWebServiceResponse("Gagal mengupdate stage 1 percobaan 2 no 1: "+err.Error(), http.StatusInternalServerError, nil)
 			}
 		case "2":
 			scores, err = usecase.Store.UpdateStage1try2No2(context.Background(), repositoryModel.UpdateStage1try2No2Params{
@@ -85,7 +93,7 @@ func (usecase *scorerUsecaseImpl) UpdateStage1No(req model.UpdateStage123456NoRe
 				No2: req.Scores,
 			})
 			if err != nil {
-				return util.ToWebServiceResponse("Gagal mengupdate babak 1 seri 2: "+err.Error(), http.StatusInternalServerError, nil)
+				return util.ToWebServiceResponse("Gagal mengupdate stage 1 percobaan 2 no 2: "+err.Error(), http.StatusInternalServerError, nil)
 			}
 		case "3":
 			scores, err = usecase.Store.UpdateStage1try2No3(context.Background(), repositoryModel.UpdateStage1try2No3Params{
@@ -93,7 +101,7 @@ func (usecase *scorerUsecaseImpl) UpdateStage1No(req model.UpdateStage123456NoRe
 				No3: req.Scores,
 			})
 			if err != nil {
-				return util.ToWebServiceResponse("Gagal mengupdate babak 1 seri 3: "+err.Error(), http.StatusInternalServerError, nil)
+				return util.ToWebServiceResponse("Gagal mengupdate stage 1 percobaan 2 no 3: "+err.Error(), http.StatusInternalServerError, nil)
 			}
 		case "4":
 			scores, err = usecase.Store.UpdateStage1try2No4(context.Background(), repositoryModel.UpdateStage1try2No4Params{
@@ -101,7 +109,7 @@ func (usecase *scorerUsecaseImpl) UpdateStage1No(req model.UpdateStage123456NoRe
 				No4: req.Scores,
 			})
 			if err != nil {
-				return util.ToWebServiceResponse("Gagal mengupdate babak 1 seri 4: "+err.Error(), http.StatusInternalServerError, nil)
+				return util.ToWebServiceResponse("Gagal mengupdate stage 1 percobaan 2 no 4: "+err.Error(), http.StatusInternalServerError, nil)
 			}
 		case "5":
 			scores, err = usecase.Store.UpdateStage1try2No5(context.Background(), repositoryModel.UpdateStage1try2No5Params{
@@ -109,12 +117,20 @@ func (usecase *scorerUsecaseImpl) UpdateStage1No(req model.UpdateStage123456NoRe
 				No5: req.Scores,
 			})
 			if err != nil {
-				return util.ToWebServiceResponse("Gagal mengupdate babak 1 No 5: "+err.Error(), http.StatusInternalServerError, nil)
+				return util.ToWebServiceResponse("Gagal mengupdate stage 1 percobaan 2 no 5: "+err.Error(), http.StatusInternalServerError, nil)
+			}
+		case "6":
+			scores, err = usecase.Store.UpdateStage1try2No6(context.Background(), repositoryModel.UpdateStage1try2No6Params{
+				ID:  req.ID,
+				No6: req.Scores,
+			})
+			if err != nil {
+				return util.ToWebServiceResponse("Gagal mengupdate stage 1 percobaan 2 no 5: "+err.Error(), http.StatusInternalServerError, nil)
 			}
 		}
 	}
 
-	return util.ToWebServiceResponse("Berhasil mengupdate stage 1 No "+req.No, http.StatusOK, gin.H{
+	return util.ToWebServiceResponse("Berhasil mengupdate stage 1 percobaan "+req.Try+" no "+req.No, http.StatusOK, gin.H{
 		"scores": util.ScoresToIntArray(scores),
 	})
 }

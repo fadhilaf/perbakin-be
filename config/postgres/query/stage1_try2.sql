@@ -9,13 +9,14 @@ WITH added_stage1_try2 AS (
     is_try2 = true,
     updated_at = NOW()
   WHERE stage1_results.id = $1
-  RETURNING try1_id
+  RETURNING try1_id, is_try2
 ), updated_stage1_try1 AS (
   UPDATE stage13_tries
   SET status = '7'
   WHERE id = (SELECT try1_id FROM updated_stage1_results)
 )
 SELECT 
+  is_try2,
   status,
   no1,
   no2,
@@ -24,7 +25,7 @@ SELECT
   no5,
   no6,
   checkmarks
-FROM added_stage1_try2;
+FROM added_stage1_try2, updated_stage1_results;
 
 -- (all role) 
 -- name: GetStage1try2Status :one

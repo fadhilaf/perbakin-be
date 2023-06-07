@@ -68,4 +68,8 @@ func registerCustomErrors() {
 
 		return fmt.Sprintf("%s yang dipilih harus salah satu dari %s", translatedFieldName, param)
 	}
+
+	customError["len"] = func(field validator.FieldError, translatedFieldName string) string {
+		return fmt.Sprintf("banyak item pada '%s' harus %s", translatedFieldName, field.Param())
+	}
 }

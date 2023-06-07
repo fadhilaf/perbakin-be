@@ -22,13 +22,14 @@ WITH added_stage1_try2 AS (
     is_try2 = true,
     updated_at = NOW()
   WHERE stage1_results.id = $1
-  RETURNING try1_id
+  RETURNING try1_id, is_try2
 ), updated_stage1_try1 AS (
   UPDATE stage13_tries
   SET status = '7'
   WHERE id = (SELECT try1_id FROM updated_stage1_results)
 )
 SELECT 
+  is_try2,
   status,
   no1,
   no2,
@@ -37,10 +38,11 @@ SELECT
   no5,
   no6,
   checkmarks
-FROM added_stage1_try2
+FROM added_stage1_try2, updated_stage1_results
 `
 
 type CreateStage1try2Row struct {
+	IsTry2     bool
 	Status     Stage13Status
 	No1        string
 	No2        string
@@ -55,6 +57,7 @@ func (q *Queries) CreateStage1try2(ctx context.Context, id pgtype.UUID) (CreateS
 	row := q.db.QueryRow(ctx, createStage1try2, id)
 	var i CreateStage1try2Row
 	err := row.Scan(
+		&i.IsTry2,
 		&i.Status,
 		&i.No1,
 		&i.No2,

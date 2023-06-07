@@ -11,22 +11,43 @@ import (
 	"github.com/FadhilAF/perbakin-be/internal/util"
 )
 
-func (usecase *scorerUsecaseImpl) UpdateStage1NextSeries(req model.ByIdRequest) model.WebServiceResponse {
-	status, _ := usecase.Store.GetStage0Status(context.Background(), req.ID)
-	if status == "5" {
-		return util.ToWebServiceResponse("Tidak dapat melanjutkan, batas seri kualifikasi hanya 5", http.StatusForbidden, nil)
+func (usecase *scorerUsecaseImpl) UpdateStage1NextNo(req model.ByIdAndTryRequest) model.WebServiceResponse {
+	var newStatus string
+
+	switch req.Try {
+	case "1":
+		status, _ := usecase.Store.GetStage1try1Status(context.Background(), req.ID)
+		if status == "6" {
+			return util.ToWebServiceResponse("Tidak dapat melanjutkan, batas no stage 1 percobaan 1 hanya 6", http.StatusForbidden, nil)
+		}
+
+		intStatus, _ := strconv.Atoi(string(status))
+		newStatus = strconv.Itoa(intStatus + 1)
+
+		err := usecase.Store.UpdateStage1try1NextNo(context.Background(), repositoryModel.UpdateStage1try1NextNoParams{
+			ID:     req.ID,
+			Status: repositoryModel.Stage13Status(newStatus),
+		})
+		if err != nil {
+			return util.ToWebServiceResponse("Gagal melanjutkan no stage 1 percobaan 1: "+err.Error(), http.StatusInternalServerError, nil)
+		}
+	case "2":
+		status, _ := usecase.Store.GetStage1try2Status(context.Background(), req.ID)
+		if status == "6" {
+			return util.ToWebServiceResponse("Tidak dapat melanjutkan, batas no stage 1 percobaan 2 hanya 6", http.StatusForbidden, nil)
+		}
+
+		intStatus, _ := strconv.Atoi(string(status))
+		newStatus = strconv.Itoa(intStatus + 1)
+
+		err := usecase.Store.UpdateStage1try2NextNo(context.Background(), repositoryModel.UpdateStage1try2NextNoParams{
+			ID:     req.ID,
+			Status: repositoryModel.Stage13Status(newStatus),
+		})
+		if err != nil {
+			return util.ToWebServiceResponse("Gagal melanjutkan no stage 1 percobaan 2: "+err.Error(), http.StatusInternalServerError, nil)
+		}
 	}
 
-	intStatus, _ := strconv.Atoi(string(status))
-	newStatus := strconv.Itoa(intStatus + 1)
-
-	err := usecase.Store.UpdateStage0NextSeries(context.Background(), repositoryModel.UpdateStage0NextSeriesParams{
-		ID:     req.ID,
-		Status: repositoryModel.Stage0Status(newStatus),
-	})
-	if err != nil {
-		return util.ToWebServiceResponse("Gagal melanjutkan seri kualifikasi: "+err.Error(), http.StatusInternalServerError, nil)
-	}
-
-	return util.ToWebServiceResponse("Berhasil melanjutkan seri kualifikasi ke seri "+newStatus, http.StatusOK, nil)
+	return util.ToWebServiceResponse("Berhasil melanjutkan no stage 1 percobaan "+req.Try+" ke no "+newStatus, http.StatusOK, nil)
 }

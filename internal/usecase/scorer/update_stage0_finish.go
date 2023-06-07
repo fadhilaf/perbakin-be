@@ -13,10 +13,18 @@ import (
 func (usecase *scorerUsecaseImpl) UpdateStage0Finish(req model.UpdateStageFinishRequest) model.WebServiceResponse {
 	status, _ := usecase.Store.GetStage0Status(context.Background(), req.ID)
 	if status != "5" {
-		return util.ToWebServiceResponse("Tidak dapat menyelesaikan, masih pada seri ke-"+string(status), http.StatusForbidden, nil)
+		return util.ToWebServiceResponse("Tidak dapat menyelesaikan babak kualifikasi, masih pada seri ke-"+string(status), http.StatusForbidden, nil)
 	}
 
-	if !req.Success {
+	if req.Success {
+		if err := usecase.Store.UpdateStage0FinishSuccess(context.Background(), repositoryModel.UpdateStage0FinishSuccessParams{
+			ID:          req.ID,
+			ShooterSign: req.ShooterSign,
+			ScorerSign:  req.ScorerSign,
+		}); err != nil {
+			return util.ToWebServiceResponse("Gagal menyelesaikan babak kualifikasi menjadi berhasil: "+err.Error(), http.StatusInternalServerError, nil)
+		}
+	} else {
 		if err := usecase.Store.UpdateStage0FinishFailed(context.Background(), repositoryModel.UpdateStage0FinishFailedParams{
 			ID:          req.ID,
 			ShooterSign: req.ShooterSign,
@@ -24,15 +32,14 @@ func (usecase *scorerUsecaseImpl) UpdateStage0Finish(req model.UpdateStageFinish
 		}); err != nil {
 			return util.ToWebServiceResponse("Gagal menyelesaikan babak kualifikasi menjadi gagal: "+err.Error(), http.StatusInternalServerError, nil)
 		}
-	} else {
-		if err := usecase.Store.UpdateStage0FinishSuccess(context.Background(), repositoryModel.UpdateStage0FinishSuccessParams{
-			ID:          req.ID,
-			ShooterSign: req.ShooterSign,
-			ScorerSign:  req.ScorerSign,
-		}); err != nil {
-			return util.ToWebServiceResponse("Gagal menyelesaikan babak kualifikasi menjadi gagal: "+err.Error(), http.StatusInternalServerError, nil)
-		}
 	}
 
-	return util.ToWebServiceResponse("Berhasil menyelesaikan pendataan kualifikasi", http.StatusOK, nil)
+	var hasil string
+	if req.Success {
+		hasil = "berhasil"
+	} else {
+		hasil = "gagal"
+	}
+
+	return util.ToWebServiceResponse("Berhasil menyelesaikan pendataan kualifikasi menjadi "+hasil, http.StatusOK, nil)
 }

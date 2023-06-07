@@ -13,7 +13,7 @@ import (
 
 func (usecase *scorerUsecaseImpl) UpdateStage0Checkmarks(req model.UpdateStage0CheckmarksRequest) model.WebServiceResponse {
 	if status, _ := usecase.Store.GetStage0Status(context.Background(), req.ID); status == "6" {
-		return util.ToWebServiceResponse("Gagal mengupdatek kualifikasi centang hasil, pencatatan data kualifikasi sudah selesai", http.StatusForbidden, nil)
+		return util.ToWebServiceResponse("Gagal mengupdate kualifikasi centang hasil, pencatatan data kualifikasi sudah selesai", http.StatusForbidden, nil)
 	}
 
 	checkmarks, err := usecase.Store.UpdateStage0Checkmarks(context.Background(), repositoryModel.UpdateStage0CheckmarksParams{

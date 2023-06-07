@@ -10,29 +10,62 @@ import (
 	"github.com/FadhilAF/perbakin-be/internal/util"
 )
 
-func (usecase *scorerUsecaseImpl) UpdateStage1Finish(req model.UpdateStageFinishRequest) model.WebServiceResponse {
-	status, _ := usecase.Store.GetStage0Status(context.Background(), req.ID)
-	if status != "5" {
-		return util.ToWebServiceResponse("Tidak dapat menyelesaikan, masih pada seri ke-"+string(status), http.StatusForbidden, nil)
+func (usecase *scorerUsecaseImpl) UpdateStage1Finish(req model.UpdateStage123456FinishRequest) model.WebServiceResponse {
+	switch req.Try {
+	case "1":
+		status, _ := usecase.Store.GetStage1try1Status(context.Background(), req.ID)
+		if status != "6" {
+			return util.ToWebServiceResponse("Tidak dapat menyelesaikan stage 1 percobaan 1, masih pada seri ke-"+string(status), http.StatusForbidden, nil)
+		}
+
+		if req.Success {
+			if err := usecase.Store.UpdateStage1try1FinishSuccess(context.Background(), repositoryModel.UpdateStage1try1FinishSuccessParams{
+				ID:          req.ID,
+				ShooterSign: req.ShooterSign,
+				ScorerSign:  req.ScorerSign,
+			}); err != nil {
+				return util.ToWebServiceResponse("Gagal menyelesaikan stage 1 percobaan 1 menjadi berhasil: "+err.Error(), http.StatusInternalServerError, nil)
+			}
+		} else {
+			if err := usecase.Store.UpdateStage1try1FinishFailed(context.Background(), repositoryModel.UpdateStage1try1FinishFailedParams{
+				ID:          req.ID,
+				ShooterSign: req.ShooterSign,
+				ScorerSign:  req.ScorerSign,
+			}); err != nil {
+				return util.ToWebServiceResponse("Gagal menyelesaikan stage 1 percobaan 1 menjadi gagal: "+err.Error(), http.StatusInternalServerError, nil)
+			}
+		}
+	case "2":
+		status, _ := usecase.Store.GetStage1try2Status(context.Background(), req.ID)
+		if status != "6" {
+			return util.ToWebServiceResponse("Tidak dapat menyelesaikan stage 1 percobaan 2, masih pada seri ke-"+string(status), http.StatusForbidden, nil)
+		}
+
+		if req.Success {
+			if err := usecase.Store.UpdateStage1try2FinishSuccess(context.Background(), repositoryModel.UpdateStage1try2FinishSuccessParams{
+				ID:          req.ID,
+				ShooterSign: req.ShooterSign,
+				ScorerSign:  req.ScorerSign,
+			}); err != nil {
+				return util.ToWebServiceResponse("Gagal menyelesaikan stage 1 percobaan 2 menjadi berhasil: "+err.Error(), http.StatusInternalServerError, nil)
+			}
+		} else {
+			if err := usecase.Store.UpdateStage1try2FinishFailed(context.Background(), repositoryModel.UpdateStage1try2FinishFailedParams{
+				ID:          req.ID,
+				ShooterSign: req.ShooterSign,
+				ScorerSign:  req.ScorerSign,
+			}); err != nil {
+				return util.ToWebServiceResponse("Gagal menyelesaikan stage 1 percobaan 2 menjadi gagal: "+err.Error(), http.StatusInternalServerError, nil)
+			}
+		}
 	}
 
-	if !req.Success {
-		if err := usecase.Store.UpdateStage0FinishFailed(context.Background(), repositoryModel.UpdateStage0FinishFailedParams{
-			ID:          req.ID,
-			ShooterSign: req.ShooterSign,
-			ScorerSign:  req.ScorerSign,
-		}); err != nil {
-			return util.ToWebServiceResponse("Gagal menyelesaikan babak kualifikasi menjadi gagal: "+err.Error(), http.StatusInternalServerError, nil)
-		}
+	var hasil string
+	if req.Success {
+		hasil = "berhasil"
 	} else {
-		if err := usecase.Store.UpdateStage0FinishSuccess(context.Background(), repositoryModel.UpdateStage0FinishSuccessParams{
-			ID:          req.ID,
-			ShooterSign: req.ShooterSign,
-			ScorerSign:  req.ScorerSign,
-		}); err != nil {
-			return util.ToWebServiceResponse("Gagal menyelesaikan babak kualifikasi menjadi gagal: "+err.Error(), http.StatusInternalServerError, nil)
-		}
+		hasil = "gagal"
 	}
 
-	return util.ToWebServiceResponse("Berhasil menyelesaikan pendataan kualifikasi", http.StatusOK, nil)
+	return util.ToWebServiceResponse("Berhasil menyelesaikan pendataan stage 1 percobaan "+req.Try+" menjadi "+hasil, http.StatusOK, nil)
 }

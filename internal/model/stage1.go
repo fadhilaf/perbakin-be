@@ -40,6 +40,11 @@ type Stage1Full struct {
 	UpdatedAt   time.Time   `json:"updated_at"`
 }
 
+type CreateStage1try2 struct {
+	Try2   Stage13Try `json:"try_2"`
+	IsTry2 bool       `json:"is_try_2"`
+}
+
 type Stage1Relation struct {
 	ID       pgtype.UUID `json:"id"`
 	ResultID pgtype.UUID `json:"result_id"`
@@ -50,6 +55,20 @@ type Stage123456Try struct {
 	Try string `uri:"try" binding:"required,oneof=1 2"`
 }
 
+type ByIdAndTryRequest struct {
+	ID  pgtype.UUID
+	Try string
+}
+
+type UpdateStage123456NoUriRequest struct {
+	No string `uri:"no" binding:"required,oneof=1 2 3 4 5"`
+}
+
+type UpdateStage123NoBodyRequest struct {
+	Scores   []int `json:"scores" binding:"required,len=3,dive,oneof=0 1 2 3 4 5 6 7 8 9 10"`
+	Duration []int `json:"duration" binding:"required,len=3,dive,lte=99,gte=0"`
+}
+
 type UpdateStage123456NoRequest struct {
 	ID     pgtype.UUID `json:"id"`
 	Try    string      `json:"try"`
@@ -57,8 +76,20 @@ type UpdateStage123456NoRequest struct {
 	Scores string      `json:"scores"`
 }
 
+type UpdateStage123456CheckmarksBodyRequest struct {
+	Checkmarks []bool `json:"checkmarks" binding:"required,len=6,dive,boolean"`
+}
+
 type UpdateStage123456CheckmarksRequest struct {
 	ID         pgtype.UUID
 	Try        string
 	Checkmarks string
+}
+
+type UpdateStage123456FinishRequest struct {
+	ID          pgtype.UUID
+	Try         string
+	Success     bool
+	ShooterSign pgtype.Text
+	ScorerSign  pgtype.Text
 }

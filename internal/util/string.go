@@ -76,6 +76,21 @@ func IntArrayToScores(input []int) string {
 	return string(buf)
 }
 
+func IntArraysToScores(scores ...[]int) string {
+	scoresStr := "("
+
+	for i, score := range scores {
+		scoresStr += IntArrayToScores(score)
+
+		if i != len(scores)-1 {
+			scoresStr += ","
+		}
+	}
+
+	scoresStr += ")"
+	return scoresStr
+}
+
 func CheckmarksToBoolArray(input string) []bool {
 	// Remove the parentheses from the input string
 	input = strings.Trim(input, "()")

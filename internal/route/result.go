@@ -46,6 +46,7 @@ func Stage1AllRoutes(resultRouter *gin.RouterGroup, delivery allDelivery.AllDeli
 
 	stage1Router := resultRouter.Group("/stage1", delivery.MustStage1Middleware())
 	stage1Router.GET("", delivery.GetStage1ById)
+	stage1Router.POST("/2", delivery.CreateStage1try2)
 
 	return stage1Router
 }
