@@ -10,7 +10,7 @@ func (handler *scorerHandler) UpdateStage1No(c *gin.Context) {
 	stage1 := c.MustGet("stage1").(model.Stage1Relation)
 	try := c.MustGet("try").(string)
 
-	var uri model.UpdateStage123456NoUriRequest
+	var uri model.UpdateStage13NoUriRequest
 
 	if ok := util.BindURIAndValidate(c, &uri); !ok {
 		return

@@ -65,6 +65,16 @@ func CheckScores(c *gin.Context, arr []int, stageType string) bool {
 	return true
 }
 
+func CheckDurations(c *gin.Context, durations ...[]int) bool {
+	for _, value := range durations {
+		if ok := CheckDuration(c, value); !ok {
+			return false
+		}
+	}
+
+	return true
+}
+
 func CheckDuration(c *gin.Context, duration []int) bool {
 	if duration[0] > 59 || duration[1] > 59 {
 		res := ToWebServiceResponse("Durasi menit(duration[0]) dan detik(duration[1]) tidak boleh lebih dari 59", http.StatusBadRequest, nil)

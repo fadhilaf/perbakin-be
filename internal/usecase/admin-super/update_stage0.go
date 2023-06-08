@@ -23,10 +23,10 @@ func (usecase *adminSuperUsecaseImpl) UpdateStage0(req model.UpdateStage0Request
 		Checkmarks: req.Checkmarks,
 	})
 	if err != nil {
-		return util.ToWebServiceResponse("Gagal mengubah hasil ujian: "+err.Error(), http.StatusInternalServerError, nil)
+		return util.ToWebServiceResponse("Gagal mengubah hasil ujian kualifikasi: "+err.Error(), http.StatusInternalServerError, nil)
 	}
 
-	return util.ToWebServiceResponse("Berhasil mengubah hasil ujian", http.StatusOK, gin.H{
+	return util.ToWebServiceResponse("Berhasil mengubah hasil ujian kualifikasi", http.StatusOK, gin.H{
 		"stage_0": model.UpdateStage0Response{
 			ID:         newStage0.ID,
 			ResultID:   newStage0.ResultID,
