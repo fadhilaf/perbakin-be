@@ -68,26 +68,9 @@ type Stage13UpdateBodyTry struct {
 	Checkmarks []bool `json:"checkmarks" binding:"required,len=6,dive,boolean"`
 }
 
-type Stage13UpdateBodyTryOptional struct {
-	Status     string `uri:"status" binding:"oneof=1 2 3 4 5 6"`
-	Scores1    []int  `json:"scores_1" binding:"len=3"`
-	Duration1  []int  `json:"duration_1" binding:"len=3,dive,lte=99,gte=0"`
-	Scores2    []int  `json:"scores_2" binding:"len=3"`
-	Duration2  []int  `json:"duration_2" binding:"len=3,dive,lte=99,gte=0"`
-	Scores3    []int  `json:"scores_3" binding:"len=3"`
-	Duration3  []int  `json:"duration_3" binding:"len=3,dive,lte=99,gte=0"`
-	Scores4    []int  `json:"scores_4" binding:"len=3"`
-	Duration4  []int  `json:"duration_4" binding:"len=3,dive,lte=99,gte=0"`
-	Scores5    []int  `json:"scores_5" binding:"len=3"`
-	Duration5  []int  `json:"duration_5" binding:"len=3,dive,lte=99,gte=0"`
-	Scores6    []int  `json:"scores_6" binding:"len=3"`
-	Duration6  []int  `json:"duration_6" binding:"len=3,dive,lte=99,gte=0"`
-	Checkmarks []bool `json:"checkmarks" binding:"len=6,dive,boolean"`
-}
-
 type UpdateStage13BodyRequest struct {
-	Try1 Stage13UpdateBodyTry `json:"try_1" binding:"required"`
-	Try2 Stage13UpdateBodyTry `json:"try_2"`
+	Try1 Stage13UpdateBodyTry `json:"try_1" binding:"required,dive"`
+	Try2 Stage13UpdateBodyTry `json:"try_2" binding:"dive"`
 }
 
 type Stage13TryString struct {
