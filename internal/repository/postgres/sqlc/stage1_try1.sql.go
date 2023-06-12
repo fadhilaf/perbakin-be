@@ -306,14 +306,14 @@ WITH updated_stage1_results AS (
 ), updated_stage1_try1 AS (
   UPDATE stage13_tries
   SET 
-    status = $2::text, 
-    no1 = $3::text,
-    no2 = $4::text,
-    no3 = $5::text,
-    no4 = $6::text,
-    no5 = $7::text,
-    no6 = $8::text,
-    checkmarks = $9::text
+    status = $2,
+    no1 = $3,
+    no2 = $4,
+    no3 = $5,
+    no4 = $6,
+    no5 = $7,
+    no6 = $8,
+    checkmarks = $9
   WHERE id = (SELECT try1_id FROM stage1_results)
   RETURNING 
     status,
@@ -340,7 +340,7 @@ FROM updated_stage1_results, updated_stage1_try1
 
 type UpdateStage1try1Params struct {
 	ID             pgtype.UUID
-	Try1Status     string
+	Try1Status     Stage13Status
 	Try1No1        string
 	Try1No2        string
 	Try1No3        string

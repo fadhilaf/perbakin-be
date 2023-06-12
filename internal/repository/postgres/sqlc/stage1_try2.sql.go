@@ -120,14 +120,14 @@ WITH updated_stage1_results AS (
 ), updated_stage1_try1 AS (
   UPDATE stage13_tries
   SET 
-    status = $2::text, 
-    no1 = $3::text,
-    no2 = $4::text,
-    no3 = $5::text,
-    no4 = $6::text,
-    no5 = $7::text,
-    no6 = $8::text,
-    checkmarks = $9::text
+    status = $2,
+    no1 = $3,
+    no2 = $4,
+    no3 = $5,
+    no4 = $6,
+    no5 = $7,
+    no6 = $8,
+    checkmarks = $9
   WHERE id = (SELECT try1_id FROM stage1_results)
   RETURNING 
     status,
@@ -141,14 +141,14 @@ WITH updated_stage1_results AS (
 ), updated_stage1_try2 AS (
   UPDATE stage13_tries
   SET 
-    status = $10::text,
-    no1 = $11::text,
-    no2 = $12::text,
-    no3 = $13::text,
-    no4 = $14::text,
-    no5 = $15::text,
-    no6 = $16::text,
-    checkmarks = $17::text
+    status = $10,
+    no1 = $11,
+    no2 = $12,
+    no3 = $13,
+    no4 = $14,
+    no5 = $15,
+    no6 = $16,
+    checkmarks = $17
   WHERE id = (SELECT try2_id FROM stage1_results WHERE try2_id IS NOT NULL)
   RETURNING 
     status,
@@ -183,7 +183,7 @@ FROM updated_stage1_results, updated_stage1_try1, updated_stage1_try2
 
 type UpdateStage1try2Params struct {
 	ID             pgtype.UUID
-	Try1Status     string
+	Try1Status     Stage13Status
 	Try1No1        string
 	Try1No2        string
 	Try1No3        string
@@ -191,7 +191,7 @@ type UpdateStage1try2Params struct {
 	Try1No5        string
 	Try1No6        string
 	Try1Checkmarks string
-	Try2Status     string
+	Try2Status     Stage13Status
 	Try2No1        string
 	Try2No2        string
 	Try2No3        string

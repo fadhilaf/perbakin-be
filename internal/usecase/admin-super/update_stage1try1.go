@@ -14,7 +14,7 @@ import (
 func (usecase *adminSuperUsecaseImpl) UpdateStage1try1(req model.UpdateStage13try1Request) model.WebServiceResponse {
 	newStage1, err := usecase.Store.UpdateStage1try1(context.Background(), repositoryModel.UpdateStage1try1Params{
 		ID:             req.ID,
-		Try1Status:     req.Try1.Status,
+		Try1Status:     repositoryModel.Stage13Status(req.Try1.Status),
 		Try1No1:        req.Try1.No1,
 		Try1No2:        req.Try1.No2,
 		Try1No3:        req.Try1.No3,
@@ -24,7 +24,7 @@ func (usecase *adminSuperUsecaseImpl) UpdateStage1try1(req model.UpdateStage13tr
 		Try1Checkmarks: req.Try1.Checkmarks,
 	})
 	if err != nil {
-		return util.ToWebServiceResponse("Gagal mengubah hasil ujian stage 1: "+err.Error(), http.StatusInternalServerError, nil)
+		return util.ToWebServiceResponse("Gagal mengubah hasil ujian stage 1 omaga: "+err.Error(), http.StatusInternalServerError, nil)
 	}
 
 	return util.ToWebServiceResponse("Berhasil mengubah hasil ujian stage 1", http.StatusOK, gin.H{

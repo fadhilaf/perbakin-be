@@ -14,7 +14,7 @@ import (
 func (usecase *adminSuperUsecaseImpl) UpdateStage1try2(req model.UpdateStage13try2Request) model.WebServiceResponse {
 	newStage1, err := usecase.Store.UpdateStage1try2(context.Background(), repositoryModel.UpdateStage1try2Params{
 		ID:             req.ID,
-		Try1Status:     req.Try1.Status,
+		Try1Status:     repositoryModel.Stage13Status(req.Try1.Status),
 		Try1No1:        req.Try1.No1,
 		Try1No2:        req.Try1.No2,
 		Try1No3:        req.Try1.No3,
@@ -22,7 +22,7 @@ func (usecase *adminSuperUsecaseImpl) UpdateStage1try2(req model.UpdateStage13tr
 		Try1No5:        req.Try1.No5,
 		Try1No6:        req.Try1.No6,
 		Try1Checkmarks: req.Try1.Checkmarks,
-		Try2Status:     req.Try2.Status,
+		Try2Status:     repositoryModel.Stage13Status(req.Try2.Status),
 		Try2No1:        req.Try2.No1,
 		Try2No2:        req.Try2.No2,
 		Try2No3:        req.Try2.No3,

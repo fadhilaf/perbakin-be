@@ -264,14 +264,14 @@ WITH updated_stage1_results AS (
 ), updated_stage1_try1 AS (
   UPDATE stage13_tries
   SET 
-    status = sqlc.arg(try1_status)::text, 
-    no1 = sqlc.arg(try1_no1)::text,
-    no2 = sqlc.arg(try1_no2)::text,
-    no3 = sqlc.arg(try1_no3)::text,
-    no4 = sqlc.arg(try1_no4)::text,
-    no5 = sqlc.arg(try1_no5)::text,
-    no6 = sqlc.arg(try1_no6)::text,
-    checkmarks = sqlc.arg(try1_checkmarks)::text
+    status = sqlc.arg(try1_status),
+    no1 = sqlc.arg(try1_no1),
+    no2 = sqlc.arg(try1_no2),
+    no3 = sqlc.arg(try1_no3),
+    no4 = sqlc.arg(try1_no4),
+    no5 = sqlc.arg(try1_no5),
+    no6 = sqlc.arg(try1_no6),
+    checkmarks = sqlc.arg(try1_checkmarks)
   WHERE id = (SELECT try1_id FROM stage1_results)
   RETURNING 
     status,
