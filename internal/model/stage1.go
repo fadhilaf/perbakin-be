@@ -52,25 +52,29 @@ type Stage1Relation struct {
 }
 
 type Stage13UpdateBodyTry struct {
-	Status     string `uri:"status" binding:"required,oneof=1 2 3 4 5 6"`
-	Scores1    []int  `json:"scores_1" binding:"required,len=3"`
+	Status     string `json:"status" binding:"required,oneof=1 2 3 4 5 6"`
+	Scores1    []int  `json:"scores_1" binding:"required,len=3,dive,gte=0"`
 	Duration1  []int  `json:"duration_1" binding:"required,len=3,dive,lte=99,gte=0"`
-	Scores2    []int  `json:"scores_2" binding:"required,len=3"`
+	Scores2    []int  `json:"scores_2" binding:"required,len=3,dive,gte=0"`
 	Duration2  []int  `json:"duration_2" binding:"required,len=3,dive,lte=99,gte=0"`
-	Scores3    []int  `json:"scores_3" binding:"required,len=3"`
+	Scores3    []int  `json:"scores_3" binding:"required,len=3,dive,gte=0"`
 	Duration3  []int  `json:"duration_3" binding:"required,len=3,dive,lte=99,gte=0"`
-	Scores4    []int  `json:"scores_4" binding:"required,len=3"`
+	Scores4    []int  `json:"scores_4" binding:"required,len=3,dive,gte=0"`
 	Duration4  []int  `json:"duration_4" binding:"required,len=3,dive,lte=99,gte=0"`
-	Scores5    []int  `json:"scores_5" binding:"required,len=3"`
+	Scores5    []int  `json:"scores_5" binding:"required,len=3,dive,gte=0"`
 	Duration5  []int  `json:"duration_5" binding:"required,len=3,dive,lte=99,gte=0"`
-	Scores6    []int  `json:"scores_6" binding:"required,len=3"`
+	Scores6    []int  `json:"scores_6" binding:"required,len=3,dive,gte=0"`
 	Duration6  []int  `json:"duration_6" binding:"required,len=3,dive,lte=99,gte=0"`
 	Checkmarks []bool `json:"checkmarks" binding:"required,len=6,dive,boolean"`
 }
 
-type UpdateStage13BodyRequest struct {
+type UpdateStage13try1BodyRequest struct {
 	Try1 Stage13UpdateBodyTry `json:"try_1" binding:"required,dive"`
-	Try2 Stage13UpdateBodyTry `json:"try_2" binding:"dive"`
+}
+
+type UpdateStage13try2BodyRequest struct {
+	Try1 Stage13UpdateBodyTry `json:"try_1" binding:"required,dive"`
+	Try2 Stage13UpdateBodyTry `json:"try_2" binding:"required,dive"`
 }
 
 type Stage13TryString struct {
@@ -84,27 +88,20 @@ type Stage13TryString struct {
 	Checkmarks string `json:"checkmarks"`
 }
 
-type Stage13TryStringOptional struct {
-	Status     pgtype.Text `json:"status"`
-	No1        pgtype.Text `json:"no_1"`
-	No2        pgtype.Text `json:"no_2"`
-	No3        pgtype.Text `json:"no_3"`
-	No4        pgtype.Text `json:"no_4"`
-	No5        pgtype.Text `json:"no_5"`
-	No6        pgtype.Text `json:"no_6"`
-	Checkmarks pgtype.Text `json:"checkmarks"`
-}
-
-type UpdateStage13Request struct {
+type UpdateStage13try1Request struct {
 	ID   pgtype.UUID
 	Try1 Stage13TryString
-	Try2 Stage13TryStringOptional
+}
+
+type UpdateStage13try2Request struct {
+	ID   pgtype.UUID
+	Try1 Stage13TryString
+	Try2 Stage13TryString
 }
 
 type UpdateStage13Response struct {
 	Try1      Stage13Try `json:"try_1"`
 	Try2      Stage13Try `json:"try_2"`
-	IsTry2    bool       `json:"is_try_2"`
 	UpdatedAt time.Time  `json:"updated_at"`
 }
 

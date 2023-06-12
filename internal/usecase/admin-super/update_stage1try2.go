@@ -11,8 +11,8 @@ import (
 	"github.com/FadhilAF/perbakin-be/internal/util"
 )
 
-func (usecase *adminSuperUsecaseImpl) UpdateStage1(req model.UpdateStage13Request) model.WebServiceResponse {
-	newStage1, err := usecase.Store.UpdateStage1(context.Background(), repositoryModel.UpdateStage1Params{
+func (usecase *adminSuperUsecaseImpl) UpdateStage1try2(req model.UpdateStage13try2Request) model.WebServiceResponse {
+	newStage1, err := usecase.Store.UpdateStage1try2(context.Background(), repositoryModel.UpdateStage1try2Params{
 		ID:             req.ID,
 		Try1Status:     req.Try1.Status,
 		Try1No1:        req.Try1.No1,
@@ -35,10 +35,8 @@ func (usecase *adminSuperUsecaseImpl) UpdateStage1(req model.UpdateStage13Reques
 		return util.ToWebServiceResponse("Gagal mengubah hasil ujian stage 1: "+err.Error(), http.StatusInternalServerError, nil)
 	}
 
-	var response model.UpdateStage13Response
-
-	if newStage1.IsTry2 {
-		response = model.UpdateStage13Response{
+	return util.ToWebServiceResponse("Berhasil mengubah hasil ujian stage 1", http.StatusOK, gin.H{
+		"stage_1": model.UpdateStage13Response{
 			Try1: model.Stage13Try{
 				Status:     string(newStage1.Try1Status),
 				No1:        util.NumbersToIntArrayArray(newStage1.Try1No1),
@@ -59,27 +57,6 @@ func (usecase *adminSuperUsecaseImpl) UpdateStage1(req model.UpdateStage13Reques
 				No6:        util.NumbersToIntArrayArray(newStage1.Try2No6),
 				Checkmarks: util.CheckmarksToBoolArray(newStage1.Try2Checkmarks),
 			},
-			IsTry2:    newStage1.IsTry2,
 			UpdatedAt: newStage1.UpdatedAt.Time,
-		}
-	} else {
-		response = model.UpdateStage13Response{
-			Try1: model.Stage13Try{
-				Status:     string(newStage1.Try1Status),
-				No1:        util.NumbersToIntArrayArray(newStage1.Try1No1),
-				No2:        util.NumbersToIntArrayArray(newStage1.Try1No2),
-				No3:        util.NumbersToIntArrayArray(newStage1.Try1No3),
-				No4:        util.NumbersToIntArrayArray(newStage1.Try1No4),
-				No5:        util.NumbersToIntArrayArray(newStage1.Try1No5),
-				No6:        util.NumbersToIntArrayArray(newStage1.Try1No6),
-				Checkmarks: util.CheckmarksToBoolArray(newStage1.Try1Checkmarks),
-			},
-			IsTry2:    newStage1.IsTry2,
-			UpdatedAt: newStage1.UpdatedAt.Time,
-		}
-
-	}
-
-	return util.ToWebServiceResponse("Berhasil mengubah hasil ujian stage 1", http.StatusOK, gin.H{
-		"stage_1": response})
+		}})
 }
