@@ -25,6 +25,7 @@ type Querier interface {
 	CreateStage0(ctx context.Context, resultID pgtype.UUID) (Stage0Result, error)
 	CreateStage1(ctx context.Context, resultID pgtype.UUID) (CreateStage1Row, error)
 	CreateStage1try2(ctx context.Context, id pgtype.UUID) (CreateStage1try2Row, error)
+	CreateStage2(ctx context.Context, resultID pgtype.UUID) (CreateStage2Row, error)
 	// untuk menghapus exam (super role)
 	DeleteExam(ctx context.Context, id pgtype.UUID) error
 	// (admin-super role) dibuat by id
@@ -37,6 +38,8 @@ type Querier interface {
 	DeleteStage1(ctx context.Context, id pgtype.UUID) error
 	// (admin-super role)
 	DeleteStage1try2(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
+	DeleteStage2(ctx context.Context, id pgtype.UUID) error
 	// dipake untuk delete user
 	DeleteUser(ctx context.Context, id pgtype.UUID) error
 	// untuk ngambil data akun admin berdasarkan id (super role)
@@ -106,6 +109,13 @@ type Querier interface {
 	GetStage1try2ExistById(ctx context.Context, id pgtype.UUID) (bool, error)
 	// (all role)
 	GetStage1try2Status(ctx context.Context, id pgtype.UUID) (Stage13Status, error)
+	// (all role)
+	GetStage2ById(ctx context.Context, id pgtype.UUID) (GetStage2ByIdRow, error)
+	// (all role)
+	GetStage2RelationByResultId(ctx context.Context, resultID pgtype.UUID) (GetStage2RelationByResultIdRow, error)
+	GetStage2try1Status(ctx context.Context, id pgtype.UUID) (Stage246Status, error)
+	// (all role)
+	GetStage2try2ExistById(ctx context.Context, id pgtype.UUID) (bool, error)
 	// untuk ngambil data lengkap super admin berdasarkan user id (super role)
 	GetSuperByUserId(ctx context.Context, userID pgtype.UUID) (GetSuperByUserIdRow, error)
 	// untuk ngambil data display super admin berdasarkan username (super role)
@@ -208,6 +218,26 @@ type Querier interface {
 	UpdateStage1try2No5(ctx context.Context, arg UpdateStage1try2No5Params) (string, error)
 	// (scorer role)
 	UpdateStage1try2No6(ctx context.Context, arg UpdateStage1try2No6Params) (string, error)
+	// (scorer role)
+	UpdateStage2NextTry(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
+	UpdateStage2Signs(ctx context.Context, arg UpdateStage2SignsParams) (UpdateStage2SignsRow, error)
+	// (admin-super role)
+	UpdateStage2try1(ctx context.Context, arg UpdateStage2try1Params) (UpdateStage2try1Row, error)
+	// (scorer role)
+	UpdateStage2try1Checkmarks(ctx context.Context, arg UpdateStage2try1CheckmarksParams) (string, error)
+	// (scorer role)
+	UpdateStage2try1FinishFailed(ctx context.Context, arg UpdateStage2try1FinishFailedParams) error
+	// (scorer role)
+	UpdateStage2try1FinishSuccess(ctx context.Context, arg UpdateStage2try1FinishSuccessParams) error
+	// (scorer role)
+	UpdateStage2try1NextNo(ctx context.Context, arg UpdateStage2try1NextNoParams) error
+	// (scorer role)
+	UpdateStage2try1No1(ctx context.Context, arg UpdateStage2try1No1Params) (string, error)
+	// (scorer role)
+	UpdateStage2try1No2(ctx context.Context, arg UpdateStage2try1No2Params) (string, error)
+	// (scorer role)
+	UpdateStage2try1No3(ctx context.Context, arg UpdateStage2try1No3Params) (string, error)
 }
 
 var _ Querier = (*Queries)(nil)

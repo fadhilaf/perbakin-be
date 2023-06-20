@@ -5,7 +5,6 @@
 package postgres
 
 import (
-	"database/sql"
 	"database/sql/driver"
 	"fmt"
 
@@ -334,20 +333,29 @@ type Stage1Result struct {
 type Stage2Result struct {
 	ID          pgtype.UUID
 	ResultID    pgtype.UUID
-	Try1        string
-	Try2        sql.NullString
+	Try1ID      pgtype.UUID
+	Try2ID      pgtype.UUID
 	IsTry2      bool
 	ShooterSign pgtype.Text
 	ScorerSign  pgtype.Text
 	CreatedAt   pgtype.Timestamp
 	UpdatedAt   pgtype.Timestamp
+}
+
+type Stage2Try struct {
+	ID         pgtype.UUID
+	Status     Stage246Status
+	No1        string
+	No2        string
+	No3        string
+	Checkmarks string
 }
 
 type Stage3Result struct {
 	ID          pgtype.UUID
 	ResultID    pgtype.UUID
-	Try1        pgtype.UUID
-	Try2        pgtype.UUID
+	Try1ID      pgtype.UUID
+	Try2ID      pgtype.UUID
 	IsTry2      bool
 	ShooterSign pgtype.Text
 	ScorerSign  pgtype.Text
@@ -355,11 +363,20 @@ type Stage3Result struct {
 	UpdatedAt   pgtype.Timestamp
 }
 
+type Stage46Try struct {
+	ID         pgtype.UUID
+	Status     Stage246Status
+	No1        string
+	No2        string
+	No3        string
+	Checkmarks string
+}
+
 type Stage4Result struct {
 	ID          pgtype.UUID
 	ResultID    pgtype.UUID
-	Try1        string
-	Try2        sql.NullString
+	Try1ID      pgtype.UUID
+	Try2ID      pgtype.UUID
 	IsTry2      bool
 	ShooterSign pgtype.Text
 	ScorerSign  pgtype.Text
@@ -370,8 +387,8 @@ type Stage4Result struct {
 type Stage5Result struct {
 	ID          pgtype.UUID
 	ResultID    pgtype.UUID
-	Try1        string
-	Try2        sql.NullString
+	Try1ID      pgtype.UUID
+	Try2ID      pgtype.UUID
 	IsTry2      bool
 	ShooterSign pgtype.Text
 	ScorerSign  pgtype.Text
@@ -379,11 +396,19 @@ type Stage5Result struct {
 	UpdatedAt   pgtype.Timestamp
 }
 
+type Stage5Try struct {
+	ID         pgtype.UUID
+	Status     Stage5Status
+	No1        string
+	No2        string
+	Checkmarks string
+}
+
 type Stage6Result struct {
 	ID          pgtype.UUID
 	ResultID    pgtype.UUID
-	Try1        string
-	Try2        sql.NullString
+	Try1ID      pgtype.UUID
+	Try2ID      pgtype.UUID
 	IsTry2      bool
 	ShooterSign pgtype.Text
 	ScorerSign  pgtype.Text
