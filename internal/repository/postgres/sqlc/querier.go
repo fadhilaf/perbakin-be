@@ -26,6 +26,14 @@ type Querier interface {
 	CreateStage1(ctx context.Context, resultID pgtype.UUID) (CreateStage1Row, error)
 	CreateStage1try2(ctx context.Context, id pgtype.UUID) (CreateStage1try2Row, error)
 	CreateStage2(ctx context.Context, resultID pgtype.UUID) (CreateStage2Row, error)
+	CreateStage2try2(ctx context.Context, id pgtype.UUID) (CreateStage2try2Row, error)
+	CreateStage3(ctx context.Context, resultID pgtype.UUID) (CreateStage3Row, error)
+	CreateStage3try2(ctx context.Context, id pgtype.UUID) (CreateStage3try2Row, error)
+	CreateStage4(ctx context.Context, resultID pgtype.UUID) (CreateStage4Row, error)
+	CreateStage4try2(ctx context.Context, id pgtype.UUID) (CreateStage4try2Row, error)
+	CreateStage5(ctx context.Context, resultID pgtype.UUID) (CreateStage5Row, error)
+	CreateStage6(ctx context.Context, resultID pgtype.UUID) (CreateStage6Row, error)
+	CreateStage6try2(ctx context.Context, id pgtype.UUID) (CreateStage6try2Row, error)
 	// untuk menghapus exam (super role)
 	DeleteExam(ctx context.Context, id pgtype.UUID) error
 	// (admin-super role) dibuat by id
@@ -40,6 +48,22 @@ type Querier interface {
 	DeleteStage1try2(ctx context.Context, id pgtype.UUID) error
 	// (admin-super role)
 	DeleteStage2(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
+	DeleteStage2try2(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
+	DeleteStage3(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
+	DeleteStage3try2(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
+	DeleteStage4(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
+	DeleteStage4try2(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
+	DeleteStage5(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
+	DeleteStage6(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
+	DeleteStage6try2(ctx context.Context, id pgtype.UUID) error
 	// dipake untuk delete user
 	DeleteUser(ctx context.Context, id pgtype.UUID) error
 	// untuk ngambil data akun admin berdasarkan id (super role)
@@ -116,6 +140,42 @@ type Querier interface {
 	GetStage2try1Status(ctx context.Context, id pgtype.UUID) (Stage246Status, error)
 	// (all role)
 	GetStage2try2ExistById(ctx context.Context, id pgtype.UUID) (bool, error)
+	// (all role)
+	GetStage2try2Status(ctx context.Context, id pgtype.UUID) (Stage246Status, error)
+	// (all role)
+	GetStage3ById(ctx context.Context, id pgtype.UUID) (GetStage3ByIdRow, error)
+	// (all role)
+	GetStage3RelationByResultId(ctx context.Context, resultID pgtype.UUID) (GetStage3RelationByResultIdRow, error)
+	GetStage3try1Status(ctx context.Context, id pgtype.UUID) (Stage13Status, error)
+	// (all role)
+	GetStage3try2ExistById(ctx context.Context, id pgtype.UUID) (bool, error)
+	// (all role)
+	GetStage3try2Status(ctx context.Context, id pgtype.UUID) (Stage13Status, error)
+	// (all role)
+	GetStage4ById(ctx context.Context, id pgtype.UUID) (GetStage4ByIdRow, error)
+	// (all role)
+	GetStage4RelationByResultId(ctx context.Context, resultID pgtype.UUID) (GetStage4RelationByResultIdRow, error)
+	GetStage4try1Status(ctx context.Context, id pgtype.UUID) (Stage246Status, error)
+	// (all role)
+	GetStage4try2ExistById(ctx context.Context, id pgtype.UUID) (bool, error)
+	// (all role)
+	GetStage4try2Status(ctx context.Context, id pgtype.UUID) (Stage246Status, error)
+	// (all role)
+	GetStage5ById(ctx context.Context, id pgtype.UUID) (GetStage5ByIdRow, error)
+	// (all role)
+	GetStage5RelationByResultId(ctx context.Context, resultID pgtype.UUID) (GetStage5RelationByResultIdRow, error)
+	GetStage5try1Status(ctx context.Context, id pgtype.UUID) (Stage5Status, error)
+	// (all role)
+	GetStage5try2ExistById(ctx context.Context, id pgtype.UUID) (bool, error)
+	// (all role)
+	GetStage6ById(ctx context.Context, id pgtype.UUID) (GetStage6ByIdRow, error)
+	// (all role)
+	GetStage6RelationByResultId(ctx context.Context, resultID pgtype.UUID) (GetStage6RelationByResultIdRow, error)
+	GetStage6try1Status(ctx context.Context, id pgtype.UUID) (Stage246Status, error)
+	// (all role)
+	GetStage6try2ExistById(ctx context.Context, id pgtype.UUID) (bool, error)
+	// (all role)
+	GetStage6try2Status(ctx context.Context, id pgtype.UUID) (Stage246Status, error)
 	// untuk ngambil data lengkap super admin berdasarkan user id (super role)
 	GetSuperByUserId(ctx context.Context, userID pgtype.UUID) (GetSuperByUserIdRow, error)
 	// untuk ngambil data display super admin berdasarkan username (super role)
@@ -238,6 +298,160 @@ type Querier interface {
 	UpdateStage2try1No2(ctx context.Context, arg UpdateStage2try1No2Params) (string, error)
 	// (scorer role)
 	UpdateStage2try1No3(ctx context.Context, arg UpdateStage2try1No3Params) (string, error)
+	// (admin-super role)
+	UpdateStage2try2(ctx context.Context, arg UpdateStage2try2Params) (UpdateStage2try2Row, error)
+	// (scorer role)
+	UpdateStage2try2Checkmarks(ctx context.Context, arg UpdateStage2try2CheckmarksParams) (string, error)
+	// (scorer role)
+	UpdateStage2try2FinishFailed(ctx context.Context, arg UpdateStage2try2FinishFailedParams) error
+	// (scorer role)
+	UpdateStage2try2FinishSuccess(ctx context.Context, arg UpdateStage2try2FinishSuccessParams) error
+	// (scorer role)
+	UpdateStage2try2NextNo(ctx context.Context, arg UpdateStage2try2NextNoParams) error
+	// (scorer role)
+	UpdateStage2try2No1(ctx context.Context, arg UpdateStage2try2No1Params) (string, error)
+	// (scorer role)
+	UpdateStage2try2No2(ctx context.Context, arg UpdateStage2try2No2Params) (string, error)
+	// (scorer role)
+	UpdateStage2try2No3(ctx context.Context, arg UpdateStage2try2No3Params) (string, error)
+	// (scorer role)
+	UpdateStage3NextTry(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
+	UpdateStage3Signs(ctx context.Context, arg UpdateStage3SignsParams) (UpdateStage3SignsRow, error)
+	// (admin-super role)
+	UpdateStage3try1(ctx context.Context, arg UpdateStage3try1Params) (UpdateStage3try1Row, error)
+	// (scorer role)
+	UpdateStage3try1Checkmarks(ctx context.Context, arg UpdateStage3try1CheckmarksParams) (string, error)
+	// (scorer role)
+	UpdateStage3try1FinishFailed(ctx context.Context, arg UpdateStage3try1FinishFailedParams) error
+	// (scorer role)
+	UpdateStage3try1FinishSuccess(ctx context.Context, arg UpdateStage3try1FinishSuccessParams) error
+	// (scorer role)
+	UpdateStage3try1NextNo(ctx context.Context, arg UpdateStage3try1NextNoParams) error
+	// (scorer role)
+	UpdateStage3try1No1(ctx context.Context, arg UpdateStage3try1No1Params) (string, error)
+	// (scorer role)
+	UpdateStage3try1No2(ctx context.Context, arg UpdateStage3try1No2Params) (string, error)
+	// (scorer role)
+	UpdateStage3try1No3(ctx context.Context, arg UpdateStage3try1No3Params) (string, error)
+	// (scorer role)
+	UpdateStage3try1No4(ctx context.Context, arg UpdateStage3try1No4Params) (string, error)
+	// (scorer role)
+	UpdateStage3try1No5(ctx context.Context, arg UpdateStage3try1No5Params) (string, error)
+	// (scorer role)
+	UpdateStage3try1No6(ctx context.Context, arg UpdateStage3try1No6Params) (string, error)
+	// (admin-super role)
+	UpdateStage3try2(ctx context.Context, arg UpdateStage3try2Params) (UpdateStage3try2Row, error)
+	// (scorer role)
+	UpdateStage3try2Checkmarks(ctx context.Context, arg UpdateStage3try2CheckmarksParams) (string, error)
+	// (scorer role)
+	UpdateStage3try2FinishFailed(ctx context.Context, arg UpdateStage3try2FinishFailedParams) error
+	// (scorer role)
+	UpdateStage3try2FinishSuccess(ctx context.Context, arg UpdateStage3try2FinishSuccessParams) error
+	// (scorer role)
+	UpdateStage3try2NextNo(ctx context.Context, arg UpdateStage3try2NextNoParams) error
+	// (scorer role)
+	UpdateStage3try2No1(ctx context.Context, arg UpdateStage3try2No1Params) (string, error)
+	// (scorer role)
+	UpdateStage3try2No2(ctx context.Context, arg UpdateStage3try2No2Params) (string, error)
+	// (scorer role)
+	UpdateStage3try2No3(ctx context.Context, arg UpdateStage3try2No3Params) (string, error)
+	// (scorer role)
+	UpdateStage3try2No4(ctx context.Context, arg UpdateStage3try2No4Params) (string, error)
+	// (scorer role)
+	UpdateStage3try2No5(ctx context.Context, arg UpdateStage3try2No5Params) (string, error)
+	// (scorer role)
+	UpdateStage3try2No6(ctx context.Context, arg UpdateStage3try2No6Params) (string, error)
+	// (scorer role)
+	UpdateStage4NextTry(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
+	UpdateStage4Signs(ctx context.Context, arg UpdateStage4SignsParams) (UpdateStage4SignsRow, error)
+	// (admin-super role)
+	UpdateStage4try1(ctx context.Context, arg UpdateStage4try1Params) (UpdateStage4try1Row, error)
+	// (scorer role)
+	UpdateStage4try1Checkmarks(ctx context.Context, arg UpdateStage4try1CheckmarksParams) (string, error)
+	// (scorer role)
+	UpdateStage4try1FinishFailed(ctx context.Context, arg UpdateStage4try1FinishFailedParams) error
+	// (scorer role)
+	UpdateStage4try1FinishSuccess(ctx context.Context, arg UpdateStage4try1FinishSuccessParams) error
+	// (scorer role)
+	UpdateStage4try1NextNo(ctx context.Context, arg UpdateStage4try1NextNoParams) error
+	// (scorer role)
+	UpdateStage4try1No1(ctx context.Context, arg UpdateStage4try1No1Params) (string, error)
+	// (scorer role)
+	UpdateStage4try1No2(ctx context.Context, arg UpdateStage4try1No2Params) (string, error)
+	// (scorer role)
+	UpdateStage4try1No3(ctx context.Context, arg UpdateStage4try1No3Params) (string, error)
+	// (admin-super role)
+	UpdateStage4try2(ctx context.Context, arg UpdateStage4try2Params) (UpdateStage4try2Row, error)
+	// (scorer role)
+	UpdateStage4try2Checkmarks(ctx context.Context, arg UpdateStage4try2CheckmarksParams) (string, error)
+	// (scorer role)
+	UpdateStage4try2FinishFailed(ctx context.Context, arg UpdateStage4try2FinishFailedParams) error
+	// (scorer role)
+	UpdateStage4try2FinishSuccess(ctx context.Context, arg UpdateStage4try2FinishSuccessParams) error
+	// (scorer role)
+	UpdateStage4try2NextNo(ctx context.Context, arg UpdateStage4try2NextNoParams) error
+	// (scorer role)
+	UpdateStage4try2No1(ctx context.Context, arg UpdateStage4try2No1Params) (string, error)
+	// (scorer role)
+	UpdateStage4try2No2(ctx context.Context, arg UpdateStage4try2No2Params) (string, error)
+	// (scorer role)
+	UpdateStage4try2No3(ctx context.Context, arg UpdateStage4try2No3Params) (string, error)
+	// (scorer role)
+	UpdateStage5NextTry(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
+	UpdateStage5Signs(ctx context.Context, arg UpdateStage5SignsParams) (UpdateStage5SignsRow, error)
+	// (admin-super role)
+	UpdateStage5try1(ctx context.Context, arg UpdateStage5try1Params) (UpdateStage5try1Row, error)
+	// (scorer role)
+	UpdateStage5try1Checkmarks(ctx context.Context, arg UpdateStage5try1CheckmarksParams) (string, error)
+	// (scorer role)
+	UpdateStage5try1FinishFailed(ctx context.Context, arg UpdateStage5try1FinishFailedParams) error
+	// (scorer role)
+	UpdateStage5try1FinishSuccess(ctx context.Context, arg UpdateStage5try1FinishSuccessParams) error
+	// (scorer role)
+	UpdateStage5try1NextNo(ctx context.Context, arg UpdateStage5try1NextNoParams) error
+	// (scorer role)
+	UpdateStage5try1No1(ctx context.Context, arg UpdateStage5try1No1Params) (string, error)
+	// (scorer role)
+	UpdateStage5try1No2(ctx context.Context, arg UpdateStage5try1No2Params) (string, error)
+	// (scorer role)
+	UpdateStage6NextTry(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
+	UpdateStage6Signs(ctx context.Context, arg UpdateStage6SignsParams) (UpdateStage6SignsRow, error)
+	// (admin-super role)
+	UpdateStage6try1(ctx context.Context, arg UpdateStage6try1Params) (UpdateStage6try1Row, error)
+	// (scorer role)
+	UpdateStage6try1Checkmarks(ctx context.Context, arg UpdateStage6try1CheckmarksParams) (string, error)
+	// (scorer role)
+	UpdateStage6try1FinishFailed(ctx context.Context, arg UpdateStage6try1FinishFailedParams) error
+	// (scorer role)
+	UpdateStage6try1FinishSuccess(ctx context.Context, arg UpdateStage6try1FinishSuccessParams) error
+	// (scorer role)
+	UpdateStage6try1NextNo(ctx context.Context, arg UpdateStage6try1NextNoParams) error
+	// (scorer role)
+	UpdateStage6try1No1(ctx context.Context, arg UpdateStage6try1No1Params) (string, error)
+	// (scorer role)
+	UpdateStage6try1No2(ctx context.Context, arg UpdateStage6try1No2Params) (string, error)
+	// (scorer role)
+	UpdateStage6try1No3(ctx context.Context, arg UpdateStage6try1No3Params) (string, error)
+	// (admin-super role)
+	UpdateStage6try2(ctx context.Context, arg UpdateStage6try2Params) (UpdateStage6try2Row, error)
+	// (scorer role)
+	UpdateStage6try2Checkmarks(ctx context.Context, arg UpdateStage6try2CheckmarksParams) (string, error)
+	// (scorer role)
+	UpdateStage6try2FinishFailed(ctx context.Context, arg UpdateStage6try2FinishFailedParams) error
+	// (scorer role)
+	UpdateStage6try2FinishSuccess(ctx context.Context, arg UpdateStage6try2FinishSuccessParams) error
+	// (scorer role)
+	UpdateStage6try2NextNo(ctx context.Context, arg UpdateStage6try2NextNoParams) error
+	// (scorer role)
+	UpdateStage6try2No1(ctx context.Context, arg UpdateStage6try2No1Params) (string, error)
+	// (scorer role)
+	UpdateStage6try2No2(ctx context.Context, arg UpdateStage6try2No2Params) (string, error)
+	// (scorer role)
+	UpdateStage6try2No3(ctx context.Context, arg UpdateStage6try2No3Params) (string, error)
 }
 
 var _ Querier = (*Queries)(nil)

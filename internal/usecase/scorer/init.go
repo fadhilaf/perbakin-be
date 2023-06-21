@@ -19,6 +19,7 @@ type ScorerUsecase interface {
 	UpdateStage0Checkmarks(model.UpdateStage0CheckmarksRequest) model.WebServiceResponse
 	UpdateStage0Finish(model.UpdateStageFinishRequest) model.WebServiceResponse
 
+	CreateStage1try2(model.ByIdRequest) model.WebServiceResponse
 	UpdateStage1No(model.UpdateStage123456NoRequest) model.WebServiceResponse
 	UpdateStage1NextNo(model.ByIdAndTryRequest) model.WebServiceResponse
 	UpdateStage1Checkmarks(model.UpdateStage123456CheckmarksRequest) model.WebServiceResponse

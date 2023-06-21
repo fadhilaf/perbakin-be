@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (usecase *allUsecaseImpl) CreateStage1try2(req model.ByIdRequest) model.WebServiceResponse {
+func (usecase *scorerUsecaseImpl) CreateStage1try2(req model.ByIdRequest) model.WebServiceResponse {
 	exists, err := usecase.Store.GetStage1try2ExistById(context.Background(), req.ID)
 	if err != nil {
 		return util.ToWebServiceResponse("Gagal mengecek keberadaan hasil ujian stage 1 percobaan 2: "+err.Error(), http.StatusInternalServerError, nil)

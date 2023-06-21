@@ -1,10 +1,10 @@
 -- name: CreateStage2 :one
-WITH added_stage2_tries AS (
+WITH added_stage2_try1 AS (
   INSERT INTO stage2_tries DEFAULT VALUES
   RETURNING id, status, no1, no2, no3, checkmarks
 ), added_stage2_results AS (
   INSERT INTO stage2_results (result_id, try1_id)
-  SELECT $1, id FROM added_stage2_tries
+  SELECT $1, id FROM added_stage2_try1
   RETURNING id, result_id, try1_id, is_try2, shooter_sign, scorer_sign, created_at, updated_at
 )
 SELECT
@@ -20,7 +20,7 @@ SELECT
   scorer_sign,
   created_at,
   updated_at
-FROM added_stage2_tries, added_stage2_results;
+FROM added_stage2_try1, added_stage2_results;
 
 -- (all role)
 -- name: GetStage2ById :one
@@ -127,7 +127,7 @@ WITH updated_stage2_results AS (
   	scorer_sign = $3
   WHERE stage2_results.id = $1
   RETURNING result_id, try1_id
-), updated_stage2_tri2s AS (
+), updated_stage2_tries AS (
   UPDATE stage2_tries
     SET status = '7'
   WHERE id = (SELECT try1_id FROM updated_stage2_results)

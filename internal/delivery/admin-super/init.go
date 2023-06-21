@@ -33,6 +33,7 @@ type AdminSuperDelivery interface {
 	UpdateStage0Signs(c *gin.Context)
 	DeleteStage0(c *gin.Context)
 
+	CreateStage1try2(c *gin.Context)
 	UpdateStage1(c *gin.Context)
 	UpdateStage1Signs(c *gin.Context)
 	DeleteStage1(c *gin.Context)
