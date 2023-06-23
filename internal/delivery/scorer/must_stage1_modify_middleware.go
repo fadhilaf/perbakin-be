@@ -11,7 +11,7 @@ import (
 func (handler *scorerHandler) MustStage1ModifyMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		result := c.MustGet("result").(model.ResultRelation)
-		stage1 := c.MustGet("stage1").(model.Stage1Relation)
+		stage1 := c.MustGet("stage1").(model.Stage123456Relation)
 
 		status, err := handler.Usecase.GetResultStatusById(model.ByIdRequest{
 			ID: result.ID,
@@ -37,7 +37,7 @@ func (handler *scorerHandler) MustStage1ModifyMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		var uri model.Stage123456Try
+		var uri model.Stage123456TryRequestParam
 
 		if ok := util.BindURIAndValidate(c, &uri); !ok {
 			return

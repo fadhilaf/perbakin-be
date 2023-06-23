@@ -8,7 +8,7 @@ import (
 )
 
 func (handler *adminSuperHandler) UpdateStage1Signs(c *gin.Context) {
-	stage1 := c.MustGet("stage1").(model.Stage1Relation)
+	stage1 := c.MustGet("stage1").(model.Stage123456Relation)
 
 	// Simpan upload file ke folder assets/images
 	shooterSign, ok := util.SaveFileFromForm(c, "shooter_sign", "media/")

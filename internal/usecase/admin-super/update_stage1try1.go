@@ -31,12 +31,12 @@ func (usecase *adminSuperUsecaseImpl) UpdateStage1try1(req model.UpdateStage13tr
 		"stage_1": model.UpdateStage13Response{
 			Try1: model.Stage13Try{
 				Status:     string(newStage1.Try1Status),
-				No1:        util.NumbersToIntArrayArray(newStage1.Try1No1),
-				No2:        util.NumbersToIntArrayArray(newStage1.Try1No2),
-				No3:        util.NumbersToIntArrayArray(newStage1.Try1No3),
-				No4:        util.NumbersToIntArrayArray(newStage1.Try1No4),
-				No5:        util.NumbersToIntArrayArray(newStage1.Try1No5),
-				No6:        util.NumbersToIntArrayArray(newStage1.Try1No6),
+				No1:        util.Stage123DatabaseNumbersToStruct(newStage1.Try1No1),
+				No2:        util.Stage123DatabaseNumbersToStruct(newStage1.Try1No2),
+				No3:        util.Stage123DatabaseNumbersToStruct(newStage1.Try1No3),
+				No4:        util.Stage123DatabaseNumbersToStruct(newStage1.Try1No4),
+				No5:        util.Stage123DatabaseNumbersToStruct(newStage1.Try1No5),
+				No6:        util.Stage123DatabaseNumbersToStruct(newStage1.Try1No6),
 				Checkmarks: util.CheckmarksToBoolArray(newStage1.Try1Checkmarks),
 			},
 			UpdatedAt: newStage1.UpdatedAt.Time,

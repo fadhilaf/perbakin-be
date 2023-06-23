@@ -3,7 +3,18 @@ package util
 import (
 	"strconv"
 	"strings"
+
+	"github.com/FadhilAF/perbakin-be/internal/model"
 )
+
+func Stage123DatabaseNumbersToStruct(input string) model.Stage123Numbers {
+	array := NumbersToIntArrayArray(input)
+
+	return model.Stage123Numbers{
+		Scores:   array[0],
+		Duration: array[1],
+	}
+}
 
 func NumbersToIntArrayArray(input string) [][]int {
 	nums := strings.Split(strings.Trim(strings.Trim(input, "(\")"), "\""), "\",\"")
@@ -76,7 +87,7 @@ func IntArrayToScores(input []int) string {
 	return string(buf)
 }
 
-func IntArraysToScores(scores ...[]int) string {
+func IntArraysToScoresAndDuration(scores ...[]int) string {
 	scoresStr := "("
 
 	for i, score := range scores {

@@ -7,7 +7,7 @@ import (
 )
 
 func (handler *scorerHandler) UpdateStage1No(c *gin.Context) {
-	stage1 := c.MustGet("stage1").(model.Stage1Relation)
+	stage1 := c.MustGet("stage1").(model.Stage123456Relation)
 	try := c.MustGet("try").(string)
 
 	var uri model.UpdateStage13NoUriRequest
@@ -16,7 +16,7 @@ func (handler *scorerHandler) UpdateStage1No(c *gin.Context) {
 		return
 	}
 
-	var req model.UpdateStage123NoBodyRequest
+	var req model.Stage123Numbers
 
 	if ok := util.BindJSONAndValidate(c, &req); !ok {
 		return
@@ -33,10 +33,10 @@ func (handler *scorerHandler) UpdateStage1No(c *gin.Context) {
 	}
 
 	res := handler.Usecase.UpdateStage1No(model.UpdateStage123456NoRequest{
-		ID:     stage1.ID,
-		Try:    try,
-		No:     uri.No,
-		Scores: util.IntArraysToScores(req.Scores, req.Duration),
+		ID:                stage1.ID,
+		Try:               try,
+		No:                uri.No,
+		ScoresAndDuration: util.IntArraysToScoresAndDuration(req.Scores, req.Duration),
 	})
 
 	c.JSON(res.Status, res)

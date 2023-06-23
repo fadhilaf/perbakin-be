@@ -7,7 +7,7 @@ import (
 )
 
 func (handler *adminSuperHandler) UpdateStage1(c *gin.Context) {
-	stage1 := c.MustGet("stage1").(model.Stage1Relation)
+	stage1 := c.MustGet("stage1").(model.Stage123456Relation)
 
 	if stage1.IsTry2 {
 		var req model.UpdateStage13try2BodyRequest
@@ -18,36 +18,36 @@ func (handler *adminSuperHandler) UpdateStage1(c *gin.Context) {
 
 		//check series try2
 		if ok := util.CheckNumbers(c, "stage1",
-			req.Try1.Scores1,
-			req.Try1.Scores2,
-			req.Try1.Scores3,
-			req.Try1.Scores4,
-			req.Try1.Scores5,
-			req.Try1.Scores6,
-			req.Try2.Scores1,
-			req.Try2.Scores2,
-			req.Try2.Scores3,
-			req.Try2.Scores4,
-			req.Try2.Scores5,
-			req.Try2.Scores6,
+			req.Try1.No1.Scores,
+			req.Try1.No2.Scores,
+			req.Try1.No3.Scores,
+			req.Try1.No4.Scores,
+			req.Try1.No5.Scores,
+			req.Try1.No6.Scores,
+			req.Try2.No1.Scores,
+			req.Try2.No2.Scores,
+			req.Try2.No3.Scores,
+			req.Try2.No4.Scores,
+			req.Try2.No5.Scores,
+			req.Try2.No6.Scores,
 		); !ok {
 			return
 		}
 
 		//check duration try 2
 		if ok := util.CheckDurations(c,
-			req.Try2.Duration1,
-			req.Try2.Duration2,
-			req.Try2.Duration3,
-			req.Try2.Duration4,
-			req.Try2.Duration5,
-			req.Try2.Duration6,
-			req.Try1.Duration1,
-			req.Try1.Duration2,
-			req.Try1.Duration3,
-			req.Try1.Duration4,
-			req.Try1.Duration5,
-			req.Try1.Duration6,
+			req.Try2.No1.Duration,
+			req.Try2.No2.Duration,
+			req.Try2.No3.Duration,
+			req.Try2.No4.Duration,
+			req.Try2.No5.Duration,
+			req.Try2.No6.Duration,
+			req.Try1.No1.Duration,
+			req.Try1.No2.Duration,
+			req.Try1.No3.Duration,
+			req.Try1.No4.Duration,
+			req.Try1.No5.Duration,
+			req.Try1.No6.Duration,
 		); !ok {
 			return
 		}
@@ -65,22 +65,22 @@ func (handler *adminSuperHandler) UpdateStage1(c *gin.Context) {
 			ID: stage1.ID,
 			Try1: model.Stage13TryString{
 				Status:     req.Try1.Status,
-				No1:        util.IntArraysToScores(req.Try1.Scores1, req.Try1.Duration1),
-				No2:        util.IntArraysToScores(req.Try1.Scores2, req.Try1.Duration2),
-				No3:        util.IntArraysToScores(req.Try1.Scores3, req.Try1.Duration3),
-				No4:        util.IntArraysToScores(req.Try1.Scores4, req.Try1.Duration4),
-				No5:        util.IntArraysToScores(req.Try1.Scores5, req.Try1.Duration5),
-				No6:        util.IntArraysToScores(req.Try1.Scores6, req.Try1.Duration6),
+				No1:        util.IntArraysToScoresAndDuration(req.Try1.No1.Scores, req.Try1.No1.Duration),
+				No2:        util.IntArraysToScoresAndDuration(req.Try1.No2.Scores, req.Try1.No2.Duration),
+				No3:        util.IntArraysToScoresAndDuration(req.Try1.No3.Scores, req.Try1.No3.Duration),
+				No4:        util.IntArraysToScoresAndDuration(req.Try1.No4.Scores, req.Try1.No4.Duration),
+				No5:        util.IntArraysToScoresAndDuration(req.Try1.No5.Scores, req.Try1.No5.Duration),
+				No6:        util.IntArraysToScoresAndDuration(req.Try1.No6.Scores, req.Try1.No6.Duration),
 				Checkmarks: util.BoolArrayToCheckmarks(req.Try1.Checkmarks),
 			},
 			Try2: model.Stage13TryString{
 				Status:     req.Try2.Status,
-				No1:        util.IntArraysToScores(req.Try2.Scores1, req.Try2.Duration1),
-				No2:        util.IntArraysToScores(req.Try2.Scores2, req.Try2.Duration2),
-				No3:        util.IntArraysToScores(req.Try2.Scores3, req.Try2.Duration3),
-				No4:        util.IntArraysToScores(req.Try2.Scores4, req.Try2.Duration4),
-				No5:        util.IntArraysToScores(req.Try2.Scores5, req.Try2.Duration5),
-				No6:        util.IntArraysToScores(req.Try2.Scores6, req.Try2.Duration6),
+				No1:        util.IntArraysToScoresAndDuration(req.Try2.No1.Scores, req.Try2.No1.Duration),
+				No2:        util.IntArraysToScoresAndDuration(req.Try2.No2.Scores, req.Try2.No2.Duration),
+				No3:        util.IntArraysToScoresAndDuration(req.Try2.No3.Scores, req.Try2.No3.Duration),
+				No4:        util.IntArraysToScoresAndDuration(req.Try2.No4.Scores, req.Try2.No4.Duration),
+				No5:        util.IntArraysToScoresAndDuration(req.Try2.No5.Scores, req.Try2.No5.Duration),
+				No6:        util.IntArraysToScoresAndDuration(req.Try2.No6.Scores, req.Try2.No6.Duration),
 				Checkmarks: util.BoolArrayToCheckmarks(req.Try2.Checkmarks),
 			},
 		})
@@ -95,24 +95,24 @@ func (handler *adminSuperHandler) UpdateStage1(c *gin.Context) {
 
 		//check series try1
 		if ok := util.CheckNumbers(c, "stage1",
-			req.Try1.Scores1,
-			req.Try1.Scores2,
-			req.Try1.Scores3,
-			req.Try1.Scores4,
-			req.Try1.Scores5,
-			req.Try1.Scores6,
+			req.Try1.No1.Scores,
+			req.Try1.No2.Scores,
+			req.Try1.No3.Scores,
+			req.Try1.No4.Scores,
+			req.Try1.No5.Scores,
+			req.Try1.No6.Scores,
 		); !ok {
 			return
 		}
 
 		//check duration try 1
 		if ok := util.CheckDurations(c,
-			req.Try1.Duration1,
-			req.Try1.Duration2,
-			req.Try1.Duration3,
-			req.Try1.Duration4,
-			req.Try1.Duration5,
-			req.Try1.Duration6,
+			req.Try1.No1.Duration,
+			req.Try1.No2.Duration,
+			req.Try1.No3.Duration,
+			req.Try1.No4.Duration,
+			req.Try1.No5.Duration,
+			req.Try1.No6.Duration,
 		); !ok {
 			return
 		}
@@ -126,12 +126,12 @@ func (handler *adminSuperHandler) UpdateStage1(c *gin.Context) {
 			ID: stage1.ID,
 			Try1: model.Stage13TryString{
 				Status:     req.Try1.Status,
-				No1:        util.IntArraysToScores(req.Try1.Scores1, req.Try1.Duration1),
-				No2:        util.IntArraysToScores(req.Try1.Scores2, req.Try1.Duration2),
-				No3:        util.IntArraysToScores(req.Try1.Scores3, req.Try1.Duration3),
-				No4:        util.IntArraysToScores(req.Try1.Scores4, req.Try1.Duration4),
-				No5:        util.IntArraysToScores(req.Try1.Scores5, req.Try1.Duration5),
-				No6:        util.IntArraysToScores(req.Try1.Scores6, req.Try1.Duration6),
+				No1:        util.IntArraysToScoresAndDuration(req.Try1.No1.Scores, req.Try1.No1.Duration),
+				No2:        util.IntArraysToScoresAndDuration(req.Try1.No2.Scores, req.Try1.No2.Duration),
+				No3:        util.IntArraysToScoresAndDuration(req.Try1.No3.Scores, req.Try1.No3.Duration),
+				No4:        util.IntArraysToScoresAndDuration(req.Try1.No4.Scores, req.Try1.No4.Duration),
+				No5:        util.IntArraysToScoresAndDuration(req.Try1.No5.Scores, req.Try1.No5.Duration),
+				No6:        util.IntArraysToScoresAndDuration(req.Try1.No6.Scores, req.Try1.No6.Duration),
 				Checkmarks: util.BoolArrayToCheckmarks(req.Try1.Checkmarks),
 			},
 		})

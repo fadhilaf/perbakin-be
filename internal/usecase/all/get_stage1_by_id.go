@@ -19,27 +19,27 @@ func (usecase *allUsecaseImpl) GetStage1ById(req model.ByIdRequest) model.WebSer
 
 	if stage1.IsTry2 {
 		stage1Response = gin.H{
-			"stage_1": model.Stage1Full{
+			"stage_1": model.Stage13Full{
 				ID:       stage1.ID,
 				ResultID: stage1.ResultID,
 				Try1: model.Stage13Try{
 					Status:     string(stage1.Try1Status),
-					No1:        util.NumbersToIntArrayArray(stage1.Try1No1),
-					No2:        util.NumbersToIntArrayArray(stage1.Try1No2),
-					No3:        util.NumbersToIntArrayArray(stage1.Try1No3),
-					No4:        util.NumbersToIntArrayArray(stage1.Try1No4),
-					No5:        util.NumbersToIntArrayArray(stage1.Try1No5),
-					No6:        util.NumbersToIntArrayArray(stage1.Try1No6),
+					No1:        util.Stage123DatabaseNumbersToStruct(stage1.Try1No1),
+					No2:        util.Stage123DatabaseNumbersToStruct(stage1.Try1No2),
+					No3:        util.Stage123DatabaseNumbersToStruct(stage1.Try1No3),
+					No4:        util.Stage123DatabaseNumbersToStruct(stage1.Try1No4),
+					No5:        util.Stage123DatabaseNumbersToStruct(stage1.Try1No5),
+					No6:        util.Stage123DatabaseNumbersToStruct(stage1.Try1No6),
 					Checkmarks: util.CheckmarksToBoolArray(stage1.Try1Checkmarks),
 				},
 				Try2: model.Stage13Try{
 					Status:     string(stage1.Try2Status.Stage13Status),
-					No1:        util.NumbersToIntArrayArray(stage1.Try2No1.String),
-					No2:        util.NumbersToIntArrayArray(stage1.Try2No2.String),
-					No3:        util.NumbersToIntArrayArray(stage1.Try2No3.String),
-					No4:        util.NumbersToIntArrayArray(stage1.Try2No4.String),
-					No5:        util.NumbersToIntArrayArray(stage1.Try2No5.String),
-					No6:        util.NumbersToIntArrayArray(stage1.Try2No6.String),
+					No1:        util.Stage123DatabaseNumbersToStruct(stage1.Try2No1.String),
+					No2:        util.Stage123DatabaseNumbersToStruct(stage1.Try2No2.String),
+					No3:        util.Stage123DatabaseNumbersToStruct(stage1.Try2No3.String),
+					No4:        util.Stage123DatabaseNumbersToStruct(stage1.Try2No4.String),
+					No5:        util.Stage123DatabaseNumbersToStruct(stage1.Try2No5.String),
+					No6:        util.Stage123DatabaseNumbersToStruct(stage1.Try2No6.String),
 					Checkmarks: util.CheckmarksToBoolArray(stage1.Try2Checkmarks.String),
 				},
 				IsTry2:      stage1.IsTry2,
@@ -50,17 +50,17 @@ func (usecase *allUsecaseImpl) GetStage1ById(req model.ByIdRequest) model.WebSer
 			}}
 	} else {
 		stage1Response = gin.H{
-			"stage_1": model.Stage1{
+			"stage_1": model.Stage13{
 				ID:       stage1.ID,
 				ResultID: stage1.ResultID,
 				Try1: model.Stage13Try{
 					Status:     string(stage1.Try1Status),
-					No1:        util.NumbersToIntArrayArray(stage1.Try1No1),
-					No2:        util.NumbersToIntArrayArray(stage1.Try1No2),
-					No3:        util.NumbersToIntArrayArray(stage1.Try1No3),
-					No4:        util.NumbersToIntArrayArray(stage1.Try1No4),
-					No5:        util.NumbersToIntArrayArray(stage1.Try1No5),
-					No6:        util.NumbersToIntArrayArray(stage1.Try1No6),
+					No1:        util.Stage123DatabaseNumbersToStruct(stage1.Try1No1),
+					No2:        util.Stage123DatabaseNumbersToStruct(stage1.Try1No2),
+					No3:        util.Stage123DatabaseNumbersToStruct(stage1.Try1No3),
+					No4:        util.Stage123DatabaseNumbersToStruct(stage1.Try1No4),
+					No5:        util.Stage123DatabaseNumbersToStruct(stage1.Try1No5),
+					No6:        util.Stage123DatabaseNumbersToStruct(stage1.Try1No6),
 					Checkmarks: util.CheckmarksToBoolArray(stage1.Try1Checkmarks),
 				},
 				IsTry2:      stage1.IsTry2,

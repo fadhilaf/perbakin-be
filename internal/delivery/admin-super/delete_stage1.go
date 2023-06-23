@@ -6,7 +6,7 @@ import (
 )
 
 func (handler *adminSuperHandler) DeleteStage1(c *gin.Context) {
-	stage1 := c.MustGet("stage1").(model.Stage1Relation)
+	stage1 := c.MustGet("stage1").(model.Stage123456Relation)
 
 	res := handler.Usecase.DeleteStage1(model.ByIdRequest{ID: stage1.ID})
 

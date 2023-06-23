@@ -6,18 +6,23 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type Stage13Try struct {
-	Status     string  `json:"status"`
-	No1        [][]int `json:"no_1"`
-	No2        [][]int `json:"no_2"`
-	No3        [][]int `json:"no_3"`
-	No4        [][]int `json:"no_4"`
-	No5        [][]int `json:"no_5"`
-	No6        [][]int `json:"no_6"`
-	Checkmarks []bool  `json:"checkmarks"`
+type Stage123Numbers struct {
+	Scores   []int `json:"scores" binding:"required,len=3"`
+	Duration []int `json:"duration" binding:"required,len=3,dive,lte=99,gte=0"`
 }
 
-type Stage1 struct {
+type Stage13Try struct {
+	Status     string          `json:"status"`
+	No1        Stage123Numbers `json:"no_1"`
+	No2        Stage123Numbers `json:"no_2"`
+	No3        Stage123Numbers `json:"no_3"`
+	No4        Stage123Numbers `json:"no_4"`
+	No5        Stage123Numbers `json:"no_5"`
+	No6        Stage123Numbers `json:"no_6"`
+	Checkmarks []bool          `json:"checkmarks"`
+}
+
+type Stage13 struct {
 	ID          pgtype.UUID `json:"id"`
 	ResultID    pgtype.UUID `json:"result_id"`
 	Try1        Stage13Try  `json:"try_1"`
@@ -28,7 +33,7 @@ type Stage1 struct {
 	UpdatedAt   time.Time   `json:"updated_at"`
 }
 
-type Stage1Full struct {
+type Stage13Full struct {
 	ID          pgtype.UUID `json:"id"`
 	ResultID    pgtype.UUID `json:"result_id"`
 	Try1        Stage13Try  `json:"try_1"`
@@ -40,32 +45,26 @@ type Stage1Full struct {
 	UpdatedAt   time.Time   `json:"updated_at"`
 }
 
-type CreateStage1try2 struct {
+type CreateStage13try2 struct {
 	Try2   Stage13Try `json:"try_2"`
 	IsTry2 bool       `json:"is_try_2"`
 }
 
-type Stage1Relation struct {
+type Stage123456Relation struct {
 	ID       pgtype.UUID `json:"id"`
 	ResultID pgtype.UUID `json:"result_id"`
 	IsTry2   bool        `json:"is_try_2"`
 }
 
 type Stage13UpdateBodyTry struct {
-	Status     string `json:"status" binding:"required,oneof=1 2 3 4 5 6"`
-	Scores1    []int  `json:"scores_1" binding:"required,len=3,dive,gte=0"`
-	Duration1  []int  `json:"duration_1" binding:"required,len=3,dive,lte=99,gte=0"`
-	Scores2    []int  `json:"scores_2" binding:"required,len=3,dive,gte=0"`
-	Duration2  []int  `json:"duration_2" binding:"required,len=3,dive,lte=99,gte=0"`
-	Scores3    []int  `json:"scores_3" binding:"required,len=3,dive,gte=0"`
-	Duration3  []int  `json:"duration_3" binding:"required,len=3,dive,lte=99,gte=0"`
-	Scores4    []int  `json:"scores_4" binding:"required,len=3,dive,gte=0"`
-	Duration4  []int  `json:"duration_4" binding:"required,len=3,dive,lte=99,gte=0"`
-	Scores5    []int  `json:"scores_5" binding:"required,len=3,dive,gte=0"`
-	Duration5  []int  `json:"duration_5" binding:"required,len=3,dive,lte=99,gte=0"`
-	Scores6    []int  `json:"scores_6" binding:"required,len=3,dive,gte=0"`
-	Duration6  []int  `json:"duration_6" binding:"required,len=3,dive,lte=99,gte=0"`
-	Checkmarks []bool `json:"checkmarks" binding:"required,len=6,dive,boolean"`
+	Status     string          `json:"status" binding:"required,oneof=1 2 3 4 5 6"`
+	No1        Stage123Numbers `json:"no_1" binding:"required,dive"`
+	No2        Stage123Numbers `json:"no_2" binding:"required,dive"`
+	No3        Stage123Numbers `json:"no_3" binding:"required,dive"`
+	No4        Stage123Numbers `json:"no_4" binding:"required,dive"`
+	No5        Stage123Numbers `json:"no_5" binding:"required,dive"`
+	No6        Stage123Numbers `json:"no_6" binding:"required,dive"`
+	Checkmarks []bool          `json:"checkmarks" binding:"required,len=6,dive,boolean"`
 }
 
 type UpdateStage13try1BodyRequest struct {
@@ -105,7 +104,7 @@ type UpdateStage13Response struct {
 	UpdatedAt time.Time  `json:"updated_at"`
 }
 
-type Stage123456Try struct {
+type Stage123456TryRequestParam struct {
 	Try string `uri:"try" binding:"required,oneof=1 2"`
 }
 
@@ -118,16 +117,12 @@ type UpdateStage13NoUriRequest struct {
 	No string `uri:"no" binding:"required,oneof=1 2 3 4 5 6"`
 }
 
-type UpdateStage123NoBodyRequest struct {
-	Scores   []int `json:"scores" binding:"required,len=3"`
-	Duration []int `json:"duration" binding:"required,len=3,dive,lte=99,gte=0"`
-}
-
+// scores in this struct means (( score_a, score_b, score_c ), checkmarks)
 type UpdateStage123456NoRequest struct {
-	ID     pgtype.UUID `json:"id"`
-	Try    string      `json:"try"`
-	No     string      `json:"no"`
-	Scores string      `json:"scores"`
+	ID                pgtype.UUID
+	Try               string
+	No                string
+	ScoresAndDuration string
 }
 
 type UpdateStage123456CheckmarksBodyRequest struct {

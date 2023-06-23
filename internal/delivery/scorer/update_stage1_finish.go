@@ -8,7 +8,7 @@ import (
 )
 
 func (handler *scorerHandler) UpdateStage1Finish(c *gin.Context) {
-	stage1 := c.MustGet("stage1").(model.Stage1Relation)
+	stage1 := c.MustGet("stage1").(model.Stage123456Relation)
 	try := c.MustGet("try").(string)
 
 	var req model.UpdateStageFinishBodyRequest
