@@ -67,6 +67,8 @@ type Querier interface {
 	// dipake untuk delete user
 	DeleteUser(ctx context.Context, id pgtype.UUID) error
 	FinishStage0(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
+	FinishStage1(ctx context.Context, id pgtype.UUID) error
 	// untuk ngambil data akun admin berdasarkan id (super role)
 	GetAdminById(ctx context.Context, id pgtype.UUID) (GetAdminByIdRow, error)
 	// untuk ngambil data lengkap admin berdasarkan user id (admin role)

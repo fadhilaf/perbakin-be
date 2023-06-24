@@ -104,6 +104,32 @@ func (q *Queries) DeleteStage1(ctx context.Context, id pgtype.UUID) error {
 	return err
 }
 
+const finishStage1 = `-- name: FinishStage1 :exec
+WITH get_stage1 AS (
+  SELECT 
+    result_id, try1_id, try2_id
+  FROM stage1_results
+  WHERE stage1_results.id = $1
+), updated_stage1try1 AS (
+  UPDATE stage13_tries
+  SET status = '7'
+  WHERE id = (SELECT try1_id FROM get_stage1)
+), updated_stage1try2 AS (
+  UPDATE stage13_tries
+  SET status = '7'
+  WHERE id = (SELECT try2_id FROM get_stage1 WHERE try2_id IS NOT NULL)
+)
+UPDATE results 
+SET stage = '2', updated_at = NOW()
+WHERE id = (SELECT result_id FROM get_stage1)
+`
+
+// (admin-super role)
+func (q *Queries) FinishStage1(ctx context.Context, id pgtype.UUID) error {
+	_, err := q.db.Exec(ctx, finishStage1, id)
+	return err
+}
+
 const getStage1ById = `-- name: GetStage1ById :one
 SELECT 
   stage1_results.id,

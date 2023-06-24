@@ -9,6 +9,7 @@ import (
 
 // for resultRouter return stage2Router
 func Stage2AllRoutes(resultRouter *gin.RouterGroup, delivery allDelivery.AllDelivery) *gin.RouterGroup {
+	//might delete create stage later
 	resultRouter.POST("/stage2", delivery.CreateStage2)
 
 	stage2Router := resultRouter.Group("/stage2", delivery.MustStage2Middleware())
