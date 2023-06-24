@@ -66,6 +66,7 @@ type Querier interface {
 	DeleteStage6try2(ctx context.Context, id pgtype.UUID) error
 	// dipake untuk delete user
 	DeleteUser(ctx context.Context, id pgtype.UUID) error
+	FinishStage0(ctx context.Context, id pgtype.UUID) error
 	// untuk ngambil data akun admin berdasarkan id (super role)
 	GetAdminById(ctx context.Context, id pgtype.UUID) (GetAdminByIdRow, error)
 	// untuk ngambil data lengkap admin berdasarkan user id (admin role)
@@ -97,8 +98,7 @@ type Querier interface {
 	// untuk mengambil seluruh exam (super role)
 	GetExamsBySuperId(ctx context.Context, superID pgtype.UUID) ([]GetExamsBySuperIdRow, error)
 	GetResultById(ctx context.Context, id pgtype.UUID) (Result, error)
-	GetResultRelationByShooterId(ctx context.Context, shooterID pgtype.UUID) (GetResultRelationByShooterIdRow, error)
-	GetResultStatusById(ctx context.Context, id pgtype.UUID) (GetResultStatusByIdRow, error)
+	GetResultRelationAndStatusByShooterId(ctx context.Context, shooterID pgtype.UUID) (GetResultRelationAndStatusByShooterIdRow, error)
 	// untuk ngambil data akun scorer berdasarkan id (admin-super role)
 	GetScorerById(ctx context.Context, id pgtype.UUID) (GetScorerByIdRow, error)
 	// untuk ngambil data lengkap scorer berdasarkan user id (scorer role)

@@ -19,7 +19,6 @@ type ScorerDelivery interface {
 	UpdateStage0Finish(c *gin.Context)
 
 	MustStage1ModifyMiddleware() gin.HandlerFunc
-	CreateStage1try2(c *gin.Context)
 	UpdateStage1No(c *gin.Context)
 	UpdateStage1NextNo(c *gin.Context)
 	UpdateStage1Checkmarks(c *gin.Context)

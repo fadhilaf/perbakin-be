@@ -26,6 +26,7 @@ type AllDelivery interface {
 
 	MustStage1Middleware() gin.HandlerFunc
 	GetStage1ById(c *gin.Context)
+	CreateStage1try2(c *gin.Context)
 
 	CreateStage2(c *gin.Context)
 

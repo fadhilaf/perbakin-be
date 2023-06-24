@@ -10,7 +10,7 @@ import (
 )
 
 func (usecase *allUsecaseImpl) CreateResult(req model.ByShooterIdRequest) model.WebServiceResponse {
-	if _, err := usecase.Store.GetResultRelationByShooterId(context.Background(), req.ShooterID); err == nil {
+	if _, err := usecase.Store.GetResultRelationAndStatusByShooterId(context.Background(), req.ShooterID); err == nil {
 		return util.ToWebServiceResponse("Hasil ujian sudah ada", http.StatusConflict, nil)
 	}
 

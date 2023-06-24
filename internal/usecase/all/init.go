@@ -13,7 +13,7 @@ type AllUsecase interface {
 
 	CreateResult(model.ByShooterIdRequest) model.WebServiceResponse
 
-	GetResultRelationByShooterId(model.ByShooterIdRequest) (model.ResultRelation, error)
+	GetResultRelationByShooterId(model.ByShooterIdRequest) (model.ResultRelationAndStatus, error)
 	GetResultById(model.ByIdRequest) model.WebServiceResponse
 
 	CreateStage0(model.ByResultIdRequest) model.WebServiceResponse
@@ -23,12 +23,13 @@ type AllUsecase interface {
 
 	CreateStage1(model.ByResultIdRequest) model.WebServiceResponse
 
-	GetStage1RelationByResultId(model.ByResultIdRequest) (model.Stage123456Relation, error)
+	GetStage1RelationByResultId(model.ByResultIdRequest) (model.Stage123456RelationAndStatus, error)
 	GetStage1ById(model.ByIdRequest) model.WebServiceResponse
+	CreateStage1try2(model.ByIdRequest) model.WebServiceResponse
 
 	CreateStage2(model.ByResultIdRequest) model.WebServiceResponse
 
-	GetStage2RelationByResultId(model.ByResultIdRequest) (model.Stage123456Relation, error)
+	GetStage2RelationByResultId(model.ByResultIdRequest) (model.Stage123456RelationAndStatus, error)
 	GetStage2ById(model.ByIdRequest) model.WebServiceResponse
 }
 

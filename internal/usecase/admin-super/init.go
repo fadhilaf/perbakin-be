@@ -28,7 +28,7 @@ type AdminSuperUsecase interface {
 	UpdateStage0Signs(model.UpdateStageSignsRequest) model.WebServiceResponse
 	DeleteStage0(model.ByIdRequest) model.WebServiceResponse
 
-	CreateStage1try2(model.ByIdRequest) model.WebServiceResponse
+	FinishStage0(model.ByIdRequest) error
 	UpdateStage1try1(model.UpdateStage13try1Request) model.WebServiceResponse
 	UpdateStage1try2(model.UpdateStage13try2Request) model.WebServiceResponse
 	UpdateStage1Signs(model.UpdateStageSignsRequest) model.WebServiceResponse

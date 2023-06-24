@@ -7,7 +7,7 @@ import (
 )
 
 func (handler *adminSuperHandler) UpdateResult(c *gin.Context) {
-	result := c.MustGet("result").(model.ResultRelation)
+	result := c.MustGet("result").(model.ResultRelationAndStatus)
 
 	var req model.UpdateResultBodyRequest
 

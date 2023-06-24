@@ -23,7 +23,7 @@ func AdminSuperRoutes(adminExamRouter *gin.RouterGroup, delivery adminSuperDeliv
 	Stage0AdminSuperRoutes(stage0Router, delivery)
 
 	stage1Router := Stage1AllRoutes(resultRouter, allDelivery)
-	Stage1AdminSuperRoutes(stage1Router, delivery)
+	Stage1AdminSuperRoutes(stage1Router, delivery, allDelivery)
 
 	stage2Router := Stage2AllRoutes(resultRouter, allDelivery)
 	Stage2AdminSuperRoutes(stage2Router, delivery)

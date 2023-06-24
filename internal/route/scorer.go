@@ -27,7 +27,7 @@ func ScorerRoutes(router *gin.RouterGroup, delivery scorerDelivery.ScorerDeliver
 
 	stage1Router := Stage1AllRoutes(resultRouter, allDelivery)
 
-	stage1Router.POST("/2", delivery.CreateStage1try2)
+	stage1Router.POST("/2", delivery.MustStage1ModifyMiddleware(), allDelivery.CreateStage1try2)
 
 	stage1ModifyRouter := stage1Router.Group("/:try", delivery.MustStage1ModifyMiddleware())
 	stage1ModifyRouter.PUT("/no/:no", delivery.UpdateStage1No)

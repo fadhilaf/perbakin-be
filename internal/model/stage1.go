@@ -50,7 +50,7 @@ type CreateStage13try2 struct {
 	IsTry2 bool       `json:"is_try_2"`
 }
 
-type Stage123456Relation struct {
+type Stage123456RelationAndStatus struct {
 	ID       pgtype.UUID `json:"id"`
 	ResultID pgtype.UUID `json:"result_id"`
 	IsTry2   bool        `json:"is_try_2"`

@@ -5,8 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *adminSuperHandler) CreateStage1try2(c *gin.Context) {
-	stage1 := c.MustGet("stage1").(model.Stage123456Relation)
+func (handler *allHandler) CreateStage1try2(c *gin.Context) {
+	stage1 := c.MustGet("stage1").(model.Stage123456RelationAndStatus)
 	res := handler.Usecase.CreateStage1try2(model.ByIdRequest{
 		ID: stage1.ID,
 	})

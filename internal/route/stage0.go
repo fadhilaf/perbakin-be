@@ -22,4 +22,5 @@ func Stage0AdminSuperRoutes(stage0Router *gin.RouterGroup, delivery adminSuperDe
 	stage0Router.PUT("", delivery.UpdateStage0)
 	stage0Router.PUT("/sign", delivery.UpdateStage0Signs)
 	stage0Router.DELETE("", delivery.DeleteStage0)
+	stage0Router.PATCH("", delivery.FinishStage0)
 }

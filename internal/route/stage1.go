@@ -18,8 +18,8 @@ func Stage1AllRoutes(resultRouter *gin.RouterGroup, delivery allDelivery.AllDeli
 }
 
 // for stage1Router
-func Stage1AdminSuperRoutes(stage1Router *gin.RouterGroup, delivery adminSuperDelivery.AdminSuperDelivery) {
-	stage1Router.POST("/2", delivery.CreateStage1try2)
+func Stage1AdminSuperRoutes(stage1Router *gin.RouterGroup, delivery adminSuperDelivery.AdminSuperDelivery, allDelivery allDelivery.AllDelivery) {
+	stage1Router.POST("/2", allDelivery.CreateStage1try2)
 	stage1Router.PUT("", delivery.UpdateStage1)
 	stage1Router.PUT("/sign", delivery.UpdateStage1Signs)
 	stage1Router.DELETE("", delivery.DeleteStage1)

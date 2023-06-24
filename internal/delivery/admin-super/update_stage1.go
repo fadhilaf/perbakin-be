@@ -7,7 +7,7 @@ import (
 )
 
 func (handler *adminSuperHandler) UpdateStage1(c *gin.Context) {
-	stage1 := c.MustGet("stage1").(model.Stage123456Relation)
+	stage1 := c.MustGet("stage1").(model.Stage123456RelationAndStatus)
 
 	if stage1.IsTry2 {
 		var req model.UpdateStage13try2BodyRequest

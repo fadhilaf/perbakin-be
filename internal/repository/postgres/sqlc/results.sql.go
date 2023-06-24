@@ -63,39 +63,28 @@ func (q *Queries) GetResultById(ctx context.Context, id pgtype.UUID) (Result, er
 	return i, err
 }
 
-const getResultRelationByShooterId = `-- name: GetResultRelationByShooterId :one
-SELECT id, shooter_id
+const getResultRelationAndStatusByShooterId = `-- name: GetResultRelationAndStatusByShooterId :one
+SELECT id, shooter_id, stage, failed
 FROM results
 WHERE shooter_id = $1
 `
 
-type GetResultRelationByShooterIdRow struct {
+type GetResultRelationAndStatusByShooterIdRow struct {
 	ID        pgtype.UUID
 	ShooterID pgtype.UUID
+	Stage     Stages
+	Failed    bool
 }
 
-func (q *Queries) GetResultRelationByShooterId(ctx context.Context, shooterID pgtype.UUID) (GetResultRelationByShooterIdRow, error) {
-	row := q.db.QueryRow(ctx, getResultRelationByShooterId, shooterID)
-	var i GetResultRelationByShooterIdRow
-	err := row.Scan(&i.ID, &i.ShooterID)
-	return i, err
-}
-
-const getResultStatusById = `-- name: GetResultStatusById :one
-SELECT failed, stage
-FROM results
-WHERE id = $1
-`
-
-type GetResultStatusByIdRow struct {
-	Failed bool
-	Stage  Stages
-}
-
-func (q *Queries) GetResultStatusById(ctx context.Context, id pgtype.UUID) (GetResultStatusByIdRow, error) {
-	row := q.db.QueryRow(ctx, getResultStatusById, id)
-	var i GetResultStatusByIdRow
-	err := row.Scan(&i.Failed, &i.Stage)
+func (q *Queries) GetResultRelationAndStatusByShooterId(ctx context.Context, shooterID pgtype.UUID) (GetResultRelationAndStatusByShooterIdRow, error) {
+	row := q.db.QueryRow(ctx, getResultRelationAndStatusByShooterId, shooterID)
+	var i GetResultRelationAndStatusByShooterIdRow
+	err := row.Scan(
+		&i.ID,
+		&i.ShooterID,
+		&i.Stage,
+		&i.Failed,
+	)
 	return i, err
 }
 

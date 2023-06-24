@@ -15,9 +15,11 @@ type Result struct {
 	UpdatedAt time.Time   `json:"updated_at"`
 }
 
-type ResultRelation struct {
+type ResultRelationAndStatus struct {
 	ID        pgtype.UUID `json:"id"`
 	ShooterID pgtype.UUID `json:"shooter_id"`
+	Failed    bool        `json:"failed"`
+	Stage     string      `json:"stage"`
 }
 
 type ResultStatus struct {

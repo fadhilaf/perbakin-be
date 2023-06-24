@@ -6,7 +6,7 @@ import (
 )
 
 func (handler *allHandler) GetStage2ById(c *gin.Context) {
-	stage2 := c.MustGet("stage2").(model.Stage123456Relation)
+	stage2 := c.MustGet("stage2").(model.Stage123456RelationAndStatus)
 	res := handler.Usecase.GetStage2ById(model.ByIdRequest{
 		ID: stage2.ID,
 	})

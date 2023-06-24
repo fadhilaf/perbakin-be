@@ -9,13 +9,8 @@ SELECT id, shooter_id, failed, stage, created_at, updated_at
 FROM results
 WHERE id = $1;
 
--- name: GetResultStatusById :one
-SELECT failed, stage
-FROM results
-WHERE id = $1;
-
--- name: GetResultRelationByShooterId :one
-SELECT id, shooter_id
+-- name: GetResultRelationAndStatusByShooterId :one
+SELECT id, shooter_id, stage, failed
 FROM results
 WHERE shooter_id = $1;
 

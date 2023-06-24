@@ -10,7 +10,7 @@ import (
 
 func (handler *allHandler) MustStage0Middleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		result := c.MustGet("result").(model.ResultRelation)
+		result := c.MustGet("result").(model.ResultRelationAndStatus)
 
 		stage0, err := handler.Usecase.GetStage0RelationByResultId(model.ByResultIdRequest{
 			ResultID: result.ID,

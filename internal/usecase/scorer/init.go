@@ -12,14 +12,12 @@ type ScorerUsecase interface {
 
 	GetScorerByUserId(model.UserByUserIdRequest) model.WebServiceResponse
 
-	GetResultStatusById(model.ByIdRequest) (model.ResultStatus, error)
-
 	UpdateStage0Series(model.UpdateStage0SeriesRequest) model.WebServiceResponse
 	UpdateStage0NextSeries(model.ByIdRequest) model.WebServiceResponse
 	UpdateStage0Checkmarks(model.UpdateStage0CheckmarksRequest) model.WebServiceResponse
 	UpdateStage0Finish(model.UpdateStageFinishRequest) model.WebServiceResponse
 
-	CreateStage1try2(model.ByIdRequest) model.WebServiceResponse
+	Stage1try1Finished(model.ByIdRequest) (bool, error)
 	UpdateStage1No(model.UpdateStage123456NoRequest) model.WebServiceResponse
 	UpdateStage1NextNo(model.ByIdAndTryRequest) model.WebServiceResponse
 	UpdateStage1Checkmarks(model.UpdateStage123456CheckmarksRequest) model.WebServiceResponse

@@ -6,7 +6,7 @@ import (
 )
 
 func (handler *adminSuperHandler) DeleteResult(c *gin.Context) {
-	result := c.MustGet("result").(model.ResultRelation)
+	result := c.MustGet("result").(model.ResultRelationAndStatus)
 
 	res := handler.Usecase.DeleteResult(model.ByIdRequest{
 		ID: result.ID,

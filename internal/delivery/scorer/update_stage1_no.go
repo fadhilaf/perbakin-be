@@ -7,7 +7,7 @@ import (
 )
 
 func (handler *scorerHandler) UpdateStage1No(c *gin.Context) {
-	stage1 := c.MustGet("stage1").(model.Stage123456Relation)
+	stage1 := c.MustGet("stage1").(model.Stage123456RelationAndStatus)
 	try := c.MustGet("try").(string)
 
 	var uri model.UpdateStage13NoUriRequest

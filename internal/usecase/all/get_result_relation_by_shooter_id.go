@@ -7,16 +7,16 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (usecase *allUsecaseImpl) GetResultRelationByShooterId(req model.ByShooterIdRequest) (model.ResultRelation, error) {
-	result, err := usecase.Store.GetResultRelationByShooterId(context.Background(), req.ShooterID)
+func (usecase *allUsecaseImpl) GetResultRelationByShooterId(req model.ByShooterIdRequest) (model.ResultRelationAndStatus, error) {
+	result, err := usecase.Store.GetResultRelationAndStatusByShooterId(context.Background(), req.ShooterID)
 	if err == pgx.ErrNoRows {
 		result, err := usecase.Store.CreateResult(context.Background(), req.ShooterID)
 		if err != nil {
-			return model.ResultRelation{}, err
+			return model.ResultRelationAndStatus{}, err
 		}
 
-		return model.ResultRelation{ID: result.ID, ShooterID: result.ShooterID}, err
+		return model.ResultRelationAndStatus{ID: result.ID, ShooterID: result.ShooterID, Stage: string(result.Stage), Failed: result.Failed}, err
 	}
 
-	return model.ResultRelation{ID: result.ID, ShooterID: result.ShooterID}, err
+	return model.ResultRelationAndStatus{ID: result.ID, ShooterID: result.ShooterID, Stage: string(result.Stage), Failed: result.Failed}, err
 }

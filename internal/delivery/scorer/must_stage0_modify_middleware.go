@@ -10,27 +10,17 @@ import (
 
 func (handler *scorerHandler) MustStage0ModifyMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		result := c.MustGet("result").(model.ResultRelation)
+		result := c.MustGet("result").(model.ResultRelationAndStatus)
 
-		status, err := handler.Usecase.GetResultStatusById(model.ByIdRequest{
-			ID: result.ID,
-		})
-		if err != nil {
-			res := util.ToWebServiceResponse("Gagal mengambil hasil ujian: "+err.Error(), http.StatusInternalServerError, nil)
-			c.JSON(res.Status, res)
-			c.Abort()
-			return
-		}
-
-		if status.Failed {
+		if result.Failed {
 			res := util.ToWebServiceResponse("Hasil ujian tidak lulus", http.StatusForbidden, nil)
 			c.JSON(res.Status, res)
 			c.Abort()
 			return
 		}
 
-		if status.Stage != "0" {
-			res := util.ToWebServiceResponse("Tidak dapat mengubah babak kualifikasi, sekarang sedang mengisi babak "+status.Stage, http.StatusForbidden, nil)
+		if result.Stage != "0" {
+			res := util.ToWebServiceResponse("Tidak dapat mengubah babak kualifikasi, sekarang sedang mengisi babak "+result.Stage, http.StatusForbidden, nil)
 			c.JSON(res.Status, res)
 			c.Abort()
 			return

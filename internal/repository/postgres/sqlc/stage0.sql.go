@@ -69,6 +69,23 @@ func (q *Queries) DeleteStage0(ctx context.Context, id pgtype.UUID) error {
 	return err
 }
 
+const finishStage0 = `-- name: FinishStage0 :exec
+WITH updated_stage0 AS (
+  UPDATE stage0_results
+  SET status = '6', updated_at = NOW()
+  WHERE stage0_results.id = $1
+  RETURNING result_id
+)
+UPDATE results 
+SET stage = '1', updated_at = NOW()
+WHERE id = (SELECT result_id FROM updated_stage0)
+`
+
+func (q *Queries) FinishStage0(ctx context.Context, id pgtype.UUID) error {
+	_, err := q.db.Exec(ctx, finishStage0, id)
+	return err
+}
+
 const getStage0ById = `-- name: GetStage0ById :one
 SELECT 
   id, 
