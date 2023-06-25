@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *scorerHandler) MustStage1tryFinishedMiddleware() gin.HandlerFunc {
+func (handler *scorerHandler) MustStage1try1FinishedMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		stage1 := c.MustGet("stage1").(model.Stage123456RelationAndStatus)
 
