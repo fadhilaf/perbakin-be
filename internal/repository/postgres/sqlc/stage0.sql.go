@@ -53,14 +53,9 @@ func (q *Queries) CreateStage0(ctx context.Context, resultID pgtype.UUID) (Stage
 }
 
 const deleteStage0 = `-- name: DeleteStage0 :exec
-WITH deleted_stage0 AS (
   DELETE FROM stage0_results
   WHERE stage0_results.id = $1
   RETURNING result_id
-)
-UPDATE results 
-SET stage = '0', updated_at = NOW()
-WHERE id = (SELECT result_id FROM deleted_stage0)
 `
 
 // (admin-super role)

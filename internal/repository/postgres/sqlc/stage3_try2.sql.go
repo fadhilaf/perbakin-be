@@ -339,7 +339,7 @@ WITH updated_stage3_results AS (
   WHERE id = (SELECT try2_id FROM updated_stage3_results)
 )
 UPDATE results 
-SET stage = '2', updated_at = NOW()
+SET stage = '4', updated_at = NOW()
 WHERE id = (SELECT result_id FROM updated_stage3_results)
 `
 

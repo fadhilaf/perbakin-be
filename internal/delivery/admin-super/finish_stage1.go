@@ -2,7 +2,6 @@ package delivery
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/FadhilAF/perbakin-be/internal/model"
 	"github.com/FadhilAF/perbakin-be/internal/util"
@@ -13,8 +12,7 @@ func (handler *adminSuperHandler) FinishStage1(c *gin.Context) {
 	result := c.MustGet("result").(model.ResultRelationAndStatus)
 	stage1 := c.MustGet("stage1").(model.Stage123456RelationAndStatus)
 
-	stageInt, _ := strconv.Atoi(result.Stage)
-	if stageInt != 1 {
+	if result.Stage != string(model.Stage1TypeString) {
 		res := util.ToWebServiceResponse("Anda tidak dapat menyelesaikan stage 1, karena sedang tidak mengisi stage ini", http.StatusForbidden, nil)
 		c.JSON(res.Status, res)
 		c.Abort()

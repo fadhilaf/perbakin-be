@@ -80,13 +80,9 @@ WITH deleted_stage4 AS (
 ), deleted_stage4try1 AS (
   DELETE FROM stage46_tries
   WHERE stage46_tries.id = (SELECT try1_id FROM deleted_stage4)
-), deleted_stage4try2 AS (
-  DELETE FROM stage46_tries
-  WHERE stage46_tries.id = (SELECT try2_id FROM deleted_stage4 WHERE try2_id IS NOT NULL)
 )
-UPDATE results 
-SET stage = '1', updated_at = NOW()
-WHERE id = (SELECT result_id FROM deleted_stage4)
+DELETE FROM stage46_tries
+WHERE stage46_tries.id = (SELECT try2_id FROM deleted_stage4 WHERE try2_id IS NOT NULL)
 `
 
 // (admin-super role)

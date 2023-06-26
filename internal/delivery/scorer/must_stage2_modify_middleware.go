@@ -20,8 +20,8 @@ func (handler *scorerHandler) MustStage2ModifyMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		if result.Stage != "2" {
-			res := util.ToWebServiceResponse("Tidak dapat mengubah stage 2, sekarang sedang mengisi babak "+result.Stage, http.StatusForbidden, nil)
+		if result.Stage != string(model.Stage2TypeString) {
+			res := util.ToWebServiceResponse("Tidak dapat mengubah stage 2, sekarang sedang mengisi stage "+result.Stage, http.StatusForbidden, nil)
 			c.JSON(res.Status, res)
 			c.Abort()
 			return

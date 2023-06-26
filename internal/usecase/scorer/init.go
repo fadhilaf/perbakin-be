@@ -28,6 +28,12 @@ type ScorerUsecase interface {
 	UpdateStage2NextNo(model.ByIdAndTryRequest) model.WebServiceResponse
 	UpdateStage2Checkmarks(model.UpdateStage123456CheckmarksRequest) model.WebServiceResponse
 	UpdateStage2Finish(model.UpdateStage123456FinishRequest) model.WebServiceResponse
+
+	Stage3try1Finished(model.ByIdRequest) (bool, error)
+	UpdateStage3No(model.UpdateStage123456NoRequest) model.WebServiceResponse
+	UpdateStage3NextNo(model.ByIdAndTryRequest) model.WebServiceResponse
+	UpdateStage3Checkmarks(model.UpdateStage123456CheckmarksRequest) model.WebServiceResponse
+	UpdateStage3Finish(model.UpdateStage123456FinishRequest) model.WebServiceResponse
 }
 
 var _ ScorerUsecase = &scorerUsecaseImpl{}

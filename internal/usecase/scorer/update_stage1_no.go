@@ -69,7 +69,7 @@ func (usecase *scorerUsecaseImpl) UpdateStage1No(req model.UpdateStage123456NoRe
 				No6: req.ScoresAndDuration,
 			})
 			if err != nil {
-				return util.ToWebServiceResponse("Gagal mengupdate stage 1 percobaan 1 no 5: "+err.Error(), http.StatusInternalServerError, nil)
+				return util.ToWebServiceResponse("Gagal mengupdate stage 1 percobaan 1 no 6: "+err.Error(), http.StatusInternalServerError, nil)
 			}
 		}
 	case "2":
@@ -125,7 +125,7 @@ func (usecase *scorerUsecaseImpl) UpdateStage1No(req model.UpdateStage123456NoRe
 				No6: req.ScoresAndDuration,
 			})
 			if err != nil {
-				return util.ToWebServiceResponse("Gagal mengupdate stage 1 percobaan 2 no 5: "+err.Error(), http.StatusInternalServerError, nil)
+				return util.ToWebServiceResponse("Gagal mengupdate stage 1 percobaan 2 no 6: "+err.Error(), http.StatusInternalServerError, nil)
 			}
 		}
 	}

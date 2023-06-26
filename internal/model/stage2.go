@@ -49,3 +49,50 @@ type UpdateStage246NoUriRequest struct {
 type UpdateStage246CheckmarksBodyRequest struct {
 	Checkmarks []bool `json:"checkmarks" binding:"required,len=3,dive,boolean"`
 }
+
+type Stage2UpdateBodyTry struct {
+	Status     string          `json:"status" binding:"required,oneof=1 2 3 4 5 6"`
+	No1        Stage123Numbers `json:"no_1" binding:"required,dive"`
+	No2        Stage123Numbers `json:"no_2" binding:"required,dive"`
+	No3        Stage123Numbers `json:"no_3" binding:"required,dive"`
+	Checkmarks []bool          `json:"checkmarks" binding:"required,len=3,dive,boolean"`
+}
+
+type UpdateStage2try1BodyRequest struct {
+	Try1 Stage2UpdateBodyTry `json:"try_1" binding:"required,dive"`
+}
+
+type UpdateStage2try2BodyRequest struct {
+	Try1 Stage2UpdateBodyTry `json:"try_1" binding:"required,dive"`
+	Try2 Stage2UpdateBodyTry `json:"try_2" binding:"required,dive"`
+}
+
+type Stage246TryString struct {
+	Status     string `json:"status"`
+	No1        string `json:"no_1"`
+	No2        string `json:"no_2"`
+	No3        string `json:"no_3"`
+	Checkmarks string `json:"checkmarks"`
+}
+
+type UpdateStage246try1Request struct {
+	ID   pgtype.UUID
+	Try1 Stage246TryString
+}
+
+type UpdateStage246try2Request struct {
+	ID   pgtype.UUID
+	Try1 Stage246TryString
+	Try2 Stage246TryString
+}
+
+type UpdateStage2try1Response struct {
+	Try1      Stage2Try `json:"try_1"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+type UpdateStage2try2Response struct {
+	Try1      Stage2Try `json:"try_1"`
+	Try2      Stage2Try `json:"try_2"`
+	UpdatedAt time.Time `json:"updated_at"`
+}

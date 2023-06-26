@@ -10,7 +10,7 @@ import (
 // for shooterRouter return resultRouter
 func ResultAllRoutes(shooterRouter *gin.RouterGroup, delivery allDelivery.AllDelivery) *gin.RouterGroup {
 	//might delete create result later
-	shooterRouter.POST("/result", delivery.CreateResult)
+	// shooterRouter.POST("/result", delivery.CreateResult)
 
 	resultRouter := shooterRouter.Group("/result", delivery.MustResultMiddleware())
 	resultRouter.GET("", delivery.GetResultById)

@@ -36,7 +36,7 @@ func (usecase *adminSuperUsecaseImpl) UpdateStage1try2(req model.UpdateStage13tr
 	}
 
 	return util.ToWebServiceResponse("Berhasil mengubah hasil ujian stage 1", http.StatusOK, gin.H{
-		"stage_1": model.UpdateStage13Response{
+		"stage_1": model.UpdateStage13try2Response{
 			Try1: model.Stage13Try{
 				Status:     string(newStage1.Try1Status),
 				No1:        util.Stage123DatabaseNumbersToStruct(newStage1.Try1No1),

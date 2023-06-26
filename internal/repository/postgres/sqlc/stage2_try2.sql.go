@@ -75,7 +75,7 @@ WITH deleted_stage2_try2 AS (
   RETURNING try1_id
 )
 UPDATE stage2_tries
-SET status = '6'
+SET status = '3'
 WHERE stage2_tries.id = (SELECT try1_id FROM updated_stage2_results)
 `
 

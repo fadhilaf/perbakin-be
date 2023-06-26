@@ -14,7 +14,7 @@ func (handler *allHandler) MustStage2Middleware() gin.HandlerFunc {
 		result := c.MustGet("result").(model.ResultRelationAndStatus)
 
 		stageInt, _ := strconv.Atoi(result.Stage)
-		if stageInt < 2 {
+		if stageInt < int(model.Stage2Type) {
 			res := util.ToWebServiceResponse("Anda tidak dapat mengakses stage 2, karena masih di stage sebelumnya", http.StatusForbidden, nil)
 			c.JSON(res.Status, res)
 			c.Abort()

@@ -123,7 +123,7 @@ WITH updated_stage3_results AS (
   WHERE id = (SELECT try1_id FROM updated_stage3_results)
 )
 UPDATE results 
-SET stage = '2', updated_at = NOW()
+SET stage = '4', updated_at = NOW()
 WHERE id = (SELECT result_id FROM updated_stage3_results);
 
 -- (scorer role)
@@ -245,7 +245,7 @@ RETURNING no6;
 
 -- (admin-super role) 
 -- name: UpdateStage3Signs :one
-UPDATE stage1_results 
+UPDATE stage3_results 
 SET 
   shooter_sign = $2, 
   scorer_sign = $3, 
@@ -312,7 +312,7 @@ WITH get_stage3 AS (
   WHERE id = (SELECT try2_id FROM get_stage3 WHERE try2_id IS NOT NULL)
 )
 UPDATE results 
-SET stage = '2', updated_at = NOW()
+SET stage = '4', updated_at = NOW()
 WHERE id = (SELECT result_id FROM get_stage3);
 
 -- (admin-super role) 
@@ -324,10 +324,6 @@ WITH deleted_stage3 AS (
 ), deleted_stage3try1 AS (
   DELETE FROM stage13_tries
   WHERE stage13_tries.id = (SELECT try1_id FROM deleted_stage3)
-), deleted_stage3try2 AS (
-  DELETE FROM stage13_tries
-  WHERE stage13_tries.id = (SELECT try2_id FROM deleted_stage3 WHERE try2_id IS NOT NULL)
 )
-UPDATE results 
-SET stage = '4', updated_at = NOW()
-WHERE id = (SELECT result_id FROM deleted_stage3);
+DELETE FROM stage13_tries
+WHERE stage13_tries.id = (SELECT try2_id FROM deleted_stage3 WHERE try2_id IS NOT NULL);

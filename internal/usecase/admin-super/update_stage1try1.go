@@ -24,11 +24,11 @@ func (usecase *adminSuperUsecaseImpl) UpdateStage1try1(req model.UpdateStage13tr
 		Try1Checkmarks: req.Try1.Checkmarks,
 	})
 	if err != nil {
-		return util.ToWebServiceResponse("Gagal mengubah hasil ujian stage 1 omaga: "+err.Error(), http.StatusInternalServerError, nil)
+		return util.ToWebServiceResponse("Gagal mengubah hasil ujian stage 1: "+err.Error(), http.StatusInternalServerError, nil)
 	}
 
 	return util.ToWebServiceResponse("Berhasil mengubah hasil ujian stage 1", http.StatusOK, gin.H{
-		"stage_1": model.UpdateStage13Response{
+		"stage_1": model.UpdateStage13try1Response{
 			Try1: model.Stage13Try{
 				Status:     string(newStage1.Try1Status),
 				No1:        util.Stage123DatabaseNumbersToStruct(newStage1.Try1No1),

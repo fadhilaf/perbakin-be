@@ -39,6 +39,18 @@ type AdminSuperDelivery interface {
 	DeleteStage1(c *gin.Context)
 	DeleteStage1try2(c *gin.Context)
 	FinishStage1(c *gin.Context)
+
+	UpdateStage2(c *gin.Context)
+	UpdateStage2Signs(c *gin.Context)
+	DeleteStage2(c *gin.Context)
+	DeleteStage2try2(c *gin.Context)
+	FinishStage2(c *gin.Context)
+
+	UpdateStage3(c *gin.Context)
+	UpdateStage3Signs(c *gin.Context)
+	DeleteStage3(c *gin.Context)
+	DeleteStage3try2(c *gin.Context)
+	FinishStage3(c *gin.Context)
 }
 
 var _ AdminSuperDelivery = &adminSuperHandler{}

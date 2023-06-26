@@ -244,10 +244,6 @@ WITH deleted_stage5 AS (
 ), deleted_stage5try1 AS (
   DELETE FROM stage5_tries
   WHERE stage5_tries.id = (SELECT try1_id FROM deleted_stage5)
-), deleted_stage5try2 AS (
-  DELETE FROM stage5_tries
-  WHERE stage5_tries.id = (SELECT try2_id FROM deleted_stage5 WHERE try2_id IS NOT NULL)
 )
-UPDATE results 
-SET stage = '1', updated_at = NOW()
-WHERE id = (SELECT result_id FROM deleted_stage5);
+DELETE FROM stage5_tries
+WHERE stage5_tries.id = (SELECT try2_id FROM deleted_stage5 WHERE try2_id IS NOT NULL);

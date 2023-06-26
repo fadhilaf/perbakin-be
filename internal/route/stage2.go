@@ -10,7 +10,7 @@ import (
 // for resultRouter return stage2Router
 func Stage2AllRoutes(resultRouter *gin.RouterGroup, delivery allDelivery.AllDelivery) *gin.RouterGroup {
 	//might delete create stage later
-	resultRouter.POST("/stage2", delivery.CreateStage2)
+	// resultRouter.POST("/stage2", delivery.CreateStage2)
 
 	stage2Router := resultRouter.Group("/stage2", delivery.MustStage2Middleware())
 	stage2Router.GET("", delivery.GetStage2ById)
@@ -19,11 +19,11 @@ func Stage2AllRoutes(resultRouter *gin.RouterGroup, delivery allDelivery.AllDeli
 }
 
 // for stage2Router
-func Stage2AdminSuperRoutes(stage2Router *gin.RouterGroup, delivery adminSuperDelivery.AdminSuperDelivery) {
-	// stage2Router.POST("/2", allDelivery.CreateStage2try2)
-	// stage2Router.PUT("", delivery.UpdateStage2)
-	// stage2Router.PUT("/sign", delivery.UpdateStage2Signs)
-	// stage2Router.DELETE("", delivery.DeleteStage2)
-	// stage2Router.DELETE("/2", delivery.DeleteStage2try2)
-	// stage2Router.PATCH("", delivery.FinishStage2)
+func Stage2AdminSuperRoutes(stage2Router *gin.RouterGroup, delivery adminSuperDelivery.AdminSuperDelivery, allDelivery allDelivery.AllDelivery) {
+	stage2Router.POST("/2", allDelivery.CreateStage2try2)
+	stage2Router.PUT("", delivery.UpdateStage2)
+	stage2Router.PUT("/sign", delivery.UpdateStage2Signs)
+	stage2Router.DELETE("", delivery.DeleteStage2)
+	stage2Router.DELETE("/2", delivery.DeleteStage2try2)
+	stage2Router.PATCH("", delivery.FinishStage2)
 }

@@ -98,7 +98,12 @@ type UpdateStage13try2Request struct {
 	Try2 Stage13TryString
 }
 
-type UpdateStage13Response struct {
+type UpdateStage13try1Response struct {
+	Try1      Stage13Try `json:"try_1"`
+	UpdatedAt time.Time  `json:"updated_at"`
+}
+
+type UpdateStage13try2Response struct {
 	Try1      Stage13Try `json:"try_1"`
 	Try2      Stage13Try `json:"try_2"`
 	UpdatedAt time.Time  `json:"updated_at"`
