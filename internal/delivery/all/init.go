@@ -39,6 +39,12 @@ type AllDelivery interface {
 	MustStage3Middleware() gin.HandlerFunc
 	GetStage3ById(c *gin.Context)
 	CreateStage3try2(c *gin.Context)
+
+	CreateStage4(c *gin.Context)
+
+	MustStage4Middleware() gin.HandlerFunc
+	GetStage4ById(c *gin.Context)
+	CreateStage4try2(c *gin.Context)
 }
 
 var _ AllDelivery = &allHandler{}

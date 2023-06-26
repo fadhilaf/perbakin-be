@@ -83,6 +83,6 @@ func (usecase *scorerUsecaseImpl) UpdateStage2No(req model.UpdateStage123456NoRe
 	}
 
 	return util.ToWebServiceResponse("Berhasil mengupdate stage 2 percobaan "+req.Try+" no "+req.No, http.StatusOK, gin.H{
-		"scores": util.Stage123DatabaseNumbersToStruct(scores),
+		"no": util.Stage123DatabaseNumbersToStruct(scores),
 	})
 }

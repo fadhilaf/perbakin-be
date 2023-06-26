@@ -25,6 +25,9 @@ func CheckCheckmarks(c *gin.Context, arr []bool, stageType model.StageList) bool
 	stage[model.Stage1Type] = 6
 	stage[model.Stage2Type] = 3
 	stage[model.Stage3Type] = 6
+	stage[model.Stage4Type] = 3
+	stage[model.Stage5Type] = 2
+	stage[model.Stage6Type] = 3
 
 	// Count the number of true values
 	numTrue := 0
@@ -53,6 +56,9 @@ func CheckScores(c *gin.Context, arr []int, stageType model.StageList) bool {
 	stage[model.Stage1Type] = 10
 	stage[model.Stage2Type] = 10
 	stage[model.Stage3Type] = 10
+	stage[model.Stage4Type] = 10
+	stage[model.Stage5Type] = 10
+	stage[model.Stage6Type] = 10
 
 	// Count the number of true values
 	sum := 0

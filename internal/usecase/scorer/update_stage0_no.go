@@ -64,6 +64,8 @@ func (usecase *scorerUsecaseImpl) UpdateStage0Series(req model.UpdateStage0Serie
 	}
 
 	return util.ToWebServiceResponse("Berhasil mengupdate kualifikasi seri "+req.Series, http.StatusOK, gin.H{
-		"scores": util.ScoresToIntArray(scores),
+		"no": gin.H{
+			"scores": util.ScoresToIntArray(scores),
+		},
 	})
 }

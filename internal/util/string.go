@@ -7,6 +7,27 @@ import (
 	"github.com/FadhilAF/perbakin-be/internal/model"
 )
 
+func Stage5DatabaseNumbersToStruct(input string) model.Stage5Numbers {
+	array := NumbersToIntArrayArray(input)
+
+	return model.Stage5Numbers{
+		ScoresA:  array[0],
+		ScoresB:  array[1],
+		ScoresC:  array[2],
+		Duration: array[3],
+	}
+}
+
+func Stage46DatabaseNumbersToStruct(input string) model.Stage46Numbers {
+	array := NumbersToIntArrayArray(input)
+
+	return model.Stage46Numbers{
+		ScoresA:  array[0],
+		ScoresB:  array[1],
+		Duration: array[2],
+	}
+}
+
 func Stage123DatabaseNumbersToStruct(input string) model.Stage123Numbers {
 	array := NumbersToIntArrayArray(input)
 
@@ -17,7 +38,12 @@ func Stage123DatabaseNumbersToStruct(input string) model.Stage123Numbers {
 }
 
 func NumbersToIntArrayArray(input string) [][]int {
-	nums := strings.Split(strings.Trim(strings.Trim(input, "(\")"), "\""), "\",\"")
+	//menghilangkan simbol (, ), dan "
+	inputTrimmed := strings.Trim(input, `()"`)
+
+	//memisahkan string dari substring yang berbentuk ","
+	nums := strings.Split(inputTrimmed, `","`)
+
 	result := make([][]int, len(nums))
 
 	for i, numStr := range nums {
@@ -27,10 +53,12 @@ func NumbersToIntArrayArray(input string) [][]int {
 	return result
 }
 
+// mengubah string `(0,0,0)` atau `0,0,0` atau `(0,0,0` atau `0,0,0)` jadi array [0,0,0]
 func ScoresToIntArray(input string) []int {
-	// Remove parentheses and split the string into individual numbers
-	numsStr := strings.Trim(input, "()")
-	nums := strings.Split(numsStr, ",")
+	// ngilangkan kurung and dan memisahkan satu satu string yang dipisahkan oleh koma
+	inputTrimmed := strings.Trim(input, "()")
+	nums := strings.Split(inputTrimmed, ",")
+
 	// Initialize the integer array
 	result := make([]int, len(nums))
 
@@ -43,6 +71,7 @@ func ScoresToIntArray(input string) []int {
 	return result
 }
 
+// mengubah array []int{ 0,0,0 } jadi string `(0,0,0)`
 func IntArrayToScores(input []int) string {
 	// Convert each integer to a string
 	strs := make([]string, len(input))
@@ -87,6 +116,7 @@ func IntArrayToScores(input []int) string {
 	return string(buf)
 }
 
+// mengubah [][]int{{0,0,0},{0,0,0},{0,0,0}} jadi string ("(0,0,0)","(0,0,0)","(0,0,0)")
 func IntArraysToScoresAndDuration(scores ...[]int) string {
 	scoresStr := "("
 

@@ -38,6 +38,12 @@ type AllUsecase interface {
 	GetStage3RelationByResultId(model.ByResultIdRequest) (model.Stage123456RelationAndStatus, error)
 	GetStage3ById(model.ByIdRequest) model.WebServiceResponse
 	CreateStage3try2(model.ByIdRequest) model.WebServiceResponse
+
+	CreateStage4(model.ByResultIdRequest) model.WebServiceResponse
+
+	GetStage4RelationByResultId(model.ByResultIdRequest) (model.Stage123456RelationAndStatus, error)
+	GetStage4ById(model.ByIdRequest) model.WebServiceResponse
+	CreateStage4try2(req model.ByIdRequest) model.WebServiceResponse
 }
 
 var _ AllUsecase = &allUsecaseImpl{}
