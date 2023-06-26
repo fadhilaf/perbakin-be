@@ -25,7 +25,7 @@ WITH added_stage4_try2 AS (
   RETURNING try1_id, is_try2
 ), updated_stage4_try1 AS (
   UPDATE stage46_tries
-  SET status = '7'
+  SET status = '4'
   WHERE id = (SELECT try1_id FROM updated_stage4_results)
 )
 SELECT 
@@ -253,7 +253,7 @@ WITH updated_stage4_results AS (
   RETURNING result_id, try2_id
 ), updated_stage4_tries AS (
   UPDATE stage46_tries
-    SET status = '7'
+    SET status = '4'
   WHERE id = (SELECT try2_id FROM updated_stage4_results)
 )
 UPDATE results 
@@ -284,11 +284,11 @@ WITH updated_stage4_results AS (
   RETURNING result_id, try2_id
 ), updated_stage4_tries AS (
   UPDATE stage46_tries
-    SET status = '7'
+    SET status = '4'
   WHERE id = (SELECT try2_id FROM updated_stage4_results)
 )
 UPDATE results 
-SET stage = '2', updated_at = NOW()
+SET stage = '5', updated_at = NOW()
 WHERE id = (SELECT result_id FROM updated_stage4_results)
 `
 

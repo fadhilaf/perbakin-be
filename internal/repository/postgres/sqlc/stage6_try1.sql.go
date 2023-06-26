@@ -95,6 +95,32 @@ func (q *Queries) DeleteStage6(ctx context.Context, id pgtype.UUID) error {
 	return err
 }
 
+const finishStage6 = `-- name: FinishStage6 :exec
+WITH get_stage6 AS (
+  SELECT 
+    result_id, try1_id, try2_id
+  FROM stage6_results
+  WHERE stage6_results.id = $1
+), updated_stage6try1 AS (
+  UPDATE stage46_tries
+  SET status = '4'
+  WHERE id = (SELECT try1_id FROM get_stage6)
+), updated_stage6try2 AS (
+  UPDATE stage46_tries
+  SET status = '4'
+  WHERE id = (SELECT try2_id FROM get_stage6 WHERE try2_id IS NOT NULL)
+)
+UPDATE results 
+SET stage = '7', updated_at = NOW()
+WHERE id = (SELECT result_id FROM get_stage6)
+`
+
+// (admin-super role)
+func (q *Queries) FinishStage6(ctx context.Context, id pgtype.UUID) error {
+	_, err := q.db.Exec(ctx, finishStage6, id)
+	return err
+}
+
 const getStage6ById = `-- name: GetStage6ById :one
 SELECT 
   stage6_results.id,
@@ -229,7 +255,7 @@ WITH updated_stage6_results AS (
   RETURNING try1_id
 )
 UPDATE stage46_tries
-SET status = '7'
+SET status = '4'
 WHERE id = (SELECT try1_id FROM stage6_results)
 `
 
@@ -381,7 +407,7 @@ WITH updated_stage6_results AS (
   RETURNING result_id, try1_id
 ), updated_stage6_tries AS (
   UPDATE stage46_tries
-    SET status = '7'
+    SET status = '4'
   WHERE id = (SELECT try1_id FROM updated_stage6_results)
 )
 UPDATE results 
@@ -412,11 +438,11 @@ WITH updated_stage6_results AS (
   RETURNING result_id, try1_id
 ), updated_stage6_tries AS (
   UPDATE stage46_tries
-    SET status = '7'
+    SET status = '4'
   WHERE id = (SELECT try1_id FROM updated_stage6_results)
 )
 UPDATE results 
-SET stage = '2', updated_at = NOW()
+SET stage = '7', updated_at = NOW()
 WHERE id = (SELECT result_id FROM updated_stage6_results)
 `
 

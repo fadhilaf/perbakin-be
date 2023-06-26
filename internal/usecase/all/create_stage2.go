@@ -25,9 +25,9 @@ func (usecase *allUsecaseImpl) CreateStage2(req model.ByResultIdRequest) model.W
 			ResultID: stage2.ResultID,
 			Try1: model.Stage2Try{
 				Status:     string(stage2.Status),
-				No1:        util.NumbersToIntArrayArray(stage2.No1),
-				No2:        util.NumbersToIntArrayArray(stage2.No2),
-				No3:        util.NumbersToIntArrayArray(stage2.No3),
+				No1:        util.Stage123DatabaseNumbersToStruct(stage2.No1),
+				No2:        util.Stage123DatabaseNumbersToStruct(stage2.No2),
+				No3:        util.Stage123DatabaseNumbersToStruct(stage2.No3),
 				Checkmarks: util.CheckmarksToBoolArray(stage2.Checkmarks),
 			},
 			IsTry2:      stage2.IsTry2,

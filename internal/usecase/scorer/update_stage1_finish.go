@@ -14,8 +14,8 @@ func (usecase *scorerUsecaseImpl) UpdateStage1Finish(req model.UpdateStage123456
 	switch req.Try {
 	case "1":
 		status, _ := usecase.Store.GetStage1try1Status(context.Background(), req.ID)
-		if status != "6" {
-			return util.ToWebServiceResponse("Tidak dapat menyelesaikan stage 1 percobaan 1, masih pada seri ke-"+string(status), http.StatusForbidden, nil)
+		if status != model.Stage13EndStatus {
+			return util.ToWebServiceResponse("Tidak dapat menyelesaikan stage 1 percobaan 1, masih pada nomor ke-"+string(status), http.StatusForbidden, nil)
 		}
 
 		if req.Success {
@@ -37,8 +37,8 @@ func (usecase *scorerUsecaseImpl) UpdateStage1Finish(req model.UpdateStage123456
 		}
 	case "2":
 		status, _ := usecase.Store.GetStage1try2Status(context.Background(), req.ID)
-		if status != "6" {
-			return util.ToWebServiceResponse("Tidak dapat menyelesaikan stage 1 percobaan 2, masih pada seri ke-"+string(status), http.StatusForbidden, nil)
+		if status != model.Stage13EndStatus {
+			return util.ToWebServiceResponse("Tidak dapat menyelesaikan stage 1 percobaan 2, masih pada nomor ke-"+string(status), http.StatusForbidden, nil)
 		}
 
 		if req.Success {

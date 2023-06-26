@@ -17,8 +17,8 @@ func (usecase *scorerUsecaseImpl) UpdateStage1Checkmarks(req model.UpdateStage12
 
 	switch req.Try {
 	case "1":
-		if status, _ := usecase.Store.GetStage1try1Status(context.Background(), req.ID); status == "7" {
-			return util.ToWebServiceResponse("Gagal mengupdate stage 1 percobaan 1 centang hasil, pencatatan data stage 1 percobaan 1 sudah selesai", http.StatusForbidden, nil)
+		if status, _ := usecase.Store.GetStage1try1Status(context.Background(), req.ID); status == model.Stage13FinishedStatus {
+			return util.ToWebServiceResponse("Gagal mengupdate centang hasil stage 1 percobaan 1, pencatatan data stage 1 percobaan 1 sudah selesai", http.StatusForbidden, nil)
 		}
 
 		checkmarks, err = usecase.Store.UpdateStage1try1Checkmarks(context.Background(), repositoryModel.UpdateStage1try1CheckmarksParams{
@@ -26,11 +26,11 @@ func (usecase *scorerUsecaseImpl) UpdateStage1Checkmarks(req model.UpdateStage12
 			Checkmarks: req.Checkmarks,
 		})
 		if err != nil {
-			return util.ToWebServiceResponse("Gagal mengupdate stage 1 percobaan 1 centang hasil: "+err.Error(), http.StatusInternalServerError, nil)
+			return util.ToWebServiceResponse("Gagal mengupdate centang hasil stage 1 percobaan 1: "+err.Error(), http.StatusInternalServerError, nil)
 		}
 	case "2":
-		if status, _ := usecase.Store.GetStage1try2Status(context.Background(), req.ID); status == "7" {
-			return util.ToWebServiceResponse("Gagal mengupdate stage 1 percobaan 2 centang hasil, pencatatan data stage 1 percobaan 2 sudah selesai", http.StatusForbidden, nil)
+		if status, _ := usecase.Store.GetStage1try2Status(context.Background(), req.ID); status == model.Stage13FinishedStatus {
+			return util.ToWebServiceResponse("Gagal mengupdate centang hasil stage 1 percobaan 2, pencatatan data stage 1 percobaan 2 sudah selesai", http.StatusForbidden, nil)
 		}
 
 		checkmarks, err = usecase.Store.UpdateStage1try2Checkmarks(context.Background(), repositoryModel.UpdateStage1try2CheckmarksParams{
@@ -38,11 +38,11 @@ func (usecase *scorerUsecaseImpl) UpdateStage1Checkmarks(req model.UpdateStage12
 			Checkmarks: req.Checkmarks,
 		})
 		if err != nil {
-			return util.ToWebServiceResponse("Gagal mengupdate stage 1 percobaan 2 centang hasil: "+err.Error(), http.StatusInternalServerError, nil)
+			return util.ToWebServiceResponse("Gagal mengupdate centang hasil stage 1 percobaan 2: "+err.Error(), http.StatusInternalServerError, nil)
 		}
 	}
 
-	return util.ToWebServiceResponse("Berhasil mengupdate stage 1 percobaan "+req.Try+" centang hasil", http.StatusOK, gin.H{
+	return util.ToWebServiceResponse("Berhasil mengupdate centang hasil stage 1 percobaan "+req.Try, http.StatusOK, gin.H{
 		"scores": util.CheckmarksToBoolArray(checkmarks),
 	})
 }

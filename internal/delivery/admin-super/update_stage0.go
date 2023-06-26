@@ -16,7 +16,7 @@ func (handler *adminSuperHandler) UpdateStage0(c *gin.Context) {
 	}
 
 	//check series
-	if ok := util.CheckNumbers(c, "stage0",
+	if ok := util.CheckNumbers(c, model.Stage0Type,
 		req.Series1,
 		req.Series2,
 		req.Series3,
@@ -27,7 +27,7 @@ func (handler *adminSuperHandler) UpdateStage0(c *gin.Context) {
 	}
 
 	//check checkmarks
-	if ok := util.CheckCheckmarks(c, req.Checkmarks, "stage0"); !ok {
+	if ok := util.CheckCheckmarks(c, req.Checkmarks, model.Stage0Type); !ok {
 		return
 	}
 

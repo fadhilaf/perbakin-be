@@ -107,11 +107,11 @@ WITH updated_stage5_results AS (
   RETURNING result_id, try1_id
 ), updated_stage5_tries AS (
   UPDATE stage5_tries
-    SET status = '7'
+    SET status = '3'
   WHERE id = (SELECT try1_id FROM updated_stage5_results)
 )
 UPDATE results 
-SET stage = '2', updated_at = NOW()
+SET stage = '6', updated_at = NOW()
 WHERE id = (SELECT result_id FROM updated_stage5_results);
 
 -- (scorer role)
@@ -126,7 +126,7 @@ WITH updated_stage5_results AS (
   RETURNING result_id, try1_id
 ), updated_stage5_tries AS (
   UPDATE stage5_tries
-    SET status = '7'
+    SET status = '3'
   WHERE id = (SELECT try1_id FROM updated_stage5_results)
 )
 UPDATE results 
@@ -144,7 +144,7 @@ WITH updated_stage5_results AS (
   RETURNING try1_id
 )
 UPDATE stage5_tries
-SET status = '7'
+SET status = '3'
 WHERE id = (SELECT try1_id FROM stage5_results);
 
 -- (scorer role)
@@ -214,6 +214,26 @@ SELECT
   updated_stage5_try1.checkmarks AS try1_checkmarks,
   updated_at
 FROM updated_stage5_results, updated_stage5_try1;
+
+-- (admin-super role)
+-- name: FinishStage5 :exec 
+WITH get_stage5 AS (
+  SELECT 
+    result_id, try1_id, try2_id
+  FROM stage5_results
+  WHERE stage5_results.id = $1
+), updated_stage5try1 AS (
+  UPDATE stage5_tries
+  SET status = '3'
+  WHERE id = (SELECT try1_id FROM get_stage5)
+), updated_stage5try2 AS (
+  UPDATE stage5_tries
+  SET status = '3'
+  WHERE id = (SELECT try2_id FROM get_stage5 WHERE try2_id IS NOT NULL)
+)
+UPDATE results 
+SET stage = '6', updated_at = NOW()
+WHERE id = (SELECT result_id FROM get_stage5);
 
 -- (admin-super role) 
 -- name: DeleteStage5 :exec

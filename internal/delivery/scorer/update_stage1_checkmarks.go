@@ -10,14 +10,14 @@ func (handler *scorerHandler) UpdateStage1Checkmarks(c *gin.Context) {
 	stage1 := c.MustGet("stage1").(model.Stage123456RelationAndStatus)
 	try := c.MustGet("try").(string)
 
-	var req model.UpdateStage123456CheckmarksBodyRequest
+	var req model.UpdateStage13CheckmarksBodyRequest
 
 	if ok := util.BindJSONAndValidate(c, &req); !ok {
 		return
 	}
 
 	//validate checkmarks
-	if ok := util.CheckCheckmarks(c, req.Checkmarks, "stage1"); !ok {
+	if ok := util.CheckCheckmarks(c, req.Checkmarks, model.Stage1Type); !ok {
 		return
 	}
 

@@ -12,7 +12,7 @@ import (
 
 func (usecase *scorerUsecaseImpl) UpdateStage0Finish(req model.UpdateStageFinishRequest) model.WebServiceResponse {
 	status, _ := usecase.Store.GetStage0Status(context.Background(), req.ID)
-	if status != "5" {
+	if status != model.Stage0EndStatus {
 		return util.ToWebServiceResponse("Tidak dapat menyelesaikan babak kualifikasi, masih pada seri ke-"+string(status), http.StatusForbidden, nil)
 	}
 

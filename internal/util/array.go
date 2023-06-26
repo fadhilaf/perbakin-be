@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/FadhilAF/perbakin-be/internal/model"
+
 	"github.com/gin-gonic/gin"
 )
 
-func CheckNumbers(c *gin.Context, stageType string, series ...[]int) bool {
+func CheckNumbers(c *gin.Context, stageType model.StageList, series ...[]int) bool {
 	for _, value := range series {
 		if ok := CheckScores(c, value, stageType); !ok {
 			return false
@@ -17,10 +19,11 @@ func CheckNumbers(c *gin.Context, stageType string, series ...[]int) bool {
 	return true
 }
 
-func CheckCheckmarks(c *gin.Context, arr []bool, stageType string) bool {
-	stage := make(map[string]int)
-	stage["stage0"] = 3 //{jumlah centang}}
-	stage["stage1"] = 6
+func CheckCheckmarks(c *gin.Context, arr []bool, stageType model.StageList) bool {
+	stage := make(map[model.StageList]int)
+	stage[model.Stage0Type] = 3 //{jumlah centang}}
+	stage[model.Stage1Type] = 6
+	stage[model.Stage2Type] = 3
 
 	// Count the number of true values
 	numTrue := 0
@@ -42,11 +45,12 @@ func CheckCheckmarks(c *gin.Context, arr []bool, stageType string) bool {
 	return true
 }
 
-func CheckScores(c *gin.Context, arr []int, stageType string) bool {
+func CheckScores(c *gin.Context, arr []int, stageType model.StageList) bool {
 	//nyimpen tipe tipe stage
-	stage := make(map[string]int)
-	stage["stage0"] = 10 //{jumlah tembakan}}
-	stage["stage1"] = 10
+	stage := make(map[model.StageList]int)
+	stage[model.Stage0Type] = 10 //{jumlah tembakan}}
+	stage[model.Stage1Type] = 10
+	stage[model.Stage2Type] = 10
 
 	// Count the number of true values
 	sum := 0

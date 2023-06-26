@@ -295,6 +295,26 @@ SELECT
   updated_at
 FROM updated_stage3_results, updated_stage3_try1;
 
+-- (admin-super role)
+-- name: FinishStage3 :exec 
+WITH get_stage3 AS (
+  SELECT 
+    result_id, try1_id, try2_id
+  FROM stage3_results
+  WHERE stage3_results.id = $1
+), updated_stage3try1 AS (
+  UPDATE stage13_tries
+  SET status = '7'
+  WHERE id = (SELECT try1_id FROM get_stage3)
+), updated_stage3try2 AS (
+  UPDATE stage13_tries
+  SET status = '7'
+  WHERE id = (SELECT try2_id FROM get_stage3 WHERE try2_id IS NOT NULL)
+)
+UPDATE results 
+SET stage = '2', updated_at = NOW()
+WHERE id = (SELECT result_id FROM get_stage3);
+
 -- (admin-super role) 
 -- name: DeleteStage3 :exec
 WITH deleted_stage3 AS (
@@ -309,5 +329,5 @@ WITH deleted_stage3 AS (
   WHERE stage13_tries.id = (SELECT try2_id FROM deleted_stage3 WHERE try2_id IS NOT NULL)
 )
 UPDATE results 
-SET stage = '1', updated_at = NOW()
+SET stage = '4', updated_at = NOW()
 WHERE id = (SELECT result_id FROM deleted_stage3);

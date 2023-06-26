@@ -17,7 +17,7 @@ func (usecase *scorerUsecaseImpl) UpdateStage1NextNo(req model.ByIdAndTryRequest
 	switch req.Try {
 	case "1":
 		status, _ := usecase.Store.GetStage1try1Status(context.Background(), req.ID)
-		if status == "6" {
+		if status == model.Stage13EndStatus {
 			return util.ToWebServiceResponse("Tidak dapat melanjutkan, batas no stage 1 percobaan 1 hanya 6", http.StatusForbidden, nil)
 		}
 
@@ -33,7 +33,7 @@ func (usecase *scorerUsecaseImpl) UpdateStage1NextNo(req model.ByIdAndTryRequest
 		}
 	case "2":
 		status, _ := usecase.Store.GetStage1try2Status(context.Background(), req.ID)
-		if status == "6" {
+		if status == model.Stage13EndStatus {
 			return util.ToWebServiceResponse("Tidak dapat melanjutkan, batas no stage 1 percobaan 2 hanya 6", http.StatusForbidden, nil)
 		}
 

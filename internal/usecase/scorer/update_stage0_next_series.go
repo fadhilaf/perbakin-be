@@ -13,7 +13,7 @@ import (
 
 func (usecase *scorerUsecaseImpl) UpdateStage0NextSeries(req model.ByIdRequest) model.WebServiceResponse {
 	status, _ := usecase.Store.GetStage0Status(context.Background(), req.ID)
-	if status == "5" {
+	if status == model.Stage0EndStatus {
 		return util.ToWebServiceResponse("Tidak dapat melanjutkan, batas seri kualifikasi hanya 5", http.StatusForbidden, nil)
 	}
 

@@ -32,6 +32,7 @@ type Querier interface {
 	CreateStage4(ctx context.Context, resultID pgtype.UUID) (CreateStage4Row, error)
 	CreateStage4try2(ctx context.Context, id pgtype.UUID) (CreateStage4try2Row, error)
 	CreateStage5(ctx context.Context, resultID pgtype.UUID) (CreateStage5Row, error)
+	CreateStage5try2(ctx context.Context, id pgtype.UUID) (CreateStage5try2Row, error)
 	CreateStage6(ctx context.Context, resultID pgtype.UUID) (CreateStage6Row, error)
 	CreateStage6try2(ctx context.Context, id pgtype.UUID) (CreateStage6try2Row, error)
 	// untuk menghapus exam (super role)
@@ -61,6 +62,8 @@ type Querier interface {
 	// (admin-super role)
 	DeleteStage5(ctx context.Context, id pgtype.UUID) error
 	// (admin-super role)
+	DeleteStage5try2(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
 	DeleteStage6(ctx context.Context, id pgtype.UUID) error
 	// (admin-super role)
 	DeleteStage6try2(ctx context.Context, id pgtype.UUID) error
@@ -69,6 +72,16 @@ type Querier interface {
 	FinishStage0(ctx context.Context, id pgtype.UUID) error
 	// (admin-super role)
 	FinishStage1(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
+	FinishStage2(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
+	FinishStage3(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
+	FinishStage4(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
+	FinishStage5(ctx context.Context, id pgtype.UUID) error
+	// (admin-super role)
+	FinishStage6(ctx context.Context, id pgtype.UUID) error
 	// untuk ngambil data akun admin berdasarkan id (super role)
 	GetAdminById(ctx context.Context, id pgtype.UUID) (GetAdminByIdRow, error)
 	// untuk ngambil data lengkap admin berdasarkan user id (admin role)
@@ -169,6 +182,8 @@ type Querier interface {
 	GetStage5try1Status(ctx context.Context, id pgtype.UUID) (Stage5Status, error)
 	// (all role)
 	GetStage5try2ExistById(ctx context.Context, id pgtype.UUID) (bool, error)
+	// (all role)
+	GetStage5try2Status(ctx context.Context, id pgtype.UUID) (Stage5Status, error)
 	// (all role)
 	GetStage6ById(ctx context.Context, id pgtype.UUID) (GetStage6ByIdRow, error)
 	// (all role)
@@ -418,6 +433,20 @@ type Querier interface {
 	UpdateStage5try1No1(ctx context.Context, arg UpdateStage5try1No1Params) (string, error)
 	// (scorer role)
 	UpdateStage5try1No2(ctx context.Context, arg UpdateStage5try1No2Params) (string, error)
+	// (admin-super role)
+	UpdateStage5try2(ctx context.Context, arg UpdateStage5try2Params) (UpdateStage5try2Row, error)
+	// (scorer role)
+	UpdateStage5try2Checkmarks(ctx context.Context, arg UpdateStage5try2CheckmarksParams) (string, error)
+	// (scorer role)
+	UpdateStage5try2FinishFailed(ctx context.Context, arg UpdateStage5try2FinishFailedParams) error
+	// (scorer role)
+	UpdateStage5try2FinishSuccess(ctx context.Context, arg UpdateStage5try2FinishSuccessParams) error
+	// (scorer role)
+	UpdateStage5try2NextNo(ctx context.Context, arg UpdateStage5try2NextNoParams) error
+	// (scorer role)
+	UpdateStage5try2No1(ctx context.Context, arg UpdateStage5try2No1Params) (string, error)
+	// (scorer role)
+	UpdateStage5try2No2(ctx context.Context, arg UpdateStage5try2No2Params) (string, error)
 	// (scorer role)
 	UpdateStage6NextTry(ctx context.Context, id pgtype.UUID) error
 	// (admin-super role)

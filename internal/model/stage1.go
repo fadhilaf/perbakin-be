@@ -125,7 +125,7 @@ type UpdateStage123456NoRequest struct {
 	ScoresAndDuration string
 }
 
-type UpdateStage123456CheckmarksBodyRequest struct {
+type UpdateStage13CheckmarksBodyRequest struct {
 	Checkmarks []bool `json:"checkmarks" binding:"required,len=6,dive,boolean"`
 }
 

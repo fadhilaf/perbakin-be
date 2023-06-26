@@ -7,11 +7,11 @@ import (
 )
 
 type Stage2Try struct {
-	Status     string  `json:"status"`
-	No1        [][]int `json:"no_1"`
-	No2        [][]int `json:"no_2"`
-	No3        [][]int `json:"no_3"`
-	Checkmarks []bool  `json:"checkmarks"`
+	Status     string          `json:"status"`
+	No1        Stage123Numbers `json:"no_1"`
+	No2        Stage123Numbers `json:"no_2"`
+	No3        Stage123Numbers `json:"no_3"`
+	Checkmarks []bool          `json:"checkmarks"`
 }
 
 type Stage2 struct {
@@ -40,4 +40,12 @@ type Stage2Full struct {
 type CreateStage2try2 struct {
 	Try2   Stage2Try `json:"try_2"`
 	IsTry2 bool      `json:"is_try_2"`
+}
+
+type UpdateStage246NoUriRequest struct {
+	No string `uri:"no" binding:"required,oneof=1 2 3"`
+}
+
+type UpdateStage246CheckmarksBodyRequest struct {
+	Checkmarks []bool `json:"checkmarks" binding:"required,len=3,dive,boolean"`
 }

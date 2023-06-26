@@ -8,10 +8,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *scorerHandler) MustStage1ModifyMiddleware() gin.HandlerFunc {
+func (handler *scorerHandler) MustStage2ModifyMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		result := c.MustGet("result").(model.ResultRelationAndStatus)
-		stage1 := c.MustGet("stage1").(model.Stage123456RelationAndStatus)
+		stage2 := c.MustGet("stage2").(model.Stage123456RelationAndStatus)
 
 		if result.Failed {
 			res := util.ToWebServiceResponse("Hasil ujian tidak lulus", http.StatusForbidden, nil)
@@ -20,8 +20,8 @@ func (handler *scorerHandler) MustStage1ModifyMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		if result.Stage != "1" {
-			res := util.ToWebServiceResponse("Tidak dapat mengubah stage 1, sekarang sedang mengisi babak "+result.Stage, http.StatusForbidden, nil)
+		if result.Stage != "2" {
+			res := util.ToWebServiceResponse("Tidak dapat mengubah stage 2, sekarang sedang mengisi babak "+result.Stage, http.StatusForbidden, nil)
 			c.JSON(res.Status, res)
 			c.Abort()
 			return
@@ -33,15 +33,15 @@ func (handler *scorerHandler) MustStage1ModifyMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		if !stage1.IsTry2 && uri.Try != "1" {
-			res := util.ToWebServiceResponse("Tidak dapat mengubah stage 1 percobaan 2, sekarang sedang mengisi percobaan 1", http.StatusForbidden, nil)
+		if !stage2.IsTry2 && uri.Try != "1" {
+			res := util.ToWebServiceResponse("Tidak dapat mengubah stage 2 percobaan 2, sekarang sedang mengisi percobaan 1", http.StatusForbidden, nil)
 			c.JSON(res.Status, res)
 			c.Abort()
 			return
 		}
 
-		if stage1.IsTry2 && uri.Try != "2" {
-			res := util.ToWebServiceResponse("Tidak dapat mengubah stage 1 percobaan 1, sekarang sedang mengisi percobaan 2", http.StatusForbidden, nil)
+		if stage2.IsTry2 && uri.Try != "2" {
+			res := util.ToWebServiceResponse("Tidak dapat mengubah stage 2 percobaan 1, sekarang sedang mengisi percobaan 2", http.StatusForbidden, nil)
 			c.JSON(res.Status, res)
 			c.Abort()
 			return

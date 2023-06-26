@@ -6,11 +6,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *scorerHandler) UpdateStage1No(c *gin.Context) {
-	stage1 := c.MustGet("stage1").(model.Stage123456RelationAndStatus)
+func (handler *scorerHandler) UpdateStage2No(c *gin.Context) {
+	stage2 := c.MustGet("stage2").(model.Stage123456RelationAndStatus)
 	try := c.MustGet("try").(string)
 
-	var uri model.UpdateStage13NoUriRequest
+	var uri model.UpdateStage246NoUriRequest
 
 	if ok := util.BindURIAndValidate(c, &uri); !ok {
 		return
@@ -23,7 +23,7 @@ func (handler *scorerHandler) UpdateStage1No(c *gin.Context) {
 	}
 
 	//validate scores
-	if ok := util.CheckScores(c, req.Scores, model.Stage1Type); !ok {
+	if ok := util.CheckScores(c, req.Scores, model.Stage2Type); !ok {
 		return
 	}
 
@@ -32,8 +32,8 @@ func (handler *scorerHandler) UpdateStage1No(c *gin.Context) {
 		return
 	}
 
-	res := handler.Usecase.UpdateStage1No(model.UpdateStage123456NoRequest{
-		ID:                stage1.ID,
+	res := handler.Usecase.UpdateStage2No(model.UpdateStage123456NoRequest{
+		ID:                stage2.ID,
 		Try:               try,
 		No:                uri.No,
 		ScoresAndDuration: util.IntArraysToScoresAndDuration(req.Scores, req.Duration),

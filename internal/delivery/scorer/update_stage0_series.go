@@ -22,7 +22,7 @@ func (handler *scorerHandler) UpdateStage0Series(c *gin.Context) {
 	}
 
 	//validate scores
-	if ok := util.CheckScores(c, req.Scores, "stage0"); !ok {
+	if ok := util.CheckScores(c, req.Scores, model.Stage0Type); !ok {
 		return
 	}
 
