@@ -26,4 +26,4 @@ migrate-fresh: migrate-down migrate-up
 sqlc:
 	sqlc generate
 
-.PHONY:	migrate-up migrate-down sqlc
+.PHONY:	migrate-fresh sqlc
