@@ -70,6 +70,6 @@ func registerCustomErrors() {
 	}
 
 	customError["len"] = func(field validator.FieldError, translatedFieldName string) string {
-		return fmt.Sprintf("banyak item pada '%s' harus %s", translatedFieldName, field.Param())
+		return fmt.Sprintf("panjang '%s' harus %s", translatedFieldName, field.Param())
 	}
 }

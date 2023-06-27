@@ -33,12 +33,12 @@ type ByResultIdRequest struct {
 
 type UpdateStage0BodyRequest struct {
 	Status     string `json:"status" binding:"required,oneof=1 2 3 4 5 6"`
-	Series1    []int  `json:"series_1" binding:"required,dive,oneof=0 1 2 3 4 5 6 7 8 9 10"`
-	Series2    []int  `json:"series_2" binding:"required,dive,oneof=0 1 2 3 4 5 6 7 8 9 10"`
-	Series3    []int  `json:"series_3" binding:"required,dive,oneof=0 1 2 3 4 5 6 7 8 9 10"`
-	Series4    []int  `json:"series_4" binding:"required,dive,oneof=0 1 2 3 4 5 6 7 8 9 10"`
-	Series5    []int  `json:"series_5" binding:"required,dive,oneof=0 1 2 3 4 5 6 7 8 9 10"`
-	Checkmarks []bool `json:"checkmarks" binding:"required,dive,boolean"`
+	Series1    []int  `json:"series_1" binding:"required,len=11,dive,oneof=0 1 2 3 4 5 6 7 8 9 10"`
+	Series2    []int  `json:"series_2" binding:"required,len=11,dive,oneof=0 1 2 3 4 5 6 7 8 9 10"`
+	Series3    []int  `json:"series_3" binding:"required,len=11,dive,oneof=0 1 2 3 4 5 6 7 8 9 10"`
+	Series4    []int  `json:"series_4" binding:"required,len=11,dive,oneof=0 1 2 3 4 5 6 7 8 9 10"`
+	Series5    []int  `json:"series_5" binding:"required,len=11,dive,oneof=0 1 2 3 4 5 6 7 8 9 10"`
+	Checkmarks []bool `json:"checkmarks" binding:"required,len=5,dive,boolean"`
 }
 
 type UpdateStage0Request struct {

@@ -49,7 +49,7 @@ type CreateStage46try2 struct {
 }
 
 type Stage46UpdateBodyTry struct {
-	Status     string         `json:"status" binding:"required,oneof=1 2 3 4 5 6"`
+	Status     string         `json:"status" binding:"required,oneof=1 2 3 4"`
 	No1        Stage46Numbers `json:"no_1" binding:"required,dive"`
 	No2        Stage46Numbers `json:"no_2" binding:"required,dive"`
 	No3        Stage46Numbers `json:"no_3" binding:"required,dive"`

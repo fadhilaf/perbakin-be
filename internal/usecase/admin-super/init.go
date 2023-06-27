@@ -56,6 +56,13 @@ type AdminSuperUsecase interface {
 	DeleteStage4(model.ByIdRequest) model.WebServiceResponse
 	DeleteStage4try2(model.ByIdRequest) model.WebServiceResponse
 	FinishStage4(model.ByIdRequest) error
+
+	UpdateStage5try1(model.UpdateStage5try1Request) model.WebServiceResponse
+	UpdateStage5try2(model.UpdateStage5try2Request) model.WebServiceResponse
+	UpdateStage5Signs(model.UpdateStageSignsRequest) model.WebServiceResponse
+	DeleteStage5(model.ByIdRequest) model.WebServiceResponse
+	DeleteStage5try2(model.ByIdRequest) model.WebServiceResponse
+	FinishStage5(model.ByIdRequest) error
 }
 
 var _ AdminSuperUsecase = &adminSuperUsecaseImpl{}

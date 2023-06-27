@@ -57,7 +57,7 @@ type Stage123456RelationAndStatus struct {
 }
 
 type Stage13UpdateBodyTry struct {
-	Status     string          `json:"status" binding:"required,oneof=1 2 3 4 5 6"`
+	Status     string          `json:"status" binding:"required,oneof=1 2 3 4 5 6 7"`
 	No1        Stage123Numbers `json:"no_1" binding:"required,dive"`
 	No2        Stage123Numbers `json:"no_2" binding:"required,dive"`
 	No3        Stage123Numbers `json:"no_3" binding:"required,dive"`

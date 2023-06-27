@@ -9,8 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CheckNumbers(c *gin.Context, stageType model.StageList, series ...[]int) bool {
-	for _, value := range series {
+func CheckNumbers(c *gin.Context, stageType model.StageList, numbers ...[]int) bool {
+	for _, value := range numbers {
 		if ok := CheckScores(c, value, stageType); !ok {
 			return false
 		}
@@ -68,7 +68,7 @@ func CheckScores(c *gin.Context, arr []int, stageType model.StageList) bool {
 
 	// The maximum number of true values is $max
 	if sum > stage[stageType] {
-		res := ToWebServiceResponse("Total jumlah tembakan per seri tidak boleh lebih dari "+fmt.Sprint(stage[stageType]), http.StatusBadRequest, nil)
+		res := ToWebServiceResponse("Total jumlah tembakan per nomor tidak boleh lebih dari "+fmt.Sprint(stage[stageType]), http.StatusBadRequest, nil)
 		c.JSON(res.Status, res)
 		c.Abort()
 		return false
