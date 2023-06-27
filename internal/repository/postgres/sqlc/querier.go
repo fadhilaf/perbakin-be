@@ -215,6 +215,8 @@ type Querier interface {
 	UpdateResult(ctx context.Context, arg UpdateResultParams) (Result, error)
 	// (scorer role) dibuat by id, utk update stage
 	UpdateResultNextStage(ctx context.Context, arg UpdateResultNextStageParams) error
+	// (admin-super role) utk edge case kalo delete stage yang terakir, mundurin ke stage sebelum
+	UpdateResultStage(ctx context.Context, arg UpdateResultStageParams) error
 	// untuk update data akun admin (super role) TODO: return sebanyak get admin by id
 	UpdateScorer(ctx context.Context, arg UpdateScorerParams) (UpdateScorerRow, error)
 	// low prio

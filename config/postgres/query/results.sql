@@ -21,6 +21,12 @@ SET failed = $2, stage = $3, updated_at = NOW()
 WHERE id = $1
 RETURNING id, shooter_id, failed, stage, created_at, updated_at;
 
+-- (admin-super role) utk edge case kalo delete stage yang terakir, mundurin ke stage sebelum
+-- name: UpdateResultStage :exec
+UPDATE results 
+SET stage = $2, updated_at = NOW()
+WHERE id = $1;
+
 -- (admin-super role) dibuat by id
 -- name: DeleteResult :exec
 DELETE FROM results

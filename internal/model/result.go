@@ -41,3 +41,8 @@ type UpdateResultRequest struct {
 	ID   pgtype.UUID
 	Body UpdateResultBodyRequest
 }
+
+type UpdateResultStageRequest struct {
+	ID    pgtype.UUID
+	Stage string
+}

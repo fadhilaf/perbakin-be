@@ -115,3 +115,20 @@ func (q *Queries) UpdateResult(ctx context.Context, arg UpdateResultParams) (Res
 	)
 	return i, err
 }
+
+const updateResultStage = `-- name: UpdateResultStage :exec
+UPDATE results 
+SET stage = $2, updated_at = NOW()
+WHERE id = $1
+`
+
+type UpdateResultStageParams struct {
+	ID    pgtype.UUID
+	Stage Stages
+}
+
+// (admin-super role) utk edge case kalo delete stage yang terakir, mundurin ke stage sebelum
+func (q *Queries) UpdateResultStage(ctx context.Context, arg UpdateResultStageParams) error {
+	_, err := q.db.Exec(ctx, updateResultStage, arg.ID, arg.Stage)
+	return err
+}
