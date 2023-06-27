@@ -268,9 +268,10 @@ type Result struct {
 }
 
 type Scorer struct {
-	ID     pgtype.UUID
-	UserID pgtype.UUID
-	ExamID pgtype.UUID
+	ID        pgtype.UUID
+	UserID    pgtype.UUID
+	ExamID    pgtype.UUID
+	ImagePath string
 }
 
 type Session struct {

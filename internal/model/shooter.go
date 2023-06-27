@@ -68,7 +68,7 @@ type CreateShooterBodyRequest struct {
 
 type CreateShooterRequest struct {
 	ScorerID  pgtype.UUID
-	ImagePath string
+	ImagePath pgtype.Text
 	Body      CreateShooterBodyRequest
 }
 

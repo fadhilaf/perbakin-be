@@ -4,6 +4,7 @@ import (
 	"github.com/FadhilAF/perbakin-be/internal/model"
 	"github.com/FadhilAF/perbakin-be/internal/util"
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 func (handler *adminSuperHandler) CreateShooter(c *gin.Context) {
@@ -15,15 +16,16 @@ func (handler *adminSuperHandler) CreateShooter(c *gin.Context) {
 		return
 	}
 
+	var imagePathText pgtype.Text
+
 	// Simpan upload file ke folder assets/images
-	imagePath, ok := util.SaveFileFromForm(c, "image", "media/")
-	if !ok {
-		return
+	if imagePath, ok := util.SaveFileFromForm(c, "image", "media/"); ok {
+		imagePathText.Scan(imagePath)
 	}
 
 	res := handler.Usecase.CreateShooter(model.CreateShooterRequest{
 		ScorerID:  scorer.ID,
-		ImagePath: imagePath,
+		ImagePath: imagePathText,
 		Body:      req,
 	})
 

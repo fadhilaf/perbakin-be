@@ -30,7 +30,8 @@ CREATE TABLE IF NOT EXISTS scorers (
   id uuid PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
   user_id uuid NOT NULL UNIQUE,
   exam_id uuid NOT NULL,
-  image_path varchar(255) NOT NULL,
+  -- semennntara
+  image_path varchar(255) NOT NULL DEFAULT 'default.png',
   CONSTRAINT user_id
     FOREIGN KEY (user_id) 
       REFERENCES users (id) ON DELETE CASCADE,

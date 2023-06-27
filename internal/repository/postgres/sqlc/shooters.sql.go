@@ -13,16 +13,16 @@ import (
 
 const createShooter = `-- name: CreateShooter :one
 INSERT INTO shooters (scorer_id, name, image_path, province, club)
-VALUES ($1, $2, $3, $4, $5)
+VALUES ($1, $2, COALESCE($5::text,'default.png'), $3, $4)
 RETURNING id, scorer_id, name, image_path, province, club, created_at, updated_at
 `
 
 type CreateShooterParams struct {
 	ScorerID  pgtype.UUID
 	Name      string
-	ImagePath string
 	Province  string
 	Club      string
+	ImagePath pgtype.Text
 }
 
 // membuat shooter baru (admin-super role)
@@ -30,9 +30,9 @@ func (q *Queries) CreateShooter(ctx context.Context, arg CreateShooterParams) (S
 	row := q.db.QueryRow(ctx, createShooter,
 		arg.ScorerID,
 		arg.Name,
-		arg.ImagePath,
 		arg.Province,
 		arg.Club,
+		arg.ImagePath,
 	)
 	var i Shooter
 	err := row.Scan(
@@ -60,7 +60,7 @@ func (q *Queries) DeleteShooter(ctx context.Context, id pgtype.UUID) error {
 }
 
 const getAllShooters = `-- name: GetAllShooters :many
-SELECT exams.name AS exam, shooters.name AS name, image_path, province, club
+SELECT exams.name AS exam, shooters.name AS name, shooters.image_path, province, club
 FROM shooters INNER JOIN scorers ON shooters.scorer_id = scorers.id INNER JOIN exams ON scorers.exam_id = exams.id
 `
 
@@ -100,7 +100,7 @@ func (q *Queries) GetAllShooters(ctx context.Context) ([]GetAllShootersRow, erro
 }
 
 const getShooterByExamId = `-- name: GetShooterByExamId :many
-SELECT shooters.id, scorer_id, users.name AS scorer, shooters.name AS name, image_path, province, club
+SELECT shooters.id, scorer_id, users.name AS scorer, shooters.name AS name, shooters.image_path, province, club
 FROM shooters INNER JOIN scorers ON shooters.scorer_id = scorers.id INNER JOIN users ON scorers.user_id = users.id
 WHERE scorers.exam_id = $1
 `

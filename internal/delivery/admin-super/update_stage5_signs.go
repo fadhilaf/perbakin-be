@@ -11,12 +11,12 @@ func (handler *adminSuperHandler) UpdateStage5Signs(c *gin.Context) {
 	stage5 := c.MustGet("stage5").(model.Stage123456RelationAndStatus)
 
 	// Simpan upload file ke folder assets/images
-	shooterSign, ok := util.SaveFileFromForm(c, "shooter_sign", "media/")
+	shooterSign, ok := util.MustSaveFileFromForm(c, "shooter_sign", "media/")
 	if !ok {
 		return
 	}
 
-	scorerSign, ok := util.SaveFileFromForm(c, "scorer_sign", "media/")
+	scorerSign, ok := util.MustSaveFileFromForm(c, "scorer_sign", "media/")
 	if !ok {
 		return
 	}

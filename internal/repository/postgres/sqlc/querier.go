@@ -121,7 +121,7 @@ type Querier interface {
 	// untuk ngambil data display scorer berdasarkan username (scorer role)
 	GetScorerByUsername(ctx context.Context, username string) (GetScorerByUsernameRow, error)
 	// untuk ngambil data relasi scorer berdasarkan id (all role)
-	GetScorerRelationById(ctx context.Context, id pgtype.UUID) (Scorer, error)
+	GetScorerRelationById(ctx context.Context, id pgtype.UUID) (GetScorerRelationByIdRow, error)
 	// untuk ngambil data relasi scorer berdasarkan user id (all role)
 	GetScorerRelationByUserId(ctx context.Context, userID pgtype.UUID) (GetScorerRelationByUserIdRow, error)
 	// untuk ngambil data akun seluruh scorer dalam satu exam (admin-super role)

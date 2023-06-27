@@ -10,7 +10,7 @@ func (handler *adminSuperHandler) UpdateShooterImage(c *gin.Context) {
 	shooter := c.MustGet("shooter").(model.ShooterRelation)
 
 	// Simpan upload file ke folder assets/images
-	imagePath, ok := util.SaveFileFromForm(c, "image", "media/")
+	imagePath, ok := util.MustSaveFileFromForm(c, "image", "media/")
 	if !ok {
 		return
 	}

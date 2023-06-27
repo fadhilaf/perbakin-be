@@ -1,17 +1,17 @@
 -- membuat shooter baru (admin-super role)
 -- name: CreateShooter :one
 INSERT INTO shooters (scorer_id, name, image_path, province, club)
-VALUES ($1, $2, $3, $4, $5)
+VALUES ($1, $2, COALESCE(sqlc.narg('image_path')::text,'default.png'), $3, $4)
 RETURNING id, scorer_id, name, image_path, province, club, created_at, updated_at;
 
 -- untuk mengambil seluruh shooter (admin-super role)
 -- name: GetAllShooters :many
-SELECT exams.name AS exam, shooters.name AS name, image_path, province, club
+SELECT exams.name AS exam, shooters.name AS name, shooters.image_path, province, club
 FROM shooters INNER JOIN scorers ON shooters.scorer_id = scorers.id INNER JOIN exams ON scorers.exam_id = exams.id;
 
 -- untuk mengambil shooter berdasarkan exam_id (admin-super role)
 -- name: GetShooterByExamId :many
-SELECT shooters.id, scorer_id, users.name AS scorer, shooters.name AS name, image_path, province, club
+SELECT shooters.id, scorer_id, users.name AS scorer, shooters.name AS name, shooters.image_path, province, club
 FROM shooters INNER JOIN scorers ON shooters.scorer_id = scorers.id INNER JOIN users ON scorers.user_id = users.id
 WHERE scorers.exam_id = $1;
 

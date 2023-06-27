@@ -18,13 +18,13 @@ func (handler *scorerHandler) UpdateStage3Finish(c *gin.Context) {
 	}
 
 	// Simpan upload file ke folder assets/images
-	shooterSign, ok := util.SaveFileFromForm(c, "shooter_sign", "media/")
+	shooterSign, ok := util.MustSaveFileFromForm(c, "shooter_sign", "media/")
 	if !ok {
 		return
 	}
 
 	// Simpan upload file ke folder assets/images
-	scorerSign, ok := util.SaveFileFromForm(c, "scorer_sign", "media/")
+	scorerSign, ok := util.MustSaveFileFromForm(c, "scorer_sign", "media/")
 	if !ok {
 		return
 	}

@@ -11,6 +11,23 @@ import (
 func SaveFileFromForm(ctx *gin.Context, field string, path string) (filename string, ok bool) {
 	file, err := ctx.FormFile(field)
 	if err != nil {
+		return "", false
+	}
+
+	extension := filepath.Base(file.Filename)
+
+	newFileName := uuid.New().String() + extension
+
+	if err := ctx.SaveUploadedFile(file, path+newFileName); err != nil {
+		return "", false
+	}
+
+	return newFileName, true
+}
+
+func MustSaveFileFromForm(ctx *gin.Context, field string, path string) (filename string, ok bool) {
+	file, err := ctx.FormFile(field)
+	if err != nil {
 		res := ToWebServiceResponse("Tidak ada file '"+field+"' dari form", http.StatusBadRequest, nil)
 		ctx.JSON(http.StatusBadRequest, res)
 		ctx.Abort()

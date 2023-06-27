@@ -204,10 +204,16 @@ INNER JOIN users ON scorers.user_id = users.id
 WHERE scorers.id = $1
 `
 
+type GetScorerRelationByIdRow struct {
+	ID     pgtype.UUID
+	UserID pgtype.UUID
+	ExamID pgtype.UUID
+}
+
 // untuk ngambil data relasi scorer berdasarkan id (all role)
-func (q *Queries) GetScorerRelationById(ctx context.Context, id pgtype.UUID) (Scorer, error) {
+func (q *Queries) GetScorerRelationById(ctx context.Context, id pgtype.UUID) (GetScorerRelationByIdRow, error) {
 	row := q.db.QueryRow(ctx, getScorerRelationById, id)
-	var i Scorer
+	var i GetScorerRelationByIdRow
 	err := row.Scan(&i.ID, &i.UserID, &i.ExamID)
 	return i, err
 }
