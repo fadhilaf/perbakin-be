@@ -79,4 +79,15 @@ func ScorerRoutes(router *gin.RouterGroup, delivery scorerDelivery.ScorerDeliver
 	stage5ModifyRouter.PUT("/checkmarks", delivery.UpdateStage5Checkmarks)
 	stage5ModifyRouter.PATCH("/next", delivery.UpdateStage5NextNo)
 	stage5ModifyRouter.PATCH("/finish", delivery.UpdateStage5Finish)
+
+	//stage 6
+	stage6Router := Stage6AllRoutes(resultRouter, allDelivery)
+
+	stage6Router.POST("/2", delivery.MustStage6try1FinishedMiddleware(), allDelivery.CreateStage6try2)
+
+	stage6ModifyRouter := stage6Router.Group("/:try", delivery.MustStage6ModifyMiddleware())
+	stage6ModifyRouter.PUT("/no/:no", delivery.UpdateStage6No)
+	stage6ModifyRouter.PUT("/checkmarks", delivery.UpdateStage6Checkmarks)
+	stage6ModifyRouter.PATCH("/next", delivery.UpdateStage6NextNo)
+	stage6ModifyRouter.PATCH("/finish", delivery.UpdateStage6Finish)
 }

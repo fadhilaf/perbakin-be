@@ -52,6 +52,13 @@ type ScorerDelivery interface {
 	UpdateStage5NextNo(c *gin.Context)
 	UpdateStage5Checkmarks(c *gin.Context)
 	UpdateStage5Finish(c *gin.Context)
+
+	MustStage6ModifyMiddleware() gin.HandlerFunc
+	MustStage6try1FinishedMiddleware() gin.HandlerFunc
+	UpdateStage6No(c *gin.Context)
+	UpdateStage6NextNo(c *gin.Context)
+	UpdateStage6Checkmarks(c *gin.Context)
+	UpdateStage6Finish(c *gin.Context)
 }
 
 var _ ScorerDelivery = &scorerHandler{}
