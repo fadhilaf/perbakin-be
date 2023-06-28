@@ -13,6 +13,10 @@ import (
 )
 
 func (usecase *adminSuperUsecaseImpl) UpdateScorer(req model.UpdateOperatorRequest) model.WebServiceResponse {
+	if _, err := usecase.Store.GetUserByUsername(context.Background(), req.Username); err == nil {
+		return util.ToWebServiceResponse("Username sudah digunakan", http.StatusConflict, nil)
+	}
+
 	var query repositoryModel.UpdateScorerParams
 
 	if req.Password.Valid {

@@ -12,6 +12,10 @@ import (
 )
 
 func (usecase *superUsecaseImpl) UpdateExam(req model.UpdateExamRequest) model.WebServiceResponse {
+	if _, err := usecase.Store.GetExamByName(context.Background(), req.Body.Name); err == nil {
+		return util.ToWebServiceResponse("Nama ujian sudah digunakan", http.StatusConflict, nil)
+	}
+
 	newExam, err := usecase.Store.UpdateExam(context.Background(), repositoryModel.UpdateExamParams{
 		ID:        req.ID,
 		Name:      req.Body.Name,
