@@ -25,6 +25,7 @@ type OperatorBodyRequest struct {
 // utk update scorer dan update admin
 type UpdateOperatorRequest struct {
 	ID       pgtype.UUID
+	UserID   pgtype.UUID
 	Username string
 	Password pgtype.Text
 	Name     string

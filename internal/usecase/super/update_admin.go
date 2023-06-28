@@ -14,7 +14,7 @@ import (
 
 func (usecase *superUsecaseImpl) UpdateAdmin(req model.UpdateOperatorRequest) model.WebServiceResponse {
 	if existingAdmin, err := usecase.Store.GetUserByUsername(context.Background(), req.Username); err == nil {
-		if existingAdmin != req.ID {
+		if existingAdmin != req.UserID {
 			return util.ToWebServiceResponse("Username sudah digunakan", http.StatusConflict, nil)
 		}
 	}

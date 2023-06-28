@@ -21,7 +21,7 @@ func (handler *adminSuperHandler) UpdateScorer(c *gin.Context) {
 		passwordText.Scan(req.Password)
 	}
 
-	res := handler.Usecase.UpdateScorer(model.UpdateOperatorRequest{ID: scorer.ID, Username: req.Username, Password: passwordText, Name: req.Name})
+	res := handler.Usecase.UpdateScorer(model.UpdateOperatorRequest{ID: scorer.ID, UserID: scorer.UserID, Username: req.Username, Password: passwordText, Name: req.Name})
 
 	c.JSON(res.Status, res)
 }

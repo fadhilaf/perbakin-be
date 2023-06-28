@@ -14,7 +14,7 @@ import (
 
 func (usecase *adminSuperUsecaseImpl) UpdateScorer(req model.UpdateOperatorRequest) model.WebServiceResponse {
 	if existingScorer, err := usecase.Store.GetUserByUsername(context.Background(), req.Username); err == nil {
-		if existingScorer != req.ID {
+		if existingScorer != req.UserID {
 			return util.ToWebServiceResponse("Username sudah digunakan", http.StatusConflict, nil)
 		}
 	}
