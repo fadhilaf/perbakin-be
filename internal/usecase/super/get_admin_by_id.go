@@ -13,7 +13,7 @@ func (usecase *superUsecaseImpl) GetAdminById(req model.ByIdRequest) model.WebSe
 	admin, _ := usecase.Store.GetAdminById(context.Background(), req.ID)
 
 	return util.ToWebServiceResponse("Data admin ditemukan", http.StatusOK, gin.H{
-		"admin": model.Operator{
+		"admin": model.Admin{
 			ID:     admin.ID,
 			ExamID: admin.ExamID,
 			User: model.User{

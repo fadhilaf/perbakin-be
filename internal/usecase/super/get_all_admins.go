@@ -15,9 +15,9 @@ func (usecase *superUsecaseImpl) GetAllAdmins() model.WebServiceResponse {
 		return util.ToWebServiceResponse("Gagal mendapatkan data admin: "+err.Error(), http.StatusInternalServerError, nil)
 	}
 
-	var adminsData []model.OperatorDisplayExamData
+	var adminsData []model.AdminDisplayExamData
 	for _, admin := range admins {
-		adminsData = append(adminsData, model.OperatorDisplayExamData{
+		adminsData = append(adminsData, model.AdminDisplayExamData{
 			Exam: admin.Exam,
 			Name: admin.Name,
 		})

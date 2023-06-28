@@ -45,7 +45,7 @@ RETURNING id, scorer_id, name, province, club, created_at, updated_at;
 UPDATE shooters 
 SET image_path = $2, updated_at = NOW()
 WHERE id = $1
-RETURNING id, scorer_id, name, image_path, province, club, created_at, updated_at;
+RETURNING image_path;
 
 -- untuk menghapus shooter berdasarkan id (admin-super role)
 -- name: DeleteShooter :exec

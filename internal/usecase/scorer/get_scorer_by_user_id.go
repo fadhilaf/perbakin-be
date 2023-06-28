@@ -16,9 +16,10 @@ func (usecase *scorerUsecaseImpl) GetScorerByUserId(req model.UserByUserIdReques
 	}
 
 	return util.ToWebServiceResponse("Data scorer ditemukan", http.StatusOK, gin.H{
-		"scorer": model.Operator{
-			ID:     scorer.ID,
-			ExamID: scorer.ExamID,
+		"scorer": model.Scorer{
+			ID:        scorer.ID,
+			ExamID:    scorer.ExamID,
+			ImagePath: scorer.ImagePath,
 			User: model.User{
 				ID:       scorer.UserID,
 				Username: scorer.Username,

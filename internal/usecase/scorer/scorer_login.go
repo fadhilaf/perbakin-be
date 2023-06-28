@@ -24,9 +24,10 @@ func (usecase *scorerUsecaseImpl) ScorerLogin(req model.LoginRequest) model.WebS
 	}
 
 	return util.ToWebServiceResponse("Login berhasil", http.StatusOK, gin.H{
-		"scorer": model.Operator{
-			ID:     scorer.ID,
-			ExamID: scorer.ExamID,
+		"scorer": model.Scorer{
+			ID:        scorer.ID,
+			ExamID:    scorer.ExamID,
+			ImagePath: scorer.ImagePath,
 			User: model.User{
 				ID:       scorer.UserID,
 				Username: scorer.Username,

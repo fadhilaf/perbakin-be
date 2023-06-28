@@ -21,7 +21,7 @@ func (handler *adminHandler) MustAdminMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		adminExam, err := handler.Usecase.GetAdminExamRelationByUserId(model.UserByUserIdRequest{UserID: userId})
+		adminExamAndStatus, err := handler.Usecase.GetAdminExamRelationByUserId(model.UserByUserIdRequest{UserID: userId})
 		if err != nil {
 			res := util.ToWebServiceResponse("User bukan merupakan admin", http.StatusUnauthorized, nil)
 			c.JSON(res.Status, res)
@@ -29,7 +29,7 @@ func (handler *adminHandler) MustAdminMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		if !adminExam.Active {
+		if !adminExamAndStatus.Active {
 			res := util.ToWebServiceResponse("Ujian tidak aktif", http.StatusForbidden, nil)
 			util.RemoveAuthSession(c)
 			util.DeleteAuthStatusCookie(c)
@@ -38,8 +38,8 @@ func (handler *adminHandler) MustAdminMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		c.Set("admin", model.OperatorRelation{ID: adminExam.ID, UserID: adminExam.UserID, ExamID: adminExam.ExamID})
-		c.Set("exam", model.ExamRelation{ID: adminExam.ExamID, SuperID: adminExam.SuperID})
+		c.Set("admin", model.OperatorRelation{ID: adminExamAndStatus.ID, UserID: adminExamAndStatus.UserID, ExamID: adminExamAndStatus.ExamID})
+		c.Set("exam", model.ExamRelation{ID: adminExamAndStatus.ExamID, SuperID: adminExamAndStatus.SuperID})
 		c.Next()
 	}
 }

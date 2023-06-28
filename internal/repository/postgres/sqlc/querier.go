@@ -203,10 +203,6 @@ type Querier interface {
 	GetUserByUsername(ctx context.Context, username string) (pgtype.UUID, error)
 	// untuk update data akun admin (super role)
 	UpdateAdmin(ctx context.Context, arg UpdateAdminParams) (UpdateAdminRow, error)
-	// low prio
-	UpdateAdminName(ctx context.Context, arg UpdateAdminNameParams) (pgtype.UUID, error)
-	// low prio
-	UpdateAdminPassword(ctx context.Context, arg UpdateAdminPasswordParams) (pgtype.UUID, error)
 	// untuk memperbarui exam (super role)
 	UpdateExam(ctx context.Context, arg UpdateExamParams) (UpdateExamRow, error)
 	// untuk mengubah status exam (super role)
@@ -219,14 +215,12 @@ type Querier interface {
 	UpdateResultStage(ctx context.Context, arg UpdateResultStageParams) error
 	// untuk update data akun admin (super role) TODO: return sebanyak get admin by id
 	UpdateScorer(ctx context.Context, arg UpdateScorerParams) (UpdateScorerRow, error)
-	// low prio
-	UpdateScorerName(ctx context.Context, arg UpdateScorerNameParams) (pgtype.UUID, error)
-	// low prio
-	UpdateScorerPassword(ctx context.Context, arg UpdateScorerPasswordParams) (pgtype.UUID, error)
+	// untuk mengupdate foto scorer berdasarkan id (all role)
+	UpdateScorerImage(ctx context.Context, arg UpdateScorerImageParams) (string, error)
 	// untuk mengupdate shooter berdasarkan id (admin-super role)
 	UpdateShooter(ctx context.Context, arg UpdateShooterParams) (UpdateShooterRow, error)
 	// untuk mengupdate foto shooter berdasarkan id (admin-super role)
-	UpdateShooterImage(ctx context.Context, arg UpdateShooterImageParams) (Shooter, error)
+	UpdateShooterImage(ctx context.Context, arg UpdateShooterImageParams) (string, error)
 	// (admin-super role)
 	UpdateStage0(ctx context.Context, arg UpdateStage0Params) (UpdateStage0Row, error)
 	// (scorer role)

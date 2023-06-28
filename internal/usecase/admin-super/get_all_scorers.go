@@ -15,11 +15,12 @@ func (usecase *adminSuperUsecaseImpl) GetAllScorers() model.WebServiceResponse {
 		return util.ToWebServiceResponse("Gagal mendapatkan data penguji", http.StatusInternalServerError, nil)
 	}
 
-	var scorersDisplayData []model.OperatorDisplayExamData
+	var scorersDisplayData []model.ScorerDisplayExamData
 	for _, scorer := range scorers {
-		scorersDisplayData = append(scorersDisplayData, model.OperatorDisplayExamData{
-			Exam: scorer.Exam,
-			Name: scorer.Name,
+		scorersDisplayData = append(scorersDisplayData, model.ScorerDisplayExamData{
+			Exam:      scorer.Exam,
+			Name:      scorer.Name,
+			ImagePath: scorer.ImagePath,
 		})
 	}
 

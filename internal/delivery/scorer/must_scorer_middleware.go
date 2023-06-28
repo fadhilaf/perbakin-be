@@ -21,7 +21,7 @@ func (handler *scorerHandler) MustScorerMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		scorer, err := handler.Usecase.GetScorerRelationByUserId(model.UserByUserIdRequest{UserID: userId})
+		scorerAndStatus, err := handler.Usecase.GetScorerRelationByUserId(model.UserByUserIdRequest{UserID: userId})
 		if err != nil {
 			res := util.ToWebServiceResponse("User bukan merupakan penguji", http.StatusUnauthorized, nil)
 			c.JSON(res.Status, res)
@@ -29,7 +29,7 @@ func (handler *scorerHandler) MustScorerMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		if !scorer.Active {
+		if !scorerAndStatus.Active {
 			res := util.ToWebServiceResponse("Ujian tidak aktif", http.StatusForbidden, nil)
 			util.RemoveAuthSession(c)
 			util.DeleteAuthStatusCookie(c)
@@ -38,7 +38,7 @@ func (handler *scorerHandler) MustScorerMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		c.Set("scorer", model.OperatorRelation{ID: scorer.ID, ExamID: scorer.ExamID, UserID: scorer.UserID})
+		c.Set("scorer", model.OperatorRelation{ID: scorerAndStatus.ID, ExamID: scorerAndStatus.ExamID, UserID: scorerAndStatus.UserID})
 		c.Next()
 	}
 }

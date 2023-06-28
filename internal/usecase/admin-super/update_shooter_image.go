@@ -11,7 +11,7 @@ import (
 	"github.com/FadhilAF/perbakin-be/internal/util"
 )
 
-func (usecase *adminSuperUsecaseImpl) UpdateShooterImage(req model.UpdateShooterImageRequest) model.WebServiceResponse {
+func (usecase *adminSuperUsecaseImpl) UpdateShooterImage(req model.UpdateImageRequest) model.WebServiceResponse {
 	imagePath, err := usecase.Store.UpdateShooterImage(context.Background(), repositoryModel.UpdateShooterImageParams{
 		ID:        req.ID,
 		ImagePath: req.ImagePath,

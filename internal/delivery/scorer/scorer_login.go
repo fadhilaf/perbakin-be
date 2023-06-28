@@ -25,7 +25,7 @@ func (handler *scorerHandler) ScorerLogin(c *gin.Context) {
 	res := handler.Usecase.ScorerLogin(req)
 
 	if res.Status == http.StatusOK {
-		if scorer, ok := res.Data["scorer"].(model.Operator); ok {
+		if scorer, ok := res.Data["scorer"].(model.Scorer); ok {
 			util.SaveUserToSession(c, scorer.User.ID)
 			util.SetAuthStatusCookie(c, "scorer")
 		}

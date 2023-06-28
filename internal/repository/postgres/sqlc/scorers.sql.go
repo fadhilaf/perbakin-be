@@ -17,19 +17,20 @@ WITH added_user AS (
   VALUES ($2, $3, $4)
   RETURNING id, username, password, name, created_at, updated_at
 ), added_scorer AS (
-  INSERT INTO scorers (user_id, exam_id)
-  SELECT id, $1 FROM added_user
-  RETURNING id, user_id, exam_id
+  INSERT INTO scorers (user_id, exam_id, image_path)
+  SELECT id, $1, COALESCE($5::text,'default.png') FROM added_user
+  RETURNING id, user_id, exam_id, image_path
 )
-SELECT added_scorer.id, user_id, exam_id, username, name, created_at, updated_at FROM added_user
-INNER JOIN added_scorer ON added_user.id = user_id
+SELECT added_scorer.id, user_id, exam_id, username, name, image_path, created_at, updated_at 
+FROM added_user, added_scorer
 `
 
 type CreateScorerParams struct {
-	ExamID   pgtype.UUID
-	Username string
-	Password string
-	Name     string
+	ExamID    pgtype.UUID
+	Username  string
+	Password  string
+	Name      string
+	ImagePath pgtype.Text
 }
 
 type CreateScorerRow struct {
@@ -38,6 +39,7 @@ type CreateScorerRow struct {
 	ExamID    pgtype.UUID
 	Username  string
 	Name      string
+	ImagePath string
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
 }
@@ -49,6 +51,7 @@ func (q *Queries) CreateScorer(ctx context.Context, arg CreateScorerParams) (Cre
 		arg.Username,
 		arg.Password,
 		arg.Name,
+		arg.ImagePath,
 	)
 	var i CreateScorerRow
 	err := row.Scan(
@@ -57,6 +60,7 @@ func (q *Queries) CreateScorer(ctx context.Context, arg CreateScorerParams) (Cre
 		&i.ExamID,
 		&i.Username,
 		&i.Name,
+		&i.ImagePath,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -64,14 +68,15 @@ func (q *Queries) CreateScorer(ctx context.Context, arg CreateScorerParams) (Cre
 }
 
 const getAllScorers = `-- name: GetAllScorers :many
-SELECT exams.name AS exam, users.name AS name FROM scorers 
+SELECT exams.name AS exam, users.name AS name, image_path FROM scorers 
 INNER JOIN users ON scorers.user_id = users.id
 INNER JOIN exams ON scorers.exam_id = exams.id
 `
 
 type GetAllScorersRow struct {
-	Exam string
-	Name string
+	Exam      string
+	Name      string
+	ImagePath string
 }
 
 // untuk ngambil data display seluruh scorer (all role)
@@ -84,7 +89,7 @@ func (q *Queries) GetAllScorers(ctx context.Context) ([]GetAllScorersRow, error)
 	var items []GetAllScorersRow
 	for rows.Next() {
 		var i GetAllScorersRow
-		if err := rows.Scan(&i.Exam, &i.Name); err != nil {
+		if err := rows.Scan(&i.Exam, &i.Name, &i.ImagePath); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -96,7 +101,7 @@ func (q *Queries) GetAllScorers(ctx context.Context) ([]GetAllScorersRow, error)
 }
 
 const getScorerById = `-- name: GetScorerById :one
-SELECT scorers.id, user_id, exam_id, username, name, created_at, updated_at FROM scorers
+SELECT scorers.id, user_id, exam_id, username, name, image_path, created_at, updated_at FROM scorers
 INNER JOIN users ON scorers.user_id = users.id
 WHERE scorers.id = $1
 `
@@ -107,6 +112,7 @@ type GetScorerByIdRow struct {
 	ExamID    pgtype.UUID
 	Username  string
 	Name      string
+	ImagePath string
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
 }
@@ -121,6 +127,7 @@ func (q *Queries) GetScorerById(ctx context.Context, id pgtype.UUID) (GetScorerB
 		&i.ExamID,
 		&i.Username,
 		&i.Name,
+		&i.ImagePath,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -128,7 +135,7 @@ func (q *Queries) GetScorerById(ctx context.Context, id pgtype.UUID) (GetScorerB
 }
 
 const getScorerByUserId = `-- name: GetScorerByUserId :one
-SELECT scorers.id, user_id, exam_id, username, password, name, created_at, updated_at FROM users
+SELECT scorers.id, user_id, exam_id, username, name, image_path, created_at, updated_at FROM users
 INNER JOIN scorers ON scorers.user_id = users.id
 WHERE user_id = $1
 `
@@ -138,8 +145,8 @@ type GetScorerByUserIdRow struct {
 	UserID    pgtype.UUID
 	ExamID    pgtype.UUID
 	Username  string
-	Password  string
 	Name      string
+	ImagePath string
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
 }
@@ -153,8 +160,8 @@ func (q *Queries) GetScorerByUserId(ctx context.Context, userID pgtype.UUID) (Ge
 		&i.UserID,
 		&i.ExamID,
 		&i.Username,
-		&i.Password,
 		&i.Name,
+		&i.ImagePath,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -162,7 +169,7 @@ func (q *Queries) GetScorerByUserId(ctx context.Context, userID pgtype.UUID) (Ge
 }
 
 const getScorerByUsername = `-- name: GetScorerByUsername :one
-SELECT scorers.id, user_id, exam_id, username, password, users.name, active, users.created_at, users.updated_at FROM users
+SELECT scorers.id, user_id, exam_id, username, password, users.name, image_path, active, users.created_at, users.updated_at FROM users
 INNER JOIN scorers ON scorers.user_id = users.id
 INNER JOIN exams ON scorers.exam_id = exams.id
 WHERE username = $1
@@ -175,6 +182,7 @@ type GetScorerByUsernameRow struct {
 	Username  string
 	Password  string
 	Name      string
+	ImagePath string
 	Active    bool
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
@@ -191,6 +199,7 @@ func (q *Queries) GetScorerByUsername(ctx context.Context, username string) (Get
 		&i.Username,
 		&i.Password,
 		&i.Name,
+		&i.ImagePath,
 		&i.Active,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -246,14 +255,15 @@ func (q *Queries) GetScorerRelationByUserId(ctx context.Context, userID pgtype.U
 }
 
 const getScorersByExamId = `-- name: GetScorersByExamId :many
-SELECT scorers.id, name FROM scorers 
+SELECT scorers.id, name, image_path FROM scorers 
 INNER JOIN users ON scorers.user_id = users.id
 WHERE exam_id = $1
 `
 
 type GetScorersByExamIdRow struct {
-	ID   pgtype.UUID
-	Name string
+	ID        pgtype.UUID
+	Name      string
+	ImagePath string
 }
 
 // untuk ngambil data akun seluruh scorer dalam satu exam (admin-super role)
@@ -266,7 +276,7 @@ func (q *Queries) GetScorersByExamId(ctx context.Context, examID pgtype.UUID) ([
 	var items []GetScorersByExamIdRow
 	for rows.Next() {
 		var i GetScorersByExamIdRow
-		if err := rows.Scan(&i.ID, &i.Name); err != nil {
+		if err := rows.Scan(&i.ID, &i.Name, &i.ImagePath); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -280,25 +290,23 @@ func (q *Queries) GetScorersByExamId(ctx context.Context, examID pgtype.UUID) ([
 const updateScorer = `-- name: UpdateScorer :one
 WITH updated_user AS (
   UPDATE users 
-  SET username = $2, password = $3, name = $4, updated_at = NOW() 
+  SET username = $2, password = COALESCE($4::text,password), name = $3, updated_at = NOW() 
   WHERE users.id = (
     SELECT user_id FROM scorers 
     WHERE scorers.id = $1
   )
-  RETURNING id
+  RETURNING id, username, name, created_at, updated_at
 )
-SELECT scorers.id, user_id, exam_id, username, name, created_at, updated_at FROM scorers
-INNER JOIN users ON scorers.user_id = users.id
-WHERE user_id = (
-  SELECT id FROM updated_user
-)
+SELECT scorers.id, user_id, exam_id, username, name, image_path, created_at, updated_at FROM scorers
+INNER JOIN updated_user ON scorers.user_id = updated_user.id
+WHERE scorers.id = $1
 `
 
 type UpdateScorerParams struct {
 	ID       pgtype.UUID
 	Username string
-	Password string
 	Name     string
+	Password pgtype.Text
 }
 
 type UpdateScorerRow struct {
@@ -307,6 +315,7 @@ type UpdateScorerRow struct {
 	ExamID    pgtype.UUID
 	Username  string
 	Name      string
+	ImagePath string
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
 }
@@ -316,8 +325,8 @@ func (q *Queries) UpdateScorer(ctx context.Context, arg UpdateScorerParams) (Upd
 	row := q.db.QueryRow(ctx, updateScorer,
 		arg.ID,
 		arg.Username,
-		arg.Password,
 		arg.Name,
+		arg.Password,
 	)
 	var i UpdateScorerRow
 	err := row.Scan(
@@ -326,54 +335,37 @@ func (q *Queries) UpdateScorer(ctx context.Context, arg UpdateScorerParams) (Upd
 		&i.ExamID,
 		&i.Username,
 		&i.Name,
+		&i.ImagePath,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
 	return i, err
 }
 
-const updateScorerName = `-- name: UpdateScorerName :one
-UPDATE users 
-SET name = $2, updated_at = NOW() 
-WHERE user_id = (
-  SELECT user_id FROM scorers 
-  WHERE scorers.id = $1
+const updateScorerImage = `-- name: UpdateScorerImage :one
+WITH updated_user AS (
+  UPDATE users 
+  SET updated_at = NOW() 
+  WHERE users.id = (
+    SELECT user_id FROM scorers 
+    WHERE scorers.id = $1
+  )
 )
-RETURNING id
+UPDATE scorers
+SET image_path = $2
+WHERE scorers.id = $1
+RETURNING image_path
 `
 
-type UpdateScorerNameParams struct {
-	ID   pgtype.UUID
-	Name string
+type UpdateScorerImageParams struct {
+	ID        pgtype.UUID
+	ImagePath string
 }
 
-// low prio
-func (q *Queries) UpdateScorerName(ctx context.Context, arg UpdateScorerNameParams) (pgtype.UUID, error) {
-	row := q.db.QueryRow(ctx, updateScorerName, arg.ID, arg.Name)
-	var id pgtype.UUID
-	err := row.Scan(&id)
-	return id, err
-}
-
-const updateScorerPassword = `-- name: UpdateScorerPassword :one
-UPDATE users 
-SET password = $2, updated_at = NOW()
-WHERE user_id = (
-  SELECT user_id FROM scorers 
-  WHERE scorers.id = $1
-)
-RETURNING id
-`
-
-type UpdateScorerPasswordParams struct {
-	ID       pgtype.UUID
-	Password string
-}
-
-// low prio
-func (q *Queries) UpdateScorerPassword(ctx context.Context, arg UpdateScorerPasswordParams) (pgtype.UUID, error) {
-	row := q.db.QueryRow(ctx, updateScorerPassword, arg.ID, arg.Password)
-	var id pgtype.UUID
-	err := row.Scan(&id)
-	return id, err
+// untuk mengupdate foto scorer berdasarkan id (all role)
+func (q *Queries) UpdateScorerImage(ctx context.Context, arg UpdateScorerImageParams) (string, error) {
+	row := q.db.QueryRow(ctx, updateScorerImage, arg.ID, arg.ImagePath)
+	var image_path string
+	err := row.Scan(&image_path)
+	return image_path, err
 }

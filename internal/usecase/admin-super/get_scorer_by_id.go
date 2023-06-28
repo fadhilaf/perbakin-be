@@ -13,9 +13,10 @@ func (usecase *adminSuperUsecaseImpl) GetScorerById(req model.ByIdRequest) model
 	scorer, _ := usecase.Store.GetScorerById(context.Background(), req.ID)
 
 	return util.ToWebServiceResponse("Data scorer ditemukan", http.StatusOK, gin.H{
-		"scorer": model.Operator{
-			ID:     scorer.ID,
-			ExamID: scorer.ExamID,
+		"scorer": model.Scorer{
+			ID:        scorer.ID,
+			ExamID:    scorer.ExamID,
+			ImagePath: scorer.ImagePath,
 			User: model.User{
 				ID:        scorer.UserID,
 				Username:  scorer.Username,

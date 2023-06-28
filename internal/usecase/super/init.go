@@ -14,7 +14,7 @@ type SuperUsecase interface {
 
 	GetAdminRelationById(model.ByIdRequest) (model.OperatorRelation, error)
 
-	CreateAdmin(model.CreateOperatorRequest) model.WebServiceResponse
+	CreateAdmin(model.CreateAdminRequest) model.WebServiceResponse
 	GetAllAdmins() model.WebServiceResponse
 	GetAdminsByExamId(model.ByExamIdRequest) model.WebServiceResponse
 	GetAdminById(model.ByIdRequest) model.WebServiceResponse

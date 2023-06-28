@@ -60,7 +60,7 @@ WHERE admins.id = $1;
 -- name: UpdateAdmin :one
 WITH updated_user AS (
   UPDATE users 
-  SET username = $2, password = $3, name = $4, updated_at = NOW()
+  SET username = $2, password = COALESCE(sqlc.narg('password')::text,password), name = $3, updated_at = NOW()
   WHERE users.id = (
     SELECT user_id FROM admins 
     WHERE admins.id = $1
@@ -69,26 +69,4 @@ WITH updated_user AS (
 )
 SELECT admins.id, user_id, exam_id, username, name, created_at, updated_at FROM admins
 INNER JOIN users ON admins.user_id = users.id
-WHERE user_id = (
-  SELECT id FROM updated_user
-);
-
--- low prio
--- name: UpdateAdminName :one
-UPDATE users 
-SET name = $2, updated_at = NOW() 
-WHERE user_id = (
-  SELECT user_id FROM admins 
-  WHERE admins.id = $1
-)
-RETURNING id;
-
--- low prio
--- name: UpdateAdminPassword :one
-UPDATE users 
-SET password = $2, updated_at = NOW() 
-WHERE user_id = (
-  SELECT user_id FROM admins 
-  WHERE admins.id = $1
-)
-RETURNING id;
+WHERE admins.id = $1;

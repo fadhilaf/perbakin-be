@@ -4,6 +4,7 @@ import (
 	"github.com/FadhilAF/perbakin-be/internal/model"
 	"github.com/FadhilAF/perbakin-be/internal/util"
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 func (handler *superHandler) UpdateAdmin(c *gin.Context) {
@@ -15,7 +16,12 @@ func (handler *superHandler) UpdateAdmin(c *gin.Context) {
 		return
 	}
 
-	res := handler.Usecase.UpdateAdmin(model.UpdateOperatorRequest{ID: admin.ID, Body: req})
+	var passwordText pgtype.Text
+	if req.Password != "" {
+		passwordText.Scan(req.Password)
+	}
+
+	res := handler.Usecase.UpdateAdmin(model.UpdateOperatorRequest{ID: admin.ID, Username: req.Username, Password: passwordText, Name: req.Name})
 
 	c.JSON(res.Status, res)
 }

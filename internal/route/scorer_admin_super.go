@@ -11,8 +11,10 @@ func ScorerAdminSuperRoutes(adminExamRouter *gin.RouterGroup, delivery adminSupe
 	adminExamRouter.POST("/scorer", delivery.CreateScorer)
 
 	scorerRouter := adminExamRouter.Group("/scorer/:scorer_id", delivery.MustScorerMiddleware())
+
 	scorerRouter.GET("", delivery.GetScorerById)
 	scorerRouter.PUT("", delivery.UpdateScorer)
+	scorerRouter.PUT("/image", delivery.UpdateScorerImage)
 	scorerRouter.DELETE("", delivery.DeleteScorer)
 
 	return scorerRouter

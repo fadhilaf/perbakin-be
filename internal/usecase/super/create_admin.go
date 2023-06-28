@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (usecase *superUsecaseImpl) CreateAdmin(req model.CreateOperatorRequest) model.WebServiceResponse {
+func (usecase *superUsecaseImpl) CreateAdmin(req model.CreateAdminRequest) model.WebServiceResponse {
 	if _, err := usecase.Store.GetUserByUsername(context.Background(), req.Body.Username); err == nil {
 		return util.ToWebServiceResponse("Username sudah digunakan", http.StatusConflict, nil)
 	}
@@ -31,7 +31,7 @@ func (usecase *superUsecaseImpl) CreateAdmin(req model.CreateOperatorRequest) mo
 	}
 
 	return util.ToWebServiceResponse("Berhasil membuat admin", http.StatusCreated, gin.H{
-		"admin": model.Operator{
+		"admin": model.Admin{
 			ID:     admin.ID,
 			ExamID: admin.ExamID,
 			User: model.User{

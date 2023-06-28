@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (usecase *adminSuperUsecaseImpl) CreateScorer(req model.CreateOperatorRequest) model.WebServiceResponse {
+func (usecase *adminSuperUsecaseImpl) CreateScorer(req model.CreateScorerRequest) model.WebServiceResponse {
 	if _, err := usecase.Store.GetUserByUsername(context.Background(), req.Body.Username); err == nil {
 		return util.ToWebServiceResponse("Username sudah digunakan", http.StatusConflict, nil)
 	}
@@ -21,19 +21,21 @@ func (usecase *adminSuperUsecaseImpl) CreateScorer(req model.CreateOperatorReque
 	}
 
 	scorer, err := usecase.Store.CreateScorer(context.Background(), repositoryModel.CreateScorerParams{
-		ExamID:   req.ExamID,
-		Username: req.Body.Username,
-		Password: passwordHash,
-		Name:     req.Body.Name,
+		ExamID:    req.ExamID,
+		Username:  req.Body.Username,
+		Password:  passwordHash,
+		Name:      req.Body.Name,
+		ImagePath: req.ImagePath,
 	})
 	if err != nil {
 		return util.ToWebServiceResponse("Gagal membuat penguji: "+err.Error(), http.StatusInternalServerError, nil)
 	}
 
 	return util.ToWebServiceResponse("Berhasil membuat penguji", http.StatusCreated, gin.H{
-		"scorer": model.Operator{
-			ID:     scorer.ID,
-			ExamID: scorer.ExamID,
+		"scorer": model.Scorer{
+			ID:        scorer.ID,
+			ExamID:    scorer.ExamID,
+			ImagePath: scorer.ImagePath,
 			User: model.User{
 				ID:        scorer.UserID,
 				Username:  scorer.Username,

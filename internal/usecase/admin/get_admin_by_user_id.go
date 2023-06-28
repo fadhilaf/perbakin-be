@@ -16,7 +16,7 @@ func (usecase *adminUsecaseImpl) GetAdminByUserId(req model.UserByUserIdRequest)
 	}
 
 	return util.ToWebServiceResponse("Data admin ditemukan", http.StatusOK, gin.H{
-		"admin": model.Operator{
+		"admin": model.Admin{
 			ID:     admin.ID,
 			ExamID: admin.ExamID,
 			User: model.User{

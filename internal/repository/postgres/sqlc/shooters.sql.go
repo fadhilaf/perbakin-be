@@ -278,7 +278,7 @@ const updateShooterImage = `-- name: UpdateShooterImage :one
 UPDATE shooters 
 SET image_path = $2, updated_at = NOW()
 WHERE id = $1
-RETURNING id, scorer_id, name, image_path, province, club, created_at, updated_at
+RETURNING image_path
 `
 
 type UpdateShooterImageParams struct {
@@ -287,18 +287,9 @@ type UpdateShooterImageParams struct {
 }
 
 // untuk mengupdate foto shooter berdasarkan id (admin-super role)
-func (q *Queries) UpdateShooterImage(ctx context.Context, arg UpdateShooterImageParams) (Shooter, error) {
+func (q *Queries) UpdateShooterImage(ctx context.Context, arg UpdateShooterImageParams) (string, error) {
 	row := q.db.QueryRow(ctx, updateShooterImage, arg.ID, arg.ImagePath)
-	var i Shooter
-	err := row.Scan(
-		&i.ID,
-		&i.ScorerID,
-		&i.Name,
-		&i.ImagePath,
-		&i.Province,
-		&i.Club,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-	)
-	return i, err
+	var image_path string
+	err := row.Scan(&image_path)
+	return image_path, err
 }

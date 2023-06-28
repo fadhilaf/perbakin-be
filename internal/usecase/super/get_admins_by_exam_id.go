@@ -15,9 +15,9 @@ func (usecase *superUsecaseImpl) GetAdminsByExamId(req model.ByExamIdRequest) mo
 		return util.ToWebServiceResponse("Gagal mendapatkan data admin: "+err.Error(), http.StatusInternalServerError, nil)
 	}
 
-	var adminsData []model.OperatorDisplayData
+	var adminsData []model.AdminDisplayData
 	for _, admin := range admins {
-		adminsData = append(adminsData, model.OperatorDisplayData{
+		adminsData = append(adminsData, model.AdminDisplayData{
 			ID:   admin.ID,
 			Name: admin.Name,
 		})

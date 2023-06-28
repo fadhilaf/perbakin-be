@@ -79,11 +79,6 @@ type UpdateShooterBodyRequest struct {
 	Club     string      `json:"club" binding:"required"`
 }
 
-type UpdateShooterImageRequest struct {
-	ID        pgtype.UUID
-	ImagePath string
-}
-
 type UpdateShooterRequest struct {
 	ID     pgtype.UUID
 	ExamID pgtype.UUID

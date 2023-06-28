@@ -276,7 +276,7 @@ func (q *Queries) GetAllAdmins(ctx context.Context) ([]GetAllAdminsRow, error) {
 const updateAdmin = `-- name: UpdateAdmin :one
 WITH updated_user AS (
   UPDATE users 
-  SET username = $2, password = $3, name = $4, updated_at = NOW()
+  SET username = $2, password = COALESCE($4::text,password), name = $3, updated_at = NOW()
   WHERE users.id = (
     SELECT user_id FROM admins 
     WHERE admins.id = $1
@@ -285,16 +285,14 @@ WITH updated_user AS (
 )
 SELECT admins.id, user_id, exam_id, username, name, created_at, updated_at FROM admins
 INNER JOIN users ON admins.user_id = users.id
-WHERE user_id = (
-  SELECT id FROM updated_user
-)
+WHERE admins.id = $1
 `
 
 type UpdateAdminParams struct {
 	ID       pgtype.UUID
 	Username string
-	Password string
 	Name     string
+	Password pgtype.Text
 }
 
 type UpdateAdminRow struct {
@@ -312,8 +310,8 @@ func (q *Queries) UpdateAdmin(ctx context.Context, arg UpdateAdminParams) (Updat
 	row := q.db.QueryRow(ctx, updateAdmin,
 		arg.ID,
 		arg.Username,
-		arg.Password,
 		arg.Name,
+		arg.Password,
 	)
 	var i UpdateAdminRow
 	err := row.Scan(
@@ -326,50 +324,4 @@ func (q *Queries) UpdateAdmin(ctx context.Context, arg UpdateAdminParams) (Updat
 		&i.UpdatedAt,
 	)
 	return i, err
-}
-
-const updateAdminName = `-- name: UpdateAdminName :one
-UPDATE users 
-SET name = $2, updated_at = NOW() 
-WHERE user_id = (
-  SELECT user_id FROM admins 
-  WHERE admins.id = $1
-)
-RETURNING id
-`
-
-type UpdateAdminNameParams struct {
-	ID   pgtype.UUID
-	Name string
-}
-
-// low prio
-func (q *Queries) UpdateAdminName(ctx context.Context, arg UpdateAdminNameParams) (pgtype.UUID, error) {
-	row := q.db.QueryRow(ctx, updateAdminName, arg.ID, arg.Name)
-	var id pgtype.UUID
-	err := row.Scan(&id)
-	return id, err
-}
-
-const updateAdminPassword = `-- name: UpdateAdminPassword :one
-UPDATE users 
-SET password = $2, updated_at = NOW() 
-WHERE user_id = (
-  SELECT user_id FROM admins 
-  WHERE admins.id = $1
-)
-RETURNING id
-`
-
-type UpdateAdminPasswordParams struct {
-	ID       pgtype.UUID
-	Password string
-}
-
-// low prio
-func (q *Queries) UpdateAdminPassword(ctx context.Context, arg UpdateAdminPasswordParams) (pgtype.UUID, error) {
-	row := q.db.QueryRow(ctx, updateAdminPassword, arg.ID, arg.Password)
-	var id pgtype.UUID
-	err := row.Scan(&id)
-	return id, err
 }
