@@ -19,10 +19,9 @@ func CheckNumbers(c *gin.Context, stageType model.StageList, numbers ...[]int) b
 	return true
 }
 
-func CheckCheckmarks(c *gin.Context, arr []bool, stageType model.StageList) bool {
+func CheckCheckmarksStage123456(c *gin.Context, checkmarks []bool, stageType model.StageList) bool {
 	stage := make(map[model.StageList]int)
-	stage[model.Stage0Type] = 3 //{jumlah centang}}
-	stage[model.Stage1Type] = 6
+	stage[model.Stage1Type] = 6 //{jumlah centang}}
 	stage[model.Stage2Type] = 3
 	stage[model.Stage3Type] = 6
 	stage[model.Stage4Type] = 3
@@ -32,7 +31,7 @@ func CheckCheckmarks(c *gin.Context, arr []bool, stageType model.StageList) bool
 	// Count the number of true values
 	numTrue := 0
 
-	for _, value := range arr {
+	for _, value := range checkmarks {
 		if value {
 			numTrue++
 		}
@@ -53,12 +52,12 @@ func CheckScores(c *gin.Context, arr []int, stageType model.StageList) bool {
 	//nyimpen tipe tipe stage
 	stage := make(map[model.StageList]int)
 	stage[model.Stage0Type] = 10 //{jumlah tembakan}}
-	stage[model.Stage1Type] = 10
-	stage[model.Stage2Type] = 10
-	stage[model.Stage3Type] = 10
-	stage[model.Stage4Type] = 10
-	stage[model.Stage5Type] = 10
-	stage[model.Stage6Type] = 10
+	stage[model.Stage1Type] = 2
+	stage[model.Stage2Type] = 2
+	stage[model.Stage3Type] = 2
+	stage[model.Stage4Type] = 2
+	stage[model.Stage5Type] = 2
+	stage[model.Stage6Type] = 2
 
 	// Count the number of true values
 	sum := 0

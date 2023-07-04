@@ -50,6 +50,36 @@ SELECT
 FROM stage0_results
 WHERE id = $1;
 
+-- name: GetStage0Series1 :one
+SELECT 
+  series1
+FROM stage0_results
+WHERE id = $1;
+
+-- name: GetStage0Series2 :one
+SELECT 
+  series2
+FROM stage0_results
+WHERE id = $1;
+
+-- name: GetStage0Series3 :one
+SELECT 
+  series3
+FROM stage0_results
+WHERE id = $1;
+
+-- name: GetStage0Series4 :one
+SELECT 
+  series4
+FROM stage0_results
+WHERE id = $1;
+
+-- name: GetStage0Series5 :one
+SELECT 
+  series5
+FROM stage0_results
+WHERE id = $1;
+
 -- name: FinishStage0 :exec
 WITH updated_stage0 AS (
   UPDATE stage0_results

@@ -27,9 +27,9 @@ func (handler *adminSuperHandler) UpdateStage0(c *gin.Context) {
 	}
 
 	//check checkmarks
-	if ok := util.CheckCheckmarks(c, req.Checkmarks, model.Stage0Type); !ok {
-		return
-	}
+	// if ok := util.CheckCheckmarks(c, req.Checkmarks, model.Stage0Type); !ok {
+	// 	return
+	// }
 
 	res := handler.Usecase.UpdateStage0(model.UpdateStage0Request{
 		ID:         stage0.ID,

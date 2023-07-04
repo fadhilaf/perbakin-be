@@ -7,9 +7,9 @@ import (
 )
 
 type Stage5Numbers struct {
-	ScoresA  []int `json:"scores_a" binding:"required,len=3"`
-	ScoresB  []int `json:"scores_b" binding:"required,len=3"`
-	ScoresC  []int `json:"scores_c" binding:"required,len=3"`
+	ScoresA  []int `json:"scores_a" binding:"required,len=3,dive,oneof=0 1 2"`
+	ScoresB  []int `json:"scores_b" binding:"required,len=3,dive,oneof=0 1 2"`
+	ScoresC  []int `json:"scores_c" binding:"required,len=3,dive,oneof=0 1 2"`
 	Duration []int `json:"duration" binding:"required,len=3,dive,lte=99,gte=0"`
 }
 

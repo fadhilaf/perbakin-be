@@ -7,7 +7,7 @@ import (
 )
 
 type Stage123Numbers struct {
-	Scores   []int `json:"scores" binding:"required,len=3"`
+	Scores   []int `json:"scores" binding:"required,len=3,dive,oneof=0 1 2"`
 	Duration []int `json:"duration" binding:"required,len=3,dive,lte=99,gte=0"`
 }
 

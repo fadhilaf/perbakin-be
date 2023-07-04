@@ -143,6 +143,76 @@ func (q *Queries) GetStage0RelationByResultId(ctx context.Context, resultID pgty
 	return i, err
 }
 
+const getStage0Series1 = `-- name: GetStage0Series1 :one
+SELECT 
+  series1
+FROM stage0_results
+WHERE id = $1
+`
+
+func (q *Queries) GetStage0Series1(ctx context.Context, id pgtype.UUID) (string, error) {
+	row := q.db.QueryRow(ctx, getStage0Series1, id)
+	var series1 string
+	err := row.Scan(&series1)
+	return series1, err
+}
+
+const getStage0Series2 = `-- name: GetStage0Series2 :one
+SELECT 
+  series2
+FROM stage0_results
+WHERE id = $1
+`
+
+func (q *Queries) GetStage0Series2(ctx context.Context, id pgtype.UUID) (string, error) {
+	row := q.db.QueryRow(ctx, getStage0Series2, id)
+	var series2 string
+	err := row.Scan(&series2)
+	return series2, err
+}
+
+const getStage0Series3 = `-- name: GetStage0Series3 :one
+SELECT 
+  series3
+FROM stage0_results
+WHERE id = $1
+`
+
+func (q *Queries) GetStage0Series3(ctx context.Context, id pgtype.UUID) (string, error) {
+	row := q.db.QueryRow(ctx, getStage0Series3, id)
+	var series3 string
+	err := row.Scan(&series3)
+	return series3, err
+}
+
+const getStage0Series4 = `-- name: GetStage0Series4 :one
+SELECT 
+  series4
+FROM stage0_results
+WHERE id = $1
+`
+
+func (q *Queries) GetStage0Series4(ctx context.Context, id pgtype.UUID) (string, error) {
+	row := q.db.QueryRow(ctx, getStage0Series4, id)
+	var series4 string
+	err := row.Scan(&series4)
+	return series4, err
+}
+
+const getStage0Series5 = `-- name: GetStage0Series5 :one
+SELECT 
+  series5
+FROM stage0_results
+WHERE id = $1
+`
+
+func (q *Queries) GetStage0Series5(ctx context.Context, id pgtype.UUID) (string, error) {
+	row := q.db.QueryRow(ctx, getStage0Series5, id)
+	var series5 string
+	err := row.Scan(&series5)
+	return series5, err
+}
+
 const getStage0Status = `-- name: GetStage0Status :one
 SELECT 
   status
