@@ -16,9 +16,9 @@ func (handler *scorerHandler) UpdateStage0Checkmarks(c *gin.Context) {
 	}
 
 	//validate checkmarks
-	// if ok := util.CheckCheckmarks(c, req.Checkmarks, model.Stage0Type); !ok {
-	// 	return
-	// }
+	if ok := util.CheckCheckmarks(c, req.Checkmarks, model.Stage0Type); !ok {
+		return
+	}
 
 	res := handler.Usecase.UpdateStage0Checkmarks(model.UpdateStage0CheckmarksRequest{ID: stage0.ID, Checkmarks: util.BoolArrayToCheckmarks(req.Checkmarks)})
 

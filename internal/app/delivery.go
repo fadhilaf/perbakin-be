@@ -21,9 +21,9 @@ func (app *App) initDelivery() {
 
 	deliveries.super = superDelivery.NewSuperDelivery(app.usecase.super)
 	deliveries.admin = adminDelivery.NewAdminDelivery(app.usecase.admin)
-	deliveries.scorer = scorerDelivery.NewScorerDelivery(app.usecase.scorer)
+	deliveries.scorer = scorerDelivery.NewScorerDelivery(app.usecase.scorer, app.usecase.all)
 
-	deliveries.adminSuper = adminSuperDelivery.NewAdminSuperDelivery(app.usecase.adminSuper)
+	deliveries.adminSuper = adminSuperDelivery.NewAdminSuperDelivery(app.usecase.adminSuper, app.usecase.all)
 	deliveries.all = allDelivery.NewAllDelivery(app.usecase.all)
 
 	app.delivery = deliveries
