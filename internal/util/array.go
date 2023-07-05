@@ -21,7 +21,7 @@ func CheckNumbers(c *gin.Context, stageType model.StageList, numbers ...[]int) b
 
 func CheckCheckmarksStage123456(c *gin.Context, checkmarks []bool, stageType model.StageList) bool {
 	stage := make(map[model.StageList]int)
-	stage[model.Stage1Type] = 6 //{jumlah centang}}
+	stage[model.Stage1Type] = 6 //{max jumlah centang}}
 	stage[model.Stage2Type] = 3
 	stage[model.Stage3Type] = 6
 	stage[model.Stage4Type] = 3
