@@ -52,6 +52,16 @@ type UpdateStage0Request struct {
 	Checkmarks string
 }
 
+type UpdateStage0AllSeriesRequest struct {
+	ID      pgtype.UUID
+	Status  string
+	Series1 string
+	Series2 string
+	Series3 string
+	Series4 string
+	Series5 string
+}
+
 type UpdateStage0Response struct {
 	ID         pgtype.UUID `json:"id"`
 	ResultID   pgtype.UUID `json:"result_id"`
@@ -64,6 +74,19 @@ type UpdateStage0Response struct {
 	Checkmarks []bool      `json:"checkmarks"`
 	CreatedAt  time.Time   `json:"created_at"`
 	UpdatedAt  time.Time   `json:"updated_at"`
+}
+
+type UpdateStage0AllSeriesResponse struct {
+	ID        pgtype.UUID `json:"id"`
+	ResultID  pgtype.UUID `json:"result_id"`
+	Status    string      `json:"status"`
+	Series1   []int       `json:"series_1"`
+	Series2   []int       `json:"series_2"`
+	Series3   []int       `json:"series_3"`
+	Series4   []int       `json:"series_4"`
+	Series5   []int       `json:"series_5"`
+	CreatedAt time.Time   `json:"created_at"`
+	UpdatedAt time.Time   `json:"updated_at"`
 }
 
 type UpdateStageSignsResponse struct {

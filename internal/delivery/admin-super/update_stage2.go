@@ -41,11 +41,11 @@ func (handler *adminSuperHandler) UpdateStage2(c *gin.Context) {
 		}
 
 		//check checkmarks try 1
-		if ok := util.CheckCheckmarksStage123456(c, req.Try1.Checkmarks, model.Stage2Type); !ok {
+		if ok := util.CheckCheckmarks(c, req.Try1.Checkmarks, model.Stage2Type); !ok {
 			return
 		}
 		//check checkmarks try 2
-		if ok := util.CheckCheckmarksStage123456(c, req.Try2.Checkmarks, model.Stage2Type); !ok {
+		if ok := util.CheckCheckmarks(c, req.Try2.Checkmarks, model.Stage2Type); !ok {
 			return
 		}
 
@@ -94,7 +94,7 @@ func (handler *adminSuperHandler) UpdateStage2(c *gin.Context) {
 		}
 
 		//check checkmarks
-		if ok := util.CheckCheckmarksStage123456(c, req.Try1.Checkmarks, model.Stage2Type); !ok {
+		if ok := util.CheckCheckmarks(c, req.Try1.Checkmarks, model.Stage2Type); !ok {
 			return
 		}
 

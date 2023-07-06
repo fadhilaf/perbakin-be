@@ -17,7 +17,7 @@ func (handler *scorerHandler) UpdateStage2Checkmarks(c *gin.Context) {
 	}
 
 	//validate checkmarks
-	if ok := util.CheckCheckmarksStage123456(c, req.Checkmarks, model.Stage2Type); !ok {
+	if ok := util.CheckCheckmarks(c, req.Checkmarks, model.Stage2Type); !ok {
 		return
 	}
 

@@ -27,7 +27,13 @@ func (handler *adminSuperHandler) UpdateStage0(c *gin.Context) {
 	}
 
 	//check checkmarks
-	if ok := handler.UtilUsecase.CheckSeriesuMinimumCheckmarkScore(c, stage0.ID, req.Checkmarks, model.Stage0Type); !ok {
+	if ok := util.CheckCheckmarksAmountAndSeriesMinimumScoreWithSeries(c, stage0.ID, req.Checkmarks, [][]int{
+		req.Series1,
+		req.Series2,
+		req.Series3,
+		req.Series4,
+		req.Series5,
+	}, model.Stage0Type); !ok {
 		return
 	}
 

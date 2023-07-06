@@ -42,3 +42,11 @@ const (
 	Stage6TypeString           StageListString = "6"
 	AllStageFinishedTypeString StageListString = "7"
 )
+
+var CheckmarksScoreCheckParameter map[StageList][2]int
+
+func init() {
+
+	CheckmarksScoreCheckParameter = make(map[StageList][2]int)
+	CheckmarksScoreCheckParameter[Stage0Type] = [2]int{3, 70} //{max jumlah centang, minimum total nilai per seri}
+}

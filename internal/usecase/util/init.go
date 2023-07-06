@@ -8,7 +8,7 @@ import (
 )
 
 type UtilUsecase interface {
-	CheckSeriesuMinimumCheckmarkScore(c *gin.Context, ID pgtype.UUID, checkmarks []bool, stageType model.StageList) bool
+	CheckCheckmarkAmountAndSeriesMinimumScore(c *gin.Context, ID pgtype.UUID, checkmarks []bool, stageType model.StageList) bool
 }
 
 var _ UtilUsecase = &utilUsecaseImpl{}

@@ -16,7 +16,7 @@ func (handler *scorerHandler) UpdateStage0Checkmarks(c *gin.Context) {
 	}
 
 	//validate checkmarks
-	if ok := handler.UtilUsecase.CheckSeriesuMinimumCheckmarkScore(c, stage0.ID, req.Checkmarks, model.Stage0Type); !ok {
+	if ok := handler.UtilUsecase.CheckCheckmarkAmountAndSeriesMinimumScore(c, stage0.ID, req.Checkmarks, model.Stage0Type); !ok {
 		return
 	}
 
