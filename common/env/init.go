@@ -16,7 +16,6 @@ const (
 type Config struct {
 	AppHost       string `mapstructure:"APP_HOST"`
 	AppPort       string `mapstructure:"APP_PORT"`
-	ClientDomain  string `mapstructure:"CLIENT_DOMAIN"`
 	PostgresDSN   string `mapstructure:"DB_CONNECTION_URL"`
 	Env           Env    `mapstructure:"ENV"`
 	AllowedOrigin string `mapstructure:"ORIGIN"`
@@ -34,7 +33,6 @@ func New(filePath string) Config {
 
 	viper.SetDefault("APP_HOST", "0.0.0.0")
 	viper.SetDefault("APP_PORT", "8000")
-	viper.SetDefault("CLIENT_DOMAIN", "localhost")
 	viper.SetDefault("ENV", EnvDev)
 	viper.SetDefault("ORIGIN", "http://localhost:5173")
 	viper.Unmarshal(&config)
