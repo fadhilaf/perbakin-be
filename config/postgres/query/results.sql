@@ -9,7 +9,8 @@ RETURNING id, shooter_id, failed, stage, created_at, updated_at;
 SELECT shooters.id, shooters.name, shooters.province, shooters.club, results.failed, results.stage
 FROM results 
 JOIN shooters ON results.shooter_id = shooters.id 
-JOIN exams ON shooters.exam_id = exams.id
+JOIN scorers ON shooters.scorer_id = scorers.id
+JOIN exams ON scorers.exam_id = exams.id
 WHERE exams.id = $1;
 
 -- (all role)
