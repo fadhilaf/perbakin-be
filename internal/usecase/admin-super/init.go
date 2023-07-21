@@ -22,6 +22,7 @@ type AdminSuperUsecase interface {
 	UpdateShooterImage(model.UpdateImageRequest) model.WebServiceResponse
 	DeleteShooter(model.ByIdRequest) model.WebServiceResponse
 
+	GetResultsByExamId(model.ByExamIdRequest) model.WebServiceResponse
 	UpdateResult(model.UpdateResultRequest) model.WebServiceResponse
 	UpdateResultStage(model.UpdateResultStageRequest) bool
 	DeleteResult(model.ByIdRequest) model.WebServiceResponse

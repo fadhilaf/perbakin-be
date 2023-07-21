@@ -15,6 +15,7 @@ type AllUsecase interface {
 
 	GetResultRelationByShooterId(model.ByShooterIdRequest) (model.ResultRelationAndStatus, error)
 	GetResultById(model.ByIdRequest) model.WebServiceResponse
+	GetResultsByScorerId(model.ByScorerIdRequest) model.WebServiceResponse
 
 	CreateStage0(model.ByResultIdRequest) model.WebServiceResponse
 

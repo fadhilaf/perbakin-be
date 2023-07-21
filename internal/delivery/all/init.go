@@ -16,6 +16,7 @@ type AllDelivery interface {
 
 	MustResultMiddleware() gin.HandlerFunc
 	GetResultById(c *gin.Context)
+	GetResultsByScorerId(c *gin.Context)
 
 	CreateStage0(c *gin.Context)
 

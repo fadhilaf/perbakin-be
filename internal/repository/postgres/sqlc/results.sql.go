@@ -88,6 +88,95 @@ func (q *Queries) GetResultRelationAndStatusByShooterId(ctx context.Context, sho
 	return i, err
 }
 
+const getResultsByExamId = `-- name: GetResultsByExamId :many
+SELECT shooters.id, shooters.name, shooters.province, shooters.club, results.failed, results.stage
+FROM results 
+JOIN shooters ON results.shooter_id = shooters.id 
+JOIN exams ON shooters.exam_id = exams.id
+WHERE exams.id = $1
+`
+
+type GetResultsByExamIdRow struct {
+	ID       pgtype.UUID
+	Name     string
+	Province string
+	Club     string
+	Failed   bool
+	Stage    Stages
+}
+
+// (admin-super role)
+func (q *Queries) GetResultsByExamId(ctx context.Context, id pgtype.UUID) ([]GetResultsByExamIdRow, error) {
+	rows, err := q.db.Query(ctx, getResultsByExamId, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetResultsByExamIdRow
+	for rows.Next() {
+		var i GetResultsByExamIdRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Province,
+			&i.Club,
+			&i.Failed,
+			&i.Stage,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getResultsByScorerId = `-- name: GetResultsByScorerId :many
+SELECT shooters.id, shooters.name, shooters.province, shooters.club, results.failed, results.stage 
+FROM results 
+JOIN shooters ON results.shooter_id = shooters.id 
+WHERE shooters.scorer_id = $1
+`
+
+type GetResultsByScorerIdRow struct {
+	ID       pgtype.UUID
+	Name     string
+	Province string
+	Club     string
+	Failed   bool
+	Stage    Stages
+}
+
+// (all role)
+func (q *Queries) GetResultsByScorerId(ctx context.Context, scorerID pgtype.UUID) ([]GetResultsByScorerIdRow, error) {
+	rows, err := q.db.Query(ctx, getResultsByScorerId, scorerID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetResultsByScorerIdRow
+	for rows.Next() {
+		var i GetResultsByScorerIdRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Province,
+			&i.Club,
+			&i.Failed,
+			&i.Stage,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateResult = `-- name: UpdateResult :one
 UPDATE results 
 SET failed = $2, stage = $3, updated_at = NOW()

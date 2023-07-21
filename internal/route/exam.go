@@ -10,4 +10,5 @@ import (
 func ExamAdminSuperRoutes(adminExamRouter *gin.RouterGroup, delivery adminSuperDelivery.AdminSuperDelivery) {
 	adminExamRouter.GET("/scorer", delivery.GetScorersByExamId)
 	adminExamRouter.GET("/shooter", delivery.GetShootersByExamId)
+	adminExamRouter.GET("/result", delivery.GetResultsByExamId)
 }

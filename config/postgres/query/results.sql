@@ -4,6 +4,21 @@ INSERT INTO results (shooter_id)
 VALUES ($1)
 RETURNING id, shooter_id, failed, stage, created_at, updated_at;
 
+-- (admin-super role)
+-- name: GetResultsByExamId :many
+SELECT shooters.id, shooters.name, shooters.province, shooters.club, results.failed, results.stage
+FROM results 
+JOIN shooters ON results.shooter_id = shooters.id 
+JOIN exams ON shooters.exam_id = exams.id
+WHERE exams.id = $1;
+
+-- (all role)
+-- name: GetResultsByScorerId :many
+SELECT shooters.id, shooters.name, shooters.province, shooters.club, results.failed, results.stage 
+FROM results 
+JOIN shooters ON results.shooter_id = shooters.id 
+WHERE shooters.scorer_id = $1; 
+
 -- name: GetResultById :one
 SELECT id, shooter_id, failed, stage, created_at, updated_at
 FROM results

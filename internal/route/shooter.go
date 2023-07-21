@@ -10,6 +10,7 @@ import (
 // for scorerRouter
 func ShooterAllRoutes(scorerRouter *gin.RouterGroup, delivery allDelivery.AllDelivery) *gin.RouterGroup {
 	scorerRouter.GET("/shooter", delivery.GetShootersByScorerId)
+	scorerRouter.GET("/result", delivery.GetResultsByScorerId)
 
 	shooterRouter := scorerRouter.Group("/shooter/:shooter_id", delivery.MustShooterMiddleware())
 	shooterRouter.GET("", delivery.GetShooterById)

@@ -28,6 +28,7 @@ type AdminSuperDelivery interface {
 	UpdateShooterImage(c *gin.Context)
 	DeleteShooter(c *gin.Context)
 
+	GetResultsByExamId(c *gin.Context)
 	UpdateResult(c *gin.Context)
 	DeleteResult(c *gin.Context)
 

@@ -22,6 +22,15 @@ type ResultRelationAndStatus struct {
 	Stage     string      `json:"stage"`
 }
 
+type ResultAndShooter struct {
+	ID       pgtype.UUID `json:"id"`
+	Name     string      `json:"name"`
+	Province string      `json:"province"`
+	Club     string      `json:"club"`
+	Failed   bool        `json:"failed"`
+	Stage    string      `json:"stage"`
+}
+
 type ResultStatus struct {
 	Failed bool   `json:"failed"`
 	Stage  string `json:"stage"`
