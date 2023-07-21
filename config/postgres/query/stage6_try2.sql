@@ -44,7 +44,7 @@ WITH updated_stage6_results AS (
 UPDATE stage46_tries
 SET 
   checkmarks = $2
-WHERE id = (SELECT try2_id FROM stage6_results)
+WHERE id = updated_stage6_results.try2_id
 RETURNING checkmarks;
 
 -- (scorer role) 
@@ -58,7 +58,7 @@ WITH updated_stage6_results AS (
 )
 UPDATE stage46_tries
   SET status = $2
-WHERE id = (SELECT try2_id FROM stage6_results);
+WHERE id = updated_stage6_results.try2_id;
 
 
 -- (scorer role)
@@ -110,7 +110,7 @@ WITH updated_stage6_results AS (
 )
 UPDATE stage46_tries
 SET no1 = $2
-WHERE id = (SELECT try2_id FROM stage6_results)
+WHERE id = updated_stage6_results.try2_id
 RETURNING no1;
 
 -- (scorer role) 
@@ -124,7 +124,7 @@ WITH updated_stage6_results AS (
 )
 UPDATE stage46_tries
 SET no2 = $2
-WHERE id = (SELECT try2_id FROM stage6_results)
+WHERE id = updated_stage6_results.try2_id
 RETURNING no2;
 
 -- (scorer role) 
@@ -138,7 +138,7 @@ WITH updated_stage6_results AS (
 ) 
 UPDATE stage46_tries 
 SET no3 = $2 
-WHERE id = (SELECT try2_id FROM stage6_results)
+WHERE id = updated_stage6_results.try2_id
 RETURNING no3;
 
 -- (admin-super role)
@@ -175,7 +175,7 @@ WITH updated_stage6_results AS (
     no2 = sqlc.arg(try1_no2),
     no3 = sqlc.arg(try1_no3),
     checkmarks = sqlc.arg(try1_checkmarks)
-  WHERE id = (SELECT try1_id FROM stage6_results)
+  WHERE id = updated_stage6_results.try1_id
   RETURNING 
     status,
     no1,
@@ -190,7 +190,7 @@ WITH updated_stage6_results AS (
     no2 = sqlc.arg(try2_no2),
     no3 = sqlc.arg(try2_no3),
     checkmarks = sqlc.arg(try2_checkmarks)
-  WHERE id = (SELECT try2_id FROM stage6_results WHERE try2_id IS NOT NULL)
+  WHERE id = (SELECT try2_id FROM updated_stage6_results WHERE try2_id IS NOT NULL)
   RETURNING 
     status,
     no1,

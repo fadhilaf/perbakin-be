@@ -26,7 +26,7 @@ WITH added_stage2_try2 AS (
 ), updated_stage2_try1 AS (
   UPDATE stage2_tries
   SET status = '4'
-  WHERE id = (SELECT try1_id FROM updated_stage2_results)
+  WHERE id = updated_stage2_results.try1_id
 )
 SELECT 
   is_try2,
@@ -76,7 +76,7 @@ WITH deleted_stage2_try2 AS (
 )
 UPDATE stage2_tries
 SET status = '3'
-WHERE stage2_tries.id = (SELECT try1_id FROM updated_stage2_results)
+WHERE stage2_tries.id = updated_stage2_results.try1_id
 `
 
 // (admin-super role)
@@ -116,7 +116,7 @@ WITH updated_stage2_results AS (
     no2 = $4,
     no3 = $5,
     checkmarks = $6
-  WHERE id = (SELECT try1_id FROM stage2_results)
+  WHERE id = updated_stage2_results.try1_id
   RETURNING 
     status,
     no1,
@@ -131,7 +131,7 @@ WITH updated_stage2_results AS (
     no2 = $9,
     no3 = $10,
     checkmarks = $11
-  WHERE id = (SELECT try2_id FROM stage2_results WHERE try2_id IS NOT NULL)
+  WHERE id = (SELECT try2_id FROM updated_stage2_results WHERE try2_id IS NOT NULL)
   RETURNING 
     status,
     no1,
@@ -225,7 +225,7 @@ WITH updated_stage2_results AS (
 UPDATE stage2_tries
 SET 
   checkmarks = $2
-WHERE id = (SELECT try2_id FROM stage2_results)
+WHERE id = updated_stage2_results.try2_id
 RETURNING checkmarks
 `
 
@@ -314,7 +314,7 @@ WITH updated_stage2_results AS (
 )
 UPDATE stage2_tries
   SET status = $2
-WHERE id = (SELECT try2_id FROM stage2_results)
+WHERE id = updated_stage2_results.try2_id
 `
 
 type UpdateStage2try2NextNoParams struct {
@@ -338,7 +338,7 @@ WITH updated_stage2_results AS (
 )
 UPDATE stage2_tries
 SET no1 = $2
-WHERE id = (SELECT try2_id FROM stage2_results)
+WHERE id = updated_stage2_results.try2_id
 RETURNING no1
 `
 
@@ -365,7 +365,7 @@ WITH updated_stage2_results AS (
 )
 UPDATE stage2_tries
 SET no2 = $2
-WHERE id = (SELECT try2_id FROM stage2_results)
+WHERE id = updated_stage2_results.try2_id
 RETURNING no2
 `
 
@@ -392,7 +392,7 @@ WITH updated_stage2_results AS (
 ) 
 UPDATE stage2_tries 
 SET no3 = $2 
-WHERE id = (SELECT try2_id FROM stage2_results)
+WHERE id = updated_stage2_results.try2_id
 RETURNING no3
 `
 

@@ -13,7 +13,7 @@ WITH added_stage2_try2 AS (
 ), updated_stage2_try1 AS (
   UPDATE stage2_tries
   SET status = '4'
-  WHERE id = (SELECT try1_id FROM updated_stage2_results)
+  WHERE id = updated_stage2_results.try1_id
 )
 SELECT 
   is_try2,
@@ -44,7 +44,7 @@ WITH updated_stage2_results AS (
 UPDATE stage2_tries
 SET 
   checkmarks = $2
-WHERE id = (SELECT try2_id FROM stage2_results)
+WHERE id = updated_stage2_results.try2_id
 RETURNING checkmarks;
 
 -- (scorer role) 
@@ -58,7 +58,7 @@ WITH updated_stage2_results AS (
 )
 UPDATE stage2_tries
   SET status = $2
-WHERE id = (SELECT try2_id FROM stage2_results);
+WHERE id = updated_stage2_results.try2_id;
 
 
 -- (scorer role)
@@ -110,7 +110,7 @@ WITH updated_stage2_results AS (
 )
 UPDATE stage2_tries
 SET no1 = $2
-WHERE id = (SELECT try2_id FROM stage2_results)
+WHERE id = updated_stage2_results.try2_id
 RETURNING no1;
 
 -- (scorer role) 
@@ -124,7 +124,7 @@ WITH updated_stage2_results AS (
 )
 UPDATE stage2_tries
 SET no2 = $2
-WHERE id = (SELECT try2_id FROM stage2_results)
+WHERE id = updated_stage2_results.try2_id
 RETURNING no2;
 
 -- (scorer role) 
@@ -138,7 +138,7 @@ WITH updated_stage2_results AS (
 ) 
 UPDATE stage2_tries 
 SET no3 = $2 
-WHERE id = (SELECT try2_id FROM stage2_results)
+WHERE id = updated_stage2_results.try2_id
 RETURNING no3;
 
 -- (admin-super role)
@@ -157,7 +157,7 @@ WITH deleted_stage2_try2 AS (
 )
 UPDATE stage2_tries
 SET status = '3'
-WHERE stage2_tries.id = (SELECT try1_id FROM updated_stage2_results);
+WHERE stage2_tries.id = updated_stage2_results.try1_id;
 
 -- (admin-super role)
 -- name: UpdateStage2try2 :one 
@@ -175,7 +175,7 @@ WITH updated_stage2_results AS (
     no2 = sqlc.arg(try1_no2),
     no3 = sqlc.arg(try1_no3),
     checkmarks = sqlc.arg(try1_checkmarks)
-  WHERE id = (SELECT try1_id FROM stage2_results)
+  WHERE id = updated_stage2_results.try1_id
   RETURNING 
     status,
     no1,
@@ -190,7 +190,7 @@ WITH updated_stage2_results AS (
     no2 = sqlc.arg(try2_no2),
     no3 = sqlc.arg(try2_no3),
     checkmarks = sqlc.arg(try2_checkmarks)
-  WHERE id = (SELECT try2_id FROM stage2_results WHERE try2_id IS NOT NULL)
+  WHERE id = (SELECT try2_id FROM updated_stage2_results WHERE try2_id IS NOT NULL)
   RETURNING 
     status,
     no1,

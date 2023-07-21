@@ -79,7 +79,7 @@ WITH deleted_stage2 AS (
   RETURNING result_id, try1_id, try2_id
 ), deleted_stage2try1 AS (
   DELETE FROM stage2_tries
-  WHERE stage2_tries.id = (SELECT try1_id FROM deleted_stage2)
+  WHERE stage2_tries.id = deleted_stage2.try1_id
 )
 DELETE FROM stage2_tries
 WHERE stage2_tries.id = (SELECT try2_id FROM deleted_stage2 WHERE try2_id IS NOT NULL)
@@ -252,7 +252,7 @@ WITH updated_stage2_results AS (
 )
 UPDATE stage2_tries
 SET status = '4'
-WHERE id = (SELECT try1_id FROM stage2_results)
+WHERE id = updated_stage2_results.try1_id
 `
 
 // (scorer role)
@@ -306,7 +306,7 @@ WITH updated_stage2_results AS (
     no2 = $4,
     no3 = $5,
     checkmarks = $6
-  WHERE id = (SELECT try1_id FROM stage2_results)
+  WHERE id = updated_stage2_results.try1_id 
   RETURNING 
     status,
     no1,
@@ -375,7 +375,7 @@ WITH updated_stage2_results AS (
 UPDATE stage2_tries
 SET 
   checkmarks = $2
-WHERE id = (SELECT try1_id FROM stage2_results)
+WHERE id = updated_stage2_results.try1_id
 RETURNING checkmarks
 `
 
@@ -464,7 +464,7 @@ WITH updated_stage2_results AS (
 )
 UPDATE stage2_tries
   SET status = $2
-WHERE id = (SELECT try1_id FROM stage2_results)
+WHERE id = updated_stage2_results.try1_id
 `
 
 type UpdateStage2try1NextNoParams struct {
@@ -488,7 +488,7 @@ WITH updated_stage2_results AS (
 )
 UPDATE stage2_tries
 SET no1 = $2
-WHERE id = (SELECT try1_id FROM stage2_results)
+WHERE id = updated_stage2_results.try1_id
 RETURNING no1
 `
 
@@ -515,7 +515,7 @@ WITH updated_stage2_results AS (
 )
 UPDATE stage2_tries 
 SET no2 = $2
-WHERE id = (SELECT try1_id FROM stage2_results)
+WHERE id = updated_stage2_results.try1_id
 RETURNING no2
 `
 
@@ -542,7 +542,7 @@ WITH updated_stage2_results AS (
 )
 UPDATE stage2_tries
 SET no3 = $2
-WHERE id = (SELECT try1_id FROM stage2_results) 
+WHERE id = updated_stage2_results.try1_id 
 RETURNING no3
 `
 

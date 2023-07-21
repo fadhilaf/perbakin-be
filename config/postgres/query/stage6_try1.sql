@@ -82,7 +82,7 @@ WITH updated_stage6_results AS (
 UPDATE stage46_tries
 SET 
   checkmarks = $2
-WHERE id = (SELECT try1_id FROM stage6_results)
+WHERE id = updated_stage6_results.try1_id
 RETURNING checkmarks;
 
 -- (scorer role)
@@ -96,7 +96,7 @@ WITH updated_stage6_results AS (
 )
 UPDATE stage46_tries
   SET status = $2
-WHERE id = (SELECT try1_id FROM stage6_results);
+WHERE id = updated_stage6_results.try1_id;
 
 -- (scorer role)
 -- name: UpdateStage6try1FinishSuccess :exec
@@ -148,7 +148,7 @@ WITH updated_stage6_results AS (
 )
 UPDATE stage46_tries
 SET status = '4'
-WHERE id = (SELECT try1_id FROM stage6_results);
+WHERE id = updated_stage6_results.try1_id;
 
 -- (scorer role)
 -- name: UpdateStage6try1No1 :one
@@ -161,7 +161,7 @@ WITH updated_stage6_results AS (
 )
 UPDATE stage46_tries
 SET no1 = $2
-WHERE id = (SELECT try1_id FROM stage6_results)
+WHERE id = updated_stage6_results.try1_id
 RETURNING no1;
 
 -- (scorer role)
@@ -175,7 +175,7 @@ WITH updated_stage6_results AS (
 )
 UPDATE stage46_tries 
 SET no2 = $2
-WHERE id = (SELECT try1_id FROM stage6_results)
+WHERE id = updated_stage6_results.try1_id
 RETURNING no2;
 
 -- (scorer role)
@@ -189,7 +189,7 @@ WITH updated_stage6_results AS (
 )
 UPDATE stage46_tries
 SET no3 = $2
-WHERE id = (SELECT try1_id FROM stage6_results) 
+WHERE id = updated_stage6_results.try1_id 
 RETURNING no3; 
 
 -- (admin-super role) 
@@ -218,7 +218,7 @@ WITH updated_stage6_results AS (
     no2 = sqlc.arg(try1_no2),
     no3 = sqlc.arg(try1_no3),
     checkmarks = sqlc.arg(try1_checkmarks)
-  WHERE id = (SELECT try1_id FROM stage6_results)
+  WHERE id = updated_stage6_results.try1_id
   RETURNING 
     status,
     no1,
@@ -263,7 +263,7 @@ WITH deleted_stage6 AS (
   RETURNING result_id, try1_id, try2_id
 ), deleted_stage6try1 AS (
   DELETE FROM stage46_tries
-  WHERE stage46_tries.id = (SELECT try1_id FROM deleted_stage6)
+  WHERE stage46_tries.id = deleted_stage6.try1_id
 )
 DELETE FROM stage46_tries
 WHERE stage46_tries.id = (SELECT try2_id FROM deleted_stage6 WHERE try2_id IS NOT NULL);

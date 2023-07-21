@@ -79,7 +79,7 @@ WITH updated_stage5_results AS (
 UPDATE stage5_tries
 SET 
   checkmarks = $2
-WHERE id = (SELECT try1_id FROM stage5_results)
+WHERE id = updated_stage5_results.try1_id
 RETURNING checkmarks;
 
 -- (scorer role)
@@ -93,7 +93,7 @@ WITH updated_stage5_results AS (
 )
 UPDATE stage5_tries
   SET status = $2
-WHERE id = (SELECT try1_id FROM stage5_results);
+WHERE id = updated_stage5_results.try1_id;
 
 -- (scorer role)
 -- name: UpdateStage5try1FinishSuccess :exec
@@ -145,7 +145,7 @@ WITH updated_stage5_results AS (
 )
 UPDATE stage5_tries
 SET status = '3'
-WHERE id = (SELECT try1_id FROM stage5_results);
+WHERE id = updated_stage5_results.try1_id;
 
 -- (scorer role)
 -- name: UpdateStage5try1No1 :one
@@ -158,7 +158,7 @@ WITH updated_stage5_results AS (
 )
 UPDATE stage5_tries
 SET no1 = $2
-WHERE id = (SELECT try1_id FROM stage5_results)
+WHERE id = updated_stage5_results.try1_id
 RETURNING no1;
 
 -- (scorer role)
@@ -172,7 +172,7 @@ WITH updated_stage5_results AS (
 )
 UPDATE stage5_tries 
 SET no2 = $2
-WHERE id = (SELECT try1_id FROM stage5_results)
+WHERE id = updated_stage5_results.try1_id
 RETURNING no2;
 
 -- (admin-super role) 
@@ -200,7 +200,7 @@ WITH updated_stage5_results AS (
     no1 = sqlc.arg(try1_no1),
     no2 = sqlc.arg(try1_no2),
     checkmarks = sqlc.arg(try1_checkmarks)
-  WHERE id = (SELECT try1_id FROM stage5_results)
+  WHERE id = updated_stage5_results.try1_id
   RETURNING 
     status,
     no1,
@@ -243,7 +243,7 @@ WITH deleted_stage5 AS (
   RETURNING result_id, try1_id, try2_id
 ), deleted_stage5try1 AS (
   DELETE FROM stage5_tries
-  WHERE stage5_tries.id = (SELECT try1_id FROM deleted_stage5)
+  WHERE stage5_tries.id = deleted_stage5.try1_id
 )
 DELETE FROM stage5_tries
 WHERE stage5_tries.id = (SELECT try2_id FROM deleted_stage5 WHERE try2_id IS NOT NULL);
