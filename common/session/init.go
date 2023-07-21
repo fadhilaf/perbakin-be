@@ -25,11 +25,11 @@ func SessionHandler(handler *gin.Engine, dbPool *pgxpool.Pool, config env.Config
 	SessionManager.Cookie.Path = "/"
 	SessionManager.Cookie.Name = "session"
 	SessionManager.Cookie.HttpOnly = true
+	// SessionManager.Cookie.Domain = config.AllowedOrigin // let the browser set the default domain
 	SessionManager.Cookie.SameSite = http.SameSiteStrictMode
 
 	if config.Env == env.EnvProd {
 		SessionManager.Cookie.Secure = true
-		SessionManager.Cookie.Domain = config.AllowedOrigin
 	} else {
 		SessionManager.Cookie.Secure = false
 	}
