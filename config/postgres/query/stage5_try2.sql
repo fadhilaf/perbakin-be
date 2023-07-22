@@ -13,7 +13,8 @@ WITH added_stage5_try2 AS (
 ), updated_stage5_try1 AS (
   UPDATE stage5_tries
   SET status = '3'
-  WHERE id = (SELECT try1_id FROM updated_stage5_results)
+  FROM updated_stage5_results
+  WHERE id = updated_stage5_results.try1_id
 )
 SELECT 
   is_try2,
@@ -43,6 +44,7 @@ WITH updated_stage5_results AS (
 UPDATE stage5_tries
 SET 
   checkmarks = $2
+FROM updated_stage5_results
 WHERE id = updated_stage5_results.try2_id
 RETURNING checkmarks;
 
@@ -57,6 +59,7 @@ WITH updated_stage5_results AS (
 )
 UPDATE stage5_tries
   SET status = $2
+FROM updated_stage5_results
 WHERE id = updated_stage5_results.try2_id;
 
 
@@ -73,11 +76,13 @@ WITH updated_stage5_results AS (
 ), updated_stage5_tries AS (
   UPDATE stage5_tries
     SET status = '3'
-  WHERE id = (SELECT try2_id FROM updated_stage5_results)
+  FROM updated_stage5_results
+  WHERE id = updated_stage5_results.try2_id
 )
 UPDATE results 
 SET stage = '6', updated_at = NOW()
-WHERE id = (SELECT result_id FROM updated_stage5_results);
+FROM updated_stage5_results
+WHERE id = updated_stage5_results.result_id;
 
 -- (scorer role)
 -- name: UpdateStage5try2FinishFailed :exec
@@ -92,11 +97,13 @@ WITH updated_stage5_results AS (
 ), updated_stage5_tries AS (
   UPDATE stage5_tries
     SET status = '3'
-  WHERE id = (SELECT try2_id FROM updated_stage5_results)
+  FROM updated_stage5_results
+  WHERE id = updated_stage5_results.try2_id
 )
 UPDATE results 
 SET failed = true, updated_at = NOW()
-WHERE id = (SELECT result_id FROM updated_stage5_results);
+FROM updated_stage5_results
+WHERE id = updated_stage5_results.result_id;
 
 -- (scorer role)
 -- name: UpdateStage5try2No1 :one 
@@ -109,6 +116,7 @@ WITH updated_stage5_results AS (
 )
 UPDATE stage5_tries
 SET no1 = $2
+FROM updated_stage5_results
 WHERE id = updated_stage5_results.try2_id
 RETURNING no1;
 
@@ -123,6 +131,7 @@ WITH updated_stage5_results AS (
 )
 UPDATE stage5_tries
 SET no2 = $2
+FROM updated_stage5_results
 WHERE id = updated_stage5_results.try2_id
 RETURNING no2;
 
@@ -142,7 +151,8 @@ WITH deleted_stage5_try2 AS (
 )
 UPDATE stage5_tries
 SET status = '2'
-WHERE stage5_tries.id = (SELECT try1_id FROM updated_stage5_results);
+FROM updated_stage5_results
+WHERE stage5_tries.id = updated_stage5_results.try1_id;
 
 -- (admin-super role)
 -- name: UpdateStage5try2 :one 
@@ -159,6 +169,7 @@ WITH updated_stage5_results AS (
     no1 = sqlc.arg(try1_no1),
     no2 = sqlc.arg(try1_no2),
     checkmarks = sqlc.arg(try1_checkmarks)
+  FROM updated_stage5_results
   WHERE id = updated_stage5_results.try1_id
   RETURNING 
     status,

@@ -252,6 +252,7 @@ WITH updated_stage6_results AS (
 )
 UPDATE stage46_tries
 SET status = '4'
+FROM updated_stage6_results
 WHERE id = updated_stage6_results.try1_id
 `
 
@@ -306,6 +307,7 @@ WITH updated_stage6_results AS (
     no2 = $4,
     no3 = $5,
     checkmarks = $6
+  FROM updated_stage6_results
   WHERE id = updated_stage6_results.try1_id
   RETURNING 
     status,
@@ -375,6 +377,7 @@ WITH updated_stage6_results AS (
 UPDATE stage46_tries
 SET 
   checkmarks = $2
+FROM updated_stage6_results
 WHERE id = updated_stage6_results.try1_id
 RETURNING checkmarks
 `
@@ -404,11 +407,13 @@ WITH updated_stage6_results AS (
 ), updated_stage6_tries AS (
   UPDATE stage46_tries
     SET status = '4'
-  WHERE id = (SELECT try1_id FROM updated_stage6_results)
+  FROM updated_stage6_results
+  WHERE id = updated_stage6_results.try1_id
 )
 UPDATE results 
 SET failed = true, updated_at = NOW()
-WHERE id = (SELECT result_id FROM updated_stage6_results)
+FROM updated_stage6_results
+WHERE id = updated_stage6_results.result_id
 `
 
 type UpdateStage6try1FinishFailedParams struct {
@@ -435,11 +440,13 @@ WITH updated_stage6_results AS (
 ), updated_stage6_tries AS (
   UPDATE stage46_tries
     SET status = '4'
-  WHERE id = (SELECT try1_id FROM updated_stage6_results)
+  FROM updated_stage6_results
+  WHERE id = updated_stage6_results.try1_id
 )
 UPDATE results 
 SET stage = '7', updated_at = NOW()
-WHERE id = (SELECT result_id FROM updated_stage6_results)
+FROM updated_stage6_results
+WHERE id = updated_stage6_results.result_id
 `
 
 type UpdateStage6try1FinishSuccessParams struct {
@@ -464,6 +471,7 @@ WITH updated_stage6_results AS (
 )
 UPDATE stage46_tries
   SET status = $2
+FROM updated_stage6_results
 WHERE id = updated_stage6_results.try1_id
 `
 
@@ -488,6 +496,7 @@ WITH updated_stage6_results AS (
 )
 UPDATE stage46_tries
 SET no1 = $2
+FROM updated_stage6_results
 WHERE id = updated_stage6_results.try1_id
 RETURNING no1
 `
@@ -515,6 +524,7 @@ WITH updated_stage6_results AS (
 )
 UPDATE stage46_tries 
 SET no2 = $2
+FROM updated_stage6_results
 WHERE id = updated_stage6_results.try1_id
 RETURNING no2
 `
@@ -542,6 +552,7 @@ WITH updated_stage6_results AS (
 )
 UPDATE stage46_tries
 SET no3 = $2
+FROM updated_stage6_results
 WHERE id = updated_stage6_results.try1_id 
 RETURNING no3
 `

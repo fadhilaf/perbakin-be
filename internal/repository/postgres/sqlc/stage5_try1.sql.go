@@ -243,6 +243,7 @@ WITH updated_stage5_results AS (
 )
 UPDATE stage5_tries
 SET status = '3'
+FROM updated_stage5_results
 WHERE id = updated_stage5_results.try1_id
 `
 
@@ -296,6 +297,7 @@ WITH updated_stage5_results AS (
     no1 = $3,
     no2 = $4,
     checkmarks = $5
+  FROM updated_stage5_results
   WHERE id = updated_stage5_results.try1_id
   RETURNING 
     status,
@@ -359,6 +361,7 @@ WITH updated_stage5_results AS (
 UPDATE stage5_tries
 SET 
   checkmarks = $2
+FROM updated_stage5_results
 WHERE id = updated_stage5_results.try1_id
 RETURNING checkmarks
 `
@@ -388,11 +391,13 @@ WITH updated_stage5_results AS (
 ), updated_stage5_tries AS (
   UPDATE stage5_tries
     SET status = '3'
-  WHERE id = (SELECT try1_id FROM updated_stage5_results)
+  FROM updated_stage5_results
+  WHERE id = updated_stage5_results.try1_id
 )
 UPDATE results 
 SET failed = true, updated_at = NOW()
-WHERE id = (SELECT result_id FROM updated_stage5_results)
+FROM updated_stage5_results
+WHERE id = updated_stage5_results.result_id
 `
 
 type UpdateStage5try1FinishFailedParams struct {
@@ -419,11 +424,13 @@ WITH updated_stage5_results AS (
 ), updated_stage5_tries AS (
   UPDATE stage5_tries
     SET status = '3'
-  WHERE id = (SELECT try1_id FROM updated_stage5_results)
+  FROM updated_stage5_results
+  WHERE id = updated_stage5_results.try1_id
 )
 UPDATE results 
 SET stage = '6', updated_at = NOW()
-WHERE id = (SELECT result_id FROM updated_stage5_results)
+FROM updated_stage5_results
+WHERE id = updated_stage5_results.result_id
 `
 
 type UpdateStage5try1FinishSuccessParams struct {
@@ -448,6 +455,7 @@ WITH updated_stage5_results AS (
 )
 UPDATE stage5_tries
   SET status = $2
+FROM updated_stage5_results
 WHERE id = updated_stage5_results.try1_id
 `
 
@@ -472,6 +480,7 @@ WITH updated_stage5_results AS (
 )
 UPDATE stage5_tries
 SET no1 = $2
+FROM updated_stage5_results
 WHERE id = updated_stage5_results.try1_id
 RETURNING no1
 `
@@ -499,6 +508,7 @@ WITH updated_stage5_results AS (
 )
 UPDATE stage5_tries 
 SET no2 = $2
+FROM updated_stage5_results
 WHERE id = updated_stage5_results.try1_id
 RETURNING no2
 `

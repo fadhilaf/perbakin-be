@@ -79,6 +79,7 @@ WITH updated_stage5_results AS (
 UPDATE stage5_tries
 SET 
   checkmarks = $2
+FROM updated_stage5_results
 WHERE id = updated_stage5_results.try1_id
 RETURNING checkmarks;
 
@@ -93,6 +94,7 @@ WITH updated_stage5_results AS (
 )
 UPDATE stage5_tries
   SET status = $2
+FROM updated_stage5_results
 WHERE id = updated_stage5_results.try1_id;
 
 -- (scorer role)
@@ -108,11 +110,13 @@ WITH updated_stage5_results AS (
 ), updated_stage5_tries AS (
   UPDATE stage5_tries
     SET status = '3'
-  WHERE id = (SELECT try1_id FROM updated_stage5_results)
+  FROM updated_stage5_results
+  WHERE id = updated_stage5_results.try1_id
 )
 UPDATE results 
 SET stage = '6', updated_at = NOW()
-WHERE id = (SELECT result_id FROM updated_stage5_results);
+FROM updated_stage5_results
+WHERE id = updated_stage5_results.result_id;
 
 -- (scorer role)
 -- name: UpdateStage5try1FinishFailed :exec
@@ -127,11 +131,13 @@ WITH updated_stage5_results AS (
 ), updated_stage5_tries AS (
   UPDATE stage5_tries
     SET status = '3'
-  WHERE id = (SELECT try1_id FROM updated_stage5_results)
+  FROM updated_stage5_results
+  WHERE id = updated_stage5_results.try1_id
 )
 UPDATE results 
 SET failed = true, updated_at = NOW()
-WHERE id = (SELECT result_id FROM updated_stage5_results);
+FROM updated_stage5_results
+WHERE id = updated_stage5_results.result_id;
 
 -- (scorer role)
 -- name: UpdateStage5NextTry :exec 
@@ -145,6 +151,7 @@ WITH updated_stage5_results AS (
 )
 UPDATE stage5_tries
 SET status = '3'
+FROM updated_stage5_results
 WHERE id = updated_stage5_results.try1_id;
 
 -- (scorer role)
@@ -158,6 +165,7 @@ WITH updated_stage5_results AS (
 )
 UPDATE stage5_tries
 SET no1 = $2
+FROM updated_stage5_results
 WHERE id = updated_stage5_results.try1_id
 RETURNING no1;
 
@@ -172,6 +180,7 @@ WITH updated_stage5_results AS (
 )
 UPDATE stage5_tries 
 SET no2 = $2
+FROM updated_stage5_results
 WHERE id = updated_stage5_results.try1_id
 RETURNING no2;
 
@@ -200,6 +209,7 @@ WITH updated_stage5_results AS (
     no1 = sqlc.arg(try1_no1),
     no2 = sqlc.arg(try1_no2),
     checkmarks = sqlc.arg(try1_checkmarks)
+  FROM updated_stage5_results
   WHERE id = updated_stage5_results.try1_id
   RETURNING 
     status,
