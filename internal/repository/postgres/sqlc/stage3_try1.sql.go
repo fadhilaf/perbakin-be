@@ -88,7 +88,7 @@ WITH deleted_stage3 AS (
   RETURNING result_id, try1_id, try2_id
 ), deleted_stage3try1 AS (
   DELETE FROM stage13_tries
-  WHERE stage13_tries.id =  deleted_stage3.try1_id
+  WHERE stage13_tries.id =  (SELECT try1_id FROM deleted_stage3)
 )
 DELETE FROM stage13_tries
 WHERE stage13_tries.id = (SELECT try2_id FROM deleted_stage3 WHERE try2_id IS NOT NULL)

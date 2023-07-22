@@ -274,7 +274,7 @@ WITH deleted_stage6 AS (
   RETURNING result_id, try1_id, try2_id
 ), deleted_stage6try1 AS (
   DELETE FROM stage46_tries
-  WHERE stage46_tries.id = deleted_stage6.try1_id
+  WHERE stage46_tries.id IN (SELECT try1_id FROM deleted_stage6)
 )
 DELETE FROM stage46_tries
 WHERE stage46_tries.id = (SELECT try2_id FROM deleted_stage6 WHERE try2_id IS NOT NULL);
