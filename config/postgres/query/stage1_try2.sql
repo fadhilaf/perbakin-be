@@ -259,7 +259,7 @@ WITH updated_stage1_results AS (
     no5 = sqlc.arg(try2_no5),
     no6 = sqlc.arg(try2_no6),
     checkmarks = sqlc.arg(try2_checkmarks)
-  WHERE id = (SELECT try2_id FROM updated_stage1_results WHERE try2_id IS NOT NULL)
+  WHERE id IN (SELECT try2_id FROM updated_stage1_results WHERE try2_id IS NOT NULL)
   RETURNING 
     status,
     no1,

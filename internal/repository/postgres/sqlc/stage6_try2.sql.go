@@ -134,7 +134,7 @@ WITH updated_stage6_results AS (
     no2 = $9,
     no3 = $10,
     checkmarks = $11
-  WHERE id = (SELECT try2_id FROM updated_stage6_results WHERE try2_id IS NOT NULL)
+  WHERE id IN (SELECT try2_id FROM updated_stage6_results WHERE try2_id IS NOT NULL)
   RETURNING 
     status,
     no1,

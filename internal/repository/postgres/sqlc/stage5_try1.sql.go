@@ -102,7 +102,7 @@ WITH get_stage5 AS (
 ), updated_stage5try2 AS (
   UPDATE stage5_tries
   SET status = '3'
-  WHERE id = (SELECT try2_id FROM get_stage5 WHERE try2_id IS NOT NULL)
+  WHERE id IN (SELECT try2_id FROM get_stage5 WHERE try2_id IS NOT NULL)
 )
 UPDATE results 
 SET stage = '6', updated_at = NOW()
