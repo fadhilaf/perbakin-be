@@ -100,7 +100,8 @@ WITH get_stage6 AS (
 ), updated_stage6try1 AS (
   UPDATE stage46_tries
   SET status = '4'
-  WHERE id = (SELECT try1_id FROM get_stage6)
+  FROM get_stage6
+  WHERE id = get_stage6.try1_id
 ), updated_stage6try2 AS (
   UPDATE stage46_tries
   SET status = '4'
@@ -108,7 +109,8 @@ WITH get_stage6 AS (
 )
 UPDATE results 
 SET stage = '7', updated_at = NOW()
-WHERE id = (SELECT result_id FROM get_stage6)
+FROM get_stage6
+WHERE id = get_stage6.result_id
 `
 
 // (admin-super role)

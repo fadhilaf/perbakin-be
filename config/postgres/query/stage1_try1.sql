@@ -319,7 +319,8 @@ WITH get_stage1 AS (
 ), updated_stage1try1 AS (
   UPDATE stage13_tries
   SET status = '7'
-  WHERE id = (SELECT try1_id FROM get_stage1)
+  FROM get_stage1
+  WHERE id = get_stage1.try1_id
 ), updated_stage1try2 AS (
   UPDATE stage13_tries
   SET status = '7'
@@ -327,7 +328,8 @@ WITH get_stage1 AS (
 )
 UPDATE results 
 SET stage = '2', updated_at = NOW()
-WHERE id = (SELECT result_id FROM get_stage1);
+FROM get_stage1
+WHERE id = get_stage1.result_id;
 
 -- (admin-super role) 
 -- name: DeleteStage1 :exec
