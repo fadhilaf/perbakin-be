@@ -12,7 +12,8 @@ func AdminRoutes(router *gin.RouterGroup, delivery adminDelivery.AdminDelivery, 
 	router.POST("/login", delivery.AdminLogin)
 
 	adminRouter := router.Group("", delivery.MustAdminMiddleware()) //jangan pake "/" agek jadi redirect https://stackoverflow.com/a/72164763
-	adminRouter.GET("", delivery.CheckAdminLogin)
+	adminRouter.GET("", adminSuperDelivery.GetAdminById)
+	adminRouter.PUT("", adminSuperDelivery.UpdateAdmin)
 
 	adminRouter.GET("/scorers", adminSuperDelivery.GetAllScorers)
 	adminRouter.GET("/shooters", adminSuperDelivery.GetAllShooters)

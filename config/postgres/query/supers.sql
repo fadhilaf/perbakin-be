@@ -9,11 +9,11 @@ SELECT supers.id, user_id FROM users
 INNER JOIN supers ON supers.user_id = users.id
 WHERE user_id = $1;
 
--- untuk ngambil data lengkap super admin berdasarkan user id (super role)
--- name: GetSuperByUserId :one
+-- untuk ngambil data lengkap super admin berdasarkan id (super role)
+-- name: GetSuperById :one
 SELECT supers.id, user_id, username, password, name, created_at, updated_at FROM users
 INNER JOIN supers ON supers.user_id = users.id
-WHERE user_id = $1;
+WHERE supers.id = $1;
 
 -- untuk ngambil data display super admin berdasarkan username (super role)
 -- name: GetSuperByUsername :one

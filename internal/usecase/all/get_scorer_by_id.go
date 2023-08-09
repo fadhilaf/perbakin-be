@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (usecase *adminSuperUsecaseImpl) GetScorerById(req model.ByIdRequest) model.WebServiceResponse {
+func (usecase *allUsecaseImpl) GetScorerById(req model.ByIdRequest) model.WebServiceResponse {
 	scorer, _ := usecase.Store.GetScorerById(context.Background(), req.ID)
 
 	return util.ToWebServiceResponse("Data scorer ditemukan", http.StatusOK, gin.H{

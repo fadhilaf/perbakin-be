@@ -6,13 +6,13 @@ import (
 )
 
 type AdminSuperUsecase interface {
+	GetAdminById(model.ByIdRequest) model.WebServiceResponse
+	UpdateAdmin(model.UpdateOperatorRequest) model.WebServiceResponse
+
 	CreateScorer(model.CreateScorerRequest) model.WebServiceResponse
 	GetAllScorers() model.WebServiceResponse
 	GetScorersByExamId(model.ByExamIdRequest) model.WebServiceResponse
 	GetScorerRelationById(model.ByIdRequest) (model.OperatorRelation, error)
-	GetScorerById(model.ByIdRequest) model.WebServiceResponse
-	UpdateScorer(model.UpdateOperatorRequest) model.WebServiceResponse
-	UpdateScorerImage(model.UpdateImageRequest) model.WebServiceResponse
 	DeleteScorer(model.UserByUserIdRequest) model.WebServiceResponse
 
 	CreateShooter(model.CreateShooterRequest) model.WebServiceResponse

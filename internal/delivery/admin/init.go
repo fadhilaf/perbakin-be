@@ -9,7 +9,6 @@ type AdminDelivery interface {
 	AdminLogin(c *gin.Context)
 
 	MustAdminMiddleware() gin.HandlerFunc
-	CheckAdminLogin(c *gin.Context)
 }
 
 var _ AdminDelivery = &adminHandler{}

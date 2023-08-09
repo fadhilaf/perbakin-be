@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *adminSuperHandler) GetScorerById(c *gin.Context) {
+func (handler *allHandler) GetScorerById(c *gin.Context) {
 	scorer := c.MustGet("scorer").(model.OperatorRelation)
 
 	res := handler.Usecase.GetScorerById(model.ByIdRequest{

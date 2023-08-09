@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *adminSuperHandler) UpdateScorerImage(c *gin.Context) {
+func (handler *allHandler) UpdateScorerImage(c *gin.Context) {
 	scorer := c.MustGet("scorer").(model.OperatorRelation)
 
 	// Simpan upload file ke folder assets/images

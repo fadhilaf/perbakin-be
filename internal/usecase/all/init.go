@@ -6,6 +6,10 @@ import (
 )
 
 type AllUsecase interface {
+	GetScorerById(model.ByIdRequest) model.WebServiceResponse
+	UpdateScorer(model.UpdateOperatorRequest) model.WebServiceResponse
+	UpdateScorerImage(model.UpdateImageRequest) model.WebServiceResponse
+
 	GetShooterRelationById(model.ByIdRequest) (model.ShooterRelation, error)
 
 	GetShooterById(model.ByIdRequest) model.WebServiceResponse

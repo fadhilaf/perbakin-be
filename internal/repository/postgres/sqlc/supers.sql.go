@@ -42,13 +42,13 @@ func (q *Queries) GetAllSupers(ctx context.Context) ([]GetAllSupersRow, error) {
 	return items, nil
 }
 
-const getSuperByUserId = `-- name: GetSuperByUserId :one
+const getSuperById = `-- name: GetSuperById :one
 SELECT supers.id, user_id, username, password, name, created_at, updated_at FROM users
 INNER JOIN supers ON supers.user_id = users.id
-WHERE user_id = $1
+WHERE supers.id = $1
 `
 
-type GetSuperByUserIdRow struct {
+type GetSuperByIdRow struct {
 	ID        pgtype.UUID
 	UserID    pgtype.UUID
 	Username  string
@@ -58,10 +58,10 @@ type GetSuperByUserIdRow struct {
 	UpdatedAt pgtype.Timestamp
 }
 
-// untuk ngambil data lengkap super admin berdasarkan user id (super role)
-func (q *Queries) GetSuperByUserId(ctx context.Context, userID pgtype.UUID) (GetSuperByUserIdRow, error) {
-	row := q.db.QueryRow(ctx, getSuperByUserId, userID)
-	var i GetSuperByUserIdRow
+// untuk ngambil data lengkap super admin berdasarkan id (super role)
+func (q *Queries) GetSuperById(ctx context.Context, id pgtype.UUID) (GetSuperByIdRow, error) {
+	row := q.db.QueryRow(ctx, getSuperById, id)
+	var i GetSuperByIdRow
 	err := row.Scan(
 		&i.ID,
 		&i.UserID,

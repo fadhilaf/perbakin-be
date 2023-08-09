@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler *superHandler) GetAdminById(c *gin.Context) {
+func (handler *adminSuperHandler) GetAdminById(c *gin.Context) {
 	admin := c.MustGet("admin").(model.OperatorRelation)
 
 	res := handler.Usecase.GetAdminById(model.ByIdRequest{

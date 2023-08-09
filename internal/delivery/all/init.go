@@ -7,6 +7,10 @@ import (
 )
 
 type AllDelivery interface {
+	GetScorerById(c *gin.Context)
+	UpdateScorer(c *gin.Context)
+	UpdateScorerImage(c *gin.Context)
+
 	GetShootersByScorerId(c *gin.Context)
 
 	MustShooterMiddleware() gin.HandlerFunc

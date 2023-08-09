@@ -9,8 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (usecase *superUsecaseImpl) GetSuperByUserId(req model.UserByUserIdRequest) model.WebServiceResponse {
-	super, err := usecase.Store.GetSuperByUserId(context.Background(), req.UserID)
+func (usecase *superUsecaseImpl) GetSuperById(req model.ByIdRequest) model.WebServiceResponse {
+	super, err := usecase.Store.GetSuperById(context.Background(), req.ID)
 	if err != nil {
 		return util.ToWebServiceResponse("User tidak terdaftar sebagai super admin", http.StatusUnauthorized, nil)
 	}

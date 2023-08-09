@@ -134,40 +134,6 @@ func (q *Queries) GetScorerById(ctx context.Context, id pgtype.UUID) (GetScorerB
 	return i, err
 }
 
-const getScorerByUserId = `-- name: GetScorerByUserId :one
-SELECT scorers.id, user_id, exam_id, username, name, image_path, created_at, updated_at FROM users
-INNER JOIN scorers ON scorers.user_id = users.id
-WHERE user_id = $1
-`
-
-type GetScorerByUserIdRow struct {
-	ID        pgtype.UUID
-	UserID    pgtype.UUID
-	ExamID    pgtype.UUID
-	Username  string
-	Name      string
-	ImagePath string
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
-}
-
-// untuk ngambil data lengkap scorer berdasarkan user id (scorer role)
-func (q *Queries) GetScorerByUserId(ctx context.Context, userID pgtype.UUID) (GetScorerByUserIdRow, error) {
-	row := q.db.QueryRow(ctx, getScorerByUserId, userID)
-	var i GetScorerByUserIdRow
-	err := row.Scan(
-		&i.ID,
-		&i.UserID,
-		&i.ExamID,
-		&i.Username,
-		&i.Name,
-		&i.ImagePath,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-	)
-	return i, err
-}
-
 const getScorerByUsername = `-- name: GetScorerByUsername :one
 SELECT scorers.id, user_id, exam_id, username, password, users.name, image_path, active, users.created_at, users.updated_at FROM users
 INNER JOIN scorers ON scorers.user_id = users.id

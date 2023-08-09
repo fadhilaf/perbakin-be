@@ -7,8 +7,8 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func (handler *adminSuperHandler) UpdateScorer(c *gin.Context) {
-	scorer := c.MustGet("scorer").(model.OperatorRelation)
+func (handler *adminSuperHandler) UpdateAdmin(c *gin.Context) {
+	admin := c.MustGet("admin").(model.OperatorRelation)
 
 	var req model.OperatorBodyRequest
 
@@ -21,7 +21,7 @@ func (handler *adminSuperHandler) UpdateScorer(c *gin.Context) {
 		passwordText.Scan(req.Password)
 	}
 
-	res := handler.Usecase.UpdateScorer(model.UpdateOperatorRequest{ID: scorer.ID, UserID: scorer.UserID, Username: req.Username, Password: passwordText, Name: req.Name})
+	res := handler.Usecase.UpdateAdmin(model.UpdateOperatorRequest{ID: admin.ID, UserID: admin.UserID, Username: req.Username, Password: passwordText, Name: req.Name})
 
 	c.JSON(res.Status, res)
 }

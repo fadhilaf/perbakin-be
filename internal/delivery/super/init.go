@@ -32,8 +32,6 @@ type SuperDelivery interface {
 
 	MustAdminMiddleware() gin.HandlerFunc
 
-	GetAdminById(c *gin.Context)
-	UpdateAdmin(c *gin.Context)
 	DeleteAdmin(c *gin.Context)
 }
 

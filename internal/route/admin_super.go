@@ -11,7 +11,7 @@ import (
 func AdminSuperRoutes(adminExamRouter *gin.RouterGroup, delivery adminSuperDelivery.AdminSuperDelivery, allDelivery allDelivery.AllDelivery) {
 	ExamAdminSuperRoutes(adminExamRouter, delivery)
 
-	scorerRouter := ScorerAdminSuperRoutes(adminExamRouter, delivery)
+	scorerRouter := ScorerAdminSuperRoutes(adminExamRouter, delivery, allDelivery)
 
 	shooterRouter := ShooterAllRoutes(scorerRouter, allDelivery)
 	ShooterAdminSuperRoutes(scorerRouter, delivery, allDelivery)

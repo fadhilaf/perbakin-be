@@ -10,8 +10,6 @@ type ScorerUsecase interface {
 
 	GetScorerRelationByUserId(model.UserByUserIdRequest) (model.ScorerRelationAndStatus, error)
 
-	GetScorerByUserId(model.UserByUserIdRequest) model.WebServiceResponse
-
 	UpdateStage0Series(model.UpdateStage0SeriesRequest) model.WebServiceResponse
 	UpdateStage0NextSeries(model.ByIdRequest) model.WebServiceResponse
 	UpdateStage0Checkmarks(model.UpdateStage0CheckmarksRequest) model.WebServiceResponse

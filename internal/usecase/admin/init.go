@@ -7,7 +7,6 @@ import (
 
 type AdminUsecase interface {
 	AdminLogin(model.LoginRequest) model.WebServiceResponse
-	GetAdminByUserId(model.UserByUserIdRequest) model.WebServiceResponse
 
 	GetAdminExamRelationByUserId(model.UserByUserIdRequest) (model.AdminAndExamRelationAndStatus, error)
 }

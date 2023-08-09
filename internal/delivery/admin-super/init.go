@@ -8,6 +8,9 @@ import (
 )
 
 type AdminSuperDelivery interface {
+	GetAdminById(c *gin.Context)
+	UpdateAdmin(c *gin.Context)
+
 	GetAllScorers(c *gin.Context)
 	GetAllShooters(c *gin.Context)
 
@@ -17,9 +20,6 @@ type AdminSuperDelivery interface {
 	CreateScorer(c *gin.Context)
 
 	MustScorerMiddleware() gin.HandlerFunc
-	GetScorerById(c *gin.Context)
-	UpdateScorer(c *gin.Context)
-	UpdateScorerImage(c *gin.Context)
 	DeleteScorer(c *gin.Context)
 
 	CreateShooter(c *gin.Context)

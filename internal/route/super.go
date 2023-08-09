@@ -34,8 +34,8 @@ func SuperRoutes(router *gin.RouterGroup, delivery superDelivery.SuperDelivery, 
 	examRouter.POST("/admin", delivery.CreateAdmin)
 
 	adminRouter := examRouter.Group("/admin/:admin_id", delivery.MustAdminMiddleware())
-	adminRouter.GET("", delivery.GetAdminById)
-	adminRouter.PUT("", delivery.UpdateAdmin)
+	adminRouter.GET("", adminSuperDelivery.GetAdminById)
+	adminRouter.PUT("", adminSuperDelivery.UpdateAdmin)
 	adminRouter.DELETE("", delivery.DeleteAdmin)
 
 }

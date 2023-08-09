@@ -95,40 +95,6 @@ func (q *Queries) GetAdminById(ctx context.Context, id pgtype.UUID) (GetAdminByI
 	return i, err
 }
 
-const getAdminByUserId = `-- name: GetAdminByUserId :one
-SELECT admins.id, user_id, exam_id, username, password, name, created_at, updated_at FROM users
-INNER JOIN admins ON admins.user_id = users.id
-WHERE user_id = $1
-`
-
-type GetAdminByUserIdRow struct {
-	ID        pgtype.UUID
-	UserID    pgtype.UUID
-	ExamID    pgtype.UUID
-	Username  string
-	Password  string
-	Name      string
-	CreatedAt pgtype.Timestamp
-	UpdatedAt pgtype.Timestamp
-}
-
-// untuk ngambil data lengkap admin berdasarkan user id (admin role)
-func (q *Queries) GetAdminByUserId(ctx context.Context, userID pgtype.UUID) (GetAdminByUserIdRow, error) {
-	row := q.db.QueryRow(ctx, getAdminByUserId, userID)
-	var i GetAdminByUserIdRow
-	err := row.Scan(
-		&i.ID,
-		&i.UserID,
-		&i.ExamID,
-		&i.Username,
-		&i.Password,
-		&i.Name,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-	)
-	return i, err
-}
-
 const getAdminByUsername = `-- name: GetAdminByUsername :one
 SELECT admins.id, user_id, exam_id, username, password, users.name, active, users.created_at, users.updated_at FROM users
 INNER JOIN admins ON admins.user_id = users.id

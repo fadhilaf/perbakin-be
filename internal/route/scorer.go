@@ -11,7 +11,9 @@ func ScorerRoutes(router *gin.RouterGroup, delivery scorerDelivery.ScorerDeliver
 	router.POST("/login", delivery.ScorerLogin)
 
 	scorerRouter := router.Group("", delivery.MustScorerMiddleware())
-	scorerRouter.GET("", delivery.CheckScorerLogin)
+	scorerRouter.GET("", allDelivery.GetScorerById)
+	scorerRouter.PUT("", allDelivery.UpdateScorer)
+	scorerRouter.PUT("/image", allDelivery.UpdateScorerImage)
 
 	shooterRouter := ShooterAllRoutes(scorerRouter, allDelivery)
 

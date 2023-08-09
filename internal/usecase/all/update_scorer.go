@@ -12,7 +12,7 @@ import (
 	"github.com/FadhilAF/perbakin-be/internal/util"
 )
 
-func (usecase *adminSuperUsecaseImpl) UpdateScorer(req model.UpdateOperatorRequest) model.WebServiceResponse {
+func (usecase *allUsecaseImpl) UpdateScorer(req model.UpdateOperatorRequest) model.WebServiceResponse {
 	if existingScorer, err := usecase.Store.GetUserByUsername(context.Background(), req.Username); err == nil {
 		if existingScorer != req.UserID {
 			return util.ToWebServiceResponse("Username sudah digunakan", http.StatusConflict, nil)
