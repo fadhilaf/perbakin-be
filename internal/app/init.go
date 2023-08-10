@@ -103,6 +103,10 @@ func (app *App) createHandlers() http.Handler {
 	router.Use(cors.New(corsCfg))
 	router.Use(middleware.LoadSessionMiddleware())
 
+	if app.Config.Env == env.EnvDev {
+		router.Static("/media", "./media")
+	}
+
 	v1 := router.Group("/api/v1")
 	app.handlerV1(v1)
 
